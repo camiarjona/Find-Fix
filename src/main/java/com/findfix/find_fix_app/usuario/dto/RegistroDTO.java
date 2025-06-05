@@ -15,7 +15,7 @@ public record RegistroDTO(
         @NotBlank(message = "El nombre no puede quedar en blanco")
         String nombre,
 
-        @NotBlank(message = "El nombre no puede quedar en blanco")
+        @NotBlank(message = "El apellido no puede quedar en blanco")
         String apellido
 
 ) {
