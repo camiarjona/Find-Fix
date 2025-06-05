@@ -28,7 +28,7 @@ public class Usuario {
     private String apellido;
 
     private String telefono;
-    private String cuidad;
+    private String ciudad;
 
 
 }
