@@ -17,9 +17,9 @@ public class Resena {
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long resenaId;
     @Column(nullable = false)
-    double puntuacion;
+    private Double puntuacion;
     @Column(nullable = false)
-    String comentario;
+    private String comentario;
     /// int id_trabajo
 
 }

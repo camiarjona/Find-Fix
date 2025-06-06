@@ -16,15 +16,15 @@ import java.time.LocalDate;
 public class SolicitudEspecialista {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long seId;
+    private Long seId;
    ///  Long usuarioId
    @Column(nullable = false)
-    LocalDate fechaSolicitud;
+   private LocalDate fechaSolicitud;
    @Column(nullable = false)
-    LocalDate fechaResolucion;
+   private LocalDate fechaResolucion;
    @Column(nullable = false)
-   EstadosSolicitudes estado;
+   private EstadosSolicitudes estado;
    @Column(nullable = false)
-    String descripcion;
+   private String motivo;
 
 }

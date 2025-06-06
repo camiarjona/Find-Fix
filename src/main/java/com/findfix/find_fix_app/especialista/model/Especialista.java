@@ -17,4 +17,6 @@ public class Especialista {
 
     @Column(nullable = false)
     private Long dni;
+
+    ///DESCRIPCION??
 }

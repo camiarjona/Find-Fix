@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OficioServiceImpl {
+public class OficioServiceImpl implements OficioService {
     private final OficioRepository oficioRepository;
 }
