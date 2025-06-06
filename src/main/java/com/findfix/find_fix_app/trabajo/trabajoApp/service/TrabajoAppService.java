@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.trabajoApp.service;
+package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import org.springframework.stereotype.Service;
 

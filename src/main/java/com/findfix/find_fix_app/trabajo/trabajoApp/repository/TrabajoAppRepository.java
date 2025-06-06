@@ -1,6 +1,6 @@
-package com.findfix.find_fix_app.trabajoApp.repository;
+package com.findfix.find_fix_app.trabajo.trabajoApp.repository;
 
-import com.findfix.find_fix_app.trabajoApp.model.TrabajoApp;
+import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -3,5 +3,5 @@ package com.findfix.find_fix_app.solicitudTrabajo.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SolicitudTrabajoServiceimpl implements SolicitudTrabajoService{
+public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService{
 }

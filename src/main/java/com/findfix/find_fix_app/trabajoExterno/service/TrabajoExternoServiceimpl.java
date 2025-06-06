@@ -1,7 +1,0 @@
-package com.findfix.find_fix_app.trabajoExterno.service;
-
-import org.springframework.stereotype.Service;
-
-@Service
-public class TrabajoExternoServiceimpl implements TrabajoExternoService {
-}
