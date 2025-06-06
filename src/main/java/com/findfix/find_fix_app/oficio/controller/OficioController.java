@@ -1,19 +1,9 @@
 package com.findfix.find_fix_app.oficio.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
-import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/oficios")
 @RequiredArgsConstructor
 public class OficioController {
 

@@ -1,14 +1,8 @@
 package com.findfix.find_fix_app.oficio.service;
 
-import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
-import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
