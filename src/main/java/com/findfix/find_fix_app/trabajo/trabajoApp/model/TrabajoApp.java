@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.trabajoApp.model;
+package com.findfix.find_fix_app.trabajo.trabajoApp.model;
 
 import com.findfix.find_fix_app.enums.EstadosTrabajos;
 import jakarta.persistence.*;
@@ -16,16 +16,18 @@ import java.time.LocalDate;
 public class TrabajoApp {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    Long trabajoAppId;
+    private Long trabajoAppId;
     /// Long especialistaId;
     /// Long clienteID;
     @Column(nullable = false)
-    LocalDate fechaInicio;
+    private LocalDate fechaInicio;
     @Column(nullable = false)
-    EstadosTrabajos estado;
+    private EstadosTrabajos estado;
     @Column(nullable = false)
-    String descripcion;
+    private String descripcion;
     @Column(nullable = false)
-    LocalDate fechaFin;
+    private LocalDate fechaFin;
+
+    private Double presupuesto;
     /// Long solicitudId;
 }

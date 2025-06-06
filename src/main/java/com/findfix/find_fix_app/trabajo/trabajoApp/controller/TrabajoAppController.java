@@ -1,6 +1,6 @@
-package com.findfix.find_fix_app.trabajoApp.controller;
+package com.findfix.find_fix_app.trabajo.trabajoApp.controller;
 
-import com.findfix.find_fix_app.trabajoApp.service.TrabajoAppService;
+import com.findfix.find_fix_app.trabajo.trabajoApp.service.TrabajoAppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
