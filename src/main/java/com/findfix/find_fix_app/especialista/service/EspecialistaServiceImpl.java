@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 public class EspecialistaServiceImpl implements EspecialistaService {
 
     private final EspecialistaRepository especialistaRepository;
+
+
 }
