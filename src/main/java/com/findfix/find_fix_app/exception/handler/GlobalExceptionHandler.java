@@ -175,11 +175,11 @@ public class GlobalExceptionHandler {
         }
     }
 
-    // Maneje de errores De RolException
-    @ExceptionHandler(
-            RolException.class
-
-    )
+    // Manejo de errores personalizados de conflictos
+    @ExceptionHandler({
+            RolException.class,
+            UserException.class
+    })
     public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
