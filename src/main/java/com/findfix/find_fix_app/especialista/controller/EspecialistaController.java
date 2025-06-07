@@ -10,4 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EspecialistaController {
     private final EspecialistaService especialistaService;
+
+
 }
