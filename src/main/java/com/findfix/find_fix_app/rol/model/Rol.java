@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class Rol {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_rol")
     private Long rolId;
     @NotBlank(message = "El nombre es obligatorio")
     @NotEmpty(message = "El nombre no puede estar vacio")

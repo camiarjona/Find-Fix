@@ -1,5 +1,7 @@
 package com.findfix.find_fix_app.usuario.service;
 
+import com.findfix.find_fix_app.exception.exceptions.RolException;
+import com.findfix.find_fix_app.exception.exceptions.UserException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
@@ -52,10 +54,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para registrar un usuario nuevo
     @Override
-    public Usuario registrarNuevoUsuario(RegistroDTO registroDTO) {
+    public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
-            throw new IllegalArgumentException("Ya existe un usuario registrado con ese email.");
+            throw new UserException("Ya existe un usuario registrado con ese email.");
         }
 
         Usuario usuario = new Usuario();
@@ -66,17 +68,17 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuario.setApellido(registroDTO.apellido());
 
         //Se registra con rol cliente por default
-        Rol rol = rolRepository.findByName("CLIENTE")
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado."));
+        Rol rol = rolRepository.findByNombre("CLIENTE")
+                .orElseThrow(() -> new RolException("Rol no encontrado."));
 
         usuario.getRoles().add(rol);
 
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
     }
 
     // metodo para eliminar un usuario por id
     @Override
-    public void eliminar(Long id) {
+    public void eliminar(Long id) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
 
@@ -85,7 +87,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para actualizar la contraseña de un usuario
     @Override
-    public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) {
+    public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -95,13 +97,13 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
             throw new IllegalArgumentException("La contraseña actual es incorrecta.");
         }
 
-        usuario.setPassword(passwordEncoder.encode(actualizarPasswordDTO.passwordActual()));
+        usuario.setPassword(passwordEncoder.encode(actualizarPasswordDTO.passwordNuevo()));
         usuarioRepository.save(usuario);
     }
 
     // metodo para actualizar atributos de un usuario
     @Override
-    public void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) {
+    public void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Usuario usuario = usuarioRepository.findByEmail(email)

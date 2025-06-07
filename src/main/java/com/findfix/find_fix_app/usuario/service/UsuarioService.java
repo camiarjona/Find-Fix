@@ -1,5 +1,8 @@
 package com.findfix.find_fix_app.usuario.service;
 
+import com.findfix.find_fix_app.exception.exceptions.RolException;
+import com.findfix.find_fix_app.exception.exceptions.UserException;
+import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.usuario.dto.ActualizarPasswordDTO;
 import com.findfix.find_fix_app.usuario.dto.ActualizarUsuarioDTO;
 import com.findfix.find_fix_app.usuario.dto.RegistroDTO;
@@ -14,8 +17,8 @@ public interface UsuarioService {
     Optional<Usuario> buscarPorEmail(String email);
     List<Usuario> obtenerUsuarios();
     Optional<Usuario> buscarPorId(Long id);
-    Usuario registrarNuevoUsuario(RegistroDTO registroDTO);
-    void eliminar(Long id);
-    void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO);
-    void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO);
+    void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException;
+    void eliminar(Long id) throws UserNotFoundException;
+    void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException;
+    void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException;
 }
