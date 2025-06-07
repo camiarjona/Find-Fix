@@ -43,12 +43,14 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public void eliminarRol(String nombre) throws RolNotFoundException {
+        nombre = nombre.toUpperCase();
         Rol encontrado = rolRepository.findByNombre(nombre).orElseThrow(() -> new RolNotFoundException("El rol que desea eliminar no existe."));
         rolRepository.delete(encontrado);
     }
 
     @Override
     public void modificarRol(String nombreNuevo, Long idBuscada) throws RolException,RolNotFoundException {
+        nombreNuevo = nombreNuevo.toUpperCase();
         Rol encontrado = rolRepository.findById(idBuscada).orElseThrow(() -> new RolNotFoundException("El rol que desea modificar no existe."));
         encontrado.setNombre(nombreNuevo);
         Optional<Rol> verificacion = rolRepository.findByNombre(nombreNuevo);
@@ -59,4 +61,5 @@ public class RolServiceImpl implements RolService {
 
         rolRepository.save(encontrado);
     }
+
 }
