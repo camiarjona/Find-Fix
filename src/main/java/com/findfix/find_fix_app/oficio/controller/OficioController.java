@@ -1,10 +1,19 @@
 package com.findfix.find_fix_app.oficio.controller;
 
+import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
+import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/oficios")
 public class OficioController {
 
     @Autowired
@@ -29,10 +38,10 @@ public class OficioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 Created
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Oficio> updateOficio(@PathVariable Long id, @RequestBody Oficio oficio) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Oficio> updateOficio(@PathVariable Long id, @RequestBody String nuevo) {
         try {
-            Oficio actualizado = oficioService.updateOficio(id, oficio);
+            Oficio actualizado = oficioService.updateOficio(id, nuevo);
             return ResponseEntity.ok(actualizado); // 200 OK
         } catch (OficioNotFoundException e) {
             return ResponseEntity.notFound().build(); // 404 Not Found
