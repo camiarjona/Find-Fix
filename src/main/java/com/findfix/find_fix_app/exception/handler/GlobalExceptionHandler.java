@@ -1,10 +1,7 @@
 package com.findfix.find_fix_app.exception.handler;
 
 import com.findfix.find_fix_app.exception.dto.ErrorResponse;
-import com.findfix.find_fix_app.exception.exceptions.ReviewNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.WorkNotFoundException;
+import com.findfix.find_fix_app.exception.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -115,9 +112,11 @@ public class GlobalExceptionHandler {
             WorkNotFoundException.class,
             UserNotFoundException.class,
             ReviewNotFoundException.class,
-            SpecialistRequestNotFoundException.class
+            SpecialistRequestNotFoundException.class,
+            RolNotFoundException.class
+
     })
-    public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFound(Exception ex) {
         log.error("Resource not found: {}", ex.getMessage());
 
         ErrorResponse error = ErrorResponse.builder()
@@ -174,6 +173,23 @@ public class GlobalExceptionHandler {
         } catch (Exception e) {
             return "unknown";
         }
+    }
+
+    // Maneje de errores De RolException
+    @ExceptionHandler(
+            RolException.class
+
+    )
+    public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .path(getCurrentPath())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
 }

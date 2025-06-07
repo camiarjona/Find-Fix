@@ -15,6 +15,7 @@ public class SecurityConfig {
                         request -> request
                                 .requestMatchers("/user/register").permitAll()
                                 .requestMatchers("/user", "/role/**").hasRole("ADMIN")
+                                .requestMatchers(("/roles/**")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
