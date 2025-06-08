@@ -24,6 +24,7 @@ public class RolController {
 
     @PostMapping
     public ResponseEntity<String> crearRol(@Valid @RequestBody Rol rol) throws RolException {
+        rol.getNombre().toUpperCase();
         rolService.guardarRol(rol);
         return ResponseEntity.status(HttpStatus.CREATED).body("Rol creado con exito." + "\n" + "ID: " + rol.getRolId() + "\n" + "Nombre: " + rol.getNombre());
     }
@@ -35,6 +36,7 @@ public class RolController {
 
     @DeleteMapping("/{nombre}")
     public ResponseEntity<String> eliminarRol(@PathVariable String nombre) throws RolNotFoundException {
+        nombre.toUpperCase();
         rolService.eliminarRol(nombre);
         return ResponseEntity.status(HttpStatus.OK).body("Rol eliminado con exito");
 
@@ -46,8 +48,8 @@ public class RolController {
         return ResponseEntity.status(HttpStatus.OK).body("Rol modificado con exito");
     }
 
-    @GetMapping("/{nombre}")
-    public ResponseEntity<String> listarRoles(@Valid @RequestParam String nombre) throws RolNotFoundException {
+    @GetMapping("/{rol}")
+    public ResponseEntity<String> filtrarRol(@PathVariable("rol") String nombre) throws RolNotFoundException {
         Rol rol = rolService.filtrarPorNombre(nombre);
         return ResponseEntity.status(HttpStatus.OK).body("Rol encontrado :) " + "\n" + "ID: " + rol.getRolId() + "\n" + "Nombre: " + rol.getNombre() );
     }
