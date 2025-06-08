@@ -49,7 +49,7 @@ public class RolController {
     }
 
     @GetMapping("/{rol}")
-    public ResponseEntity<String> listarRoles(@PathVariable("rol") String nombre) throws RolNotFoundException {
+    public ResponseEntity<String> filtrarRol(@PathVariable("rol") String nombre) throws RolNotFoundException {
         Rol rol = rolService.filtrarPorNombre(nombre);
         return ResponseEntity.status(HttpStatus.OK).body("Rol encontrado :) " + "\n" + "ID: " + rol.getRolId() + "\n" + "Nombre: " + rol.getNombre() );
     }
