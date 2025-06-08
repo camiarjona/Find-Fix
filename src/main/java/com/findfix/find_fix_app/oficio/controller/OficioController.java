@@ -1,12 +1,16 @@
 package com.findfix.find_fix_app.oficio.controller;
 
 import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
+import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
+import com.findfix.find_fix_app.rol.model.Rol;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/oficios")
+@Validated
 public class OficioController {
 
     @Autowired
@@ -33,7 +38,7 @@ public class OficioController {
     }
 
     @PostMapping
-    public ResponseEntity<Oficio> saveOficio(@RequestBody Oficio oficio) {
+    public ResponseEntity<Oficio> saveOficio(@Valid @RequestBody Oficio oficio) {
         Oficio guardado = oficioService.saveOficio(oficio);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 Created
     }
@@ -57,6 +62,13 @@ public class OficioController {
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
+    }
+
+    @GetMapping("/{oficio}")
+    public ResponseEntity<String> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
+        nombre = nombre.toUpperCase();
+        Oficio oficio = oficioService.filtrarPorNombre(nombre);
+        return ResponseEntity.status(HttpStatus.OK).body("Oficio encontrado :) " + "\n" + "ID: " + oficio.getId() + "\n" + "Nombre: " + oficio.getNombre() );
     }
 
 }
