@@ -46,4 +46,16 @@ public class OficioServiceImpl implements OficioService {
     public void delete(Long id) {
         oficioRepository.deleteById(id);
     }
+
+    @Override
+    public Oficio filtrarPorNombre(String nombreBuscado) throws OficioNotFoundException {
+        Optional<Oficio> encontrado = oficioRepository.findByNombre(nombreBuscado);
+        if(!encontrado.isPresent())
+        {
+            throw new OficioNotFoundException("El oficio que desea buscar no esta registrado en el sistema :(");
+        }else
+        {
+            return encontrado.get();
+        }
+    }
 }
