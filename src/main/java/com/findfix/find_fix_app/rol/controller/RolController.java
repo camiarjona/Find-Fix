@@ -46,5 +46,11 @@ public class RolController {
         return ResponseEntity.status(HttpStatus.OK).body("Rol modificado con exito");
     }
 
+    @GetMapping("/{nombre}")
+    public ResponseEntity<String> listarRoles(@Valid @RequestParam String nombre) throws RolNotFoundException {
+        Rol rol = rolService.filtrarPorNombre(nombre);
+        return ResponseEntity.status(HttpStatus.OK).body("Rol encontrado :) " + "\n" + "ID: " + rol.getRolId() + "\n" + "Nombre: " + rol.getNombre() );
+    }
+
 
 }
