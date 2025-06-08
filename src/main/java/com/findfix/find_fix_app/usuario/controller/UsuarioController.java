@@ -1,5 +1,7 @@
 package com.findfix.find_fix_app.usuario.controller;
 
+import com.findfix.find_fix_app.exception.exceptions.RolException;
+import com.findfix.find_fix_app.exception.exceptions.UserException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.usuario.dto.ActualizarPasswordDTO;
 import com.findfix.find_fix_app.usuario.dto.ActualizarUsuarioDTO;
@@ -29,7 +31,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<RegistroDTO> registrarUsuario(@Valid @RequestBody RegistroDTO registro) {
+    public ResponseEntity<RegistroDTO> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UserException, RolException {
         usuarioService.registrarNuevoUsuario(registro);
         return ResponseEntity.status(HttpStatus.CREATED).body(registro);
     }
