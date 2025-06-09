@@ -64,7 +64,7 @@ public class OficioController {
         }
     }
 
-    @GetMapping("/{oficio}")
+    @GetMapping("/nombre/{oficio}")
     public ResponseEntity<String> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
         nombre = nombre.toUpperCase();
         Oficio oficio = oficioService.filtrarPorNombre(nombre);
