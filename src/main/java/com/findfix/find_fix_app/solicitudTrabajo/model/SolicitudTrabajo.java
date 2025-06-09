@@ -17,7 +17,7 @@ public class SolicitudTrabajo {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long stId;
-    /// Long especialistaId
+    /// Long especialista Id
     /// Long clienteId
     @Column(nullable = false)
     private LocalDate fechaCreacion;

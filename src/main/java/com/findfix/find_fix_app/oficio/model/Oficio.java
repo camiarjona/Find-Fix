@@ -16,4 +16,9 @@ public class Oficio {
 
     @Column(nullable = false)
     private String nombre;
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre != null ? nombre.toUpperCase() : null;
+    }
+
 }
