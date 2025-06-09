@@ -1,26 +1,12 @@
 package com.findfix.find_fix_app.especialista.controller;
 
-import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
-import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
-import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.SecondaryTable;
-import jakarta.validation.Valid;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/especialista")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class EspecialistaController {
     private final EspecialistaService especialistaService;
