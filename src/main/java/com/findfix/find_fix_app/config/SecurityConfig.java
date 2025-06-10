@@ -13,10 +13,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/usuario/registrar").permitAll()
-                                .requestMatchers("/usuario", "/roles/**", "/usuario/eliminar").hasRole("ADMIN")
-                                .requestMatchers("/usuario/modificar-datos", "/usuario/modificar-password").hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
-                                .requestMatchers("/oficios/**").permitAll()
+                                .requestMatchers("/user/register").permitAll()
+                                .requestMatchers("/user", "/role/**").hasRole("ADMIN")
+                                .requestMatchers("/especialista/**").permitAll() /// cambio belen
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
