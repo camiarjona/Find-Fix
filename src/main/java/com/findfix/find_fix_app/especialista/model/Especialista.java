@@ -25,10 +25,10 @@ public class Especialista {
     @Column(name = "id_especialista")
     private Long especialistaId;
 
-    @Column(nullable = false, unique = true)
-    @NotNull(message = "El DNI no puede ser nulo")
+    @Column(unique = true)
     private Long dni;
 
+    @Column(length = 250)
     private String descripcion;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -42,7 +42,6 @@ public class Especialista {
             joinColumns = @JoinColumn(name = "id_especialista"),
             inverseJoinColumns = @JoinColumn(name = "id_oficio")
     )
-    @NotEmpty(message = "Debe tener al menos un oficio")
     private Set<Oficio>oficios = new HashSet<>();
 
 

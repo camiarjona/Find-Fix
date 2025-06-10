@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public record ActualizarOficioEspDTO (
-        @NotEmpty(message = "Debe especificar al menos un oficio para agregar o eliminar")
         Set<Long> agregar ,
         Set<Long> eliminar){
 
