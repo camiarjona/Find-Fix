@@ -36,6 +36,12 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     private final RolRepository rolRepository;
     private final AuthService authService;
 
+    //metodo para guardar un usuario basico
+    @Override
+    public void actualizarUsuarioEspecialista(Usuario usuario){
+        usuarioRepository.save(usuario);
+    }
+
     // metodo para buscar un usuario por email
     @Override
     public Optional<Usuario> buscarPorEmail(String email) {
@@ -195,6 +201,8 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         return new VerPerfilUsuarioDTO(usuario);
     }
+
+
 
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
