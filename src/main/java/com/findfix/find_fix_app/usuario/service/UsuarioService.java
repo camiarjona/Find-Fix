@@ -25,6 +25,6 @@ public interface UsuarioService {
     void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException;
     void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException;
     VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException;
-
+    void actualizarUsuarioEspecialista(Usuario usuario);
 
 }
