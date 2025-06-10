@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.usuario.dto.ActualizarPasswordDTO;
+import com.findfix.find_fix_app.usuario.dto.ActualizarRolesUsuarioDTO;
 import com.findfix.find_fix_app.usuario.dto.ActualizarUsuarioDTO;
 import com.findfix.find_fix_app.usuario.dto.RegistroDTO;
 import com.findfix.find_fix_app.usuario.model.Usuario;
@@ -120,6 +121,31 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         }
         if (actualizarUsuarioDTO.ciudad() != null) {
             usuario.setCiudad(actualizarUsuarioDTO.ciudad());
+        }
+
+        usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void actualizarRolesUsuario(Long idUsuario, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
+
+        // agregar roles
+        if (usuarioRolesDTO.rolesAgregar() != null && !usuarioRolesDTO.rolesAgregar().isEmpty()) {
+            Set<Rol> rolesAAgregar = usuarioRolesDTO.rolesAgregar().stream()
+                    .map(nombre -> rolRepository.findByNombre(nombre)
+                            .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombre)))
+                    .collect(Collectors.toSet());
+
+            usuario.getRoles().addAll(rolesAAgregar);
+        }
+
+        //eliminar roles
+        if(usuarioRolesDTO.rolesEliminar()!=null &&  !usuarioRolesDTO.rolesEliminar().isEmpty()){
+            for (String nombreRol : usuarioRolesDTO.rolesEliminar()) {
+                usuario.getRoles().removeIf(r -> r.getNombre().equalsIgnoreCase(nombreRol));
+            }
         }
 
         usuarioRepository.save(usuario);
