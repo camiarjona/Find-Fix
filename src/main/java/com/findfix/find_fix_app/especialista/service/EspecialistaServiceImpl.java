@@ -12,9 +12,7 @@ import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,6 +27,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     private final OficioRepository oficioRepository;
     private final UsuarioService usuarioService;
 
+    /// Metodo para guardar un usuario como especialista
     @Override
     public Especialista guardar(Long id) throws UserNotFoundException {
         Usuario usuario = usuarioService.buscarPorId(id).orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
@@ -40,7 +39,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         return especialistaRepository.save(especialista);
     }
 
-
+    /// Metodo para que el admin actualice los atributos de un especialista
     @Override
     public Especialista actualizarEspecialista(String email, ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
@@ -74,16 +73,20 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     }
 
 
+    /// Metodo para mostrar todos los especialistas para el Admin
     @Override
     public List<Especialista> obtenerEspecialistas() {
         return especialistaRepository.findAll();
     }
 
+    /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
     public List<Especialista> obtenerEspecialistasDisponibles() {
         return especialistaRepository.findAll();
     }
 
+
+    ///Metodo para que el admin pueda eliminar un especialista por email
     @Override
     public void eliminarPorEmail(String email) throws SpecialistRequestNotFoundException {
         if(especialistaRepository.findByUsuarioEmail(email).isEmpty()){
@@ -92,22 +95,26 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         especialistaRepository.deleteById(especialistaRepository.findByUsuarioEmail(email).get().getEspecialistaId());
     }
 
+    /// Metodo para buscar un especialista por DNI
     @Override
     public Optional<Especialista> buscarPorDni(Long dni) {
         return especialistaRepository.findByDni(dni);
     }
 
+    /// Metodo para buscar un especialista por ID
     @Override
     public Optional<Especialista> buscarPorId(Long id) {
         return especialistaRepository.findById(id);
     }
 
 
+    /// Metodo para buscar un especialista por Email
     @Override
     public Optional<Especialista> buscarPorEmail(String email) {
         return especialistaRepository.findByUsuarioEmail(email);
     }
 
+    /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
     @Override
     public Especialista actualizarOficioDeEspecialista(String email, ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email).orElseThrow(()-> new SpecialistRequestNotFoundException("Especialista no encontrado"));
@@ -133,6 +140,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         return especialistaRepository.save(especialista);
     }
 
+    /// Metodo para buscar especialistas de un oficio en particular
     @Override
     public List<Especialista> buscarPorOficio(String nombreOficio) {
         Optional<Oficio> oficioOptional = oficioRepository.findByNombre(nombreOficio);
@@ -143,6 +151,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         }
     }
 
+    /// Metodo para buscar especialistas de un oficio en particular
     @Override
     public List<Especialista> buscarPorCiudad(String ciudad) {
         return especialistaRepository.findByUsuario_Ciudad(ciudad).stream().collect(Collectors.toList());
