@@ -93,7 +93,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
         actualizarDatosEspecialista(especialista, dto);
 
-         /// usuarioService.actualizar(especialista);
+        usuarioService.actualizarUsuarioEspecialista(especialista.getUsuario());
         return especialistaRepository.save(especialista);
     }
 
@@ -104,7 +104,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
         actualizarDatosEspecialista(especialista, dto);
 
-        /// usuarioService.actualizar(especialista);
+        usuarioService.actualizarUsuarioEspecialista(especialista.getUsuario());
         return especialistaRepository.save(especialista);
     }
 
