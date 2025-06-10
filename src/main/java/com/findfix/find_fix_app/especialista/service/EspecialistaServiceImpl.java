@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.especialista.service;
 
+import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
 import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
 import com.findfix.find_fix_app.especialista.model.Especialista;
@@ -26,6 +27,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     private final EspecialistaRepository especialistaRepository;
     private final OficioRepository oficioRepository;
     private final UsuarioService usuarioService;
+    private final AuthService authService;
 
     /// Metodo para guardar un usuario como especialista
     @Override
@@ -39,50 +41,91 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         return especialistaRepository.save(especialista);
     }
 
-    /// Metodo para que el admin actualice los atributos de un especialista
-    @Override
-    public Especialista actualizarEspecialista(String email, ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException {
-        Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
-                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado"));
 
-        if (dto.descripcion() != null && !dto.descripcion().isEmpty()) {
+    /// Metodo para traerme el especialista segun el usuario registrado
+    public Especialista obtenerEspecialistaAutenticado() throws UserNotFoundException, SpecialistRequestNotFoundException {
+        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        return especialistaRepository.findByUsuario(usuario)
+                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado para el usuario autenticado"));
+    }
+
+    /// Metodo para validar los string que se ingresan
+    private boolean esValorValido(String valor) {
+        return valor != null && !valor.isEmpty();
+    }
+
+    /// Metodo para actualizar los datos y llamarlo desde el metodo de actualizar por admin o por especialista
+    private void actualizarDatosEspecialista(Especialista especialista, ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion {
+        if (esValorValido(dto.descripcion())) {
             especialista.setDescripcion(dto.descripcion());
         }
 
-        if (dto.nombre() != null && !dto.nombre().isEmpty()) {
+        if (esValorValido(dto.nombre())) {
             especialista.getUsuario().setNombre(dto.nombre());
         }
 
-        if (dto.apellido() != null && !dto.apellido().isEmpty()) {
+        if (esValorValido(dto.apellido())) {
             especialista.getUsuario().setApellido(dto.apellido());
         }
 
-        if (dto.telefono() != null && !dto.telefono().isEmpty()) {
+        if (esValorValido(dto.telefono())) {
             especialista.getUsuario().setTelefono(dto.telefono());
         }
 
-        if (dto.ciudad() != null && !dto.ciudad().isEmpty()) {
+        if (esValorValido(dto.ciudad())) {
             especialista.getUsuario().setCiudad(dto.ciudad());
         }
-        if (dto.dni() != null) {
+
+        if (dto.dni() != null && !dto.dni().equals(especialista.getDni())) {
+            boolean existe = especialistaRepository.existsByDni(dto.dni());
+            if (existe) {
+                throw new EspecialistaExcepcion("El DNI ya está en uso por otro especialista.");
+            }
             especialista.setDni(dto.dni());
         }
+    }
+
+    /// Metodo para que el admin actualice los atributos de un especialista
+    @Override
+    public Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
+        Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
+                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado"));
+
+        actualizarDatosEspecialista(especialista, dto);
+
+         /// usuarioService.actualizar(especialista);
+        return especialistaRepository.save(especialista);
+    }
+
+    /// Metodo para que el especialista actualice sus atributos
+    @Override
+    public Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException, UserNotFoundException, EspecialistaExcepcion {
+        Especialista especialista = obtenerEspecialistaAutenticado();
+
+        actualizarDatosEspecialista(especialista, dto);
 
         /// usuarioService.actualizar(especialista);
         return especialistaRepository.save(especialista);
     }
 
-
     /// Metodo para mostrar todos los especialistas para el Admin
     @Override
-    public List<Especialista> obtenerEspecialistas() {
-        return especialistaRepository.findAll();
+    public List<Especialista> obtenerEspecialistas() throws SpecialistRequestNotFoundException {
+        List<Especialista> especialistas = especialistaRepository.findAll();
+        if (especialistas.isEmpty()) {
+            throw new SpecialistRequestNotFoundException("No hay especialistas registrados en el sistema.");
+        }
+        return especialistas;
     }
 
     /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
-    public List<Especialista> obtenerEspecialistasDisponibles() {
-        return especialistaRepository.findAll();
+    public List<Especialista> obtenerEspecialistasDisponibles() throws SpecialistRequestNotFoundException {
+        List<Especialista> especialistas = especialistaRepository.findAll();
+        if (especialistas.isEmpty()) {
+            throw new SpecialistRequestNotFoundException("No hay especialistas disponibles en este momento.");
+        }
+        return especialistas;
     }
 
 
@@ -114,29 +157,49 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         return especialistaRepository.findByUsuarioEmail(email);
     }
 
-    /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
-    @Override
-    public Especialista actualizarOficioDeEspecialista(String email, ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
-        Especialista especialista = especialistaRepository.findByUsuarioEmail(email).orElseThrow(()-> new SpecialistRequestNotFoundException("Especialista no encontrado"));
-
-        ///Se eliminan los oficios que esten en la lista para eliminar
-        if(dto.eliminar() != null && !dto.eliminar().isEmpty()){
-            Set<Oficio> oficiosAEliminar = oficioRepository.findAllById(dto.eliminar()).stream().collect(Collectors.toSet());
+    /// Metotodo para actualoizar los oficios que luego va a llamar cada metodo de actualizar oficio
+    private void actualizarDatosOficiosEspecialista(Especialista especialista, ActualizarOficioEspDTO dto) throws EspecialistaExcepcion {
+        // Eliminar oficios
+        if(dto.eliminar() != null && !dto.eliminar().isEmpty()) {
+            Set<Oficio> oficiosAEliminar = oficioRepository.findAllById(dto.eliminar())
+                    .stream()
+                    .collect(Collectors.toSet());
             especialista.getOficios().removeAll(oficiosAEliminar);
         }
 
-        ///Se agregan los oficios que esten en la lista para agregar
-        if(dto.agregar() != null && !dto.agregar().isEmpty()){
-            Set<Oficio>oficiosAAgregar = oficioRepository.findAllById(dto.agregar()).stream().collect(Collectors.toSet());
+        // Agregar oficios
+        if(dto.agregar() != null && !dto.agregar().isEmpty()) {
+            Set<Oficio> oficiosAAgregar = oficioRepository.findAllById(dto.agregar())
+                    .stream()
+                    .collect(Collectors.toSet());
             especialista.getOficios().addAll(oficiosAAgregar);
         }
 
-        ///validacion para que quede al menos un oficio en la lista
-        if(especialista.getOficios().isEmpty()){
+        // Validar que quede al menos un oficio
+        if(especialista.getOficios().isEmpty()) {
             throw new EspecialistaExcepcion("El especialista debe tener al menos un oficio");
         }
+    }
 
-        /// usuarioService.actualizar(especialista);
+    /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
+    @Override
+    public Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
+        Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
+                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado"));
+
+        actualizarDatosOficiosEspecialista(especialista, dto);
+
+        return especialistaRepository.save(especialista);
+    }
+
+
+    /// Metodo para actualizar (agregar o eliminar) oficios
+    @Override
+    public Especialista actualizarOficioDeEspecialista(ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion, UserNotFoundException {
+        Especialista especialista = obtenerEspecialistaAutenticado();
+
+        actualizarDatosOficiosEspecialista(especialista, dto);
+
         return especialistaRepository.save(especialista);
     }
 
@@ -150,6 +213,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
             return List.of();
         }
     }
+
 
     /// Metodo para buscar especialistas de un oficio en particular
     @Override
