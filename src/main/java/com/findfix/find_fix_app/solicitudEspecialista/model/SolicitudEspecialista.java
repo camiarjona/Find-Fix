@@ -17,7 +17,6 @@ public class SolicitudEspecialista {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seId;
-   ///  Long usuarioId
    @Column(nullable = false)
    private LocalDate fechaSolicitud;
    @Column(nullable = false)
@@ -26,5 +25,6 @@ public class SolicitudEspecialista {
    private EstadosSolicitudes estado;
    @Column(nullable = false)
    private String motivo;
+
 
 }

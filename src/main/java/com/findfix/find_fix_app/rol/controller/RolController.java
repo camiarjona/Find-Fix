@@ -35,6 +35,7 @@ public class RolController {
 
     @DeleteMapping("/{nombre}")
     public ResponseEntity<String> eliminarRol(@PathVariable String nombre) throws RolNotFoundException {
+        nombre = nombre.toUpperCase();
         rolService.eliminarRol(nombre);
         return ResponseEntity.status(HttpStatus.OK).body("Rol eliminado con exito");
 
@@ -44,6 +45,13 @@ public class RolController {
     public ResponseEntity<String> modificarRol(@PathVariable Long id, @RequestParam String nuevoNombre) throws RolNotFoundException, RolException {
         rolService.modificarRol(nuevoNombre, id);
         return ResponseEntity.status(HttpStatus.OK).body("Rol modificado con exito");
+    }
+
+    @GetMapping("/{rol}")
+    public ResponseEntity<String> filtrarPorNombre(@PathVariable("rol") String nombre) throws RolNotFoundException {
+        nombre = nombre.toUpperCase();
+        Rol rol = rolService.filtrarPorNombre(nombre);
+        return ResponseEntity.status(HttpStatus.OK).body("Rol encontrado :) " + "\n" + "ID: " + rol.getRolId() + "\n" + "Nombre: " + rol.getNombre() );
     }
 
 

@@ -19,14 +19,14 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public void guardarRol(Rol rol)  throws RolException{
+        String nombre = rol.getNombre();
+        rol.setNombre(nombre.toUpperCase());
 
         if (rolRepository.findByNombre(rol.getNombre()).isPresent()) {
             throw new RolException("El rol ingresado ya esta registrado en el sistema");
         } else {
             rolRepository.save(rol);
-
         }
-
     }
 
     @Override
@@ -62,4 +62,15 @@ public class RolServiceImpl implements RolService {
         rolRepository.save(encontrado);
     }
 
+    @Override
+    public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
+        Optional<Rol> encontrado = rolRepository.findByNombre(nombreBuscado);
+        if(!encontrado.isPresent())
+        {
+            throw new RolNotFoundException("El rol que intenta buscar no esta registrado en el sistema");
+        }else
+        {
+            return encontrado.get();
+        }
+    }
 }
