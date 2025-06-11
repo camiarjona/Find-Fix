@@ -1,6 +1,10 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.model;
 
 import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.resena.model.Resena;
+import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
+import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +20,8 @@ import java.time.LocalDate;
 public class TrabajoApp {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column(name = "id_trabajo_app")
     private Long trabajoAppId;
-    /// Long especialistaId;
-    /// Long clienteID;
     @Column(nullable = false)
     private LocalDate fechaInicio;
     @Column(nullable = false)
@@ -29,5 +32,19 @@ public class TrabajoApp {
     private LocalDate fechaFin;
 
     private Double presupuesto;
-    /// Long solicitudId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_especialista")
+    private Especialista especialista;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_solicitud_trabajo")
+    private SolicitudTrabajo solicitudTrabajo;
+
+    @OneToOne(mappedBy = "trabajo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Resena  resena;
 }

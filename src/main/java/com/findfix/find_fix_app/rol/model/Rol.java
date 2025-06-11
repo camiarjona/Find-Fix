@@ -20,7 +20,7 @@ public class Rol {
     @Column(name = "id_rol")
     private Long rolId;
     @NotBlank(message = "El nombre es obligatorio")
-    @NotEmpty(message = "El nombre no puede estar vacio")
+    @NotEmpty(message = "El nombre no puede estar vacío")
     @Size(min = 4, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres")
     @Pattern(regexp = "^[a-zA-Z]+$", message = "El nombre solo debe contener letras")
     @Column(nullable = false)

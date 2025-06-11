@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Oficio {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_oficio")
     private Long id;
 
     @Column(nullable = false)
