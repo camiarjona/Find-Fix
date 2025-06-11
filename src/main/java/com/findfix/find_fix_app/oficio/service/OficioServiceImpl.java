@@ -18,23 +18,23 @@ public class OficioServiceImpl implements OficioService {
     private OficioRepository oficioRepository;
 
     @Override
-    public Oficio saveOficio(Oficio oficio) {
+    public Oficio crearOficio(Oficio oficio) {
         return oficioRepository.save(oficio);
     }
 
     @Override
-    public List<Oficio> findAll() {
+    public List<Oficio> buscarTodos() {
         return oficioRepository.findAll();
     }
 
     @Override
-    public Optional<Oficio> findById(Long id) {
+    public Optional<Oficio> buscarPorId(Long id) {
         return oficioRepository.findById(id);
     }
 
     @Override
-    public Oficio updateOficio(Long id, String nuevo) throws OficioNotFoundException {
-        Optional<Oficio> existente = Optional.ofNullable(findById(id).orElseThrow(() -> new OficioNotFoundException("\n Oficio no encontrado. ")));
+    public Oficio modificarOficio(Long id, String nuevo) throws OficioNotFoundException {
+        Optional<Oficio> existente = Optional.ofNullable(buscarPorId(id).orElseThrow(() -> new OficioNotFoundException("\n Oficio no encontrado. ")));
         if(existente.isPresent()){
             existente.get().setNombre(nuevo);
             return oficioRepository.save(existente.get());
@@ -43,7 +43,7 @@ public class OficioServiceImpl implements OficioService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void borrarOficioPorId(Long id) {
         oficioRepository.deleteById(id);
     }
 

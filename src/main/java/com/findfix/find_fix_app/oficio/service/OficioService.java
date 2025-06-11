@@ -10,11 +10,10 @@ import java.util.Optional;
 @Service
 public interface OficioService {
 
-    Oficio saveOficio(Oficio oficio);
-    List<Oficio> findAll();
-    Optional<Oficio> findById(Long id);
-    Oficio updateOficio(Long id, String nuevo) throws OficioNotFoundException;
-    void delete(Long id);
-    Oficio filtrarPorNombre(String nombreBuscado) throws OficioNotFoundException;
+    Oficio crearOficio(Oficio oficio);
+    List<Oficio> buscarTodos();
+    Optional<Oficio> buscarPorId(Long id);
+    Oficio modificarOficio(Long id, String nuevo) throws OficioNotFoundException;
+    void borrarOficioPorId(Long id);
 
 }

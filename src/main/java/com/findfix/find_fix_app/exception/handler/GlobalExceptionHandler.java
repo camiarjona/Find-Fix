@@ -114,7 +114,8 @@ public class GlobalExceptionHandler {
             ReviewNotFoundException.class,
             SpecialistRequestNotFoundException.class,
             RolNotFoundException.class,
-            OficioNotFoundException.class
+            OficioNotFoundException.class,
+            TrabajoExternoNotFoundException.class
 
     })
     public ResponseEntity<ErrorResponse> handleNotFound(Exception ex) {
