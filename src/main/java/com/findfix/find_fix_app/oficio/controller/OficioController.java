@@ -1,7 +1,6 @@
 package com.findfix.find_fix_app.oficio.controller;
 
 import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
 import com.findfix.find_fix_app.rol.model.Rol;
@@ -25,28 +24,28 @@ public class OficioController {
     private OficioService oficioService;
 
     @GetMapping
-    public ResponseEntity<List<Oficio>> findAll() {
-        List<Oficio> oficios = oficioService.findAll();
+    public ResponseEntity<List<Oficio>> buscarTodos() {
+        List<Oficio> oficios = oficioService.buscarTodos();
         return ResponseEntity.ok(oficios); // 200 OK
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Oficio> findById(@PathVariable Long id) {
-        Optional<Oficio> oficio = oficioService.findById(id);
+    public ResponseEntity<Oficio> buscarPorId(@PathVariable Long id) {
+        Optional<Oficio> oficio = oficioService.buscarPorId(id);
         return oficio.map(ResponseEntity::ok) // 200 OK si existe
                 .orElseGet(() -> ResponseEntity.notFound().build()); // 404 si no existe
     }
 
     @PostMapping
-    public ResponseEntity<Oficio> saveOficio(@Valid @RequestBody Oficio oficio) {
-        Oficio guardado = oficioService.saveOficio(oficio);
+    public ResponseEntity<Oficio> crearOficio(@RequestBody Oficio oficio) {
+        Oficio guardado = oficioService.crearOficio(oficio);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 Created
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Oficio> updateOficio(@PathVariable Long id, @RequestBody String nuevo) {
+    public ResponseEntity<Oficio> modificarOficio(@PathVariable Long id, @RequestBody String nuevo) {
         try {
-            Oficio actualizado = oficioService.updateOficio(id, nuevo);
+            Oficio actualizado = oficioService.modificarOficio(id, nuevo);
             return ResponseEntity.ok(actualizado); // 200 OK
         } catch (OficioNotFoundException e) {
             return ResponseEntity.notFound().build(); // 404 Not Found
@@ -54,10 +53,10 @@ public class OficioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOficio(@PathVariable Long id) {
-        Optional<Oficio> oficio = oficioService.findById(id);
+    public ResponseEntity<Void> borrarOficioPorId(@PathVariable Long id) {
+        Optional<Oficio> oficio = oficioService.buscarPorId(id);
         if (oficio.isPresent()) {
-            oficioService.delete(id);
+            oficioService.borrarOficioPorId(id);
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found

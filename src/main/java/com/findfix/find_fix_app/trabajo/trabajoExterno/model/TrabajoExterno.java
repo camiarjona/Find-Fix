@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.model;
 
 import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.especialista.model.Especialista;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,18 +19,28 @@ public class TrabajoExterno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trabajoExternoId;
+
     @Column(nullable = false)
     private String nombreCliente;
-    @Column(nullable = false)
+
+    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaInicio;
-    @Column(nullable = false)
+
+    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaFin;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadosTrabajos estado;
+
     @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
     private Double presupuesto;
-    /// Long especialistaId;
+
+    @ManyToOne
+    @JoinColumn(name = "id_especialista")
+    private Especialista especialista;
 
 }

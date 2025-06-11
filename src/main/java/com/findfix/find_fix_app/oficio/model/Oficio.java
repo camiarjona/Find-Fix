@@ -22,4 +22,6 @@ public class Oficio {
         this.nombre = nombre != null ? nombre.toUpperCase() : null;
     }
 
+
+
 }
