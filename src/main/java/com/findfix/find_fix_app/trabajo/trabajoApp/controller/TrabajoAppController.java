@@ -119,17 +119,21 @@ public class TrabajoAppController {
 
 
     @PatchMapping("/{tituloBuscado}")
-    public ResponseEntity<String> actualizarTrabajo(@PathVariable String tituloBuscado, @Valid @RequestBody ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public ResponseEntity<Map<String,Object>> actualizarTrabajo(@PathVariable String tituloBuscado, @Valid @RequestBody ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException {
         TrabajoApp trabajoApp = trabajoAppService.actualizarTrabajo(tituloBuscado,dto);
-        return ResponseEntity.status(HttpStatus.OK).body("Trabajo modificado con exito ☑️");
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Trabajo modificado con exito ☑️");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
     @PatchMapping("/{titulo}/{nuevoEstado}")
-    public ResponseEntity<String> actualizarEstadoTrabajo(@PathVariable String titulo, @PathVariable String nuevoEstado) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public ResponseEntity<Map<String,Object>> actualizarEstadoTrabajo(@PathVariable String titulo, @PathVariable String nuevoEstado) throws TrabajoAppNotFoundException, TrabajoAppException {
         String nuevoEstadoNormalizado = nuevoEstado.toUpperCase().replace(" ", "_");
         trabajoAppService.modificarEstadoTrabajo(titulo,nuevoEstadoNormalizado);
-        return ResponseEntity.status(HttpStatus.OK).body("Estado actualizado con exito ☑️");
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","\"Estado actualizado con exito ️️☑️");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
