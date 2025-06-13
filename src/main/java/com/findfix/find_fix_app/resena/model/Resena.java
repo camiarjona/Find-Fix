@@ -23,8 +23,8 @@ public class Resena {
     @Column(nullable = false)
     private String comentario;
 
-    @OneToOne(mappedBy = "trabajo",fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajo", nullable = false, unique = true)
-    private TrabajoApp trabajo;
+    private TrabajoApp trabajoApp;
 
 }

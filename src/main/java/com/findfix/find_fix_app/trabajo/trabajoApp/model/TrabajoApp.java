@@ -45,6 +45,6 @@ public class TrabajoApp {
     @JoinColumn(name = "id_solicitud_trabajo")
     private SolicitudTrabajo solicitudTrabajo;
 
-    @OneToOne(mappedBy = "trabajo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Resena  resena;
+    @OneToOne(mappedBy = "trabajoApp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Resena resena;
 }

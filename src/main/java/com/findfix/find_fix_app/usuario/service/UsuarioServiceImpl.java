@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,7 +37,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para guardar un usuario basico
     @Override
-    public void actualizarUsuarioEspecialista(Usuario usuario){
+    public void actualizarUsuarioEspecialista(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
 
@@ -50,8 +49,13 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para obtener lista completa de usuarios
     @Override
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioRepository.findAll();
+    public List<Usuario> obtenerUsuarios() throws UserException {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        if (usuarios.isEmpty()) {
+            throw new UserException("No hay usuarios registrados.");
+        }
+        return usuarios;
     }
 
     // metodo para buscar un usuario por id
@@ -75,11 +79,20 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuario.setNombre(registroDTO.nombre());
         usuario.setApellido(registroDTO.apellido());
 
-        //Se registra con rol cliente por default
-        Rol rol = rolRepository.findByNombre("CLIENTE")
-                .orElseThrow(() -> new RolException("Rol no encontrado."));
+        Rol rol = new Rol();
 
-        usuario.getRoles().add(rol);
+        if (obtenerUsuarios().isEmpty()) {
+            //si la lista esta vacia, al primer usuario creado se le asigna rol de admin
+            rol = rolRepository.findByNombre("ADMIN")
+                    .orElseThrow(() -> new RolException("Rol no encontrado."));
+            usuario.getRoles().add(rol);
+        } else {
+            //Se registra con rol cliente por default
+            rol = rolRepository.findByNombre("CLIENTE")
+                    .orElseThrow(() -> new RolException("Rol no encontrado."));
+
+            usuario.getRoles().add(rol);
+        }
 
         usuarioRepository.save(usuario);
     }
@@ -113,18 +126,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
-        if (actualizarUsuarioDTO.nombre() != null) {
-            usuario.setNombre(actualizarUsuarioDTO.nombre());
-        }
-        if (actualizarUsuarioDTO.apellido() != null) {
-            usuario.setApellido(actualizarUsuarioDTO.apellido());
-        }
-        if (actualizarUsuarioDTO.telefono() != null) {
-            usuario.setTelefono(actualizarUsuarioDTO.telefono());
-        }
-        if (actualizarUsuarioDTO.ciudad() != null) {
-            usuario.setCiudad(actualizarUsuarioDTO.ciudad());
-        }
+        actualizarDatosAModificar(actualizarUsuarioDTO, usuario);
 
         usuarioRepository.save(usuario);
     }
@@ -169,6 +171,13 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
 
+        actualizarDatosAModificar(actualizarUsuarioDTO, usuario);
+
+        usuarioRepository.save(usuario);
+    }
+
+    public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario){
+
         if (actualizarUsuarioDTO.nombre() != null) {
             usuario.setNombre(actualizarUsuarioDTO.nombre());
         }
@@ -181,9 +190,8 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         if (actualizarUsuarioDTO.ciudad() != null) {
             usuario.setCiudad(actualizarUsuarioDTO.ciudad());
         }
-
-        usuarioRepository.save(usuario);
     }
+
 
     // metodo para asignar un rol especifico a un usuario (para solicitudes)
     @Override
@@ -203,7 +211,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
 
-
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -217,7 +224,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
                 getAuthorities(usuario.getRoles())
         );
     }
-
 
     // Metodo que convierte los roles del usuario en autoridades para spring security
     private Collection<? extends GrantedAuthority> getAuthorities(Set<Rol> roles) {

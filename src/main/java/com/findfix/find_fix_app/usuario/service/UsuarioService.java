@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public interface UsuarioService {
     Optional<Usuario> buscarPorEmail(String email);
-    List<Usuario> obtenerUsuarios();
+    List<Usuario> obtenerUsuarios() throws UserException;
     Optional<Usuario> buscarPorId(Long id);
     void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException;
     void eliminarPorId(Long id) throws UserNotFoundException;
