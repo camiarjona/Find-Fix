@@ -23,22 +23,22 @@ import java.util.Map;
 public class EspecialistaController {
     private final EspecialistaService especialistaService;
 
+//    @PostMapping("/agregar/{id}")
+//    public ResponseEntity<Map<String, Object>> guardar(@Valid @PathVariable Long id) throws UserNotFoundException {
+//        Map<String, Object> response = new HashMap<>();
+//
+//        especialistaService.guardar();
+//        response.put("message", "Especialista registrado exitosamente✅");
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//    }
 
-    @PostMapping("/agregar/{id}")
-    public ResponseEntity<Map<String, Object>> guardar(@Valid @PathVariable Long id) throws UserNotFoundException {
-        Map<String, Object> response = new HashMap<>();
-
-        especialistaService.guardar(id);
-        response.put("message", "Especialista registrado exitosamente✅");
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
     @GetMapping
     public ResponseEntity<Map<String, Object>> obtenerEspecialistas() throws SpecialistRequestNotFoundException {
         Map<String, Object> response = new HashMap<>();
         List<Especialista> especialistas = especialistaService.obtenerEspecialistas();
 
-        response.put("message", "Lista de especialistas encontrada☑\uFE0F");
+        response.put("message", "Lista de especialistas encontrada☑️");
         response.put("data", especialistas.stream().map(EspecialistaFichaCompletaDTO::new).toList());
 
         return ResponseEntity.ok(response);

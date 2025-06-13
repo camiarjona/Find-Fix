@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.especialista.service;
 
 import com.findfix.find_fix_app.auth.service.AuthService;
+import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
 import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
 import com.findfix.find_fix_app.especialista.model.Especialista;
@@ -31,12 +32,9 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para guardar un usuario como especialista
     @Override
-    public Especialista guardar(Long id) throws UserNotFoundException {
-        Usuario usuario = usuarioService.buscarPorId(id).orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
-
+    public Especialista guardar(Usuario usuario){
         Especialista especialista = new Especialista();
         especialista.setUsuario(usuario);
-
 
         return especialistaRepository.save(especialista);
     }
@@ -73,7 +71,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         }
 
         if (esValorValido(dto.ciudad())) {
-            especialista.getUsuario().setCiudad(dto.ciudad());
+            especialista.getUsuario().setCiudad(CiudadesDisponibles.desdeString(dto.ciudad()));
         }
 
         if (dto.dni() != null && !dto.dni().equals(especialista.getDni())) {

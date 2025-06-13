@@ -22,7 +22,7 @@ public class EspecialistaRespuestaDTO {
         this.apellido = especialista.getUsuario().getApellido();
         this.dni = especialista.getDni();
         this.telefono = especialista.getUsuario().getTelefono();
-        this.ciudad = especialista.getUsuario().getCiudad();
+        this.ciudad = especialista.getUsuario().getCiudad().getNombreAmigable();
         this.oficios = especialista.getOficios().stream()
                 .map(oficio -> oficio.getNombre())
                 .collect(Collectors.toSet());

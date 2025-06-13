@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.usuario.service;
 
+import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.exception.exceptions.RolException;
 import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserException;
@@ -26,5 +27,6 @@ public interface UsuarioService {
     void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException;
     VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException;
     void actualizarUsuarioEspecialista(Usuario usuario);
+    List<String> ciudadesDisponibles();
 
 }

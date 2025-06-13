@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.usuario.model;
 
+import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
@@ -37,7 +38,9 @@ public class Usuario {
     private String apellido;
 
     private String telefono;
-    private String ciudad;
+
+    @Enumerated(EnumType.STRING)
+    private CiudadesDisponibles ciudad;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

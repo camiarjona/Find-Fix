@@ -20,7 +20,7 @@ public class EspecialistaFichaCompletaDTO {
         this.nombre = especialista.getUsuario().getNombre();
         this.apellido = especialista.getUsuario().getApellido();
         this.telefono = especialista.getUsuario().getTelefono();
-        this.ciudad = especialista.getUsuario().getCiudad();
+        this.ciudad = especialista.getUsuario().getCiudad().getNombreAmigable();
         this.oficios = especialista.getOficios().stream().map(Oficio::getNombre).collect(java.util.stream.Collectors.toSet());
     }
 

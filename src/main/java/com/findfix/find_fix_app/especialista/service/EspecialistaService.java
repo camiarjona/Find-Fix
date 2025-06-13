@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.exception.exceptions.EspecialistaExcepcion;
 import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Service
 public interface EspecialistaService {
 
-    Especialista guardar(Long id) throws UserNotFoundException;
+    Especialista guardar(Usuario usuario);
 
     Especialista obtenerEspecialistaAutenticado() throws UserNotFoundException, SpecialistRequestNotFoundException;
     Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion;

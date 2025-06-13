@@ -6,4 +6,13 @@ public record ActualizarUsuarioDTO (
     String telefono,
     String ciudad
 ){
+    @Override
+    public String toString() {
+        return "ActualizarUsuarioDTO{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                '}';
+    }
 }

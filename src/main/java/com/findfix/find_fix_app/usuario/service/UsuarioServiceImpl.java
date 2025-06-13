@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.usuario.service;
 
 import com.findfix.find_fix_app.auth.service.AuthService;
+import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.exception.exceptions.RolException;
 import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserException;
@@ -11,7 +12,6 @@ import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +41,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
+    @Override
+    public List<String> ciudadesDisponibles() {
+        return CiudadesDisponibles.ciudadesDisponibles();
+    }
+
     // metodo para buscar un usuario por email
     @Override
     public Optional<Usuario> buscarPorEmail(String email) {
@@ -50,12 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     // metodo para obtener lista completa de usuarios
     @Override
     public List<Usuario> obtenerUsuarios() throws UserException {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-
-        if (usuarios.isEmpty()) {
-            throw new UserException("No hay usuarios registrados.");
-        }
-        return usuarios;
+        return usuarioRepository.findAll();
     }
 
     // metodo para buscar un usuario por id
@@ -78,8 +78,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuario.setPassword(passwordEncoder.encode(registroDTO.password()));
         usuario.setNombre(registroDTO.nombre());
         usuario.setApellido(registroDTO.apellido());
+        usuario.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+        usuario.setTelefono("No especificado.");
 
-        Rol rol = new Rol();
+        Rol rol;
 
         if (obtenerUsuarios().isEmpty()) {
             //si la lista esta vacia, al primer usuario creado se le asigna rol de admin
@@ -188,12 +190,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
             usuario.setTelefono(actualizarUsuarioDTO.telefono());
         }
         if (actualizarUsuarioDTO.ciudad() != null) {
-            usuario.setCiudad(actualizarUsuarioDTO.ciudad());
+            usuario.setCiudad(CiudadesDisponibles.desdeString(actualizarUsuarioDTO.ciudad()));
         }
     }
 
-
-    // metodo para asignar un rol especifico a un usuario (para solicitudes)
+    // metodo para asignar un rol específico a un usuario (para solicitudes)
     @Override
     public void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException {
         Rol rol = rolRepository.findByNombre(nombreRol)
@@ -209,7 +210,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         return new VerPerfilUsuarioDTO(usuario);
     }
-
 
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
