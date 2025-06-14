@@ -37,39 +37,31 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrar") //CHEQUEADO
-    public ResponseEntity<Map<String, String>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UserException, RolException {
+    public ResponseEntity<Map<String, MostrarRegistroDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UserException, RolException {
         usuarioService.registrarNuevoUsuario(registro);
-        Map<String, String> response = new HashMap<>();
-        response.put("Usuario registrado con éxito✅", "\nNombre: " + registro.nombre() + "\nApellido: " + registro.apellido() + "\nEmail: " +  registro.email());
+        Map<String, MostrarRegistroDTO> response = new HashMap<>();
+        response.put("Usuario registrado con éxito✅", new MostrarRegistroDTO(registro));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     //NO VA
     @DeleteMapping("/eliminar-por-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> eliminarUsuario(@PathVariable Long id) throws UserNotFoundException {
         usuarioService.eliminarPorId(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario eliminado con éxito✅");
     }
 
     @DeleteMapping("/eliminar-por-email/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException {
         usuarioService.eliminarPorEmail(email);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario eliminado con éxito✅");
     }
 
-    //CAMBIAR A OBTENER POR EMAIL
-    @GetMapping("/obtener-por-id/{id}")
-    public ResponseEntity<MostrarUsuarioDTO> obtenerUsuarioPorId(@PathVariable Long id) throws UserNotFoundException {
-        Usuario usuario = usuarioService.buscarPorId(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuario con ID " + id + " no encontrado."));
-
-        MostrarUsuarioDTO usuarioDTO = new MostrarUsuarioDTO(usuario);
-        return ResponseEntity.ok()
-                .body(usuarioDTO);
-    }
-
     //metodo para que el usuario pueda modificar sus datos
     @PatchMapping("/modificar-datos") //CHEQUEADO
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<?> actualizarUsuario(@Valid @RequestBody ActualizarUsuarioDTO usuarioDTO) throws UserNotFoundException {
         usuarioService.actualizarUsuario(usuarioDTO);
         Map<String, Object> response = new HashMap<>();
@@ -80,6 +72,7 @@ public class UsuarioController {
 
     //metodo para modificar un usuario (desde admin)
     @PatchMapping("/modificar/{email}") //CHEQUEADO
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> actualizarUsuarioAdmin(@Valid @RequestBody ActualizarUsuarioDTO usuario, @PathVariable String email) throws UserNotFoundException {
         usuarioService.actualizarUsuarioAdmin(usuario, email);
         return ResponseEntity.ok("Modificaciones realizadas con éxito☑️\n" + usuario);
@@ -92,15 +85,17 @@ public class UsuarioController {
     }
 
     //admin
-    @PatchMapping("/actualizar-roles/{idUsuario}") //CHEQUEADO
-    public ResponseEntity<Map<String, ActualizarRolesUsuarioDTO>> actualizarRoles(@PathVariable Long idUsuario, @Valid @RequestBody ActualizarRolesUsuarioDTO rolesDTO) throws UserNotFoundException {
-        usuarioService.actualizarRolesUsuario(idUsuario, rolesDTO);
+    @PatchMapping("/actualizar-roles/{email}") //CHEQUEADO
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, ActualizarRolesUsuarioDTO>> actualizarRoles(@PathVariable String email, @Valid @RequestBody ActualizarRolesUsuarioDTO rolesDTO) throws UserNotFoundException {
+        usuarioService.actualizarRolesUsuario(email, rolesDTO);
         Map<String, ActualizarRolesUsuarioDTO> response = new HashMap<>();
         response.put("Roles actualizados con éxito☑️", rolesDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/ver-perfil") //CHEQUEADO
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<Map<String, VerPerfilUsuarioDTO>> verPerfilUsuario() throws UserNotFoundException {
         Map<String, VerPerfilUsuarioDTO> response = new HashMap<>();
         VerPerfilUsuarioDTO usuarioDTO = usuarioService.verPerfilUsuario();
@@ -109,10 +104,21 @@ public class UsuarioController {
     }
 
     @GetMapping("/ver-ciudades-disponibles") //CHEQUEADO
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<Map<String, List<String>>> verCiudadesDisponibles(){
         Map<String, List<String>> response = new HashMap<>();
         List<String> ciudadesDisponibles = CiudadesDisponibles.ciudadesDisponibles();
         response.put("Ciudades disponibles", ciudadesDisponibles);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filtrar")
+    @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
+    public ResponseEntity<Map<String, Object>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
+        List<MostrarUsuarioDTO> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
+        Map<String, Object> response = new HashMap<>();
+        response.put("Mensaje", "Lista de usuarios encontrada️☑️️");
+        response.put("Usuarios", usuariosFiltrados);
         return ResponseEntity.ok(response);
     }
 

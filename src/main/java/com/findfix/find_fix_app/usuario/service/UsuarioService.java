@@ -14,14 +14,13 @@ import java.util.Optional;
 
 @Service
 public interface UsuarioService {
-    Optional<Usuario> buscarPorEmail(String email);
+    List<MostrarUsuarioDTO> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException;
     List<Usuario> obtenerUsuarios() throws UserException;
-    Optional<Usuario> buscarPorId(Long id);
     void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException;
     void eliminarPorId(Long id) throws UserNotFoundException;
     void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException;
     void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException;
-    void actualizarRolesUsuario(Long idUsuario, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException;
+    void actualizarRolesUsuario(String email, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException;
     void eliminarPorEmail(String email) throws UserNotFoundException;
     void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException;
     void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException;
