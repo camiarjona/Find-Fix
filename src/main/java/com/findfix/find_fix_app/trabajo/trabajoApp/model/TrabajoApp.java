@@ -22,15 +22,15 @@ public class TrabajoApp {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "id_trabajo_app")
     private Long trabajoAppId;
-    @Column(nullable = false)
+
     private LocalDate fechaInicio;
-    @Column(nullable = false)
+    @Column(unique = true,nullable = false)
     private String titulo;
-    @Column(nullable = false)
+
     private EstadosTrabajos estado;
-    @Column(nullable = false)
+
     private String descripcion;
-    @Column(nullable = false)
+
     private LocalDate fechaFin;
 
     private Double presupuesto;
