@@ -94,10 +94,11 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     public Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado) {
         return trabajoAppRepository.findByTitulo(tituloBuscado);
     }
-
+    ///  METODO PARA MODIFICAR UN TRABAJO (NO SOLO EL ESTADO)
     @Override
-    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException {
-       Optional<TrabajoApp> trabajoAppBuscado = buscarPorTitulo(titulo);
+    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
+        List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoAppBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
        if(trabajoAppBuscado.isPresent())
        {
            throw new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema.");
@@ -158,36 +159,40 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  Este metodo solo modifica el estado de un trabajo
     @Override
-    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
+        ///  filtramos los trabajos del espewcialista que esta queriendo modificar el trabajo
+        List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
         ///  buscamos y verificamos que exista el trabajo
-        TrabajoApp trabajo = buscarPorTitulo(titulo)
-                .orElseThrow(() -> new TrabajoAppNotFoundException("El trabajo al que le quiere cambiar el estado no está registrado"));
-
+          if(!trabajoBuscado.isPresent())
+          {
+              new TrabajoAppNotFoundException("El trabajo al que le quiere cambiar el estado no está registrado");
+          }
 
         ///  Verificamos que el trabajo no se encuentra ya en finalizado porque si es asi no puede cambiarlo de ninguna manera. (usamos metodo auxiliar)
-        if(verificacionEstadoFinalizado(trabajo))
+        if(verificacionEstadoFinalizado(trabajoBuscado.get()))
         {
          throw new TrabajoAppException("El trabajo ya se encuentra finalizado, por lo tanto ya no se puede modificar su estado.");
         }
         ///  verificamos que el estado ingresado exista en nuestro estadosTrabajos
             if(validezIngresoEstado(nombreEstado))
             {
-                verificacionEstadoAdicionales(trabajo,nombreEstado);
-                if(EstadosTrabajos.EN_PROCESO.equals(EstadosTrabajos.valueOf(nombreEstado))&&trabajo.getEstado().equals(EstadosTrabajos.CREADO))
+                verificacionEstadoAdicionales(trabajoBuscado.get(),nombreEstado);
+                if(EstadosTrabajos.EN_PROCESO.equals(EstadosTrabajos.valueOf(nombreEstado))&&trabajoBuscado.get().getEstado().equals(EstadosTrabajos.CREADO))
                 {
-                    trabajo.setFechaInicio(LocalDate.now());
+                    trabajoBuscado.get().setFechaInicio(LocalDate.now());
                 }
                 if(EstadosTrabajos.FINALIZADO.equals(EstadosTrabajos.valueOf(nombreEstado)))
                 {
-                    trabajo.setFechaFin(LocalDate.now());
+                    trabajoBuscado.get().setFechaFin(LocalDate.now());
                 }
-                trabajo.setEstado(EstadosTrabajos.valueOf(nombreEstado));
+                trabajoBuscado.get().setEstado(EstadosTrabajos.valueOf(nombreEstado));
 
             }else ///  sino exception
             {
                 throw new TrabajoAppException("El estado ingresado no es valido");
             }
-        trabajoAppRepository.save(trabajo);
+        trabajoAppRepository.save(trabajoBuscado.get());
     }
 
    ///  METODO AUXILIAR PARA VERIFICAR
@@ -226,8 +231,9 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  METODO PARA QUE UN CLIENTE OBTENGA UNA FICHA DE UN TRABAJO FILTRANDO POR EL TITULO DEL MISMO
     @Override
-    public TrabajoApp obtenerFichaDeTrabajo(String tituloBuscado) throws TrabajoAppNotFoundException {
-        Optional<TrabajoApp> trabajoBuscado = buscarPorTitulo(tituloBuscado);
+    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+       List<TrabajoApp> trabajoAppDelEspecialista =  obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(tituloBuscado)).findFirst();
         if(!trabajoBuscado.isPresent())
         {
           throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el titulo ingresado no pertenece a ningun registro. ");
@@ -235,7 +241,6 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
             return trabajoBuscado.get();
         }
     }
-
 
 
 }
