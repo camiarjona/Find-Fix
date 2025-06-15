@@ -20,9 +20,9 @@ public interface TrabajoAppService {
     List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, SpecialistRequestNotFoundException, TrabajoAppException;
     /// Optional<TrabajoApp> buscarPorEstado(String nombreEstado);
     Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado);
-    TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException;
-    void modificarEstadoTrabajo(String titulo,String nombreEstado)throws TrabajoAppNotFoundException,TrabajoAppException;
-    TrabajoApp obtenerFichaDeTrabajo(String titulo) throws TrabajoAppNotFoundException;
+    TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException;
+    void modificarEstadoTrabajo(String titulo,String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException;
+    TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String titulo) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException;
 
 
 }

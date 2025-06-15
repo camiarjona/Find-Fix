@@ -93,9 +93,9 @@ public class TrabajoAppController {
     }
 
 
-    @GetMapping("/ficha/{tituloBuscado}")
-    public ResponseEntity<String> obtenerFichaDeTrabajoEspecialista(@PathVariable String tituloBuscado) throws TrabajoAppNotFoundException {
-        TrabajoApp trabajoApp = trabajoAppService.obtenerFichaDeTrabajo(tituloBuscado);
+    @GetMapping("/fichaE/{tituloBuscado}")
+    public ResponseEntity<String> obtenerFichaDeTrabajoEspecialista(@PathVariable String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+        TrabajoApp trabajoApp = trabajoAppService.obtenerFichaDeTrabajoParaEspecialista(tituloBuscado);
         String respuesta = String.format(
                 """
                 📋 **Ficha de Trabajo** 📋
@@ -118,8 +118,10 @@ public class TrabajoAppController {
     }
 
 
+
+
     @PatchMapping("/{tituloBuscado}")
-    public ResponseEntity<Map<String,Object>> actualizarTrabajo(@PathVariable String tituloBuscado, @Valid @RequestBody ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public ResponseEntity<Map<String,Object>> actualizarTrabajo(@PathVariable String tituloBuscado, @Valid @RequestBody ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
         TrabajoApp trabajoApp = trabajoAppService.actualizarTrabajo(tituloBuscado,dto);
         Map<String,Object> response = new HashMap<>();
         response.put("message","Trabajo modificado con exito ☑️");
@@ -128,7 +130,7 @@ public class TrabajoAppController {
 
 
     @PatchMapping("/{titulo}/{nuevoEstado}")
-    public ResponseEntity<Map<String,Object>> actualizarEstadoTrabajo(@PathVariable String titulo, @PathVariable String nuevoEstado) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public ResponseEntity<Map<String,Object>> actualizarEstadoTrabajo(@PathVariable String titulo, @PathVariable String nuevoEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
         String nuevoEstadoNormalizado = nuevoEstado.toUpperCase().replace(" ", "_");
         trabajoAppService.modificarEstadoTrabajo(titulo,nuevoEstadoNormalizado);
         Map<String,Object> response = new HashMap<>();
