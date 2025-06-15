@@ -30,6 +30,8 @@ public class SolicitudEspecialista {
     @Column(nullable = false)
     private String motivo;
 
+    private String respuesta;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
