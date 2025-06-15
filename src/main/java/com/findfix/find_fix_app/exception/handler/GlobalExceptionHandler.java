@@ -115,7 +115,8 @@ public class GlobalExceptionHandler {
             SpecialistRequestNotFoundException.class,
             RolNotFoundException.class,
             OficioNotFoundException.class,
-            TrabajoExternoNotFoundException.class
+            TrabajoExternoNotFoundException.class,
+            TrabajoAppNotFoundException.class
 
     })
     public ResponseEntity<ErrorResponse> handleNotFound(Exception ex) {
@@ -180,7 +181,9 @@ public class GlobalExceptionHandler {
     // Manejo de errores personalizados de conflictos
     @ExceptionHandler({
             RolException.class,
-            UserException.class
+            UserException.class,
+            EspecialistaExcepcion.class,
+            TrabajoAppException.class
     })
     public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
         ErrorResponse error = ErrorResponse.builder()
