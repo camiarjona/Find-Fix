@@ -25,6 +25,8 @@ public class TrabajoApp {
     @Column(nullable = false)
     private LocalDate fechaInicio;
     @Column(nullable = false)
+    private String titulo;
+    @Column(nullable = false)
     private EstadosTrabajos estado;
     @Column(nullable = false)
     private String descripcion;
@@ -46,5 +48,5 @@ public class TrabajoApp {
     private SolicitudTrabajo solicitudTrabajo;
 
     @OneToOne(mappedBy = "trabajoApp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Resena resena;
+    private Resena  resena;
 }

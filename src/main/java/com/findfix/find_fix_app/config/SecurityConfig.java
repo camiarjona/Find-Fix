@@ -21,6 +21,8 @@ public class SecurityConfig {
                                 .requestMatchers("/usuario/modificar-datos", "/usuario/modificar-password", "/usuario/ver-perfil", "/usuario/ver-ciudades-disponibles").hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
                                 .requestMatchers("/oficios").permitAll()
                                 .requestMatchers("/trabajosExternos/**").permitAll()
+                                .requestMatchers("/trabajosApp/misTrabajosC").hasRole("CLIENTE")
+                                .requestMatchers("/trabajosApp/**").hasRole("ESPECIALISTA")
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
