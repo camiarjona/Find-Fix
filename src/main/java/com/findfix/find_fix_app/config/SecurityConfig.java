@@ -2,7 +2,6 @@ package com.findfix.find_fix_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,7 +21,7 @@ public class SecurityConfig {
                                 .requestMatchers("/usuario/modificar-datos", "/usuario/modificar-password", "/usuario/ver-perfil", "/usuario/ver-ciudades-disponibles").hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
                                 .requestMatchers("/oficios").permitAll()
                                 .requestMatchers("/trabajosExternos/**").permitAll()
-                                .requestMatchers("/trabajo-app/mis-trabajos-cliente").hasRole("CLIENTE")
+                                .requestMatchers("/trabajosApp/misTrabajosC").hasRole("CLIENTE")
                                 .requestMatchers("/trabajosApp/**").hasRole("ESPECIALISTA")
                                 .requestMatchers("/solicitud-trabajo/registrar-solicitud", "/solicitud-trabajo/mis-solicitudes-enviadas", "/solicitud-trabajo/eliminar-solicitud/").hasRole("CLIENTE")
                                 .requestMatchers("/solicitud-trabajo/mis-solicitudes-recibidas", "/solicitud-trabajo/actualizar-estado/").hasRole("ESPECIALISTA")

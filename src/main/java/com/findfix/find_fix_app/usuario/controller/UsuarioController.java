@@ -75,7 +75,7 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> actualizarUsuarioAdmin(@Valid @RequestBody ActualizarUsuarioDTO usuario, @PathVariable String email) throws UserNotFoundException {
         usuarioService.actualizarUsuarioAdmin(usuario, email);
-        return ResponseEntity.ok("Modificaciones realizadas con éxito☑️\n" + usuario);
+        return ResponseEntity.ok("Modificaciones realizadas con éxito☑️");
     }
 
     @PatchMapping("/modificar-password") //CHEQUEADO

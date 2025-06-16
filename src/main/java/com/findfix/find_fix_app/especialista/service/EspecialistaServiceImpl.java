@@ -7,7 +7,7 @@ import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.repository.EspecialistaRepository;
 import com.findfix.find_fix_app.exception.exceptions.EspecialistaExcepcion;
-import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
+import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
@@ -41,10 +41,10 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
 
     /// Metodo para traerme el especialista segun el usuario registrado
-    public Especialista obtenerEspecialistaAutenticado() throws UserNotFoundException, SpecialistRequestNotFoundException {
+    public Especialista obtenerEspecialistaAutenticado() throws UserNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         return especialistaRepository.findByUsuario(usuario)
-                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado para el usuario autenticado"));
+                .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado para el usuario autenticado"));
     }
 
     /// Metodo para validar los string que se ingresan
@@ -85,9 +85,9 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para que el admin actualice los atributos de un especialista
     @Override
-    public Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
+    public Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
-                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado"));
+                .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado"));
 
         actualizarDatosEspecialista(especialista, dto);
 
@@ -97,7 +97,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para que el especialista actualice sus atributos
     @Override
-    public Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws SpecialistRequestNotFoundException, UserNotFoundException, EspecialistaExcepcion {
+    public Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, UserNotFoundException, EspecialistaExcepcion {
         Especialista especialista = obtenerEspecialistaAutenticado();
 
         actualizarDatosEspecialista(especialista, dto);
@@ -108,20 +108,20 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para mostrar todos los especialistas para el Admin
     @Override
-    public List<Especialista> obtenerEspecialistas() throws SpecialistRequestNotFoundException {
+    public List<Especialista> obtenerEspecialistas() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaRepository.findAll();
         if (especialistas.isEmpty()) {
-            throw new SpecialistRequestNotFoundException("No hay especialistas registrados en el sistema.");
+            throw new EspecialistaNotFoundException("No hay especialistas registrados en el sistema.");
         }
         return especialistas;
     }
 
     /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
-    public List<Especialista> obtenerEspecialistasDisponibles() throws SpecialistRequestNotFoundException {
+    public List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaRepository.findAll();
         if (especialistas.isEmpty()) {
-            throw new SpecialistRequestNotFoundException("No hay especialistas disponibles en este momento.");
+            throw new EspecialistaNotFoundException("No hay especialistas disponibles en este momento.");
         }
         return especialistas;
     }
@@ -129,9 +129,9 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     ///Metodo para que el admin pueda eliminar un especialista por email
     @Override
-    public void eliminarPorEmail(String email) throws SpecialistRequestNotFoundException {
+    public void eliminarPorEmail(String email) throws EspecialistaNotFoundException {
         if(especialistaRepository.findByUsuarioEmail(email).isEmpty()){
-            throw new SpecialistRequestNotFoundException("Especialista no encontrado");
+            throw new EspecialistaNotFoundException("Especialista no encontrado");
         }
         especialistaRepository.deleteById(especialistaRepository.findByUsuarioEmail(email).get().getEspecialistaId());
     }
@@ -181,9 +181,9 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
     @Override
-    public Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion {
+    public Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
-                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado"));
+                .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado"));
 
         actualizarDatosOficiosEspecialista(especialista, dto);
 
@@ -193,7 +193,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para actualizar (agregar o eliminar) oficios
     @Override
-    public Especialista actualizarOficioDeEspecialista(ActualizarOficioEspDTO dto) throws SpecialistRequestNotFoundException, EspecialistaExcepcion, UserNotFoundException {
+    public Especialista actualizarOficioDeEspecialista(ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion, UserNotFoundException {
         Especialista especialista = obtenerEspecialistaAutenticado();
 
         actualizarDatosOficiosEspecialista(especialista, dto);
