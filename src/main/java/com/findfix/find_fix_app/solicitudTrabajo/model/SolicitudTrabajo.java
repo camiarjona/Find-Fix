@@ -18,11 +18,16 @@ import java.time.LocalDate;
 public class SolicitudTrabajo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud_trabajo")
-    private Long stId;
+    private Long solicitudTrabajoId;
+
     @Column(nullable = false)
     private LocalDate fechaCreacion;
+
+    private LocalDate fechaResolucion;
+
     @Column(nullable = false)
     private EstadosSolicitudes estado;
+
     @Column(nullable = false)
     private String descripcion;
 

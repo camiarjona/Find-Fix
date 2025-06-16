@@ -10,8 +10,6 @@ public record ActualizarTrabajoAppDTO(
         String titulo,
         @Size(max = 300,message = "La descripcion no puede contener mas de 300 caracteres")
         String descripcion,
-        String estado,
-        @DecimalMin(value = "1000.0",message = "El presupuesto debe ser al menos 1000")
         Double presupuesto) {
 
 

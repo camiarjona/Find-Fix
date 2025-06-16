@@ -33,13 +33,10 @@ public class OficioServiceImpl implements OficioService {
     }
 
     @Override
-    public Oficio modificarOficio(Long id, String nuevo) throws OficioNotFoundException {
+    public void modificarOficio(Long id, Oficio nuevo) throws OficioNotFoundException {
         Optional<Oficio> existente = Optional.ofNullable(buscarPorId(id).orElseThrow(() -> new OficioNotFoundException("\n Oficio no encontrado. ")));
-        if(existente.isPresent()){
-            existente.get().setNombre(nuevo);
-            return oficioRepository.save(existente.get());
-        }
-        return null;
+            existente.get().setNombre(nuevo.getNombre());
+            oficioRepository.save(existente.get());
     }
 
     @Override

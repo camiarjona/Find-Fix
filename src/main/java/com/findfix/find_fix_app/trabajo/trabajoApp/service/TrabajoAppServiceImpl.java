@@ -5,13 +5,14 @@ import com.findfix.find_fix_app.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.exception.exceptions.*;
+import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.repository.TrabajoAppRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.patterns.IVerificationRequired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,56 +28,67 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     private final AuthService authService;
     private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
+
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
     @Override
-    public void guardarTrabajo(TrabajoApp trabajoApp) {
-          trabajoAppRepository.save(trabajoApp);
+    public TrabajoApp registrarDesdeSolicitud(SolicitudTrabajo solicitudTrabajo, Especialista especialista) {
+        TrabajoApp trabajoApp = new TrabajoApp();
+        trabajoApp.setEspecialista(especialista);
+        trabajoApp.setUsuario(solicitudTrabajo.getUsuario());
+        trabajoApp.setEstado(EstadosTrabajos.CREADO);
+        trabajoApp.setDescripcion(solicitudTrabajo.getDescripcion());
+        trabajoApp.setSolicitudTrabajo(solicitudTrabajo);
+        trabajoApp = trabajoAppRepository.save(trabajoApp);
+        trabajoApp.setTitulo("NuevoTrabajo" + trabajoApp.getTrabajoAppId());
+
+        return trabajoAppRepository.save(trabajoApp);
     }
-   ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
+
+    ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
     @Override
     public List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException,TrabajoAppException {
 
-        String emailUsuario = authService.obtenerEmailUsuarioAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getUsuario().getEmail().equals(emailUsuario)).collect(Collectors.toList());
-        if(trabajoApps.isEmpty())
-        {
-            throw new TrabajoAppException("Usted no tiene ningun registro de trabajos.");
+        Usuario usuario = authService.obtenerUsuarioAutenticado();
+
+        List<TrabajoApp> trabajosSolicitados = trabajoAppRepository.findByUsuario(usuario);
+
+        if (trabajosSolicitados.isEmpty()) {
+            throw new TrabajoAppException("Usted no tiene trabajos aceptados.");
         }
-        return trabajoApps;
+
+        return trabajosSolicitados;
     }
     /// METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTAS
     @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
+
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getEspecialista().getDni().equals(especialista.getDni())).collect(Collectors.toList());
-        if(trabajoApps.isEmpty())
-        {
-            throw new TrabajoAppException("Usted no tiene ningun registro de trabajos.");
+        List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
+
+        if (trabajosAceptados.isEmpty()) {
+            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
         }
-        return trabajoApps;
+        return trabajosAceptados;
     }
 
   ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTA Y APLICANDO FILTRO DE UN ESTADO ELEGIDO
     @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, SpecialistRequestNotFoundException, TrabajoAppException {
+    public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException,  TrabajoAppException, EspecialistaNotFoundException {
         if(!validezIngresoEstado(nombreEstado))
         {
-            throw new TrabajoAppException("El estado ingresado no es valido.");
+            throw new TrabajoAppException("El estado ingresado no es válido.");
         }
-        Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getEspecialista().getDni().equals(especialista.getDni())&&trabajoApp.getEstado().name().equalsIgnoreCase(nombreEstado)).collect(Collectors.toList());
+
+        List<TrabajoApp> trabajoApps = obtenerTrabajosEspecialista().stream().filter(trabajo -> trabajo.getEstado()
+                .equals(EstadosTrabajos.valueOf(nombreEstado))).collect(Collectors.toList());
+
         if(trabajoApps.isEmpty())
         {
-            throw new TrabajoAppException("Usted no tiene ningun trabajo en ese estado.");
+            throw new TrabajoAppException("Usted no tiene ningún trabajo en ese estado.");
         }
         return trabajoApps;
     }
 
-    /*@Override
-    public Optional<TrabajoApp> buscarPorEstado(String nombreEstado) {
-           ///  en realidad no serviria ???
-
-    }*/
   ///  METODO PARA VALIDAR QUE EL ESTADO INGRESADO EXISTA EN EL ENUM ESTADOS
     private Boolean validezIngresoEstado(String nombreEstado)
     {
@@ -94,11 +106,21 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     public Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado) {
         return trabajoAppRepository.findByTitulo(tituloBuscado);
     }
-
+    ///  METODO PARA MODIFICAR UN TRABAJO (NO SOLO EL ESTADO)
     @Override
-    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException {
-       Optional<TrabajoApp> trabajoAppBuscado = buscarPorTitulo(titulo);
-       if(trabajoAppBuscado.isPresent())
+    @Transactional
+    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
+        List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoAppBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
+
+        ///  si todos los datos del dto estan vacio o son null significa que no se mandaron datos para modifica
+        if(!datoStringValido(dto.descripcion())&&!datoStringValido(titulo)&&dto.presupuesto()==null)
+        {
+            throw new TrabajoAppException("No se pudo realizar modificacion debido a falta de datos");
+        }
+
+
+        if(trabajoAppBuscado.isEmpty())
        {
            throw new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema.");
        }else
@@ -109,32 +131,20 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
                throw new TrabajoAppException("El trabajo se encuentra finalizado por lo tanto ya no se pueden realizar cambios en sus datos");
            }
 
-           Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
-           if(verificacion.isPresent())
-           {
-               throw new TrabajoAppException("El titulo que ingreso ya pertenece a un trabajo del sistema.");
-           }else{
-               trabajoAppBuscado.get().setTitulo(dto.titulo());
+           if(datoStringValido(dto.titulo())) {
+               Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
+               if (verificacion.isPresent()) {
+                   throw new TrabajoAppException("El titulo que ingreso ya pertenece a un trabajo del sistema.");
+               } else {
+                   trabajoAppBuscado.get().setTitulo(dto.titulo());
+               }
            }
-
 
            if(datoStringValido(dto.descripcion()))
            {
                trabajoAppBuscado.get().setDescripcion(dto.descripcion());
            }
-           String estadoNormalizado = dto.estado().toUpperCase().replace("","_");
-           if(datoStringValido(estadoNormalizado)&&validezIngresoEstado(estadoNormalizado)&&!trabajoAppBuscado.get().getEstado().name().equalsIgnoreCase(estadoNormalizado)&&!trabajoAppBuscado.get().getEstado().equals(EstadosTrabajos.EN_PROCESO)&&estadoNormalizado.equalsIgnoreCase(EstadosTrabajos.CREADO.name())&&!trabajoAppBuscado.get().getEstado().equals(EstadosTrabajos.EN_REVISION)&&estadoNormalizado.equalsIgnoreCase(EstadosTrabajos.CREADO.name()))
-           {
-               if(EstadosTrabajos.EN_PROCESO.equals(EstadosTrabajos.valueOf(estadoNormalizado))&&trabajoAppBuscado.get().getEstado().equals(EstadosTrabajos.CREADO))
-               {
-                   trabajoAppBuscado.get().setFechaInicio(LocalDate.now());
-               }
-               if(EstadosTrabajos.FINALIZADO.equals(EstadosTrabajos.valueOf(estadoNormalizado)))
-               {
-                   trabajoAppBuscado.get().setFechaFin(LocalDate.now());
-               }
-               trabajoAppBuscado.get().setEstado(EstadosTrabajos.valueOf(estadoNormalizado));
-           }
+
            if(dto.presupuesto()!=null)
            {
                trabajoAppBuscado.get().setPresupuesto(dto.presupuesto());
@@ -147,7 +157,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
   ///  METODO AUXILIAR APRA VERIFICAR
     public boolean datoStringValido(String datoString)
     {
-        if(datoString.isEmpty()||datoString==null)
+        if(datoString==null||datoString.isEmpty())
         {
             return false;
         }else
@@ -158,36 +168,40 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  Este metodo solo modifica el estado de un trabajo
     @Override
-    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException {
+    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
+        ///  filtramos los trabajos del especialista que esta queriendo modificar el trabajo
+        List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
         ///  buscamos y verificamos que exista el trabajo
-        TrabajoApp trabajo = buscarPorTitulo(titulo)
-                .orElseThrow(() -> new TrabajoAppNotFoundException("El trabajo al que le quiere cambiar el estado no está registrado"));
-
+          if(trabajoBuscado.isEmpty())
+          {
+              throw new TrabajoAppNotFoundException("El trabajo al que le quiere cambiar el estado no está registrado");
+          }
 
         ///  Verificamos que el trabajo no se encuentra ya en finalizado porque si es asi no puede cambiarlo de ninguna manera. (usamos metodo auxiliar)
-        if(verificacionEstadoFinalizado(trabajo))
+        if(verificacionEstadoFinalizado(trabajoBuscado.get()))
         {
          throw new TrabajoAppException("El trabajo ya se encuentra finalizado, por lo tanto ya no se puede modificar su estado.");
         }
         ///  verificamos que el estado ingresado exista en nuestro estadosTrabajos
             if(validezIngresoEstado(nombreEstado))
             {
-                verificacionEstadoAdicionales(trabajo,nombreEstado);
-                if(EstadosTrabajos.EN_PROCESO.equals(EstadosTrabajos.valueOf(nombreEstado))&&trabajo.getEstado().equals(EstadosTrabajos.CREADO))
+                verificacionEstadoAdicionales(trabajoBuscado.get(),nombreEstado);
+                if(EstadosTrabajos.EN_PROCESO.equals(EstadosTrabajos.valueOf(nombreEstado))&&trabajoBuscado.get().getEstado().equals(EstadosTrabajos.CREADO))
                 {
-                    trabajo.setFechaInicio(LocalDate.now());
+                    trabajoBuscado.get().setFechaInicio(LocalDate.now());
                 }
                 if(EstadosTrabajos.FINALIZADO.equals(EstadosTrabajos.valueOf(nombreEstado)))
                 {
-                    trabajo.setFechaFin(LocalDate.now());
+                    trabajoBuscado.get().setFechaFin(LocalDate.now());
                 }
-                trabajo.setEstado(EstadosTrabajos.valueOf(nombreEstado));
+                trabajoBuscado.get().setEstado(EstadosTrabajos.valueOf(nombreEstado));
 
             }else ///  sino exception
             {
                 throw new TrabajoAppException("El estado ingresado no es valido");
             }
-        trabajoAppRepository.save(trabajo);
+        trabajoAppRepository.save(trabajoBuscado.get());
     }
 
    ///  METODO AUXILIAR PARA VERIFICAR
@@ -199,6 +213,11 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
             throw new TrabajoAppException("El trabajo ya se encuentra en ese estado");
         }
 
+        if(trabajoApp.getEstado().equals(EstadosTrabajos.CREADO)&&!nombreEstado.equalsIgnoreCase(EstadosTrabajos.EN_PROCESO.name()))
+        {
+            throw new TrabajoAppException("El estado debe pasar obligatoriamente por el estado en proceso");
+        }
+
         if(trabajoApp.getEstado().equals(EstadosTrabajos.EN_PROCESO)&&nombreEstado.equalsIgnoreCase(EstadosTrabajos.CREADO.name()))
         {
             throw new TrabajoAppException("El trabajo ya esta en proceso, no puede volver atras");
@@ -208,6 +227,12 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
         {
             throw new TrabajoAppException("El trabajo no puede volver a 'CREADO'. Como mucho puede revertir De EN REVISION A PROCESO ");
         }
+
+
+
+
+
+
 
 
 
@@ -226,9 +251,10 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  METODO PARA QUE UN CLIENTE OBTENGA UNA FICHA DE UN TRABAJO FILTRANDO POR EL TITULO DEL MISMO
     @Override
-    public TrabajoApp obtenerFichaDeTrabajo(String tituloBuscado) throws TrabajoAppNotFoundException {
-        Optional<TrabajoApp> trabajoBuscado = buscarPorTitulo(tituloBuscado);
-        if(!trabajoBuscado.isPresent())
+    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
+       List<TrabajoApp> trabajoAppDelEspecialista =  obtenerTrabajosEspecialista();
+        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(tituloBuscado)).findFirst();
+        if(trabajoBuscado.isEmpty())
         {
           throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el titulo ingresado no pertenece a ningun registro. ");
         }else {
@@ -236,6 +262,15 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
         }
     }
 
-
-
+    @Override
+    public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UserNotFoundException, TrabajoAppException, TrabajoAppNotFoundException {
+        List<TrabajoApp> trabajoAppDelEspecialista =  obtenerTrabajosClientes();
+        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTrabajoAppId()==id).findFirst();
+        if(trabajoBuscado.isEmpty())
+        {
+            throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el id ingresado no pertenece a ningun registro. ");
+        }else {
+            return trabajoBuscado.get();
+        }
+    }
 }

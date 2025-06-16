@@ -16,7 +16,7 @@ public class EspecialistaListadoDTO{
     public EspecialistaListadoDTO(Especialista especialista) {
         this.nombre = especialista.getUsuario().getNombre();
         this.apellido = especialista.getUsuario().getApellido();
-        this.ciudad = especialista.getUsuario().getCiudad();
+        this.ciudad = especialista.getUsuario().getCiudad().getNombreAmigable();
         this.oficios = especialista.getOficios().stream().map(Oficio::getNombre).collect(java.util.stream.Collectors.toSet());
     }
 }

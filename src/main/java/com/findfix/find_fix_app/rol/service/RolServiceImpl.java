@@ -65,7 +65,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
         Optional<Rol> encontrado = rolRepository.findByNombre(nombreBuscado);
-        if(!encontrado.isPresent())
+        if(encontrado.isEmpty())
         {
             throw new RolNotFoundException("El rol que intenta buscar no esta registrado en el sistema");
         }else

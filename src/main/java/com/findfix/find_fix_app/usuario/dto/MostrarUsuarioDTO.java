@@ -19,12 +19,6 @@ public class MostrarUsuarioDTO {
     String email;
     Set<String> rolesUsuario;
 
-    @Override
-    public String toString() {
-        return "Nombre: " + nombre + "\nApellido: " + apellido + "\nEmail: " + email
-                + "\nRoles: " + String.join(",", rolesUsuario);
-    }
-
     public MostrarUsuarioDTO(Usuario usuario) {
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
