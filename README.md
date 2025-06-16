@@ -1,6 +1,6 @@
 # 🛠️ Find-Finx - Sistema de búsqueda y prestación de servicios.
 
-![Java](https://img.shields.io/badge/Java-17-blue?logo=java)
+![Java](https://img.shields.io/badge/Java-21-blue?logo=java)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-brightgreen?logo=springboot)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-lightgrey?logo=mysql)
 ![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
