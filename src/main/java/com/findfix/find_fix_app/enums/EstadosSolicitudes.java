@@ -27,7 +27,7 @@ public enum EstadosSolicitudes {
         return Arrays.stream(values())
                 .filter(e -> e.nombreAmigable.equalsIgnoreCase(nombre))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Estado inválido: " + nombre));
+                .orElseThrow(() -> new IllegalArgumentException("El estado ingresado no forma parte del sistema."));
     }
 
 }
