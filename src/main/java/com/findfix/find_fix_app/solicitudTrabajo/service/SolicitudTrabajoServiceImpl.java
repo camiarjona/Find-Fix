@@ -13,7 +13,7 @@ import com.findfix.find_fix_app.solicitudTrabajo.dto.BuscarSolicitudDTO;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.SolicitarTrabajoDTO;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.solicitudTrabajo.repository.SolicitudTrabajoRepository;
-import com.findfix.find_fix_app.solicitudTrabajo.specifications.SolicitudSpecifications;
+import com.findfix.find_fix_app.solicitudTrabajo.specifications.SolicitudTrabajoSpecifications;
 import com.findfix.find_fix_app.trabajo.trabajoApp.service.TrabajoAppService;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import lombok.RequiredArgsConstructor;
@@ -134,10 +134,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
         Specification<SolicitudTrabajo> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
         if (filtro.tieneFecha()) {
-            spec = spec.and(SolicitudSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
+            spec = spec.and(SolicitudTrabajoSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
         }
         if (filtro.tieneEstado()) {
-            spec = spec.and(SolicitudSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
+            spec = spec.and(SolicitudTrabajoSpecifications.estadoEs(EstadosSolicitudes.desdeString(filtro.estado())));
         }
 
         List<SolicitudTrabajo> solicitudesEncontradas = solicitudTrabajoRepository.findAll(spec).stream()
@@ -158,10 +158,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
         Specification<SolicitudTrabajo> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
         if (filtro.tieneFecha()) {
-            spec = spec.and(SolicitudSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
+            spec = spec.and(SolicitudTrabajoSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
         }
         if (filtro.tieneEstado()) {
-            spec = spec.and(SolicitudSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
+            spec = spec.and(SolicitudTrabajoSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
         }
 
         List<SolicitudTrabajo> solicitudesEncontradas = solicitudTrabajoRepository.findAll(spec).stream()

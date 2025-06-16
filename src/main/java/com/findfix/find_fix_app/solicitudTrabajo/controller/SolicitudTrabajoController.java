@@ -75,7 +75,7 @@ public class SolicitudTrabajoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/recibidas-filtrar")
+    @GetMapping("/filtrar/recibidas")
     @PreAuthorize("hasRole('ESPECIALISTA')")
     public ResponseEntity<Map<String, Object>> filtrarSolicitudesRecibidas(@RequestBody BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException, EspecialistaNotFoundException {
         List<SolicitudTrabajo> solicitudes = solicitudTrabajoService.filtrarSolicitudesRecibidas(filtro);
@@ -85,7 +85,7 @@ public class SolicitudTrabajoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/enviadas-filtrar")
+    @GetMapping("/filtrar/enviadas")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<Map<String, Object>> filtrarSolicitudesEnviadas(@RequestBody BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException {
         List<SolicitudTrabajo> solicitudes = solicitudTrabajoService.filtrarSolicitudesEnviadas(filtro);

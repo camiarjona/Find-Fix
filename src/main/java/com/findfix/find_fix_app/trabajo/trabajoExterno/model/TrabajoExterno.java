@@ -23,11 +23,11 @@ public class TrabajoExterno {
     @Column(nullable = false)
     private String nombreCliente;
 
-    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaInicio;
 
-    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaFin;
+
+    private String titulo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
