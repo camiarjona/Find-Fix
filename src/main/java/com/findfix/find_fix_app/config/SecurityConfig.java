@@ -20,7 +20,7 @@ public class SecurityConfig {
                                 .requestMatchers("/usuario", "/roles/**", "/usuario/eliminar").hasRole("ADMIN")
                                 .requestMatchers("/usuario/modificar-datos", "/usuario/modificar-password", "/usuario/ver-perfil", "/usuario/ver-ciudades-disponibles").hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
                                 .requestMatchers("/oficios").permitAll()
-                                .requestMatchers("/trabajosExternos/**").permitAll()
+                                .requestMatchers("/trabajosExternos/**").hasRole("ESPECIALISTA")
                                 .requestMatchers("/trabajosApp/misTrabajosC").hasRole("CLIENTE")
                                 .requestMatchers("/trabajosApp/**").hasRole("ESPECIALISTA")
                                 .requestMatchers("/solicitud-trabajo/registrar-solicitud", "/solicitud-trabajo/mis-solicitudes-enviadas", "/solicitud-trabajo/eliminar-solicitud/").hasRole("CLIENTE")
