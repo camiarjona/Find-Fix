@@ -18,12 +18,12 @@ public interface TrabajoAppService {
     TrabajoApp registrarDesdeSolicitud (SolicitudTrabajo solicitudTrabajo, Especialista especialista);
     List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException, TrabajoAppException;
     List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException;
-    List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoAppException;
+    List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException;
     /// Optional<TrabajoApp> buscarPorEstado(String nombreEstado);
     Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado);
     TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException;
     void modificarEstadoTrabajo(String titulo,String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException;
     TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String titulo) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException;
-
+    TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UserNotFoundException, TrabajoAppException, TrabajoAppNotFoundException;
 
 }

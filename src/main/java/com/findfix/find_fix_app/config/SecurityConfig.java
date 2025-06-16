@@ -2,6 +2,7 @@ package com.findfix.find_fix_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -20,13 +21,37 @@ public class SecurityConfig {
                                 .requestMatchers("/usuario", "/roles/**", "/usuario/eliminar").hasRole("ADMIN")
                                 .requestMatchers("/usuario/modificar-datos", "/usuario/modificar-password", "/usuario/ver-perfil", "/usuario/ver-ciudades-disponibles").hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
                                 .requestMatchers("/oficios").permitAll()
-                                .requestMatchers("/trabajosExternos/**").hasRole("ESPECIALISTA")
+                                .requestMatchers("/trabajosExternos/**").permitAll()
                                 .requestMatchers("/trabajosApp/misTrabajosC").hasRole("CLIENTE")
                                 .requestMatchers("/trabajosApp/**").hasRole("ESPECIALISTA")
                                 .requestMatchers("/solicitud-trabajo/registrar-solicitud", "/solicitud-trabajo/mis-solicitudes-enviadas", "/solicitud-trabajo/eliminar-solicitud/").hasRole("CLIENTE")
                                 .requestMatchers("/solicitud-trabajo/mis-solicitudes-recibidas", "/solicitud-trabajo/actualizar-estado/").hasRole("ESPECIALISTA")
                                 .requestMatchers("/solicitud-trabajo/filtrar", "/solicitud-trabajo/{id}").hasAnyRole("CLIENTE", "ESPECIALISTA")
                                 .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        // Manejar 401 Unauthorized (credenciales inválidas o no proporcionadas)
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+                        {
+                            "error": "No autorizado",
+                            "mensaje": "Credenciales inválidas o faltantes. Por favor, inicia sesión."
+                        }
+                        """);
+                        })
+                        // Manejar 403 Forbidden (sin permisos debidos)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpStatus.FORBIDDEN.value());
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+                        {
+                            "error": "Acceso denegado",
+                            "mensaje": "No tenés permisos para acceder a este recurso."
+                        }
+                        """);
+                        })
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())

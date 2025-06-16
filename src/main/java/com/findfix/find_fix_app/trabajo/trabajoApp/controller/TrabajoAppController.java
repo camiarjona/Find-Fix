@@ -1,5 +1,8 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.controller;
 
+import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
+import com.findfix.find_fix_app.especialista.dto.EspecialistaRespuestaDTO;
+import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.exception.exceptions.*;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.VisualizarTrabajoAppClienteDTO;
@@ -8,7 +11,9 @@ import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.service.TrabajoAppService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +23,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/trabajosApp")
+@RequestMapping("/trabajo-app")
 @RequiredArgsConstructor
 @Validated
 public class TrabajoAppController {
     private final TrabajoAppService trabajoAppService;
 
-    @GetMapping("/misTrabajosC")
+    @GetMapping("/mis-trabajos-cliente")
     public ResponseEntity<Map<String, Object>> obtenerTrabajosDelCliente() throws UserNotFoundException, TrabajoAppException {
         List<TrabajoApp> trabajos = trabajoAppService.obtenerTrabajosClientes();
 
         List<VisualizarTrabajoAppClienteDTO> dtos = trabajos.stream()
                 .map(trabajo -> new VisualizarTrabajoAppClienteDTO(
+                        trabajo.getTrabajoAppId(),
                         trabajo.getEspecialista().getUsuario().getNombre(),
                         trabajo.getDescripcion(),
                         trabajo.getEstado(),
@@ -44,7 +50,7 @@ public class TrabajoAppController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/misTrabajosE")
+    @GetMapping("/mis-trabajos-especialista")
     public ResponseEntity<Map<String, Object>> obtenerTrabajosDelEspecialista() throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
         List<TrabajoApp> trabajos = trabajoAppService.obtenerTrabajosEspecialista();
 
@@ -65,7 +71,7 @@ public class TrabajoAppController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/misTrabajosE/estado")
+    @GetMapping("/mis-trabajos-especialista/estado")
     public ResponseEntity<Map<String, Object>> obtenerTrabajosDelEspecialistaPorEstado(@Valid @RequestParam String estado) throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
         String estadoNormalizado = estado.toUpperCase().replace(" ", "_");
         List<TrabajoApp> trabajos = trabajoAppService.obtenerTrabajosEspecialistaEstado(estadoNormalizado);
@@ -88,34 +94,30 @@ public class TrabajoAppController {
     }
 
 
-    @GetMapping("/fichaE/{tituloBuscado}")
-    public ResponseEntity<String> obtenerFichaDeTrabajoEspecialista(@PathVariable String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
+    @GetMapping("/ficha-trabajo-especialista/{tituloBuscado}")
+    public ResponseEntity<Map<String,Object>> obtenerFichaDeTrabajoEspecialista(@PathVariable String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
         TrabajoApp trabajoApp = trabajoAppService.obtenerFichaDeTrabajoParaEspecialista(tituloBuscado);
-        String respuesta = String.format(
-                """
-                📋 **Ficha de Trabajo** 📋
-                Cliente: %s
-                Título: %s
-                Descripción: %s
-                Estado: %s
-                Presupuesto: $%.2f
-                Fechas: %s a %s
-                """,
-                trabajoApp.getUsuario().getNombre(),
-                trabajoApp.getTitulo(),
-                trabajoApp.getDescripcion(),
-                trabajoApp.getEstado().toString(),
-                trabajoApp.getPresupuesto(),
-                trabajoApp.getFechaInicio(),
-                trabajoApp.getFechaFin()
-        );
-        return ResponseEntity.ok(respuesta);
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Ficha de trabajo encontrado:");
+        response.put("data",new VisualizarTrabajoAppEspecialistaDTO(trabajoApp.getUsuario().getNombre(),trabajoApp.getTitulo(),trabajoApp.getDescripcion(),trabajoApp.getEstado(),trabajoApp.getPresupuesto(),trabajoApp.getFechaInicio(),trabajoApp.getFechaFin()));
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/ficha-trabajo-cliente/{id}")
+    public ResponseEntity<Map<String,Object>> obtenerFichaDeTrabajoCliente(@PathVariable Long id) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException {
+        TrabajoApp trabajoApp = trabajoAppService.obtenerFichaDeTrabajoParaCliente(id);
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Ficha de trabajo encontrado:");
+        response.put("data",new VisualizarTrabajoAppClienteDTO(trabajoApp.getTrabajoAppId(),trabajoApp.getEspecialista().getUsuario().getNombre(),trabajoApp.getDescripcion(),trabajoApp.getEstado(),trabajoApp.getPresupuesto(),trabajoApp.getFechaInicio(),trabajoApp.getFechaFin()));
+
+        return ResponseEntity.ok(response);
     }
 
 
 
 
-    @PatchMapping("/{tituloBuscado}")
+    @PatchMapping("/actualizar-datos/{tituloBuscado}")
     public ResponseEntity<Map<String,Object>> actualizarTrabajo(@PathVariable String tituloBuscado, @Valid @RequestBody ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
         TrabajoApp trabajoApp = trabajoAppService.actualizarTrabajo(tituloBuscado,dto);
         Map<String,Object> response = new HashMap<>();
@@ -124,7 +126,7 @@ public class TrabajoAppController {
     }
 
 
-    @PatchMapping("/{titulo}/{nuevoEstado}")
+    @PatchMapping("/actualizar-estado/{titulo}/{nuevoEstado}")
     public ResponseEntity<Map<String,Object>> actualizarEstadoTrabajo(@PathVariable String titulo, @PathVariable String nuevoEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
         String nuevoEstadoNormalizado = nuevoEstado.toUpperCase().replace(" ", "_");
         trabajoAppService.modificarEstadoTrabajo(titulo,nuevoEstadoNormalizado);

@@ -6,6 +6,7 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 
 public record VisualizarTrabajoAppClienteDTO(
+        Long id,
         String nombreEspecialista,
         String descripcion,
         EstadosTrabajos estado,
