@@ -2,7 +2,6 @@ package com.findfix.find_fix_app.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -28,7 +27,7 @@ public enum EstadosSolicitudes {
         return Arrays.stream(values())
                 .filter(e -> e.nombreAmigable.equalsIgnoreCase(nombre))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Estado inválido: " + nombre));
+                .orElseThrow(() -> new IllegalArgumentException("El estado ingresado no forma parte del sistema."));
     }
 
 }

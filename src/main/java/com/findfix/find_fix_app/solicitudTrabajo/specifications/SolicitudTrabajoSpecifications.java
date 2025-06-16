@@ -5,11 +5,8 @@ import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 
-public class SolicitudSpecifications {
+public class SolicitudTrabajoSpecifications {
 
     //criteria builder genera las condiciones del WHERE en la consulta
 
