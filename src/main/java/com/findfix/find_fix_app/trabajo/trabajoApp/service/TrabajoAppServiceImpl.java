@@ -5,13 +5,13 @@ import com.findfix.find_fix_app.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.exception.exceptions.*;
+import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.repository.TrabajoAppRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.patterns.IVerificationRequired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,33 +27,47 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     private final AuthService authService;
     private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
+
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
     @Override
-    public void guardarTrabajo(TrabajoApp trabajoApp) {
-          trabajoAppRepository.save(trabajoApp);
+    public TrabajoApp registrarDesdeSolicitud(SolicitudTrabajo solicitudTrabajo, Especialista especialista) {
+        TrabajoApp trabajoApp = new TrabajoApp();
+        trabajoApp.setEspecialista(especialista);
+        trabajoApp.setUsuario(solicitudTrabajo.getUsuario());
+        trabajoApp.setEstado(EstadosTrabajos.CREADO);
+        trabajoApp.setDescripcion(solicitudTrabajo.getDescripcion());
+        trabajoApp.setSolicitudTrabajo(solicitudTrabajo);
+        trabajoApp = trabajoAppRepository.save(trabajoApp);
+        trabajoApp.setTitulo("NuevoTrabajo" + trabajoApp.getTrabajoAppId());
+
+        return trabajoAppRepository.save(trabajoApp);
     }
-   ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
+
+    ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
     @Override
     public List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException,TrabajoAppException {
 
-        String emailUsuario = authService.obtenerEmailUsuarioAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getUsuario().getEmail().equals(emailUsuario)).collect(Collectors.toList());
-        if(trabajoApps.isEmpty())
-        {
-            throw new TrabajoAppException("Usted no tiene ningun registro de trabajos.");
+        Usuario usuario = authService.obtenerUsuarioAutenticado();
+
+        List<TrabajoApp> trabajosSolicitados = trabajoAppRepository.findByUsuario(usuario);
+
+        if (trabajosSolicitados.isEmpty()) {
+            throw new TrabajoAppException("Usted no tiene trabajos aceptados.");
         }
-        return trabajoApps;
+
+        return trabajosSolicitados;
     }
     /// METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTAS
     @Override
     public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getEspecialista().getDni().equals(especialista.getDni())).collect(Collectors.toList());
-        if(trabajoApps.isEmpty())
-        {
-            throw new TrabajoAppException("Usted no tiene ningun registro de trabajos.");
+        List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
+
+        if (trabajosAceptados.isEmpty()) {
+            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
         }
-        return trabajoApps;
+        return trabajosAceptados;
     }
 
   ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTA Y APLICANDO FILTRO DE UN ESTADO ELEGIDO
@@ -61,22 +75,19 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, SpecialistRequestNotFoundException, TrabajoAppException {
         if(!validezIngresoEstado(nombreEstado))
         {
-            throw new TrabajoAppException("El estado ingresado no es valido.");
+            throw new TrabajoAppException("El estado ingresado no es válido.");
         }
-        Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajoApps = trabajoAppRepository.findAll().stream().filter(trabajoApp -> trabajoApp.getEspecialista().getDni().equals(especialista.getDni())&&trabajoApp.getEstado().name().equalsIgnoreCase(nombreEstado)).collect(Collectors.toList());
+
+        List<TrabajoApp> trabajoApps = obtenerTrabajosEspecialista().stream().filter(trabajo -> trabajo.getEstado()
+                .equals(EstadosTrabajos.valueOf(nombreEstado))).collect(Collectors.toList());
+
         if(trabajoApps.isEmpty())
         {
-            throw new TrabajoAppException("Usted no tiene ningun trabajo en ese estado.");
+            throw new TrabajoAppException("Usted no tiene ningún trabajo en ese estado.");
         }
         return trabajoApps;
     }
 
-    /*@Override
-    public Optional<TrabajoApp> buscarPorEstado(String nombreEstado) {
-           ///  en realidad no serviria ???
-
-    }*/
   ///  METODO PARA VALIDAR QUE EL ESTADO INGRESADO EXISTA EN EL ENUM ESTADOS
     private Boolean validezIngresoEstado(String nombreEstado)
     {
@@ -99,7 +110,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
         List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoAppBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
-       if(trabajoAppBuscado.isPresent())
+       if(trabajoAppBuscado.isEmpty())
        {
            throw new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema.");
        }else
