@@ -94,6 +94,13 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     public Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado) {
         return trabajoAppRepository.findByTitulo(tituloBuscado);
     }
+
+    ///  BUSCA POR ID
+    @Override
+    public Optional<TrabajoApp> buscarPorId(Long id) throws TrabajoAppNotFoundException {
+        return trabajoAppRepository.findById(id);
+    }
+
     ///  METODO PARA MODIFICAR UN TRABAJO (NO SOLO EL ESTADO)
     @Override
     public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {

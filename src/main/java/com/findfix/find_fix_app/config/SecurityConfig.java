@@ -20,6 +20,8 @@ public class SecurityConfig {
                                 .requestMatchers("/trabajosExternos/**").permitAll()
                                 .requestMatchers("/trabajosApp/misTrabajosC").hasRole("CLIENTE")
                                 .requestMatchers("/trabajosApp/**").hasRole("ESPECIALISTA")
+                                .requestMatchers("/resenas", "/resenas/trabajo/**", "/resenas/mis-resenas", "/resenas/{id}").hasRole("CLIENTE")
+                                .requestMatchers("/resenas", "/resenas/trabajo/**", "/resenas/titulo", "/resenas/mis-resenas", "/resenas/mis-trabajos", "/resenas/{id}").hasRole("ESPECIALISTA")
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

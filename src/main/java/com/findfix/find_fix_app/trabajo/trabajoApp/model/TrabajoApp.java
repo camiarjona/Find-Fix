@@ -48,5 +48,5 @@ public class TrabajoApp {
     private SolicitudTrabajo solicitudTrabajo;
 
     @OneToOne(mappedBy = "trabajoApp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Resena  resena;
+    private Resena resena;
 }
