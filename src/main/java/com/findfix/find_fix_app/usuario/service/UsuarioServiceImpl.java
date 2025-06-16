@@ -49,19 +49,19 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
-    public List<MostrarUsuarioDTO> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
+    public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
         Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
-        if(filtro.rol() != null && !filtro.rol().isEmpty()) {
+        if(filtro.tieneRol()) {
             spec = spec.and(UsuarioSpecifications.tieneRol(filtro.rol()));
         }
-        if(filtro.roles() != null && !filtro.roles().isEmpty()) {
+        if(filtro.tieneRoles()) {
             spec = spec.and(UsuarioSpecifications.tieneAlgunRol(filtro.roles()));
         }
-        if(filtro.email() != null && !filtro.email().isEmpty()) {
+        if(filtro.tieneEmail()) {
             spec = spec.and(UsuarioSpecifications.tieneEmail(filtro.email()));
         }
-        if(filtro.id() != null){
+        if(filtro.tieneId()){
             spec = spec.and(UsuarioSpecifications.tieneId(filtro.id()));
         }
 
@@ -71,14 +71,12 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
             throw new UserException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
         }
 
-        return usuariosEncontrados.stream()
-                .map(MostrarUsuarioDTO::new)
-                .toList();
+        return usuariosEncontrados;
     }
 
     // metodo para obtener lista completa de usuarios
     @Override
-    public List<Usuario> obtenerUsuarios() throws UserException {
+    public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
     }
 
@@ -157,7 +155,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
 
         // agregar roles
-        if (usuarioRolesDTO.rolesAgregar() != null && !usuarioRolesDTO.rolesAgregar().isEmpty()) {
+        if (usuarioRolesDTO.tieneRolesAgregar()) {
             Set<Rol> rolesAAgregar = usuarioRolesDTO.rolesAgregar().stream()
                     .map(nombre -> rolRepository.findByNombre(nombre)
                             .orElseThrow(() -> new RuntimeException("❌Rol no encontrado: " + nombre)))
@@ -167,7 +165,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         }
 
         //eliminar roles
-        if (usuarioRolesDTO.rolesEliminar() != null && !usuarioRolesDTO.rolesEliminar().isEmpty()) {
+        if (usuarioRolesDTO.tieneRolesEliminar()) {
             for (String nombreRol : usuarioRolesDTO.rolesEliminar()) {
                 usuario.getRoles().removeIf(r -> r.getNombre().equalsIgnoreCase(nombreRol));
             }
@@ -198,23 +196,23 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario){
 
-        if (actualizarUsuarioDTO.nombre() != null) {
+        if (actualizarUsuarioDTO.tieneNombre()) {
             usuario.setNombre(actualizarUsuarioDTO.nombre());
         }
-        if (actualizarUsuarioDTO.apellido() != null) {
+        if (actualizarUsuarioDTO.tieneApellido()) {
             usuario.setApellido(actualizarUsuarioDTO.apellido());
         }
-        if (actualizarUsuarioDTO.telefono() != null) {
+        if (actualizarUsuarioDTO.tieneTelefono()) {
             usuario.setTelefono(actualizarUsuarioDTO.telefono());
         }
-        if (actualizarUsuarioDTO.ciudad() != null) {
+        if (actualizarUsuarioDTO.tieneCiudad()) {
             usuario.setCiudad(CiudadesDisponibles.desdeString(actualizarUsuarioDTO.ciudad()));
         }
     }
 
     // metodo para asignar un rol específico a un usuario (para solicitudes)
     @Override
-    public void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException {
+    public void agregarRol(Usuario usuario, String nombreRol) throws RolNotFoundException {
         Rol rol = rolRepository.findByNombre(nombreRol)
                 .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
 

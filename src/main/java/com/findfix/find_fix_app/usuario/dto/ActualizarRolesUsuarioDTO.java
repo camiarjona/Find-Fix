@@ -6,4 +6,6 @@ public record ActualizarRolesUsuarioDTO (
         Set<String> rolesAgregar,
         Set<String> rolesEliminar
 ){
+    public boolean tieneRolesAgregar() {return rolesAgregar != null && !rolesAgregar.isEmpty();}
+    public boolean tieneRolesEliminar() {return rolesEliminar != null && !rolesEliminar.isEmpty();}
 }

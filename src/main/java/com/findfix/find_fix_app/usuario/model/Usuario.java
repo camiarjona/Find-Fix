@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -50,9 +51,11 @@ public class Usuario {
     )
     private Set<Rol> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<SolicitudEspecialista> solicitudesParaEspecialista;
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<SolicitudTrabajo> solicitudesEnviadas;
+
+
 }

@@ -1,6 +1,5 @@
 package com.findfix.find_fix_app.usuario.service;
 
-import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.exception.exceptions.RolException;
 import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserException;
@@ -10,12 +9,11 @@ import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface UsuarioService {
-    List<MostrarUsuarioDTO> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException;
-    List<Usuario> obtenerUsuarios() throws UserException;
+    List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException;
+    List<Usuario> obtenerUsuarios();
     void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException;
     void eliminarPorId(Long id) throws UserNotFoundException;
     void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException;
@@ -23,7 +21,7 @@ public interface UsuarioService {
     void actualizarRolesUsuario(String email, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException;
     void eliminarPorEmail(String email) throws UserNotFoundException;
     void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException;
-    void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException;
+    void agregarRol(Usuario usuario, String nombreRol) throws RolNotFoundException;
     VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException;
     void actualizarUsuarioEspecialista(Usuario usuario);
     List<String> ciudadesDisponibles();

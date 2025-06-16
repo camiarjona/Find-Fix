@@ -115,10 +115,10 @@ public class UsuarioController {
     @GetMapping("/filtrar")
     @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
     public ResponseEntity<Map<String, Object>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
-        List<MostrarUsuarioDTO> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
+        List<Usuario> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
         Map<String, Object> response = new HashMap<>();
-        response.put("Mensaje", "Lista de usuarios encontrada️☑️️");
-        response.put("Usuarios", usuariosFiltrados);
+                response.put("Mensaje", "Lista de usuarios encontrada️☑️️");
+        response.put("Usuarios", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new));
         return ResponseEntity.ok(response);
     }
 
