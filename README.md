@@ -49,7 +49,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ---
 
-##📌 Estado del Proyecto
+## 📌 Estado del Proyecto
 
 - ✅ Backend funcional con endpoints listos.
 - 🛠️ En desarrollo la interfaz visual (frontend).
