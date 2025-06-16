@@ -20,13 +20,7 @@ public interface SolicitudEspecialistaService {
     List<SolicitudEspecialista> obtenerSolicitudesEspecialista() throws SolicitudEspecialistaNotFoundException;
     SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, UserNotFoundException, RolNotFoundException, SolicitudEspecialistaException;
     void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException;
-//    Optional<SolicitudEspecialista> buscarPorId(Long id);
-//    List<SolicitudEspecialista> buscarPorEstado(EstadosSolicitudes estado) throws SolicitudEspecialistaException;
-//    List<SolicitudEspecialista> buscarPorFechaSolicitud(String fecha) throws SolicitudEspecialistaException;
-//    List<SolicitudEspecialista> buscarPorUsuarioAdmin(String email) throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException;
     List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UserNotFoundException;
-    //List<SolicitudEspecialista> buscarPorIntervaloFechas(String fechaInicio, String fechaFin) throws SolicitudEspecialistaException;
     List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException;
-
 
     }

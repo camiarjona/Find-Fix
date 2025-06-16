@@ -37,7 +37,7 @@ public class SolicitudEspecialistaController {
     }
 
     @GetMapping("/obtener-todas")
-    public ResponseEntity<Map<String, Object>> obtenerSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException {
+    public ResponseEntity<Map<String, Object>> obtenerSolicitudes() throws SolicitudEspecialistaNotFoundException {
         Map<String, Object> response = new HashMap<>();
         List<SolicitudEspecialista> solicitudesEspecialista = solicitudEspecialistaService.obtenerSolicitudesEspecialista();
 

@@ -158,6 +158,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         solicitudEspecialistaRepository.deleteById(id);
     }
 
+    /// Metodo para filtrar solicitudes
     @Override
     public List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {
         Specification<SolicitudEspecialista> spec = (root, query, cb) -> cb.conjunction();
@@ -203,5 +204,5 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 .map(FichaCompletaSolicitudEspecialistaDTO::new)
                 .toList();
     }
-    
+
 }
