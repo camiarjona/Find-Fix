@@ -1,10 +1,11 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
-import com.findfix.find_fix_app.auth.service.AuthService;
+import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.TrabajoAppException;
 import com.findfix.find_fix_app.exception.exceptions.TrabajoAppNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public interface TrabajoAppService {
-    void guardarTrabajo(TrabajoApp trabajoApp);
+    TrabajoApp registrarDesdeSolicitud (SolicitudTrabajo solicitudTrabajo, Especialista especialista);
     List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException, TrabajoAppException;
     List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException;
     List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, SpecialistRequestNotFoundException, TrabajoAppException;
