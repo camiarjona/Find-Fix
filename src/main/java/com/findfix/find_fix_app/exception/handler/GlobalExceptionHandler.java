@@ -116,8 +116,9 @@ public class GlobalExceptionHandler {
             RolNotFoundException.class,
             OficioNotFoundException.class,
             TrabajoExternoNotFoundException.class,
-            TrabajoAppNotFoundException.class
-
+            TrabajoAppNotFoundException.class,
+            SolicitudTrabajoException.class,
+            SolicitudTrabajoNotFoundException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotFound(Exception ex) {
         log.error("Resource not found: {}", ex.getMessage());
