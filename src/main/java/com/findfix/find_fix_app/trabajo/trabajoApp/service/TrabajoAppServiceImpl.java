@@ -60,7 +60,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     }
     /// METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTAS
     @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
         List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
@@ -73,7 +73,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
   ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTA Y APLICANDO FILTRO DE UN ESTADO ELEGIDO
     @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, SpecialistRequestNotFoundException, TrabajoAppException {
+    public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException,  TrabajoAppException, EspecialistaNotFoundException {
         if(!validezIngresoEstado(nombreEstado))
         {
             throw new TrabajoAppException("El estado ingresado no es válido.");
@@ -109,7 +109,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
     ///  METODO PARA MODIFICAR UN TRABAJO (NO SOLO EL ESTADO)
     @Override
     @Transactional
-    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
+    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
         List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoAppBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
 
@@ -168,7 +168,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  Este metodo solo modifica el estado de un trabajo
     @Override
-    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, SpecialistRequestNotFoundException {
+    public void modificarEstadoTrabajo(String titulo, String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
         ///  filtramos los trabajos del especialista que esta queriendo modificar el trabajo
         List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
@@ -251,7 +251,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
 
     ///  METODO PARA QUE UN CLIENTE OBTENGA UNA FICHA DE UN TRABAJO FILTRANDO POR EL TITULO DEL MISMO
     @Override
-    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, SpecialistRequestNotFoundException {
+    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
        List<TrabajoApp> trabajoAppDelEspecialista =  obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(tituloBuscado)).findFirst();
         if(trabajoBuscado.isEmpty())
