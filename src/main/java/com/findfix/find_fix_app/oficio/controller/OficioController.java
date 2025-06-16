@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,32 +27,39 @@ public class OficioController {
     private OficioService oficioService;
 
     @GetMapping
-    public ResponseEntity<List<Oficio>> buscarTodos() {
+    public ResponseEntity<Map<String,Object>> buscarTodos() {
+        Map<String,Object> response = new HashMap<>();
         List<Oficio> oficios = oficioService.buscarTodos();
-        return ResponseEntity.ok(oficios); // 200 OK
+        response.put("message","Lista de oficios encontrada ✅");
+        response.put("data",oficios);
+        return ResponseEntity.ok(response); // 200 OK
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Oficio> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Map<String,Object>> buscarPorId(@PathVariable Long id) {
         Optional<Oficio> oficio = oficioService.buscarPorId(id);
-        return oficio.map(ResponseEntity::ok) // 200 OK si existe
-                .orElseGet(() -> ResponseEntity.notFound().build()); // 404 si no existe
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Oficio encontrado ✅ ");
+        response.put("data",oficio.get());
+        return ResponseEntity.ok(response);  // 200 OK si existe
+
     }
 
     @PostMapping
-    public ResponseEntity<Oficio> crearOficio(@RequestBody Oficio oficio) {
+    public ResponseEntity<Map<String,Object>> crearOficio(@Valid @RequestBody Oficio oficio) {
         Oficio guardado = oficioService.crearOficio(oficio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(guardado); // 201 Created
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Oficio registrado exitosamente ✅");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201 Created
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Oficio> modificarOficio(@PathVariable Long id, @RequestBody String nuevo) {
-        try {
-            Oficio actualizado = oficioService.modificarOficio(id, nuevo);
-            return ResponseEntity.ok(actualizado); // 200 OK
-        } catch (OficioNotFoundException e) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
-        }
+    public ResponseEntity<Map<String,Object>> modificarOficio(@PathVariable Long id, @Valid @RequestBody Oficio nuevo) throws OficioNotFoundException {
+            oficioService.modificarOficio(id, nuevo);
+            Map<String,Object> response = new HashMap<>();
+            response.put("message","Oficio actualizado exitosamente ✅");
+            return ResponseEntity.ok(response); // 200 OK
+
     }
 
     @DeleteMapping("/{id}")
@@ -64,10 +74,13 @@ public class OficioController {
     }
 
     @GetMapping("/nombre/{oficio}")
-    public ResponseEntity<String> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
+    public ResponseEntity<Map<String,Object>> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
         nombre = nombre.toUpperCase();
         Oficio oficio = oficioService.filtrarPorNombre(nombre);
-        return ResponseEntity.status(HttpStatus.OK).body("Oficio encontrado :) " + "\n" + "ID: " + oficio.getId() + "\n" + "Nombre: " + oficio.getNombre() );
+        Map<String,Object> response = new HashMap<>();
+        response.put("message","Oficio encontrado ✅");
+        response.put("data",oficio);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

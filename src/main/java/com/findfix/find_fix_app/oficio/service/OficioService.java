@@ -13,8 +13,7 @@ public interface OficioService {
     Oficio crearOficio(Oficio oficio);
     List<Oficio> buscarTodos();
     Optional<Oficio> buscarPorId(Long id);
-    Oficio modificarOficio(Long id, String nuevo) throws OficioNotFoundException;
+    void modificarOficio(Long id, Oficio nuevo) throws OficioNotFoundException;
     void borrarOficioPorId(Long id);
-
     Oficio filtrarPorNombre(String nombre) throws OficioNotFoundException;
 }
