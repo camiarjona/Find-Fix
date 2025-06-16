@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class ModificarTrabajoExternoDTO {
-    @NotNull(message = "El nuevo estado es obligatorio")
     private EstadosTrabajos estado;
 }
