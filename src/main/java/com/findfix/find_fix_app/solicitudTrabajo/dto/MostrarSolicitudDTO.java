@@ -6,20 +6,20 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class MostrarSolicitudTrabajoDTO {
+public class MostrarSolicitudDTO {
     Long id;
     LocalDate fechaCreacion;
     String estado;
-    String nombreEspecialista;
-    String apellidoEspecialista;
+    String nombreCliente;
+    String apellidoCliente;
     String descripcion;
 
-    public MostrarSolicitudTrabajoDTO(SolicitudTrabajo solicitudTrabajo) {
+    public MostrarSolicitudDTO(SolicitudTrabajo solicitudTrabajo) {
         this.id = solicitudTrabajo.getSolicitudTrabajoId();
         this.fechaCreacion = solicitudTrabajo.getFechaCreacion();
         this.estado = solicitudTrabajo.getEstado().toString();
-        this.nombreEspecialista = solicitudTrabajo.getEspecialista().getUsuario().getNombre();
-        this.apellidoEspecialista = solicitudTrabajo.getEspecialista().getUsuario().getApellido();
+        this.nombreCliente = solicitudTrabajo.getUsuario().getNombre();
+        this.apellidoCliente = solicitudTrabajo.getUsuario().getApellido();
         this.descripcion = solicitudTrabajo.getDescripcion();
     }
 }
