@@ -6,7 +6,7 @@ import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoException;
 import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
+import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.ActualizarEstadoDTO;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.BuscarSolicitudDTO;
@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +37,11 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     //metodo para registrar una nueva solicitud de trabajo
     @Override
-    public SolicitudTrabajo registrarNuevaSolicitud(SolicitarTrabajoDTO solicitarTrabajoDTO) throws UserNotFoundException, SpecialistRequestNotFoundException {
+    public SolicitudTrabajo registrarNuevaSolicitud(SolicitarTrabajoDTO solicitarTrabajoDTO) throws UserNotFoundException, EspecialistaNotFoundException {
         SolicitudTrabajo solicitudTrabajo = new SolicitudTrabajo();
 
         Especialista especialista = especialistaService.buscarPorEmail(solicitarTrabajoDTO.emailEspecialista())
-                .orElseThrow(() -> new SpecialistRequestNotFoundException("Especialista no encontrado."));
+                .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado."));
 
         solicitudTrabajo.setDescripcion(solicitarTrabajoDTO.descripcion());
         solicitudTrabajo.setEstado(EstadosSolicitudes.PENDIENTE);
@@ -52,7 +53,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     //metodo para actualizar el estado de una solicitud (especialista)
     @Override
-    public void actualizarEstadoSolicitud(ActualizarEstadoDTO actualizar, Long idSolicitud) throws SolicitudTrabajoNotFoundException, UserNotFoundException, SpecialistRequestNotFoundException, SolicitudTrabajoException {
+    public void actualizarEstadoSolicitud(ActualizarEstadoDTO actualizar, Long idSolicitud) throws SolicitudTrabajoNotFoundException, UserNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
@@ -94,7 +95,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     // metodo para obtener las solicitudes recibidas (como especialista)
     @Override
-    public List<SolicitudTrabajo> obtenerSolicitudesDelEspecialista() throws UserNotFoundException, SpecialistRequestNotFoundException, SolicitudTrabajoException {
+    public List<SolicitudTrabajo> obtenerSolicitudesDelEspecialista() throws UserNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
         List<SolicitudTrabajo> solicitudesRecibidas = solicitudTrabajoRepository.findByEspecialista(especialista);
 
@@ -126,8 +127,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     // metodo para filtrar solicitudes según criterios
     @Override
-    // VERIFICAR QUE LAS SOLIS CORRESPONDAN AL QUE INICIO SESION
-    public List<SolicitudTrabajo> filtrarSolicitudes(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException {
+    public List<SolicitudTrabajo> filtrarSolicitudesRecibidas(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException, EspecialistaNotFoundException {
+
+        Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
+
         Specification<SolicitudTrabajo> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
         if (filtro.tieneFecha()) {
@@ -137,12 +140,38 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
             spec = spec.and(SolicitudSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
         }
 
-        List<SolicitudTrabajo> solicitudesEncontrada = solicitudTrabajoRepository.findAll(spec);
+        List<SolicitudTrabajo> solicitudesEncontradas = solicitudTrabajoRepository.findAll(spec).stream()
+                .filter(s -> s.getEspecialista().equals(especialista))
+                .collect(Collectors.toList());
 
-        if (solicitudesEncontrada.isEmpty()) {
+        if (solicitudesEncontradas.isEmpty()) {
             throw new SolicitudTrabajoException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
         }
-        return solicitudesEncontrada;
+        return solicitudesEncontradas;
+    }
+
+    @Override
+    public List<SolicitudTrabajo> filtrarSolicitudesEnviadas(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException {
+
+        Usuario usuario = authService.obtenerUsuarioAutenticado();
+
+        Specification<SolicitudTrabajo> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+
+        if (filtro.tieneFecha()) {
+            spec = spec.and(SolicitudSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
+        }
+        if (filtro.tieneEstado()) {
+            spec = spec.and(SolicitudSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
+        }
+
+        List<SolicitudTrabajo> solicitudesEncontradas = solicitudTrabajoRepository.findAll(spec).stream()
+                .filter(s -> s.getUsuario().equals(usuario))
+                .collect(Collectors.toList());
+
+        if (solicitudesEncontradas.isEmpty()) {
+            throw new SolicitudTrabajoException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
+        }
+        return solicitudesEncontradas;
     }
 
     // metodo para validar el estado de una solicitud (para actualizar)

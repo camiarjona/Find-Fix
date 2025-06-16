@@ -112,7 +112,7 @@ public class GlobalExceptionHandler {
             WorkNotFoundException.class,
             UserNotFoundException.class,
             ReviewNotFoundException.class,
-            SpecialistRequestNotFoundException.class,
+            EspecialistaNotFoundException.class,
             RolNotFoundException.class,
             OficioNotFoundException.class,
             TrabajoExternoNotFoundException.class,

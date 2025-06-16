@@ -2,7 +2,7 @@ package com.findfix.find_fix_app.solicitudTrabajo.controller;
 
 import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoException;
 import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
+import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.*;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
@@ -28,7 +28,7 @@ public class SolicitudTrabajoController {
 
     @PostMapping("/registrar-solicitud")
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<Map<String, Object>> registrarNuevaSolicitud (@Valid @RequestBody SolicitarTrabajoDTO solicitudTrabajo) throws UserNotFoundException, SpecialistRequestNotFoundException {
+    public ResponseEntity<Map<String, Object>> registrarNuevaSolicitud (@Valid @RequestBody SolicitarTrabajoDTO solicitudTrabajo) throws UserNotFoundException, EspecialistaNotFoundException {
         SolicitudTrabajo solicitud = solicitudTrabajoService.registrarNuevaSolicitud(solicitudTrabajo);
         Map<String, Object> response = new HashMap<>();
         response.put("Mensaje", "Se ha enviado la solicitud al especialista✅" );
@@ -48,7 +48,7 @@ public class SolicitudTrabajoController {
 
     @GetMapping("/mis-solicitudes-recibidas")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<Map<String, Object>> visualizarSolicitudesRecibidas() throws SolicitudTrabajoException, SpecialistRequestNotFoundException, UserNotFoundException {
+    public ResponseEntity<Map<String, Object>> visualizarSolicitudesRecibidas() throws SolicitudTrabajoException, EspecialistaNotFoundException, UserNotFoundException {
         List<SolicitudTrabajo> solicitudesRecibidas =  solicitudTrabajoService.obtenerSolicitudesDelEspecialista();
         Map<String, Object> response = new HashMap<>();
         response.put("Mensaje", "Lista de solicitudes encontrada️☑️️");
@@ -75,10 +75,20 @@ public class SolicitudTrabajoController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/filtrar")
-    @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<Map<String, Object>> filtrarSolicitudes(@RequestBody BuscarSolicitudDTO filtro) throws SolicitudTrabajoException {
-        List<SolicitudTrabajo> solicitudes = solicitudTrabajoService.filtrarSolicitudes(filtro);
+    @GetMapping("/recibidas-filtrar")
+    @PreAuthorize("hasRole('ESPECIALISTA')")
+    public ResponseEntity<Map<String, Object>> filtrarSolicitudesRecibidas(@RequestBody BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException, EspecialistaNotFoundException {
+        List<SolicitudTrabajo> solicitudes = solicitudTrabajoService.filtrarSolicitudesRecibidas(filtro);
+        Map<String, Object> response = new HashMap<>();
+        response.put("Mensaje", "Lista de solicitudes encontrada️☑️️");
+        response.put("Solicitudes", solicitudes.stream().map(MostrarSolicitudTrabajoDTO::new).toList());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/enviadas-filtrar")
+    @PreAuthorize("hasRole('CLIENTE')")
+    public ResponseEntity<Map<String, Object>> filtrarSolicitudesEnviadas(@RequestBody BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UserNotFoundException {
+        List<SolicitudTrabajo> solicitudes = solicitudTrabajoService.filtrarSolicitudesEnviadas(filtro);
         Map<String, Object> response = new HashMap<>();
         response.put("Mensaje", "Lista de solicitudes encontrada️☑️️");
         response.put("Solicitudes", solicitudes.stream().map(MostrarSolicitudTrabajoDTO::new).toList());
@@ -87,7 +97,7 @@ public class SolicitudTrabajoController {
 
     @PatchMapping("/actualizar-estado/{id}")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestBody ActualizarEstadoDTO actualizar) throws UserNotFoundException, SolicitudTrabajoNotFoundException, SolicitudTrabajoException, SpecialistRequestNotFoundException {
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestBody ActualizarEstadoDTO actualizar) throws UserNotFoundException, SolicitudTrabajoNotFoundException, SolicitudTrabajoException, EspecialistaNotFoundException {
         solicitudTrabajoService.actualizarEstadoSolicitud(actualizar, id);
         Map<String, Object> response = new HashMap<>();
         response.put("Mensaje", "Solicitud actualizada con éxito☑️");
