@@ -111,7 +111,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 solicitudEspecialista.setEstado(EstadosSolicitudes.ACEPTADO);
                 solicitudEspecialista.setRespuesta(dto.respuesta());
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
-                especialistaService.guardar(solicitudEspecialista.getUsuario().getUsuarioId()); ///cambiar en especialistaservice el metodo para recibir un usuario directamente
+                especialistaService.guardar(solicitudEspecialista.getUsuario());
 
             }
 
@@ -203,84 +203,5 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 .map(FichaCompletaSolicitudEspecialistaDTO::new)
                 .toList();
     }
-
-
-//    /// Metodo para buscar solicitud por id
-//
-//    @Override
-//    public Optional<SolicitudEspecialista> buscarPorId(Long id) {
-//        return solicitudEspecialistaRepository.findById(id);
-//    }
-
-
-
-//    /// Metodo para buscar solicitudes por Estado
-//
-//    @Override
-//    public List<SolicitudEspecialista> buscarPorEstado(EstadosSolicitudes estado) throws SolicitudEspecialistaException {
-//
-//        List<SolicitudEspecialista> solicitudesEspecialistas = solicitudEspecialistaRepository.findAllByEstado(estado);
-//        if(solicitudesEspecialistas.isEmpty()){
-//            throw new SolicitudEspecialistaException("No se encontraron solicitudes en estado: " + estado.name());
-//        }
-//
-//        return solicitudesEspecialistas;
-//    }
-//
-//    /// Metodo para buscar solicitudes por fecha de solicitud
-//
-//    @Override
-//    public List<SolicitudEspecialista> buscarPorFechaSolicitud(String fecha) throws SolicitudEspecialistaException {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//
-//        try {
-//            LocalDate localDate = LocalDate.parse(fecha, formatter);
-//            return solicitudEspecialistaRepository.findByFechaSolicitud(localDate);
-//        } catch (DateTimeParseException e) {
-//            throw new SolicitudEspecialistaException("El formato de la fecha es inválido. Debe ser 'dd-MM-yyyy'.");
-//        }
-//    }
-//
-//    /// Metodo para buscar solicitudes por intervalo de fechas
-//
-//    @Override
-//    public List<SolicitudEspecialista> buscarPorIntervaloFechas(String fechaInicio, String fechaFin) throws SolicitudEspecialistaException {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        List<SolicitudEspecialista> solicitudesEspecialistas;
-//
-//        try {
-//            LocalDate inicio = LocalDate.parse(fechaInicio, formatter);
-//            LocalDate fin = LocalDate.parse(fechaFin, formatter);
-//
-//            if (inicio.isAfter(fin)) {
-//                throw new SolicitudEspecialistaException("La fecha de inicio no puede ser posterior a la fecha de fin.");
-//            }
-//            solicitudesEspecialistas = solicitudEspecialistaRepository.findByFechaSolicitudBetween(inicio, fin);
-//
-//            if (solicitudesEspecialistas.isEmpty()) {
-//                throw new SolicitudEspecialistaException("No se encontraron solicitudes en el intervalo de fechas especificadas.");
-//            }
-//
-//
-//            return solicitudesEspecialistas;
-//        } catch (DateTimeParseException e) {
-//            throw new SolicitudEspecialistaException("El formato de las fechas es inválido. Debe ser 'dd-MM-yyyy'.");
-//        }
-//    }
-//
-//    /// Metodo para buscar solicitudes por usuario de parte del admin
-//
-//    @Override
-//    public List<SolicitudEspecialista> buscarPorUsuarioAdmin(String email) throws SolicitudEspecialistaNotFoundException {
-//        List<SolicitudEspecialista> solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(email);
-//        if(solicitudEspecialistas.isEmpty()){
-//            throw new SolicitudEspecialistaNotFoundException("No se encontraron solicitudes para el usuario con email: " + email);
-//        }
-//        return solicitudEspecialistas;
-//    }
-
-
-
-
-
+    
 }
