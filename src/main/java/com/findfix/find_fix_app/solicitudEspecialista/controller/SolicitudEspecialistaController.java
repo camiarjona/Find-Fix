@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/solicitudEspecialista")
+@RequestMapping("/solicitud-especialista")
 @RequiredArgsConstructor
 public class SolicitudEspecialistaController {
     private final SolicitudEspecialistaService solicitudEspecialistaService;
 
-    @PostMapping("/mandarSolicitud")
+    @PostMapping("/enviar-solicitud")
     public ResponseEntity<Map<String, Object>> mandarSolicitud (@Valid @RequestBody MandarSolicitudEspecialistaDTO solicitudEspecialistaDTO) throws UserNotFoundException, SolicitudEspecialistaException {
         Map<String, Object> response = new HashMap<>();
 
@@ -36,7 +36,7 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/obtenerTodas")
+    @GetMapping("/obtener-todas")
     public ResponseEntity<Map<String, Object>> obtenerSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException {
         Map<String, Object> response = new HashMap<>();
         List<SolicitudEspecialista> solicitudesEspecialista = solicitudEspecialistaService.obtenerSolicitudesEspecialista();
@@ -54,7 +54,7 @@ public class SolicitudEspecialistaController {
     }
 
 
-    @GetMapping("/obtenerMisSolicitudes")
+    @GetMapping("/mis-solicitudes")
     public ResponseEntity<Map<String, Object>> obtenerMisSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UserNotFoundException {
         Map<String, Object> response = new HashMap<>();
         List<SolicitudEspecialista> solicitudesEspecialista = solicitudEspecialistaService.obtenerMisSolicitudesEspecialista();
@@ -70,9 +70,10 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/actualizar")
+    @PatchMapping("/{id}")
     public ResponseEntity<Map<String, Object>> actualizarSolicitudEspecialista(@Valid @RequestBody ActualizarSolicitudEspecialistaDTO actualizarSolicitudEspecialistaDTO, @PathVariable Long id) throws UserNotFoundException, SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, RolNotFoundException {
         Map<String, Object> response = new HashMap<>();
+
 
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaService.actualizarSolicitudEspecialistaAdmin(actualizarSolicitudEspecialistaDTO, id);
         response.put("Mensaje", "Solicitud actualizada correctamente☑️");
@@ -80,7 +81,7 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> eliminarSolicitudEspecialista(@PathVariable Long id) throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException {
         Map<String, Object> response = new HashMap<>();
 

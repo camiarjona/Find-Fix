@@ -1,9 +1,11 @@
 package com.findfix.find_fix_app.solicitudEspecialista.dto;
 
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 public class FichaCompletaSolicitudEspecialistaDTO {
         private LocalDate fechaSolicitud;
         private LocalDate fechaResolucion;
@@ -20,4 +22,5 @@ public class FichaCompletaSolicitudEspecialistaDTO {
         this.respuesta = solicitudEspecialista.getRespuesta();
         this.email = solicitudEspecialista.getUsuario().getEmail();
     }
+
 }

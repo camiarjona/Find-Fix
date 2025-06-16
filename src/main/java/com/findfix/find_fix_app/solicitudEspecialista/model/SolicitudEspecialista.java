@@ -22,7 +22,7 @@ public class SolicitudEspecialista {
     @Column(nullable = false)
     //momento en el que se envia la solicitud
     private LocalDate fechaSolicitud;
-    @Column(nullable = false)
+
     //momento en el que la solicitud es aceptada o rechazada
     private LocalDate fechaResolucion;
     @Column(nullable = false)

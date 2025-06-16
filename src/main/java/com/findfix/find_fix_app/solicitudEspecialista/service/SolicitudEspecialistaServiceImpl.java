@@ -104,9 +104,10 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para actualizar el estado y la respuesta de una solicitud, por parte del admin
     private void actualizarDatosSolicitud(SolicitudEspecialista solicitudEspecialista, ActualizarSolicitudEspecialistaDTO dto) throws UserNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
-        if(dto.estado().equals("PENDIENTE")) {
+        EstadosSolicitudes estadosSolicitudes = EstadosSolicitudes.valueOf(dto.estado());
+        if(solicitudEspecialista.getEstado().name().equals("PENDIENTE")) {
 
-            if (dto.estado().equals("ACEPTADO")) {
+            if (estadosSolicitudes.name().equals("ACEPTADO")) {
                 solicitudEspecialista.setEstado(EstadosSolicitudes.ACEPTADO);
                 solicitudEspecialista.setRespuesta(dto.respuesta());
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
@@ -114,7 +115,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
             }
 
-            if (dto.estado().equals("RECHAZADO")) {
+            if (estadosSolicitudes.name().equals("RECHAZADO")) {
                 solicitudEspecialista.setEstado(EstadosSolicitudes.RECHAZADO);
                 solicitudEspecialista.setRespuesta(dto.respuesta());
             }
@@ -132,8 +133,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaRepository.findById(id)
                 .orElseThrow(()-> new SolicitudEspecialistaNotFoundException("Solicitud no encontrada"));
 
-        actualizarDatosSolicitud(solicitudEspecialista, dto);
         solicitudEspecialista.setFechaResolucion(LocalDate.now());
+        actualizarDatosSolicitud(solicitudEspecialista, dto);
         return solicitudEspecialista;
     }
 
@@ -148,6 +149,10 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         }
         if(!email.equals(solicitudEspecialistaRepository.findById(id).get().getUsuario().getEmail())){
             throw new SolicitudEspecialistaException("Solicitud no encontrada para el usuario: " + email);
+        }
+
+        if(!solicitudEspecialistaRepository.findById(id).get().getEstado().name().equals("PENDIENTE")){
+            throw new SolicitudEspecialistaException("Solicitud no se puede eliminar porque ya ha sido aceptada o rechazada.");
         }
 
         solicitudEspecialistaRepository.deleteById(id);

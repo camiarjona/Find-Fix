@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record ActualizarSolicitudEspecialistaDTO (
-        EstadosSolicitudes estado,
+        String estado,
 
         @NotNull (message = "La devolucion es obligatoria.")
         @NotBlank (message = "La devolucion no puede quedar en blanco")
