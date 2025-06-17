@@ -1,9 +1,9 @@
 package com.findfix.find_fix_app.resena.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.ResenaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.TrabajoAppNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.ResenaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
+import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.resena.dto.CrearResenaDTO;
 import com.findfix.find_fix_app.resena.dto.MostrarResenaDTO;
 import com.findfix.find_fix_app.resena.model.Resena;
@@ -42,7 +42,7 @@ public class ResenaController {
 
     @GetMapping("/mis-trabajos")
     public ResponseEntity<List<CrearResenaDTO>> verResenasDeMisTrabajos()
-            throws UserNotFoundException, SpecialistRequestNotFoundException {
+            throws UserNotFoundException, EspecialistaExcepcion {
         return ResponseEntity.ok(resenaService.ResenasDeMisTrabajos());
     }
 
