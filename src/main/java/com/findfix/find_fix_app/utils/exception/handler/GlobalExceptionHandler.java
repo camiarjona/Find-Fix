@@ -86,6 +86,7 @@ public class GlobalExceptionHandler {
             SolicitudTrabajoException.class,
             SolicitudTrabajoNotFoundException.class,
             TrabajoExternoException.class,
+            SolicitudEspecialistaNotFoundException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotFound(Exception ex) {
         log.error("Resource not found: {}", ex.getMessage());
@@ -151,7 +152,8 @@ public class GlobalExceptionHandler {
             RolException.class,
             UserException.class,
             EspecialistaExcepcion.class,
-            TrabajoAppException.class
+            TrabajoAppException.class,
+            SolicitudEspecialistaException.class
     })
     public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
         ErrorResponse error = ErrorResponse.builder()

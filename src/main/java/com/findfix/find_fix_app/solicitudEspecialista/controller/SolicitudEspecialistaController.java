@@ -34,14 +34,14 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/obtener-todas")
+    @GetMapping
     public ResponseEntity<Map<String, Object>> obtenerSolicitudes() throws SolicitudEspecialistaNotFoundException {
         Map<String, Object> response = new HashMap<>();
         List<SolicitudEspecialista> solicitudesEspecialista = solicitudEspecialistaService.obtenerSolicitudesEspecialista();
 
         response.put("Mensaje", "Lista de solicitudes encontrada☑️");
         response.put("Solicitudes", solicitudesEspecialista.stream()
-                .map(solicitud -> new MostrarSolicitudEspecialistaDTO(
+                .map(solicitud -> new MostrarSolicitudEspecialistaAdminDTO(
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
                         solicitud.getUsuario().getEmail()
@@ -62,7 +62,8 @@ public class SolicitudEspecialistaController {
                 .map(solicitud -> new MostrarSolicitudEspecialistaDTO(
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
-                        solicitud.getUsuario().getEmail()
+                        solicitud.getUsuario().getEmail(),
+                        solicitud.getRespuesta()
                 )).toList());
 
         return ResponseEntity.ok(response);
