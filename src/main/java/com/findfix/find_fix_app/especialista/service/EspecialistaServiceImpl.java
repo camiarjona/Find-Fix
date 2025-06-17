@@ -2,8 +2,8 @@ package com.findfix.find_fix_app.especialista.service;
 
 import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.enums.CiudadesDisponibles;
-import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
-import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
+import com.findfix.find_fix_app.especialista.Specifications.EspecialistaSpecifications;
+import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.repository.EspecialistaRepository;
 import com.findfix.find_fix_app.exception.exceptions.EspecialistaExcepcion;
@@ -14,12 +14,10 @@ import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -119,7 +117,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
     public List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
-        List<Especialista> especialistas = especialistaRepository.findAll();
+        List<Especialista> especialistas = especialistaRepository.findAll(EspecialistaSpecifications.tieneDatosCompletos());
         if (especialistas.isEmpty()) {
             throw new EspecialistaNotFoundException("No hay especialistas disponibles en este momento.");
         }
@@ -136,48 +134,57 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         especialistaRepository.deleteById(especialistaRepository.findByUsuarioEmail(email).get().getEspecialistaId());
     }
 
-    /// Metodo para buscar un especialista por DNI
-    @Override
-    public Optional<Especialista> buscarPorDni(Long dni) {
-        return especialistaRepository.findByDni(dni);
-    }
-
-    /// Metodo para buscar un especialista por ID
-    @Override
-    public Optional<Especialista> buscarPorId(Long id) {
-        return especialistaRepository.findById(id);
-    }
-
-
     /// Metodo para buscar un especialista por Email
     @Override
     public Optional<Especialista> buscarPorEmail(String email) {
         return especialistaRepository.findByUsuarioEmail(email);
     }
 
-    /// Metotodo para actualoizar los oficios que luego va a llamar cada metodo de actualizar oficio
+    /// Metotodo para actualizar los oficios que luego va a llamar cada metodo de actualizar oficio
     private void actualizarDatosOficiosEspecialista(Especialista especialista, ActualizarOficioEspDTO dto) throws EspecialistaExcepcion {
-        // Eliminar oficios
-        if(dto.eliminar() != null && !dto.eliminar().isEmpty()) {
-            Set<Oficio> oficiosAEliminar = oficioRepository.findAllById(dto.eliminar())
-                    .stream()
-                    .collect(Collectors.toSet());
-            especialista.getOficios().removeAll(oficiosAEliminar);
+        Set<Oficio> oficiosActuales = especialista.getOficios();
+
+        // Eliminar oficios con validación previa
+        if (dto.eliminar() != null && !dto.eliminar().isEmpty()) {
+            Set<Oficio> oficiosAEliminar = new HashSet<>();
+
+            for (String nombreOficio : dto.eliminar()) {
+                Oficio oficio = oficioRepository.findByNombre(nombreOficio.trim().toUpperCase())
+                        .orElseThrow(() -> new EspecialistaExcepcion("El oficio '" + nombreOficio + "' no existe"));
+
+                if (!oficiosActuales.contains(oficio)) {
+                    throw new EspecialistaExcepcion("El oficio '" + nombreOficio + "' no está asignado al especialista y no puede ser eliminado");
+                }
+
+                oficiosAEliminar.add(oficio);
+            }
+
+            // Validación previa a eliminar para que el set no quede vacio
+            if (oficiosActuales.size() - oficiosAEliminar.size() <= 0) {
+                throw new EspecialistaExcepcion("El especialista debe tener al menos un oficio asignado");
+            }
+
+            // Si pasa la validación, eliminamos
+            oficiosActuales.removeAll(oficiosAEliminar);
         }
 
-        // Agregar oficios
-        if(dto.agregar() != null && !dto.agregar().isEmpty()) {
-            Set<Oficio> oficiosAAgregar = oficioRepository.findAllById(dto.agregar())
-                    .stream()
-                    .collect(Collectors.toSet());
-            especialista.getOficios().addAll(oficiosAAgregar);
+        // Agregar nuevos oficios con validación de duplicados
+        if (dto.agregar() != null && !dto.agregar().isEmpty()) {
+            for (String nombreOficio : dto.agregar()) {
+                Oficio oficio = oficioRepository.findByNombre(nombreOficio.trim().toUpperCase())
+                        .orElseThrow(() -> new EspecialistaExcepcion("El oficio '" + nombreOficio + "' no existe"));
+
+                if (oficiosActuales.contains(oficio)) {
+                    throw new EspecialistaExcepcion("El oficio '" + nombreOficio + "' ya está asignado al especialista");
+                }
+
+                oficiosActuales.add(oficio);
+            }
         }
 
-        // Validar que quede al menos un oficio
-        if(especialista.getOficios().isEmpty()) {
-            throw new EspecialistaExcepcion("El especialista debe tener al menos un oficio");
-        }
+        especialista.setOficios(oficiosActuales);
     }
+
 
     /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
     @Override
@@ -201,22 +208,77 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         return especialistaRepository.save(especialista);
     }
 
-    /// Metodo para buscar especialistas de un oficio en particular
+
+/// Metodo para ver mi perfil de especialista
     @Override
-    public List<Especialista> buscarPorOficio(String nombreOficio) {
-        Optional<Oficio> oficioOptional = oficioRepository.findByNombre(nombreOficio);
-        if (oficioOptional.isPresent()) {
-            return especialistaRepository.findAllByOficios(oficioOptional.get());
-        } else {
-            return List.of();
+    public VerPerfilEspecialistaDTO verPerfilEspecialista() throws UserNotFoundException, EspecialistaNotFoundException {
+        Especialista especialista = obtenerEspecialistaAutenticado();
+        return new VerPerfilEspecialistaDTO(especialista);
+    }
+
+/// Metodo para filtrar especialistas
+    @Override
+    public List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion {
+        List<Specification<Especialista>> specifications = new ArrayList<>();
+
+        // 1. Filtro por ID
+        if (filtro.id() != null) {
+            specifications.add(EspecialistaSpecifications.tieneId(filtro.id()));
         }
+
+        // 2. Filtro por Oficio
+        if (filtro.oficio() != null && !filtro.oficio().isEmpty()) {
+            specifications.add(EspecialistaSpecifications.tieneOficio(filtro.oficio()));
+        }
+
+        // 3. Filtro por Ciudad
+        if (filtro.ciudad() != null && !filtro.ciudad().isEmpty()) {
+            try {
+                CiudadesDisponibles ciudadEnum = CiudadesDisponibles.desdeString(filtro.ciudad());
+                specifications.add(EspecialistaSpecifications.enCiudad(ciudadEnum.getNombreAmigable()));
+            } catch (IllegalArgumentException e) {
+                throw new EspecialistaExcepcion("La ciudad ingresada no es válida. Ciudades disponibles: " +
+                        CiudadesDisponibles.ciudadesDisponibles());
+            }
+        }
+
+        // 4. Filtro por DNI
+        if (filtro.dni() != null) {
+            if (filtro.dni().toString().length() == 8) {
+                throw new EspecialistaExcepcion("El DNI debe tener 8 dígitos");
+            }
+            specifications.add(EspecialistaSpecifications.tieneDni(filtro.dni()));
+        }
+
+        // 5. Filtro por Email
+        if (filtro.email() != null && !filtro.email().isEmpty()) {
+            if (!filtro.email().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                throw new EspecialistaExcepcion("El formato del email no es válido");
+            }
+            specifications.add(EspecialistaSpecifications.tieneEmail(filtro.email()));
+        }
+
+        // 6. Filtro por Calificación Mínima
+        if (filtro.minCalificacion() != null) {
+            if (filtro.minCalificacion() < 0 || filtro.minCalificacion() > 5) {
+                throw new EspecialistaExcepcion("La calificación debe estar entre 0 y 5");
+            }
+            specifications.add(EspecialistaSpecifications.tieneCalificacionMinima(filtro.minCalificacion()));
+        }
+
+        Specification<Especialista> finalSpec = specifications.stream()
+                .reduce(Specification::and)
+                .orElse(EspecialistaSpecifications.tieneDatosCompletos())
+                .and(EspecialistaSpecifications.tieneDatosCompletos());
+
+        List<Especialista> especialistas = especialistaRepository.findAll(finalSpec);
+        if (especialistas.isEmpty()) {
+            throw new EspecialistaExcepcion("No se encontraron especialistas con los criterios especificados");
+        }
+
+
+        return especialistas.stream()
+                .map(EspecialistaFichaCompletaDTO::new)
+                .toList();
     }
-
-
-    /// Metodo para buscar especialistas de un oficio en particular
-    @Override
-    public List<Especialista> buscarPorCiudad(String ciudad) {
-        return especialistaRepository.findByUsuario_Ciudad(ciudad).stream().collect(Collectors.toList());
-    }
-
 }
