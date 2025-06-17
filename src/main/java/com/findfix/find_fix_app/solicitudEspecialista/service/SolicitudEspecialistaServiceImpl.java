@@ -104,12 +104,13 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para actualizar el estado y la respuesta de una solicitud, por parte del admin
     private void actualizarDatosSolicitud(SolicitudEspecialista solicitudEspecialista, ActualizarSolicitudEspecialistaDTO dto) throws UserNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
-        EstadosSolicitudes estadosSolicitudes = EstadosSolicitudes.valueOf(dto.estado());
+        EstadosSolicitudes estadosSolicitudes = EstadosSolicitudes.valueOf(dto.estado().trim().toUpperCase() );
         if(solicitudEspecialista.getEstado().name().equals("PENDIENTE")) {
 
             if (estadosSolicitudes.name().equals("ACEPTADO")) {
                 solicitudEspecialista.setEstado(EstadosSolicitudes.ACEPTADO);
-                solicitudEspecialista.setRespuesta(dto.respuesta());
+                String respuesta = dto.respuesta() + " Atención: para aparecer en las búsquedas de clientes, debe completar su perfil de especialista (ciudad, teléfono y al menos un oficio).";
+                solicitudEspecialista.setRespuesta(respuesta);
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
                 especialistaService.guardar(solicitudEspecialista.getUsuario());
 

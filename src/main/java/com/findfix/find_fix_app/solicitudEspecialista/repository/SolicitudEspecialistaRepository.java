@@ -13,9 +13,5 @@ import java.util.Optional;
 
 @Repository
 public interface SolicitudEspecialistaRepository extends JpaRepository<SolicitudEspecialista, Long>, JpaSpecificationExecutor<SolicitudEspecialista> {
-    List<SolicitudEspecialista> findByFechaSolicitud(LocalDate fecha);
-    List<SolicitudEspecialista> findAllByEstado(EstadosSolicitudes estado);
     List<SolicitudEspecialista> findByUsuarioEmail(String email);
-    List<SolicitudEspecialista> findByFechaSolicitudBetween(LocalDate fechaInicio, LocalDate fechaFin);
-
 }
