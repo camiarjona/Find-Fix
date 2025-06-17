@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.solicitudEspecialista.Specifications;
 
+import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.usuario.model.Usuario;
@@ -17,17 +18,16 @@ public class SolicitudEspecialistaSpecifications {
         };
     }
 
-    public static Specification<SolicitudEspecialista> tieneFechaSolicitud(LocalDate fechaSolicitud) {
+    public static Specification<SolicitudEspecialista> fechaEntre(LocalDate desde, LocalDate hasta) {
         return (root, query, criteriaBuilder) -> {
-            if (fechaSolicitud == null) return null;
-            return criteriaBuilder.equal(root.get("fechaSolicitud"), fechaSolicitud);
-        };
-    }
-
-    public static Specification<SolicitudEspecialista> tieneFechaSolicitudEntre(LocalDate inicio, LocalDate fin) {
-        return (root, query, criteriaBuilder) -> {
-            if (inicio == null || fin == null) return null;
-            return criteriaBuilder.between(root.get("fechaSolicitud"), inicio, fin);
+            if (desde == null && hasta == null) return null;
+            if(desde != null && hasta != null && !desde.isBefore(hasta)) {
+                return criteriaBuilder.between(root.get("fechaSolicitud"), desde, hasta);
+            } else if(desde != null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaSolicitud"), desde);
+            } else {
+                return criteriaBuilder.lessThanOrEqualTo(root.get("fechaSolicitud"), hasta);
+            }
         };
     }
 

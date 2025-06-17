@@ -11,4 +11,7 @@ public record ActualizarOficioEspDTO (
             throw new IllegalArgumentException("Debe especificar oficios para agregar o remover");
         }
     }
+
+    public boolean tieneAgregar() { return agregar != null && !agregar.isEmpty(); }
+    public boolean tieneEliminar() { return eliminar != null && !eliminar.isEmpty(); }
 }

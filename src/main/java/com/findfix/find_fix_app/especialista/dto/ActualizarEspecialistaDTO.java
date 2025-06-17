@@ -17,4 +17,10 @@ public record ActualizarEspecialistaDTO(
         @Digits(integer = 8, fraction = 0, message = "El DNI debe tener 8 dígitos")
         Long dni
 ) {
+        public boolean tieneDescripcion() { return descripcion != null && !descripcion.isEmpty(); }
+        public boolean tieneNombre() { return nombre != null && !nombre.isEmpty(); }
+        public boolean tieneApellido() { return apellido != null && !apellido.isEmpty(); }
+        public boolean tieneTelefono() { return telefono != null && !telefono.isEmpty(); }
+        public boolean tieneCiudad() { return ciudad != null && !ciudad.isEmpty(); }
+        public boolean tieneDni() { return dni != null; }
 }
