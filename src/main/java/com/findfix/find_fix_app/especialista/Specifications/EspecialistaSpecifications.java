@@ -1,6 +1,5 @@
 package com.findfix.find_fix_app.especialista.Specifications;
 
-import com.findfix.find_fix_app.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import org.springframework.data.jpa.domain.Specification;
 
