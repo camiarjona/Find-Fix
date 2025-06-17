@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.solicitudTrabajo.specifications;
 
-import com.findfix.find_fix_app.enums.EstadosSolicitudes;
+import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import org.springframework.data.jpa.domain.Specification;
 

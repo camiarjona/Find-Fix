@@ -1,10 +1,10 @@
 package com.findfix.find_fix_app.solicitudTrabajo.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.ActualizarEstadoDTO;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.BuscarSolicitudDTO;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.SolicitarTrabajoDTO;

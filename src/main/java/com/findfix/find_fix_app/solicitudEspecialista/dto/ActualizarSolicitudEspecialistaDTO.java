@@ -1,6 +1,5 @@
 package com.findfix.find_fix_app.solicitudEspecialista.dto;
 
-import com.findfix.find_fix_app.enums.EstadosSolicitudes;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.model;
 
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.resena.model.Resena;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;

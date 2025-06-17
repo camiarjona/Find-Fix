@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.specifications;
 
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import org.springframework.data.jpa.domain.Specification;
 

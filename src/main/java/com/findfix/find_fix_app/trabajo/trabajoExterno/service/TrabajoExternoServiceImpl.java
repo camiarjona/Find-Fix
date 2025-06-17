@@ -1,15 +1,15 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
-import com.findfix.find_fix_app.exception.exceptions.*;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.CrearTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.ModificarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.repository.TrabajoExternoRepository;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.specifications.TrabajoExternoSpecifications;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;

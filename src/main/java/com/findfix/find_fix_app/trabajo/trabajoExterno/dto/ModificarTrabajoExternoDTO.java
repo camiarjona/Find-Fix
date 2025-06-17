@@ -1,13 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.dto;
 
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 public record ModificarTrabajoExternoDTO (

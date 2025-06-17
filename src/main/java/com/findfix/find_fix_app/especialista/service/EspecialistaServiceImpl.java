@@ -1,14 +1,14 @@
 package com.findfix.find_fix_app.especialista.service;
 
-import com.findfix.find_fix_app.auth.service.AuthService;
-import com.findfix.find_fix_app.enums.CiudadesDisponibles;
+import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.especialista.dto.ActualizarEspecialistaDTO;
 import com.findfix.find_fix_app.especialista.dto.ActualizarOficioEspDTO;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.repository.EspecialistaRepository;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaExcepcion;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
