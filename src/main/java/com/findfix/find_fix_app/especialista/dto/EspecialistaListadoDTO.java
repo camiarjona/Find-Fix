@@ -14,10 +14,12 @@ public class EspecialistaListadoDTO{
     private String ciudad;
     private Set<String> oficios;
     private Double calificacionPromedio;
+    private String email;
 
     public EspecialistaListadoDTO(Especialista especialista) {
         this.nombre = validarYObtenerString(especialista.getUsuario().getNombre());
         this.apellido = validarYObtenerString(especialista.getUsuario().getApellido());
+        this.email = validarYObtenerString(especialista.getUsuario().getEmail());
 
         // Manejo de ciudad nula
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
