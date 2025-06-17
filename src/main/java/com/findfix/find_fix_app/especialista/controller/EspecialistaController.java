@@ -4,6 +4,7 @@ import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.usuario.dto.VerPerfilUsuarioDTO;
+import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/especialista")
@@ -25,103 +27,78 @@ public class EspecialistaController {
 
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> obtenerEspecialistas() throws EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistas() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaService.obtenerEspecialistas();
 
-        response.put("Mensaje", "Lista de especialistas encontrada☑️");
-        response.put("Especialistas: ", especialistas.stream().map(EspecialistaFichaCompletaDTO::new).toList());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
     }
 
 
     @GetMapping("/disponibles")
-    public ResponseEntity<Map<String, Object>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
+    @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaService.obtenerEspecialistasDisponibles();
 
-        response.put("Mensaje", "Lista de especialistas disponibles encontrada☑️");
-        response.put("Especialistas: ", especialistas.stream().map(EspecialistaListadoDTO::new).toList());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas disponibles encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
     }
 
 
-    @PatchMapping("/{email}")
-    public ResponseEntity<Map<String, Object>> actualizarEspecialistaAdmin(@PathVariable String email, @Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
-
+    @PatchMapping("/actualizar/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialistaAdmin(@PathVariable String email, @Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException {
         Especialista especialista = especialistaService.actualizarEspecialistaAdmin(email, dto);
-        response.put("Mensaje", "Especialista actualizado correctamente☑️");
-        response.put("Especialista actualizado: ", new EspecialistaRespuestaDTO(especialista));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Especialista actualizado correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
-    @PatchMapping
-    public ResponseEntity<Map<String, Object>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException, UserNotFoundException {
-        Map<String, Object> response = new HashMap<>();
-
+    @PatchMapping("/actualizar-mis-datos")
+    @PreAuthorize("hasRole('ESPECIALISTA')")
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException, UserNotFoundException {
         Especialista especialista = especialistaService.actualizarEspecialista(dto);
-        response.put("Mensaje", "Especialista actualizado correctamente☑️");
-        response.put("Actualizacion: ", new EspecialistaRespuestaDTO(especialista));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Especialista actualizado correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<Map<String, Object>> eliminarPorEmail(@PathVariable String email) throws EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
+    @DeleteMapping("/eliminar/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<String>> eliminarPorEmail(@PathVariable String email) throws EspecialistaNotFoundException {
+       especialistaService.eliminarPorEmail(email);
 
-        especialistaService.eliminarPorEmail(email);
-        response.put("Mensaje", "Especialista eliminado correctamente✅");
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Especialista eliminado correctamente✅", "[]"));
     }
 
 
-    @PatchMapping("/oficios/{email}")
-    public ResponseEntity<Map<String, Object>> actualizarOficiosDeEspecialistaAdmin(@PathVariable String email, @Valid @RequestBody ActualizarOficioEspDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
+    @PatchMapping("/actualizar-oficios/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialistaAdmin(@PathVariable String email, @Valid @RequestBody ActualizarOficioEspDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException {
+      Especialista especialista = especialistaService.actualizarOficioDeEspecialistaAdmin(email, dto);
 
-        Especialista especialista = especialistaService.actualizarOficioDeEspecialistaAdmin(email, dto);
-        response.put("Mensaje", "Oficios actualizados correctamente☑️");
-        response.put("Especialista actualizado: ", new EspecialistaRespuestaDTO(especialista));
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Oficios actualizados correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
-    @PatchMapping("/actualizar-oficios")
-    public ResponseEntity<Map<String, Object>> actualizarOficiosDeEspecialista(@Valid @RequestBody ActualizarOficioEspDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
-        Map<String, Object> response = new HashMap<>();
+    @PatchMapping("/actualizar-mis-oficios")
+    @PreAuthorize("hasRole('ESPECIALISTA')")
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialista(@Valid @RequestBody ActualizarOficioEspDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
+       Especialista especialista = especialistaService.actualizarOficioDeEspecialista(dto);
 
-        Especialista especialista = especialistaService.actualizarOficioDeEspecialista(dto);
-        response.put("Mensaje", "Oficios actualizados correctamente☑️");
-        response.put("Actualizacion", new EspecialistaRespuestaDTO(especialista));
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Oficios actualizados correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
     @GetMapping("/ver-perfil")
-    public ResponseEntity<Map<String, VerPerfilEspecialistaDTO>> verPerfilEspecialista() throws UserNotFoundException, EspecialistaNotFoundException {
-        Map<String, VerPerfilEspecialistaDTO> response = new HashMap<>();
+    @PreAuthorize("hasRole('ESPECIALISTA')")
+    public ResponseEntity<ApiResponse<VerPerfilEspecialistaDTO>> verPerfilEspecialista() throws UserNotFoundException, EspecialistaNotFoundException {
         VerPerfilEspecialistaDTO especialistaDTO = especialistaService.verPerfilEspecialista();
-        response.put("Perfil:", especialistaDTO);
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<Map<String, Object>> filtrarEspecialistas(@RequestBody BuscarEspecialistaDTO filtro)
+    public ResponseEntity<ApiResponse<List<EspecialistaFichaCompletaDTO>>> filtrarEspecialistas(@RequestBody BuscarEspecialistaDTO filtro)
             throws EspecialistaExcepcion {
-
         List<EspecialistaFichaCompletaDTO> especialistasFiltrados = especialistaService.filtrarEspecialistas(filtro);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("Mensaje", "Lista de especialistas encontrada ☑️");
-        response.put("Especialista/s: ", especialistasFiltrados);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", especialistasFiltrados));
     }
 
 }

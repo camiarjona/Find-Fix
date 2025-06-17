@@ -15,6 +15,7 @@ public class EspecialistaFichaCompletaDTO {
     private String telefono;
     private String ciudad;
     private Set<String> oficios;
+    private String email;
     private Double calificacionPromedio;
 
 
@@ -22,6 +23,7 @@ public class EspecialistaFichaCompletaDTO {
             this.nombre = validarYObtenerString(especialista.getUsuario().getNombre());
             this.apellido = validarYObtenerString(especialista.getUsuario().getApellido());
             this.telefono = validarYObtenerString(especialista.getUsuario().getTelefono());
+            this.email = validarYObtenerString(especialista.getUsuario().getEmail());
 
             // Validar ciudad
             this.ciudad = (especialista.getUsuario().getCiudad() != null)
