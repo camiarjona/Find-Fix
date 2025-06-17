@@ -14,6 +14,6 @@ public interface OficioService {
     List<Oficio> buscarTodos();
     Optional<Oficio> buscarPorId(Long id);
     void modificarOficio(Long id, Oficio nuevo) throws OficioNotFoundException;
-    void borrarOficioPorId(Long id);
+    void borrarOficioPorId(Long id) throws OficioNotFoundException;
     Oficio filtrarPorNombre(String nombre) throws OficioNotFoundException;
 }

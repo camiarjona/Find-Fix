@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.rol.controller;
 
+import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
@@ -23,51 +24,38 @@ public class RolController {
 
     private final RolService rolService;
 
-
+    ///  endpoint para crear rol nuevo en el sistema
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crearRol(@Valid @RequestBody Rol rol) throws RolException {
+    public ResponseEntity<ApiResponse<String>> crearRol(@Valid @RequestBody Rol rol) throws RolException {
         rolService.guardarRol(rol);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message", "Rol creado con exito.");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Rol creado con exito ☑️","Consulte la lista de roles para visualizar el rol agregado"));
     }
-
+  ///  endpoint que muestra la lista de roles registrados
     @GetMapping
-    public ResponseEntity<Map<String, Object>> listarRoles() throws RolException {
-
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<ApiResponse<List<Rol>>> listarRoles() throws RolException {
         List<Rol>  roles = rolService.mostrarRoles();
-        response.put("message","Lista de roles registrados");
-        response.put("data",roles);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Lista de roles registrados",roles));
     }
-
+   ///  endpoint para eliminar un rol del sistema a traves de su nombre
     @DeleteMapping("/{nombre}")
-    public ResponseEntity<Map<String,Object>> eliminarRol(@PathVariable String nombre) throws RolNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarRol(@PathVariable String nombre) throws RolNotFoundException {
         nombre = nombre.toUpperCase();
         rolService.eliminarRol(nombre);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Rol eliminado con exito");
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Rol eliminado con exito ☑️","Consulte la lista de roles registrados si desea verificar que fue eliminado"));
 
     }
-
+     ///  endpoint para modificar rol, se busca por id
     @PatchMapping("/{id}")   /// http://localhost:8080/roles/3?nuevoNombre=nuevoRol
-    public ResponseEntity<Map<String,Object>> modificarRol(@PathVariable Long id, @Valid @RequestParam String nuevoNombre) throws RolNotFoundException, RolException {
+    public ResponseEntity<ApiResponse<String>> modificarRol(@PathVariable Long id, @Valid @RequestParam String nuevoNombre) throws RolNotFoundException, RolException {
         rolService.modificarRol(nuevoNombre, id);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Rol modificado con exito");
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Rol modificado con exito ☑️","Verifique el cambio buscando el rol que haya modificado"));
     }
-
+   ///  endpoint para obtener un rol filtrandolo por su nombre
     @GetMapping("/{rol}")
-    public ResponseEntity<Map<String,Object>> filtrarPorNombre(@PathVariable("rol") String nombre) throws RolNotFoundException {
+    public ResponseEntity<ApiResponse<Rol>> filtrarPorNombre(@PathVariable("rol") String nombre) throws RolNotFoundException {
         nombre = nombre.toUpperCase();
         Rol rol = rolService.filtrarPorNombre(nombre);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Rol encontrado");
-        response.put("data",rol);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Rol encontrado ☑️",rol));
     }
 
 

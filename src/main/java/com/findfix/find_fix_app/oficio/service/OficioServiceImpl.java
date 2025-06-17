@@ -40,7 +40,11 @@ public class OficioServiceImpl implements OficioService {
     }
 
     @Override
-    public void borrarOficioPorId(Long id) {
+    public void borrarOficioPorId(Long id) throws OficioNotFoundException {
+        if(oficioRepository.findById(id).isEmpty())
+        {
+            throw new OficioNotFoundException("El id ingresado no pertenece a ningun oficio registrado");
+        }
         oficioRepository.deleteById(id);
     }
 
