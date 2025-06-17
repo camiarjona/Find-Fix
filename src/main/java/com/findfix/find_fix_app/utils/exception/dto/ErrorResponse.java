@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.exception.dto;
+package com.findfix.find_fix_app.utils.exception.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

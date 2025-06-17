@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.enums;
+package com.findfix.find_fix_app.utils.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
