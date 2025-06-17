@@ -113,25 +113,20 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
         List<TrabajoApp> trabajosAppDelEspecialista = obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoAppBuscado = trabajosAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(titulo)).findFirst();
 
+        TrabajoApp trabajoApp = trabajoAppRepository.findByTitulo(titulo)
+                .orElseThrow(() -> new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema."));
         ///  si todos los datos del dto estan vacio o son null significa que no se mandaron datos para modifica
         if(!datoStringValido(dto.descripcion())&&!datoStringValido(titulo)&&dto.presupuesto()==null)
         {
             throw new TrabajoAppException("No se pudo realizar modificacion debido a falta de datos");
         }
 
-
-        if(trabajoAppBuscado.isEmpty())
-       {
-           throw new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema.");
-       }else
-       {
-
-           if(verificacionEstadoFinalizado(trabajoAppBuscado.get()))
+           if(verificacionEstadoFinalizado(trabajoApp))
            {
                throw new TrabajoAppException("El trabajo se encuentra finalizado por lo tanto ya no se pueden realizar cambios en sus datos");
            }
 
-           if(datoStringValido(dto.titulo())) {
+           if(dto.tieneTitulo()) {
                Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
                if (verificacion.isPresent()) {
                    throw new TrabajoAppException("El titulo que ingreso ya pertenece a un trabajo del sistema.");
@@ -140,16 +135,15 @@ public class TrabajoAppServiceImpl implements TrabajoAppService{
                }
            }
 
-           if(datoStringValido(dto.descripcion()))
+           if(dto.tieneDescripcion())
            {
                trabajoAppBuscado.get().setDescripcion(dto.descripcion());
            }
 
-           if(dto.presupuesto()!=null)
+           if(dto.tienePresupuesto())
            {
                trabajoAppBuscado.get().setPresupuesto(dto.presupuesto());
            }
-       }
 
        trabajoAppRepository.save(trabajoAppBuscado.get());
        return trabajoAppBuscado.get();
