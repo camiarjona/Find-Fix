@@ -16,7 +16,7 @@ public class RolServiceImpl implements RolService {
 
     private final RolRepository rolRepository;
 
-
+ ///  guardar nuevo rol  en el sistema
     @Override
     public void guardarRol(Rol rol)  throws RolException{
         String nombre = rol.getNombre();
@@ -28,7 +28,7 @@ public class RolServiceImpl implements RolService {
             rolRepository.save(rol);
         }
     }
-
+  ///  mostrar lista de roles registrados en el sistema
     @Override
     public List<Rol> mostrarRoles() throws RolException{
         List<Rol> roles = rolRepository.findAll();
@@ -40,14 +40,14 @@ public class RolServiceImpl implements RolService {
         }
 
     }
-
+   ///  eliminar un rol registrado del sistema
     @Override
     public void eliminarRol(String nombre) throws RolNotFoundException {
         nombre = nombre.toUpperCase();
         Rol encontrado = rolRepository.findByNombre(nombre).orElseThrow(() -> new RolNotFoundException("El rol que desea eliminar no existe."));
         rolRepository.delete(encontrado);
     }
-
+    ///  modificar un rol ya registrado en el sistema buscandolo por su id
     @Override
     public void modificarRol(String nombreNuevo, Long idBuscada) throws RolException,RolNotFoundException {
         nombreNuevo = nombreNuevo.toUpperCase();
@@ -61,7 +61,7 @@ public class RolServiceImpl implements RolService {
 
         rolRepository.save(encontrado);
     }
-
+   ///  filtro de roles por nombre
     @Override
     public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
         Optional<Rol> encontrado = rolRepository.findByNombre(nombreBuscado);
