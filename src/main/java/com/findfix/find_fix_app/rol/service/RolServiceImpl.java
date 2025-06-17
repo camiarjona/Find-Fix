@@ -1,7 +1,7 @@
 package com.findfix.find_fix_app.rol.service;
 
-import com.findfix.find_fix_app.exception.exceptions.RolException;
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
         Optional<Rol> encontrado = rolRepository.findByNombre(nombreBuscado);
-        if(!encontrado.isPresent())
+        if(encontrado.isEmpty())
         {
             throw new RolNotFoundException("El rol que intenta buscar no esta registrado en el sistema");
         }else

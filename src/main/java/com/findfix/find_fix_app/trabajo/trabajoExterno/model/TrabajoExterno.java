@@ -1,12 +1,11 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.model;
 
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -23,11 +22,11 @@ public class TrabajoExterno {
     @Column(nullable = false)
     private String nombreCliente;
 
-    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaInicio;
 
-    @Column(nullable = true)  // Ahora puede ser null
     private LocalDate fechaFin;
+
+    private String titulo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

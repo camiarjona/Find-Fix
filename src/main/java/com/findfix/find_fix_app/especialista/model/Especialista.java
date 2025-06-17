@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.especialista.model;
 
 import com.findfix.find_fix_app.oficio.model.Oficio;
+import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +45,13 @@ public class Especialista {
             inverseJoinColumns = @JoinColumn(name = "id_oficio")
     )
     private Set<Oficio>oficios = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
+    private List<TrabajoApp> trabajos = new ArrayList<>();
+
+    @Transient
+    private Double calificacionPromedio;
 
 
 

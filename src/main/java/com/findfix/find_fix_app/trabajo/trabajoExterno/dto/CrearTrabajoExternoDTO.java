@@ -5,23 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+public record CrearTrabajoExternoDTO(
+        @NotBlank(message = "El nombre del cliente no puede quedar en blanco.")
+        @NotNull(message = "El nombre del cliente es obligatoria.")
+        @Size(min = 1, max = 20, message = "El nombre del cliente debe tener entre 1 y 20 caracteres")
+        String nombreCliente,
 
-public class CrearTrabajoExternoDTO {
-    @NotBlank(message = "El nombre del cliente es obligatorio")
-    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
-    private String nombreCliente;
+        @NotBlank(message="La descripción no puede quedar en blanco.")
+        @NotNull(message = "La descripción es obligatoria.")
+        @Size(min = 1, max = 250, message = "La descripción debe tener entre 1 y 250 caracteres")
+        String descripcion,
 
-    @NotBlank(message = "La descripción es obligatoria")
-    @Size(min = 5, max = 500, message = "La descripción debe tener entre 5 y 500 caracteres")
-    private String descripcion;
+        @NotNull(message = "El presupuesto no puede ser nulo.")
+        @Positive(message = "El presupuesto debe ser mayor a cero.")
+        Double presupuesto,
 
-    @NotNull(message = "El presupuesto no puede ser nulo")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El presupuesto debe ser mayor a cero")
-    private Double presupuesto;
-
-    @NotNull(message = "El ID del especialista es obligatorio")
-    private Long especialistaId;
+        @NotBlank(message="El título no puede quedar en blanco.")
+        @NotNull(message = "El título es obligatorio.")
+        @Size(min = 1, max = 20, message = "El titulo debe tener entre 1 y 20 caracteres")
+        String titulo
+){
 }

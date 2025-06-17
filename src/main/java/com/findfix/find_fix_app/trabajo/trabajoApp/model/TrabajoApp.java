@@ -27,6 +27,7 @@ public class TrabajoApp {
     @Column(unique = true,nullable = false)
     private String titulo;
 
+    @Column(nullable = false)
     private EstadosTrabajos estado;
 
     private String descripcion;
@@ -47,6 +48,6 @@ public class TrabajoApp {
     @JoinColumn(name = "id_solicitud_trabajo")
     private SolicitudTrabajo solicitudTrabajo;
 
-    @OneToOne(mappedBy = "trabajoApp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Resena resena;
+    @OneToOne(mappedBy = "trabajoApp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Resena  resena;
 }

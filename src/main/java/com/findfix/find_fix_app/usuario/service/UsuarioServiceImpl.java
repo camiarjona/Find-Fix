@@ -1,20 +1,21 @@
 package com.findfix.find_fix_app.usuario.service;
 
-import com.findfix.find_fix_app.auth.service.AuthService;
-import com.findfix.find_fix_app.exception.exceptions.RolException;
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
+import com.findfix.find_fix_app.usuario.specifications.UsuarioSpecifications;
 import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,14 +39,39 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para guardar un usuario basico
     @Override
-    public void actualizarUsuarioEspecialista(Usuario usuario){
+    public void actualizarUsuarioEspecialista(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
 
-    // metodo para buscar un usuario por email
     @Override
-    public Optional<Usuario> buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+    public List<String> ciudadesDisponibles() {
+        return CiudadesDisponibles.ciudadesDisponibles();
+    }
+
+    @Override
+    public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
+        Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
+
+        if(filtro.tieneRol()) {
+            spec = spec.and(UsuarioSpecifications.tieneRol(filtro.rol()));
+        }
+        if(filtro.tieneRoles()) {
+            spec = spec.and(UsuarioSpecifications.tieneAlgunRol(filtro.roles()));
+        }
+        if(filtro.tieneEmail()) {
+            spec = spec.and(UsuarioSpecifications.tieneEmail(filtro.email()));
+        }
+        if(filtro.tieneId()){
+            spec = spec.and(UsuarioSpecifications.tieneId(filtro.id()));
+        }
+
+        List<Usuario> usuariosEncontrados = usuarioRepository.findAll(spec);
+
+        if(usuariosEncontrados.isEmpty()){
+            throw new UserException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
+        }
+
+        return usuariosEncontrados;
     }
 
     // metodo para obtener lista completa de usuarios
@@ -54,18 +80,12 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         return usuarioRepository.findAll();
     }
 
-    // metodo para buscar un usuario por id
-    @Override
-    public Optional<Usuario> buscarPorId(Long id) {
-        return usuarioRepository.findById(id);
-    }
-
     //metodo para registrar un usuario nuevo
     @Override
     public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
-            throw new UserException("Ya existe un usuario registrado con ese email.");
+            throw new UserException("❗Ya existe un usuario registrado con ese email.");
         }
 
         Usuario usuario = new Usuario();
@@ -74,12 +94,23 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuario.setPassword(passwordEncoder.encode(registroDTO.password()));
         usuario.setNombre(registroDTO.nombre());
         usuario.setApellido(registroDTO.apellido());
+        usuario.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+        usuario.setTelefono("No especificado.");
 
-        //Se registra con rol cliente por default
-        Rol rol = rolRepository.findByNombre("CLIENTE")
-                .orElseThrow(() -> new RolException("Rol no encontrado."));
+        Rol rol;
 
-        usuario.getRoles().add(rol);
+        if (obtenerUsuarios().isEmpty()) {
+            //si la lista esta vacia, al primer usuario creado se le asigna rol de admin
+            rol = rolRepository.findByNombre("ADMIN")
+                    .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
+            usuario.getRoles().add(rol);
+        } else {
+            //Se registra con rol cliente por default
+            rol = rolRepository.findByNombre("CLIENTE")
+                    .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
+
+            usuario.getRoles().add(rol);
+        }
 
         usuarioRepository.save(usuario);
     }
@@ -88,7 +119,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     @Override
     public void eliminarPorId(Long id) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
+                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
 
         usuarioRepository.delete(usuario);
     }
@@ -100,7 +131,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
         if (!passwordEncoder.matches(actualizarPasswordDTO.passwordActual(), usuario.getPassword())) {
-            throw new IllegalArgumentException("La contraseña actual es incorrecta.");
+            throw new IllegalArgumentException("❌La contraseña actual es incorrecta❌");
         }
 
         usuario.setPassword(passwordEncoder.encode(actualizarPasswordDTO.passwordNuevo()));
@@ -113,39 +144,28 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
-        if (actualizarUsuarioDTO.nombre() != null) {
-            usuario.setNombre(actualizarUsuarioDTO.nombre());
-        }
-        if (actualizarUsuarioDTO.apellido() != null) {
-            usuario.setApellido(actualizarUsuarioDTO.apellido());
-        }
-        if (actualizarUsuarioDTO.telefono() != null) {
-            usuario.setTelefono(actualizarUsuarioDTO.telefono());
-        }
-        if (actualizarUsuarioDTO.ciudad() != null) {
-            usuario.setCiudad(actualizarUsuarioDTO.ciudad());
-        }
+        actualizarDatosAModificar(actualizarUsuarioDTO, usuario);
 
         usuarioRepository.save(usuario);
     }
 
     @Override
-    public void actualizarRolesUsuario(Long idUsuario, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
+    public void actualizarRolesUsuario(String email, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
 
         // agregar roles
-        if (usuarioRolesDTO.rolesAgregar() != null && !usuarioRolesDTO.rolesAgregar().isEmpty()) {
+        if (usuarioRolesDTO.tieneRolesAgregar()) {
             Set<Rol> rolesAAgregar = usuarioRolesDTO.rolesAgregar().stream()
                     .map(nombre -> rolRepository.findByNombre(nombre)
-                            .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombre)))
+                            .orElseThrow(() -> new RuntimeException("❌Rol no encontrado: " + nombre)))
                     .collect(Collectors.toSet());
 
             usuario.getRoles().addAll(rolesAAgregar);
         }
 
         //eliminar roles
-        if (usuarioRolesDTO.rolesEliminar() != null && !usuarioRolesDTO.rolesEliminar().isEmpty()) {
+        if (usuarioRolesDTO.tieneRolesEliminar()) {
             for (String nombreRol : usuarioRolesDTO.rolesEliminar()) {
                 usuario.getRoles().removeIf(r -> r.getNombre().equalsIgnoreCase(nombreRol));
             }
@@ -158,7 +178,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     @Override
     public void eliminarPorEmail(String email) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
+                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
 
         usuarioRepository.delete(usuario);
     }
@@ -167,29 +187,34 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     @Override
     public void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
+                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
 
-        if (actualizarUsuarioDTO.nombre() != null) {
-            usuario.setNombre(actualizarUsuarioDTO.nombre());
-        }
-        if (actualizarUsuarioDTO.apellido() != null) {
-            usuario.setApellido(actualizarUsuarioDTO.apellido());
-        }
-        if (actualizarUsuarioDTO.telefono() != null) {
-            usuario.setTelefono(actualizarUsuarioDTO.telefono());
-        }
-        if (actualizarUsuarioDTO.ciudad() != null) {
-            usuario.setCiudad(actualizarUsuarioDTO.ciudad());
-        }
+        actualizarDatosAModificar(actualizarUsuarioDTO, usuario);
 
         usuarioRepository.save(usuario);
     }
 
-    // metodo para asignar un rol especifico a un usuario (para solicitudes)
+    public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario){
+
+        if (actualizarUsuarioDTO.tieneNombre()) {
+            usuario.setNombre(actualizarUsuarioDTO.nombre());
+        }
+        if (actualizarUsuarioDTO.tieneApellido()) {
+            usuario.setApellido(actualizarUsuarioDTO.apellido());
+        }
+        if (actualizarUsuarioDTO.tieneTelefono()) {
+            usuario.setTelefono(actualizarUsuarioDTO.telefono());
+        }
+        if (actualizarUsuarioDTO.tieneCiudad()) {
+            usuario.setCiudad(CiudadesDisponibles.desdeString(actualizarUsuarioDTO.ciudad()));
+        }
+    }
+
+    // metodo para asignar un rol específico a un usuario (para solicitudes)
     @Override
-    public void agregarRol(Usuario usuario, String nombreRol) throws UserNotFoundException, RolNotFoundException {
+    public void agregarRol(Usuario usuario, String nombreRol) throws RolNotFoundException {
         Rol rol = rolRepository.findByNombre(nombreRol)
-                .orElseThrow(() -> new RolNotFoundException("Rol no encontrado."));
+                .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
 
         usuario.getRoles().add(rol);
         usuarioRepository.save(usuario);
@@ -202,13 +227,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         return new VerPerfilUsuarioDTO(usuario);
     }
 
-
-
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> userOptional = usuarioRepository.findByEmail(username);
-        Usuario usuario = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado."));
+        Usuario usuario = userOptional.orElseThrow(() -> new UsernameNotFoundException("❌Usuario no encontrado❌"));
 
         // retorna un user de spring security
         return new org.springframework.security.core.userdetails.User(
@@ -218,7 +241,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         );
     }
 
-
     // Metodo que convierte los roles del usuario en autoridades para spring security
     private Collection<? extends GrantedAuthority> getAuthorities(Set<Rol> roles) {
         // Prefijo "ROLE_" es requerido por Spring Security para roles
@@ -226,4 +248,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getNombre()))
                 .collect(Collectors.toList());
     }
+
+
 }

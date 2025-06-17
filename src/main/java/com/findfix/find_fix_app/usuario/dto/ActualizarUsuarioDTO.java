@@ -6,4 +6,8 @@ public record ActualizarUsuarioDTO (
     String telefono,
     String ciudad
 ){
+    public boolean tieneNombre() { return nombre != null; }
+    public boolean tieneApellido() { return apellido != null; }
+    public boolean tieneTelefono() { return telefono != null; }
+    public boolean tieneCiudad() { return ciudad != null; }
 }

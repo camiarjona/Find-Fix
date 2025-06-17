@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.solicitudTrabajo.model;
 
-import com.findfix.find_fix_app.enums.EstadosSolicitudes;
+import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
@@ -18,11 +18,16 @@ import java.time.LocalDate;
 public class SolicitudTrabajo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud_trabajo")
-    private Long stId;
+    private Long solicitudTrabajoId;
+
     @Column(nullable = false)
     private LocalDate fechaCreacion;
+
+    private LocalDate fechaResolucion;
+
     @Column(nullable = false)
     private EstadosSolicitudes estado;
+
     @Column(nullable = false)
     private String descripcion;
 
