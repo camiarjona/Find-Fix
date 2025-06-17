@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.oficio.controller;
 
+import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.OficioNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
@@ -26,60 +27,41 @@ public class OficioController {
     private OficioService oficioService;
 
     @GetMapping
-    public ResponseEntity<Map<String,Object>> buscarTodos() {
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<ApiResponse<List<Oficio>>> buscarTodos() {
         List<Oficio> oficios = oficioService.buscarTodos();
-        response.put("message","Lista de oficios encontrada ✅");
-        response.put("data",oficios);
-        return ResponseEntity.ok(response); // 200 OK
+        return ResponseEntity.ok(new ApiResponse<>("Lista de oficios encontrada ✅",oficios));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String,Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Oficio>> buscarPorId(@PathVariable Long id) {
         Optional<Oficio> oficio = oficioService.buscarPorId(id);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Oficio encontrado ✅ ");
-        response.put("data",oficio.get());
-        return ResponseEntity.ok(response);  // 200 OK si existe
-
+        return ResponseEntity.ok(new ApiResponse<>("Oficio encontrado ✅",oficio.get()));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,Object>> crearOficio(@Valid @RequestBody Oficio oficio) {
+    public ResponseEntity<ApiResponse<String>> crearOficio(@Valid @RequestBody Oficio oficio) {
         Oficio guardado = oficioService.crearOficio(oficio);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Oficio registrado exitosamente ✅");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Oficio registrado exitosamente ✅","Ingrese a la lista de oficios para verificar su registro")); // 201 Created
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String,Object>> modificarOficio(@PathVariable Long id, @Valid @RequestBody Oficio nuevo) throws OficioNotFoundException {
+    public ResponseEntity<ApiResponse<String>> modificarOficio(@PathVariable Long id, @Valid @RequestBody Oficio nuevo) throws OficioNotFoundException {
             oficioService.modificarOficio(id, nuevo);
-            Map<String,Object> response = new HashMap<>();
-            response.put("message","Oficio actualizado exitosamente ✅");
-            return ResponseEntity.ok(response); // 200 OK
+            return ResponseEntity.ok(new ApiResponse<>("Oficio actualizado exitosamente ✅","Filtre el oficio modificado para  verificar los cambios")); // 200 OK
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> borrarOficioPorId(@PathVariable Long id) {
-        Optional<Oficio> oficio = oficioService.buscarPorId(id);
-        if (oficio.isPresent()) {
-            oficioService.borrarOficioPorId(id);
-            return ResponseEntity.noContent().build(); // 204 No Content
-        } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found
-        }
+    public ResponseEntity<ApiResponse<String>> borrarOficioPorId(@PathVariable Long id) throws OficioNotFoundException {
+       oficioService.borrarOficioPorId(id);
+       return ResponseEntity.ok(new ApiResponse<>("Oficio eliminado exitosamente ✅","Ingrese a la lista de oficios para verificar la eliminacion del registro"));
     }
 
     @GetMapping("/nombre/{oficio}")
-    public ResponseEntity<Map<String,Object>> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
+    public ResponseEntity<ApiResponse<Oficio>> filtrarPorNombre(@PathVariable("oficio") String nombre) throws OficioNotFoundException {
         nombre = nombre.toUpperCase();
         Oficio oficio = oficioService.filtrarPorNombre(nombre);
-        Map<String,Object> response = new HashMap<>();
-        response.put("message","Oficio encontrado ✅");
-        response.put("data",oficio);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Oficio encontrado ✅",oficio));
     }
 
 }
