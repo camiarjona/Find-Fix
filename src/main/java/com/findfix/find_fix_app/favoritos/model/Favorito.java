@@ -3,7 +3,6 @@ package com.findfix.find_fix_app.favoritos.model;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,5 +21,7 @@ public class Favorito {
     private Especialista especialista;
 
     public Favorito(Usuario usuario, Especialista especialista) {
+        this.usuario = usuario;
+        this.especialista = especialista;
     }
 }

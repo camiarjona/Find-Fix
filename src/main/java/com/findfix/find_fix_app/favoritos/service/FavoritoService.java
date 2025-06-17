@@ -13,6 +13,6 @@ import java.util.List;
 public interface FavoritoService {
     void agregarAFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException;
     void eliminarDeFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException;
-    List<Especialista> obtenerFavoritos() throws UserNotFoundException;
+    List<Especialista> obtenerFavoritos() throws UserNotFoundException, FavoritoException;
     void validarExistencia(Usuario usuario, Especialista especialista) throws FavoritoException;
 }

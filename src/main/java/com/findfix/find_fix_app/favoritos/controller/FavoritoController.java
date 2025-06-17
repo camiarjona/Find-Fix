@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/favoritos")
@@ -23,23 +24,27 @@ public class FavoritoController {
     private final FavoritoService favoritoService;
 
     @GetMapping
-    public ResponseEntity<?> obtenerFavoritos() throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerFavoritos() throws UserNotFoundException, FavoritoException {
         List<Especialista> favoritos = favoritoService.obtenerFavoritos();
-        return ResponseEntity.ok(new ApiResponse<>(
-                "⭐Mis favoritos⭐",
+
+        String mensaje = favoritos.isEmpty() ?
+                "No hay especialistas en su lista de favoritos" :
+                "⭐Mis favoritos⭐";
+
+        return ResponseEntity.ok(new ApiResponse<>(mensaje,
                 favoritos.stream().map(EspecialistaListadoDTO::new)));
     }
 
     @DeleteMapping("/eliminar/{emailEspecialista}")
-    public ResponseEntity<?> eliminar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
         favoritoService.eliminarDeFavoritos(emailEspecialista);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "El especialista se ha eliminado de su lista✅",
                 "Especialista: " + emailEspecialista));
     }
 
     @PostMapping("/agregar/{emailEspecialista}")
-    public ResponseEntity<?> agregar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException {
+    public ResponseEntity<ApiResponse<String>> agregar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException {
         favoritoService.agregarAFavoritos(emailEspecialista);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 "Especialista agregado a su lista con éxito✅",

@@ -5,22 +5,20 @@ import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.favoritos.model.Favorito;
 import com.findfix.find_fix_app.favoritos.repository.FavoritoRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.FavoritoException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FavoritoServiceImpl implements FavoritoService {
     private final FavoritoRepository favoritoRepository;
-    private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
     private final AuthService authService;
 
@@ -37,6 +35,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
+    @Transactional
     public void eliminarDeFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -47,12 +46,13 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
-    public List<Especialista> obtenerFavoritos() throws UserNotFoundException {
+    public List<Especialista> obtenerFavoritos() throws UserNotFoundException, FavoritoException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
+
         return favoritoRepository.findAllByUsuario(usuario)
                 .stream()
                 .map(Favorito::getEspecialista)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
