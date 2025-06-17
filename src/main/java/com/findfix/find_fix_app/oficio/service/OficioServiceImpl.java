@@ -48,7 +48,6 @@ public class OficioServiceImpl implements OficioService {
         oficioRepository.deleteById(id);
     }
 
-    @Override
     public Oficio filtrarPorNombre(String nombreBuscado) throws OficioNotFoundException {
         Optional<Oficio> encontrado = oficioRepository.findByNombre(nombreBuscado);
         if(!encontrado.isPresent())
