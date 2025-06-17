@@ -1,12 +1,12 @@
 package com.findfix.find_fix_app.solicitudEspecialista.service;
 
-import com.findfix.find_fix_app.auth.service.AuthService;
-import com.findfix.find_fix_app.enums.EstadosSolicitudes;
+import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudEspecialistaException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudEspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.Specifications.SolicitudEspecialistaSpecifications;
 import com.findfix.find_fix_app.solicitudEspecialista.dto.ActualizarSolicitudEspecialistaDTO;
 import com.findfix.find_fix_app.solicitudEspecialista.dto.BuscarSolicitudEspecialistaDTO;

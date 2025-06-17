@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.solicitudTrabajo.model;
 
-import com.findfix.find_fix_app.enums.EstadosSolicitudes;
+import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;

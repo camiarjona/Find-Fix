@@ -1,11 +1,8 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.dto;
 
-import com.findfix.find_fix_app.enums.EstadosTrabajos;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 

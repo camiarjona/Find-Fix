@@ -1,9 +1,8 @@
 package com.findfix.find_fix_app.oficio.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.OficioNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.OficioNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
-import com.findfix.find_fix_app.rol.model.Rol;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

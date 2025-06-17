@@ -1,12 +1,12 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.*;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.CrearTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.ModificarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.TrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.service.TrabajoExternoService;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

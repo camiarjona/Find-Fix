@@ -1,9 +1,9 @@
 package com.findfix.find_fix_app.solicitudTrabajo.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudTrabajoNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudTrabajo.dto.*;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.solicitudTrabajo.service.SolicitudTrabajoService;
