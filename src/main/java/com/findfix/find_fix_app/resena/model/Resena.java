@@ -21,19 +21,13 @@ public class Resena {
     @Column(name = "id_resena")
     private Long resenaId;
 
-    @NotNull(message = "La puntuación no puede ser nula")
-    @DecimalMin(value = "1.0", message = "La puntuación mínima es 1")
-    @DecimalMax(value = "5.0", message = "La puntuación máxima es 5")
     @Column(nullable = false)
     private Double puntuacion;
 
-    @NotBlank(message = "El comentario no puede estar vacío")
-    @Size(min = 5, max = 500, message = "El comentario debe tener entre 5 y 500 caracteres")
     @Column(nullable = false, length = 500)
     private String comentario;
 
     @OneToOne
-    @JoinColumn(name = "trabajo_id", nullable = false, unique = true)
-    @NotNull(message = "La reseña debe estar asociada a un trabajo")
+    @JoinColumn(name = "id_trabajo_app", nullable = false, unique = true)
     private TrabajoApp trabajoApp;
 }

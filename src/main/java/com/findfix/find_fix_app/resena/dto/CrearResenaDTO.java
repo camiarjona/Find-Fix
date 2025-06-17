@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class CrearResenaDTO {
 
     @NotNull(message = "La puntuación no puede ser nula")
-    @DecimalMin(value = "1.0", message = "La puntuación mínima es 1")
+    @DecimalMin(value = "0.0", message = "La puntuación mínima es 1")
     @DecimalMax(value = "5.0", message = "La puntuación máxima es 5")
     private Double puntuacion;
 

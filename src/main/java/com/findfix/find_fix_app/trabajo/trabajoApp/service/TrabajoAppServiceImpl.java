@@ -224,4 +224,9 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
             throw new TrabajoAppException("El trabajo que desea modificar no le pertenece. Corrobore el id ingresado.");
         }
     }
+
+    @Override
+    public Optional<TrabajoApp> buscarPorId(Long trabajoId) {
+        return trabajoAppRepository.findById(trabajoId);
+    }
 }
