@@ -1,9 +1,9 @@
 package com.findfix.find_fix_app.usuario.controller;
 
-import com.findfix.find_fix_app.enums.CiudadesDisponibles;
-import com.findfix.find_fix_app.exception.exceptions.RolException;
-import com.findfix.find_fix_app.exception.exceptions.UserException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;

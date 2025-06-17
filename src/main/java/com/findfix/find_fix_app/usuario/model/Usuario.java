@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.usuario.model;
 
-import com.findfix.find_fix_app.enums.CiudadesDisponibles;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity

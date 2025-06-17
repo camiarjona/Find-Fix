@@ -1,14 +1,12 @@
-package com.findfix.find_fix_app.exception.handler;
+package com.findfix.find_fix_app.utils.exception.handler;
 
-import com.findfix.find_fix_app.exception.dto.ErrorResponse;
-import com.findfix.find_fix_app.exception.exceptions.*;
+import com.findfix.find_fix_app.utils.exception.dto.ErrorResponse;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

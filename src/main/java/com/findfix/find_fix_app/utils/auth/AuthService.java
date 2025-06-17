@@ -1,6 +1,6 @@
-package com.findfix.find_fix_app.auth.service;
+package com.findfix.find_fix_app.utils.auth;
 
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;

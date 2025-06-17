@@ -2,9 +2,9 @@ package com.findfix.find_fix_app.especialista.service;
 
 import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaExcepcion;
-import com.findfix.find_fix_app.exception.exceptions.EspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
+import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.stereotype.Service;
 

@@ -1,11 +1,11 @@
 package com.findfix.find_fix_app.trabajo.trabajoExterno.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
-import com.findfix.find_fix_app.exception.exceptions.*;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.CrearTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.ModificarTrabajoExternoDTO;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

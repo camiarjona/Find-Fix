@@ -1,19 +1,17 @@
 package com.findfix.find_fix_app.solicitudEspecialista.controller;
 
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudEspecialistaException;
-import com.findfix.find_fix_app.exception.exceptions.SolicitudEspecialistaNotFoundException;
-import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
+import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.service.SolicitudEspecialistaService;
-import com.findfix.find_fix_app.usuario.dto.MostrarUsuarioDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

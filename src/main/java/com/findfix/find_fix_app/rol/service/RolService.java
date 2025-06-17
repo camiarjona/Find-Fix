@@ -1,7 +1,7 @@
 package com.findfix.find_fix_app.rol.service;
 
-import com.findfix.find_fix_app.exception.exceptions.RolException;
-import com.findfix.find_fix_app.exception.exceptions.RolNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.rol.model.Rol;
 import org.springframework.stereotype.Service;
 
