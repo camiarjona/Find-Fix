@@ -17,8 +17,7 @@ import java.util.Optional;
 
 @Service
 public interface ResenaService {
-    Resena crearResena(CrearResenaDTO DTO) throws TrabajoAppNotFoundException;
-    List<MostrarResenaDTO> buscarTodos();
+    Resena crearResena(CrearResenaDTO DTO) throws TrabajoAppNotFoundException, UserNotFoundException;
     Optional<Resena> buscarPorTrabajoId(Long id) throws ResenaNotFoundException;
     Optional<Resena> buscarPorTrabajoTitulo(String titulo) throws ResenaNotFoundException, TrabajoAppNotFoundException;
     List<CrearResenaDTO> ResenasDeMisTrabajos() throws UserNotFoundException, SpecialistRequestNotFoundException;

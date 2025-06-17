@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ResenaRepository extends JpaRepository<Resena,Long> {
 
-    Optional<Resena> findByTrabajoApp(String titulo);
+    Optional<Resena> findByTrabajoApp_Titulo(String titulo);
 
     List<Resena> findAllByTrabajoApp_Especialista(Especialista especialista);
 
-    List<Resena> findAllByTrabajoApp_Cliente(Usuario cliente);
+    List<Resena> findAllByTrabajoApp_Usuario(Usuario usuario);
 }

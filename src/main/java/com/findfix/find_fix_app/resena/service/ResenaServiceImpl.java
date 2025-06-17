@@ -3,18 +3,15 @@ package com.findfix.find_fix_app.resena.service;
 import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
-import com.findfix.find_fix_app.especialista.service.EspecialistaServiceImpl;
 import com.findfix.find_fix_app.exception.exceptions.ResenaNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.SpecialistRequestNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.TrabajoAppNotFoundException;
 import com.findfix.find_fix_app.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.resena.dto.CrearResenaDTO;
-import com.findfix.find_fix_app.resena.dto.MostrarResenaDTO;
 import com.findfix.find_fix_app.resena.model.Resena;
 import com.findfix.find_fix_app.resena.repository.ResenaRepository;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.service.TrabajoAppService;
-import com.findfix.find_fix_app.trabajo.trabajoApp.service.TrabajoAppServiceImpl;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,40 +37,26 @@ public class ResenaServiceImpl implements ResenaService {
     private TrabajoAppService trabajoService;
 
     @Override
-    @Transactional
-    public Resena crearResena(CrearResenaDTO dto) throws TrabajoAppNotFoundException {
-        Optional<TrabajoApp> trabajo = trabajoService.buscarPorId(dto.getTrabajoId());
+    @Transactional(readOnly = true)
+    public Resena crearResena(CrearResenaDTO dto) throws UserNotFoundException, TrabajoAppNotFoundException {
+        Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
-        if(trabajo.isEmpty()){
-            throw new TrabajoAppNotFoundException("\n Trabajo de la app no encontrado. ");
+        TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
+                .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo no encontrado"));
+
+        boolean esCliente = trabajo.getUsuario().getUsuarioId().equals(usuario.getUsuarioId());
+        boolean esEspecialista = trabajo.getEspecialista().getEspecialistaId().equals(usuario.getUsuarioId());
+
+        if (!esCliente && !esEspecialista) {
+            throw new UserNotFoundException("No estás autorizado para dejar una reseña sobre este trabajo.");
         }
 
         Resena resena = new Resena();
         resena.setComentario(dto.getComentario());
         resena.setPuntuacion(dto.getPuntuacion());
-        resena.setTrabajoApp(trabajo.get());
+        resena.setTrabajoApp(trabajo);
 
         return repository.save(resena);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<MostrarResenaDTO> buscarTodos() {
-        List<Resena> resenas = repository.findAll();
-
-        return resenas.stream().map(resena -> {
-            TrabajoApp trabajo = resena.getTrabajoApp();
-
-            return new MostrarResenaDTO(
-                    resena.getPuntuacion(),
-                    resena.getComentario(),
-                    trabajo.getFechaInicio(),
-                    trabajo.getFechaFin(),
-                    trabajo.getEstado(),
-                    trabajo.getDescripcion(),
-                    trabajo.getPresupuesto()
-            );
-        }).toList();
     }
 
     @Override
@@ -91,7 +74,7 @@ public class ResenaServiceImpl implements ResenaService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Resena> buscarPorTrabajoTitulo(String titulo) throws ResenaNotFoundException, TrabajoAppNotFoundException {
-        TrabajoApp trabajo = trabajoService.buscarPorTitulo(titulo).orElseThrow(() -> new TrabajoAppNotFoundException("\n nio encotnrado"));
+        TrabajoApp trabajo = trabajoService.buscarPorTitulo(titulo).orElseThrow(() -> new TrabajoAppNotFoundException("\n Trabajo no encontrado. "));
 
         return Optional.ofNullable(trabajo.getResena());
 
@@ -118,7 +101,7 @@ public class ResenaServiceImpl implements ResenaService {
     public List<CrearResenaDTO> ResenasHechasPorMi() throws UserNotFoundException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
-        List<Resena> resenas = repository.findAllByTrabajoApp_Cliente(usuario);
+        List<Resena> resenas = repository.findAllByTrabajoApp_Usuario(usuario);
 
         return resenas.stream()
                 .map(resena -> new CrearResenaDTO(
@@ -132,9 +115,8 @@ public class ResenaServiceImpl implements ResenaService {
     @Override
     @Transactional
     public void borrarResena(Long id) throws ResenaNotFoundException {
-        Resena resena = repository.findById(id)
-                .orElseThrow(() -> new ResenaNotFoundException("No se encontró una reseña para el trabajo con id:  " + id));
+        Optional<Resena> resena = buscarPorTrabajoId(id);
 
-        repository.delete(resena);
+        repository.delete(resena.get());
     }
 }

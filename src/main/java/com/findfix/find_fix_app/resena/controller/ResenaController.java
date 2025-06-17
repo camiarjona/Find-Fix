@@ -25,14 +25,9 @@ public class ResenaController {
     private ResenaService resenaService;
 
     @PostMapping
-    public ResponseEntity<Resena> crearResena(@Valid @RequestBody CrearResenaDTO dto) throws TrabajoAppNotFoundException {
+    public ResponseEntity<Resena> crearResena(@Valid @RequestBody CrearResenaDTO dto) throws TrabajoAppNotFoundException, UserNotFoundException {
         Resena nueva = resenaService.crearResena(dto);
         return ResponseEntity.ok(nueva);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<MostrarResenaDTO>> obtenerTodas() {
-        return ResponseEntity.ok(resenaService.buscarTodos());
     }
 
     @GetMapping("/trabajo/{id}")
@@ -41,7 +36,7 @@ public class ResenaController {
     }
 
     @GetMapping("/titulo")
-    public ResponseEntity<Resena> buscarPorTitulo(@RequestParam String titulo) throws ResenaNotFoundException, TrabajoAppNotFoundException {
+    public ResponseEntity<Resena> buscarPorTitulo(@RequestBody String titulo) throws ResenaNotFoundException, TrabajoAppNotFoundException {
         return ResponseEntity.ok(resenaService.buscarPorTrabajoTitulo(titulo).get());
     }
 
