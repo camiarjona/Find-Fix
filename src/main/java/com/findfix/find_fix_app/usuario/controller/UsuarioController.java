@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.usuario.controller;
 
+import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UserException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/usuario")
@@ -26,100 +28,88 @@ import java.util.Map;
 public class UsuarioController {
     private final UsuarioService usuarioService;
 
+    //metodo para ver la lista de usuarios registrados
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> obtenerUsuarios() throws UserException {
+    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> obtenerUsuarios() throws UserException {
         List<Usuario> usuarios = usuarioService.obtenerUsuarios();
-        Map<String, Object> response = new HashMap<>();
-        response.put("Mensaje", "Lista de usuarios encontrada️☑️️");
-        response.put("Usuarios", usuarios.stream().map(MostrarUsuarioDTO::new).toList());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(
+                "Lista de usuarios encontrada️☑️",
+                usuarios.stream().map(MostrarUsuarioDTO::new).toList()));
     }
 
+    //metodo para que un usuario se registre en el sistema
     @PostMapping("/registrar") //CHEQUEADO
-    public ResponseEntity<Map<String, MostrarRegistroDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UserException, RolException {
+    public ResponseEntity<ApiResponse<MostrarRegistroDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UserException, RolException {
         usuarioService.registrarNuevoUsuario(registro);
-        Map<String, MostrarRegistroDTO> response = new HashMap<>();
-        response.put("Usuario registrado con éxito✅", new MostrarRegistroDTO(registro));
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
+                "Usuario registrado con éxito✅",
+                new MostrarRegistroDTO(registro)));
     }
 
-    //NO VA
-    @DeleteMapping("/eliminar-por-id/{id}")
+    //metodo para eliminar un usuario por su email
+    @DeleteMapping("/eliminar/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> eliminarUsuario(@PathVariable Long id) throws UserNotFoundException {
-        usuarioService.eliminarPorId(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario eliminado con éxito✅");
-    }
-
-    @DeleteMapping("/eliminar-por-email/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException {
         usuarioService.eliminarPorEmail(email);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario eliminado con éxito✅");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(
+                "Usuario eliminado con éxito✅", "{}"));
     }
 
     //metodo para que el usuario pueda modificar sus datos
     @PatchMapping("/modificar-datos") //CHEQUEADO
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<?> actualizarUsuario(@Valid @RequestBody ActualizarUsuarioDTO usuarioDTO) throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<String>> actualizarUsuario(@Valid @RequestBody ActualizarUsuarioDTO usuarioDTO) throws UserNotFoundException {
         usuarioService.actualizarUsuario(usuarioDTO);
-        Map<String, Object> response = new HashMap<>();
-        response.put("Mensaje", "Modificaciones realizadas con éxito☑️");
-        response.put("Modificaciones", usuarioDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(
+                "Modificaciones realizadas con éxito☑️", "Consulte su perfil para corroborar los cambios."));
     }
 
     //metodo para modificar un usuario (desde admin)
     @PatchMapping("/modificar/{email}") //CHEQUEADO
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> actualizarUsuarioAdmin(@Valid @RequestBody ActualizarUsuarioDTO usuario, @PathVariable String email) throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<String>> actualizarUsuarioAdmin(@Valid @RequestBody ActualizarUsuarioDTO usuario, @PathVariable String email) throws UserNotFoundException {
         usuarioService.actualizarUsuarioAdmin(usuario, email);
-        return ResponseEntity.ok("Modificaciones realizadas con éxito☑️");
+        return ResponseEntity.ok(new ApiResponse<>("Modificaciones realizadas con éxito☑️", "Consulte la lista de usuarios para corroborar los cambios."));
     }
 
-    @PatchMapping("/modificar-password") //CHEQUEADO
-    public ResponseEntity<String> modificarPassword(@Valid @RequestBody ActualizarPasswordDTO passwordDTO) throws UserNotFoundException {
+    @PatchMapping("/modificar-password")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")//CHEQUEADO
+    public ResponseEntity<ApiResponse<String>> modificarPassword(@Valid @RequestBody ActualizarPasswordDTO passwordDTO) throws UserNotFoundException {
         usuarioService.actualizarPassword(passwordDTO);
-        return ResponseEntity.ok("Password modificado con éxito☑️");
+        return ResponseEntity.ok(new ApiResponse<>(
+                "Password modificado con éxito☑️", "{*****}"));
     }
 
-    //admin
+    //metodo para actualizar los roles de un usuario
     @PatchMapping("/actualizar-roles/{email}") //CHEQUEADO
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, ActualizarRolesUsuarioDTO>> actualizarRoles(@PathVariable String email, @Valid @RequestBody ActualizarRolesUsuarioDTO rolesDTO) throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<ActualizarRolesUsuarioDTO>> actualizarRoles(@PathVariable String email, @Valid @RequestBody ActualizarRolesUsuarioDTO rolesDTO) throws UserNotFoundException {
         usuarioService.actualizarRolesUsuario(email, rolesDTO);
-        Map<String, ActualizarRolesUsuarioDTO> response = new HashMap<>();
-        response.put("Roles actualizados con éxito☑️", rolesDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
+                "Roles actualizados con éxito☑️", rolesDTO));
     }
 
     @GetMapping("/ver-perfil") //CHEQUEADO
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<Map<String, VerPerfilUsuarioDTO>> verPerfilUsuario() throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> verPerfilUsuario() throws UserNotFoundException {
         Map<String, VerPerfilUsuarioDTO> response = new HashMap<>();
         VerPerfilUsuarioDTO usuarioDTO = usuarioService.verPerfilUsuario();
-        response.put("Perfil:", usuarioDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("\uD83D\uDC64Perfil\uD83D\uDC64", usuarioDTO));
     }
 
-    @GetMapping("/ver-ciudades-disponibles") //CHEQUEADO
+    @GetMapping("/ciudades-disponibles") //CHEQUEADO
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<Map<String, List<String>>> verCiudadesDisponibles(){
-        Map<String, List<String>> response = new HashMap<>();
+    public ResponseEntity<ApiResponse<List<String>>> verCiudadesDisponibles() {
         List<String> ciudadesDisponibles = CiudadesDisponibles.ciudadesDisponibles();
-        response.put("Ciudades disponibles", ciudadesDisponibles);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Ciudades disponibles", ciudadesDisponibles));
     }
 
     @GetMapping("/filtrar")
     @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
-    public ResponseEntity<Map<String, Object>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
+    public ResponseEntity<ApiResponse<Stream<MostrarUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
         List<Usuario> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
-        Map<String, Object> response = new HashMap<>();
-                response.put("Mensaje", "Lista de usuarios encontrada️☑️️");
-        response.put("Usuarios", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new));
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new)));
     }
 
 }
