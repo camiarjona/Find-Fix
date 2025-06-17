@@ -34,7 +34,7 @@ public class FavoritoController {
     public ResponseEntity<?> eliminar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
         favoritoService.eliminarDeFavoritos(emailEspecialista);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(
-                "Especialista eliminado de tu lista✅",
+                "El especialista se ha eliminado de su lista✅",
                 "Especialista: " + emailEspecialista));
     }
 
