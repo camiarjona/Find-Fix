@@ -3,20 +3,17 @@ package com.findfix.find_fix_app.especialista.controller;
 import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
-import com.findfix.find_fix_app.usuario.dto.VerPerfilUsuarioDTO;
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 @RestController
@@ -54,7 +51,7 @@ public class EspecialistaController {
 
     @PatchMapping("/actualizar-mis-datos")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException, UserNotFoundException {
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException, UserNotFoundException {
         Especialista especialista = especialistaService.actualizarEspecialista(dto);
 
         return ResponseEntity.ok(new ApiResponse<>("Especialista actualizado correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
@@ -62,7 +59,7 @@ public class EspecialistaController {
 
     @DeleteMapping("/eliminar/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> eliminarPorEmail(@PathVariable String email) throws EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarPorEmail(@PathVariable String email) throws EspecialistaNotFoundException, RolNotFoundException {
        especialistaService.eliminarPorEmail(email);
 
         return ResponseEntity.ok(new ApiResponse<>("Especialista eliminado correctamente✅", "[]"));

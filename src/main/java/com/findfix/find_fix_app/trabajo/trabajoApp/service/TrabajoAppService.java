@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppNotFoundException;
@@ -8,12 +9,13 @@ import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public interface TrabajoAppService {
     void registrarDesdeSolicitud (SolicitudTrabajo solicitudTrabajo, Especialista especialista);
     List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException, TrabajoAppException;
@@ -24,6 +26,6 @@ public interface TrabajoAppService {
     void modificarEstadoTrabajo(String titulo,String nombreEstado) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException;
     TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String titulo) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException;
     TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UserNotFoundException, TrabajoAppException, TrabajoAppNotFoundException;
-
     void validarEspecialista(TrabajoApp trabajoApp, Especialista especialista) throws TrabajoAppException;
+    Optional<TrabajoApp> buscarPorId(@NotNull(message = "Debe indicarse el ID del trabajo asociado") Long trabajoId);
 }
