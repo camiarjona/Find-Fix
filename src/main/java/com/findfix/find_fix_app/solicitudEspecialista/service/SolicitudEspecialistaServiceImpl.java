@@ -56,7 +56,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     }
 
     /// Metodo para verificar si un usuario puede hacer una solicitud nueva para ser especialista
-    private void verificarUsuario(Usuario usuario) throws UserNotFoundException, SolicitudEspecialistaException {
+    private void verificarUsuario(Usuario usuario) throws SolicitudEspecialistaException {
 
         if(usuario.getRoles().stream().anyMatch(rol -> rol.getNombre().equals("ESPECIALISTA"))){
             throw new SolicitudEspecialistaException("⚠️Usted ya se encuentra como especialista en nuestro sistema.");
@@ -87,7 +87,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                         solicitud.getSeId(),
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
-                        solicitud.getUsuario().getEmail()
+                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado"
                 )).toList();
     }
 
@@ -106,7 +106,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 .map(solicitud -> new MostrarSolicitudEspecialistaDTO(
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
-                        solicitud.getUsuario().getEmail(),
+                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado",
                         solicitud.getRespuesta()
                 )).toList();
     }

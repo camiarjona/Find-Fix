@@ -8,6 +8,7 @@ import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.repository.EspecialistaRepository;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
@@ -27,6 +28,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     private final OficioRepository oficioRepository;
     private final UsuarioService usuarioService;
     private final AuthService authService;
+    private final EspecialistaDesvinculacionService especialistaDesvinculacionService;
 
     /// Metodo para guardar un usuario como especialista
     @Override
@@ -122,11 +124,13 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     ///Metodo para que el admin pueda eliminar un especialista por email
     @Override
-    public void eliminarPorEmail(String email) throws EspecialistaNotFoundException {
-        if(especialistaRepository.findByUsuarioEmail(email).isEmpty()){
-            throw new EspecialistaNotFoundException("⚠️Especialista no encontrado");
-        }
-        especialistaRepository.deleteById(especialistaRepository.findByUsuarioEmail(email).get().getEspecialistaId());
+    public void eliminarPorEmail(String email) throws EspecialistaNotFoundException, RolNotFoundException {
+        Especialista especialista = especialistaRepository.findByUsuarioEmail(email).orElseThrow(()-> new EspecialistaNotFoundException("⚠️Especialista no encontrado"));
+
+        especialistaDesvinculacionService.desvincularEspecialista(especialista);
+        usuarioService.eliminarRol(especialista.getUsuario(), "ESPECIALISTA");
+
+        especialistaRepository.delete(especialista);
     }
 
     /// Metodo para buscar un especialista por Email

@@ -24,7 +24,7 @@ public class FichaCompletaSolicitudEspecialistaDTO {
         this.estado = solicitudEspecialista.getEstado().toString();
         this.motivo = solicitudEspecialista.getMotivo();
         this.respuesta = (solicitudEspecialista.getRespuesta() == null) ? "No se ha respondido a la solicitud" : solicitudEspecialista.getRespuesta();
-        this.email = solicitudEspecialista.getUsuario().getEmail();
+        this.email = solicitudEspecialista.getUsuario() != null ? solicitudEspecialista.getUsuario().getEmail() : "Usuario desvinculado";
     }
 
 }
