@@ -60,7 +60,7 @@ public class SecurityConfig {
                             response.getWriter().write("""
                         {
                             "error": "No autorizado",
-                            "mensaje": "Credenciales inválidas o faltantes. Por favor, inicia sesión."
+                            "mensaje": "Credenciales inválidas o faltantes. Por favor, inicia sesión o registrate."
                         }
                         """);
                         })

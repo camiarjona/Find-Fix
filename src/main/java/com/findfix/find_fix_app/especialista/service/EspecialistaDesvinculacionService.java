@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.especialista.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.favoritos.repository.FavoritoRepository;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.solicitudTrabajo.repository.SolicitudTrabajoRepository;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
@@ -16,6 +17,7 @@ import java.util.List;
 public class EspecialistaDesvinculacionService {
     private final TrabajoAppRepository trabajoAppRepository;
     private final SolicitudTrabajoRepository solicitudTrabajoRepository;
+    private final FavoritoRepository favoritoRepository;
 
     @Transactional
     public void desvincularEspecialista(Especialista especialista) {
@@ -24,10 +26,13 @@ public class EspecialistaDesvinculacionService {
         trabajos.forEach(trabajo -> trabajo.setEspecialista(null));
         trabajoAppRepository.saveAll(trabajos);
 
-
         // Desvincular solicitudes trabajo
         List<SolicitudTrabajo> solicitudesTrabajo = solicitudTrabajoRepository.findByEspecialista(especialista);
         solicitudesTrabajo.forEach(solicitud -> solicitud.setEspecialista(null));
         solicitudTrabajoRepository.saveAll(solicitudesTrabajo);
+
+        //eliminamos favoritos relacionados al especialista
+        favoritoRepository.deleteByEspecialista(especialista);
+
     }
 }
