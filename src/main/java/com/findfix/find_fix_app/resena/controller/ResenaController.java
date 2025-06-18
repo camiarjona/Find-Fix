@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resena")
+@RequestMapping("/resenas")
 @RequiredArgsConstructor
 public class ResenaController {
 

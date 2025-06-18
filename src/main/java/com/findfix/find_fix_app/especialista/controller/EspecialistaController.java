@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/especialista")
+@RequestMapping("/especialistas")
 @RequiredArgsConstructor
 public class EspecialistaController {
     private final EspecialistaService especialistaService;
@@ -49,7 +49,7 @@ public class EspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Especialista actualizado correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
-    @PatchMapping("/actualizar-mis-datos")
+    @PatchMapping("/actualizar/mis-datos")
     @PreAuthorize("hasRole('ESPECIALISTA')")
     public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException, UsuarioNotFoundException {
         Especialista especialista = especialistaService.actualizarEspecialista(dto);
@@ -66,7 +66,7 @@ public class EspecialistaController {
     }
 
 
-    @PatchMapping("/actualizar-oficios/{email}")
+    @PatchMapping("/actualizar/oficios/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialistaAdmin(@PathVariable String email, @Valid @RequestBody ActualizarOficioEspDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException {
       Especialista especialista = especialistaService.actualizarOficioDeEspecialistaAdmin(email, dto);
@@ -74,7 +74,7 @@ public class EspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Oficios actualizados correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
     }
 
-    @PatchMapping("/actualizar-mis-oficios")
+    @PatchMapping("/actualizar/mis-oficios")
     @PreAuthorize("hasRole('ESPECIALISTA')")
     public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialista(@Valid @RequestBody ActualizarOficioEspDTO dto) throws UsuarioNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
        Especialista especialista = especialistaService.actualizarOficioDeEspecialista(dto);
@@ -91,6 +91,7 @@ public class EspecialistaController {
     }
 
     @GetMapping("/filtrar")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<List<EspecialistaFichaCompletaDTO>>> filtrarEspecialistas(@RequestBody BuscarEspecialistaDTO filtro)
             throws EspecialistaExcepcion {
         List<EspecialistaFichaCompletaDTO> especialistasFiltrados = especialistaService.filtrarEspecialistas(filtro);
