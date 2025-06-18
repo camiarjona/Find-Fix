@@ -7,7 +7,7 @@ import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.Specifications.SolicitudEspecialistaSpecifications;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.repository.SolicitudEspecialistaRepository;
@@ -33,7 +33,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para que el usuario mande una solicitud para ser especialista
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UserNotFoundException, SolicitudEspecialistaException {
+    public void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = new SolicitudEspecialista();
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
@@ -98,7 +98,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UserNotFoundException {
+    public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         List<SolicitudEspecialista>solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
         if (solicitudEspecialistas.isEmpty()) {

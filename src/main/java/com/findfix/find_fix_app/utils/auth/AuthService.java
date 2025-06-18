@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.utils.auth;
 
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class AuthService {
         return authentication.getName();
     }
 
-    public Usuario obtenerUsuarioAutenticado() throws UserNotFoundException {
+    public Usuario obtenerUsuarioAutenticado() throws UsuarioNotFoundException {
         String email = obtenerEmailUsuarioAutenticado();
         return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
     }
 }
