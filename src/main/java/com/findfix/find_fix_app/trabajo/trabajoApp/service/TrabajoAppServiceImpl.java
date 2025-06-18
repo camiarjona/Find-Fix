@@ -1,5 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
+import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
+import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
@@ -9,20 +11,16 @@ import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.repository.TrabajoAppRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.usuario.service.UsuarioService;
-import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppException;
-import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
-import jakarta.transaction.Transactional;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +28,11 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     private final TrabajoAppRepository trabajoAppRepository;
     private final AuthService authService;
-    private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
 
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void registrarDesdeSolicitud(SolicitudTrabajo solicitudTrabajo, Especialista especialista) {
         TrabajoApp trabajoApp = new TrabajoApp();
         trabajoApp.setEspecialista(especialista);
@@ -50,7 +48,8 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
     @Override
-    public List<TrabajoApp> obtenerTrabajosClientes() throws UserNotFoundException, TrabajoAppException {
+    @Transactional(readOnly = true)
+    public List<TrabajoApp> obtenerTrabajosClientes() throws UsuarioNotFoundException, TrabajoAppException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -65,7 +64,8 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     /// METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTAS
     @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
+    @Transactional(readOnly = true)
+    public List<TrabajoApp> obtenerTrabajosEspecialista() throws UsuarioNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
         List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
@@ -76,42 +76,17 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
         return trabajosAceptados;
     }
 
-    ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTA Y APLICANDO FILTRO DE UN ESTADO ELEGIDO
-    @Override
-    public List<TrabajoApp> obtenerTrabajosEspecialistaEstado(String nombreEstado) throws UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
-        if (!validezIngresoEstado(nombreEstado)) {
-            throw new TrabajoAppException("El estado ingresado no es válido.");
-        }
-
-        List<TrabajoApp> trabajoApps = obtenerTrabajosEspecialista().stream().filter(trabajo -> trabajo.getEstado()
-                .equals(EstadosTrabajos.valueOf(nombreEstado))).collect(Collectors.toList());
-
-        if (trabajoApps.isEmpty()) {
-            throw new TrabajoAppException("Usted no tiene ningún trabajo en ese estado.");
-        }
-        return trabajoApps;
-    }
-
-    //  METODO PARA VALIDAR QUE EL ESTADO INGRESADO EXISTA EN EL ENUM ESTADOS
-    private Boolean validezIngresoEstado(String nombreEstado) {
-        for (EstadosTrabajos e : EstadosTrabajos.values()) {
-            if (e.name().equalsIgnoreCase(nombreEstado)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     ///  BUSCA UN TRABAJO POR TITULO
     @Override
+    @Transactional(readOnly = true)
     public Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado) {
         return trabajoAppRepository.findByTitulo(tituloBuscado);
     }
 
     ///  METODO PARA MODIFICAR UN TRABAJO
     @Override
-    @Transactional
-    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
+    @Transactional(rollbackFor = Exception.class)
+    public TrabajoApp actualizarTrabajo(String titulo, ActualizarTrabajoAppDTO dto) throws TrabajoAppNotFoundException, TrabajoAppException, UsuarioNotFoundException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
@@ -145,7 +120,8 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     // metodo para modificar el estado de un trabajo
     @Override
-    public void modificarEstadoTrabajo(String titulo, String estadoNuevo) throws TrabajoAppNotFoundException, TrabajoAppException, UserNotFoundException, EspecialistaNotFoundException {
+    @Transactional(rollbackFor = Exception.class)
+    public void modificarEstadoTrabajo(String titulo, String estadoNuevo) throws TrabajoAppNotFoundException, TrabajoAppException, UsuarioNotFoundException, EspecialistaNotFoundException {
         //obtenemos el especialista autenticado
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
@@ -194,9 +170,10 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
         }
     }
 
-    ///  METODO PARA QUE UN CLIENTE OBTENGA UNA FICHA DE UN TRABAJO FILTRANDO POR EL TITULO DEL MISMO
+    ///  METODO PARA QUE UN ESPECIALISTA OBTENGA UNA FICHA DE UN TRABAJO FILTRANDO POR EL TITULO DEL MISMO
     @Override
-    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UserNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
+    @Transactional(readOnly = true)
+    public TrabajoApp obtenerFichaDeTrabajoParaEspecialista(String tituloBuscado) throws TrabajoAppNotFoundException, UsuarioNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
         List<TrabajoApp> trabajoAppDelEspecialista = obtenerTrabajosEspecialista();
         Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTitulo().equalsIgnoreCase(tituloBuscado)).findFirst();
         if (trabajoBuscado.isEmpty()) {
@@ -207,11 +184,12 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     }
 
     @Override
-    public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UserNotFoundException, TrabajoAppException, TrabajoAppNotFoundException {
-        List<TrabajoApp> trabajoAppDelEspecialista = obtenerTrabajosClientes();
-        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTrabajoAppId() == id).findFirst();
+    @Transactional(readOnly = true)
+    public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UsuarioNotFoundException, TrabajoAppException, TrabajoAppNotFoundException {
+        List<TrabajoApp> trabajoAppDelCliente = obtenerTrabajosClientes();
+        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelCliente.stream().filter(trabajoApp -> Objects.equals(trabajoApp.getTrabajoAppId(), id)).findFirst();
         if (trabajoBuscado.isEmpty()) {
-            throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el id ingresado no pertenece a ningun registro. ");
+            throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el id ingresado no pertenece a ningun registro.");
         } else {
             return trabajoBuscado.get();
         }
@@ -226,7 +204,53 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<TrabajoApp> buscarPorId(Long trabajoId) {
         return trabajoAppRepository.findById(trabajoId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TrabajoApp> filtrarTrabajosApp(BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
+        Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
+
+        Specification<TrabajoApp> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+
+        if (filtro.tieneTitulo()) {
+            spec = spec.and(TrabajoAppSpecifications.tituloEs(filtro.titulo()));
+        }
+        if (filtro.tieneEstado()) {
+            spec = spec.and(TrabajoAppSpecifications.estadoEs(EstadosTrabajos.desdeString(filtro.estado())));
+        }
+        if (filtro.tieneId()) {
+            spec = spec.and(TrabajoAppSpecifications.idEs(filtro.id()));
+        }
+        if (filtro.tieneFecha()) {
+            spec = spec.and(TrabajoAppSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
+        }
+
+        List<TrabajoApp> trabajosEncontrados = trabajoAppRepository.findAll(spec)
+                .stream().filter(trabajoExterno -> trabajoExterno.getEspecialista().equals(especialista))
+                .toList();
+
+        if (trabajosEncontrados.isEmpty()) {
+            throw new TrabajoAppException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
+        }
+
+        return trabajosEncontrados;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TrabajoApp> filtrarPorEstadoCliente(String estado) throws UsuarioNotFoundException, TrabajoAppException {
+        List<TrabajoApp> trabajosCliente = obtenerTrabajosClientes();
+
+        List<TrabajoApp> trabajosEncontrados = trabajosCliente.stream().filter(t -> t.getEstado().equals(EstadosTrabajos.desdeString(estado))).toList();
+
+        if (trabajosEncontrados.isEmpty()) {
+            throw new TrabajoAppException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
+        }
+
+        return trabajosEncontrados;
     }
 }

@@ -7,7 +7,7 @@ import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.Specifications.SolicitudEspecialistaSpecifications;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.repository.SolicitudEspecialistaRepository;
@@ -16,9 +16,9 @@ import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,7 +32,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para que el usuario mande una solicitud para ser especialista
     @Override
-    public SolicitudEspecialista mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UserNotFoundException, SolicitudEspecialistaException {
+    @Transactional(rollbackFor = Exception.class)
+    public void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = new SolicitudEspecialista();
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
@@ -44,7 +45,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         solicitudEspecialista.setMotivo(dto.motivo());
         solicitudEspecialista.setEstado(EstadosSolicitudes.PENDIENTE);
 
-        return solicitudEspecialistaRepository.save(solicitudEspecialista);
+        solicitudEspecialistaRepository.save(solicitudEspecialista);
     }
 
     /// Metodo para controlar y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
@@ -56,7 +57,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     }
 
     /// Metodo para verificar si un usuario puede hacer una solicitud nueva para ser especialista
-    private void verificarUsuario(Usuario usuario) throws UserNotFoundException, SolicitudEspecialistaException {
+    private void verificarUsuario(Usuario usuario) throws SolicitudEspecialistaException {
 
         if(usuario.getRoles().stream().anyMatch(rol -> rol.getNombre().equals("ESPECIALISTA"))){
             throw new SolicitudEspecialistaException("⚠️Usted ya se encuentra como especialista en nuestro sistema.");
@@ -75,6 +76,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para mostrar todas las solicitudes de especialistas, para el admin.
     @Override
+    @Transactional(readOnly = true)
     public List<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista() throws SolicitudEspecialistaNotFoundException {
         List<SolicitudEspecialista> solicitudesEspecialistas = solicitudEspecialistaRepository.findAll();
 
@@ -87,7 +89,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                         solicitud.getSeId(),
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
-                        solicitud.getUsuario().getEmail()
+                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado"
                 )).toList();
     }
 
@@ -95,7 +97,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para mostrar mis solicitudes
 
     @Override
-    public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UserNotFoundException {
+    @Transactional(readOnly = true)
+    public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         List<SolicitudEspecialista>solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
         if (solicitudEspecialistas.isEmpty()) {
@@ -106,13 +109,13 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 .map(solicitud -> new MostrarSolicitudEspecialistaDTO(
                         solicitud.getFechaSolicitud(),
                         solicitud.getEstado().name(),
-                        solicitud.getUsuario().getEmail(),
+                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado",
                         solicitud.getRespuesta()
                 )).toList();
     }
 
     /// Metodo para actualizar el estado y la respuesta de una solicitud, por parte del admin
-    private void actualizarDatosSolicitud(SolicitudEspecialista solicitudEspecialista, ActualizarSolicitudEspecialistaDTO dto) throws UserNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
+    private void actualizarDatosSolicitud(SolicitudEspecialista solicitudEspecialista, ActualizarSolicitudEspecialistaDTO dto) throws RolNotFoundException, SolicitudEspecialistaException {
         EstadosSolicitudes estadosSolicitudes = EstadosSolicitudes.valueOf(dto.estado().trim().toUpperCase() );
         if(solicitudEspecialista.getEstado().name().equals("PENDIENTE")) {
 
@@ -139,7 +142,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo que actualiza llamando al de actualizar los datos
 
     @Override
-    public SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, UserNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
+    @Transactional(rollbackFor = Exception.class)
+    public SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaRepository.findById(id)
                 .orElseThrow(()-> new SolicitudEspecialistaNotFoundException("⚠️Solicitud no encontrada"));
 
@@ -151,6 +155,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para eliminar una solicitud pendiente propia de parte del usuario. Solo si esta pendiente
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException {
         String email = authService.obtenerEmailUsuarioAutenticado();
 
@@ -170,6 +175,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para filtrar solicitudes
     @Override
+    @Transactional(readOnly = true)
     public List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {
         Specification<SolicitudEspecialista> spec = (root, query, cb) -> cb.conjunction();
 

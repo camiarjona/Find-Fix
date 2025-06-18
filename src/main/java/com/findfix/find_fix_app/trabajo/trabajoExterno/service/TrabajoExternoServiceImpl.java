@@ -29,7 +29,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public TrabajoExterno crearTrabajoExterno(CrearTrabajoExternoDTO DTO) throws UserNotFoundException, EspecialistaNotFoundException {
+    public TrabajoExterno crearTrabajoExterno(CrearTrabajoExternoDTO DTO) throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         TrabajoExterno trabajo = new TrabajoExterno();
@@ -45,7 +45,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TrabajoExterno> obtenerMisTrabajos() throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
+    public List<TrabajoExterno> obtenerMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
         List<TrabajoExterno> misTrabajos = trabajoExternoRepository.findByEspecialista(especialista);
 
@@ -57,7 +57,8 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     }
 
     @Override
-    public List<TrabajoExterno> filtrarTrabajosExternos(BuscarTrabajoExternoDTO filtro) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
+    @Transactional(readOnly = true)
+    public List<TrabajoExterno> filtrarTrabajosExternos(BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         Specification<TrabajoExterno> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
@@ -88,7 +89,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void modificarTrabajoExterno(String titulo, ModificarTrabajoExternoDTO dto) throws TrabajoExternoNotFoundException, UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
+    public void modificarTrabajoExterno(String titulo, ModificarTrabajoExternoDTO dto) throws TrabajoExternoNotFoundException, UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
                 .orElseThrow(() -> new TrabajoExternoNotFoundException("Trabajo externo no encontrado."));
 
@@ -115,7 +116,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarEstado(String titulo, String estadoNuevo) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException {
+    public void actualizarEstado(String titulo, String estadoNuevo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException {
 
         TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
                 .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo externo no encontrado."));
@@ -145,7 +146,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void borrarTrabajoExternoPorTitulo(String titulo) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
+    public void borrarTrabajoExternoPorTitulo(String titulo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
                 .orElseThrow(() -> new EntityNotFoundException("Trabajo externo no encontrado."));
 

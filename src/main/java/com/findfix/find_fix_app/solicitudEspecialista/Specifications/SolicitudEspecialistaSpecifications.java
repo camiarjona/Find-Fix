@@ -1,6 +1,5 @@
 package com.findfix.find_fix_app.solicitudEspecialista.Specifications;
 
-import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.usuario.model.Usuario;

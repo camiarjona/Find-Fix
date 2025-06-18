@@ -29,7 +29,7 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Resena crearResena(CrearResenaDTO dto) throws UserNotFoundException, TrabajoAppNotFoundException, TrabajoAppException {
+    public Resena crearResena(CrearResenaDTO dto) throws UsuarioNotFoundException, TrabajoAppNotFoundException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
         TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
@@ -43,7 +43,7 @@ public class ResenaServiceImpl implements ResenaService {
         boolean esEspecialista = trabajo.getEspecialista().getEspecialistaId().equals(usuario.getUsuarioId());
 
         if (!esCliente && !esEspecialista) {
-            throw new UserNotFoundException("No estás autorizado para dejar una reseña sobre este trabajo.");
+            throw new UsuarioNotFoundException("No estás autorizado para dejar una reseña sobre este trabajo.");
         }
 
         Resena resena = new Resena();
@@ -74,20 +74,20 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Resena> resenasDeMisTrabajos() throws UserNotFoundException, EspecialistaNotFoundException {
+    public List<Resena> resenasDeMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
         return repository.findAllByTrabajoApp_Especialista(especialista);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Resena> resenasHechasPorMi() throws UserNotFoundException {
+    public List<Resena> resenasHechasPorMi() throws UsuarioNotFoundException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
         return repository.findAllByTrabajoApp_Usuario(usuario);
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void borrarResena(Long id) throws ResenaNotFoundException {
         Resena resena = buscarPorId(id)
                 .orElseThrow(() -> new ResenaNotFoundException("No se encontró una reseña con el id: " + id));

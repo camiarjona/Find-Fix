@@ -30,11 +30,11 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ## 🧱 Tecnologías Utilizadas
 
-- **Java 17**
+- **Java 21**
 - **Spring Boot**
 - **Spring Security**
 - **JPA / Hibernate**
-- **MySQL**
+- **SQL**
 - **Postman** (para pruebas)
 - **Lombok**
 - **Maven**
@@ -49,6 +49,69 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ---
 
+## ⚙️ Configuración del proyecto
+
+Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y permite conexión con bases de datos relacionales como PostgreSQL (por ejemplo con Neon), MySQL, entre otras.
+
+### ✅ Requisitos previos
+
+- Java 17+
+
+- Base de datos relacional (PostgreSQL, MySQL, etc.)
+
+- Maven
+
+- IDE como IntelliJ o Eclipse
+
+
+## 🛠️ Configuración de la base de datos
+
+En el archivo application.properties o application.yml, completá los datos de tu base. A continuación hay un ejemplo con PostgreSQL (Neon):
+
+```properties
+spring.datasource.url=jdbc:postgresql://tu-host.neon.tech:5432/tu_basededatos
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_contraseña
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
+
+También podés usar MySQL o cualquier base de datos compatible con JPA cambiando el url y el dialect correspondiente.
+
+**¡No te olvides de agregar el driver o la dependencia correspondiente!**
+
+---
+
+## 📦 Precarga de datos
+
+Cuando se inicia la aplicación, se cargan automáticamente roles, ciudades y otros datos base necesarios para que el sistema funcione sin necesidad de ingresar datos manuales.
+
+
+---
+
+## 🚀 Cómo ejecutar
+
+1. Cloná el repositorio.
+
+
+2. Configurá tu archivo application.properties.
+
+
+3. Ejecutá la clase FindFixAppApplication.java.
+
+
+4. Usá Postman (u otra herramienta) para probar las rutas.
+
+---
+
+## 📚Documentación con endpoints disponibles
+
+[Find-Fix - Endpoints](https://docs.google.com/document/d/1lvLfzfLlXB_Eut2KI4ePRHm3PPPWE8_JrSTTgYvkI00/edit?usp=sharing)
+
+---
+
 ## 📌 Estado del Proyecto
 
 - ✅ Backend funcional con endpoints listos.
@@ -58,7 +121,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ## ✍️ Autores
 
-**Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
+### **Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
 
 ---
 

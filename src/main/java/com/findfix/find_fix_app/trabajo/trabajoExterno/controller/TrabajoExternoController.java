@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/trabajos-externos")
@@ -29,7 +28,7 @@ public class TrabajoExternoController {
 
     @PostMapping("/agregar")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<TrabajoExternoDTO>> crearTrabajo(@Valid @RequestBody CrearTrabajoExternoDTO dto) throws UserNotFoundException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<TrabajoExternoDTO>> crearTrabajo(@Valid @RequestBody CrearTrabajoExternoDTO dto) throws UsuarioNotFoundException, EspecialistaNotFoundException {
         TrabajoExterno trabajo = trabajoExternoService.crearTrabajoExterno(dto);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Trabajo externo creado con éxito✅",
@@ -38,7 +37,7 @@ public class TrabajoExternoController {
 
     @GetMapping("/mis-trabajos")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<TrabajoExternoDTO>>> obtenerTodos() throws UserNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<List<TrabajoExternoDTO>>> obtenerTodos() throws UsuarioNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
         List<TrabajoExterno> misTrabajos = trabajoExternoService.obtenerMisTrabajos();
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "\uD83D\uDD27Mis trabajos\uD83D\uDD27",
@@ -48,7 +47,7 @@ public class TrabajoExternoController {
 
     @PatchMapping("/modificar/{titulo}")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<String>> modificarTrabajo(@PathVariable String titulo, @Valid @RequestBody ModificarTrabajoExternoDTO dto) throws TrabajoExternoNotFoundException, OficioNotFoundException, UserNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> modificarTrabajo(@PathVariable String titulo, @Valid @RequestBody ModificarTrabajoExternoDTO dto) throws TrabajoExternoNotFoundException, OficioNotFoundException, UsuarioNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
         trabajoExternoService.modificarTrabajoExterno(titulo, dto);
         return ResponseEntity.ok(new ApiResponse<>(
                 "Trabajo externo actualizado con éxito☑️",
@@ -57,7 +56,7 @@ public class TrabajoExternoController {
 
     @DeleteMapping("/eliminar/{titulo}")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<String>> eliminarTrabajo(@PathVariable String titulo) throws UserNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarTrabajo(@PathVariable String titulo) throws UsuarioNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
         trabajoExternoService.borrarTrabajoExternoPorTitulo(titulo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Trabajo externo eliminado con éxito✅", "{}"));
@@ -65,7 +64,7 @@ public class TrabajoExternoController {
 
     @PatchMapping("/actualizar-estado/{titulo}/{estado}")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<String>> actualizarEstado(@PathVariable String titulo, @PathVariable String estado) throws UserNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> actualizarEstado(@PathVariable String titulo, @PathVariable String estado) throws UsuarioNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException, EspecialistaNotFoundException {
         trabajoExternoService.actualizarEstado(titulo, estado);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Estado actualizado con éxito☑️",
@@ -74,7 +73,7 @@ public class TrabajoExternoController {
 
     @GetMapping("/filtrar")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<TrabajoExternoDTO>>> filtrarMisTrabajos(@RequestBody BuscarTrabajoExternoDTO filtro) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
+    public ResponseEntity<ApiResponse<List<TrabajoExternoDTO>>> filtrarMisTrabajos(@RequestBody BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         List<TrabajoExterno> trabajos = trabajoExternoService.filtrarTrabajosExternos(filtro);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Coincidencias⬇️",

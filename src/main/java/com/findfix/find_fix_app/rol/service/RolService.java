@@ -12,7 +12,7 @@ public interface RolService {
     void guardarRol(Rol rol) throws RolException;
     List<Rol> mostrarRoles()throws RolException;
     void eliminarRol(String nombre) throws RolNotFoundException;
-    void modificarRol(String nombreNuevo,Long idBuscada) throws RolNotFoundException,RolException;
+
     Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException;
 
 }

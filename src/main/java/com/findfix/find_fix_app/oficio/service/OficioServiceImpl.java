@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,25 +15,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OficioServiceImpl implements OficioService {
 
-    @Autowired
-    private OficioRepository oficioRepository;
+    private final OficioRepository oficioRepository;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Oficio crearOficio(Oficio oficio) {
         return oficioRepository.save(oficio);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Oficio> buscarTodos() {
         return oficioRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Oficio> buscarPorId(Long id) {
         return oficioRepository.findById(id);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void modificarOficio(Long id, Oficio nuevo) throws OficioNotFoundException {
         Optional<Oficio> existente = Optional.ofNullable(buscarPorId(id).orElseThrow(() -> new OficioNotFoundException("\n Oficio no encontrado. ")));
             existente.get().setNombre(nuevo.getNombre());
@@ -40,6 +44,7 @@ public class OficioServiceImpl implements OficioService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void borrarOficioPorId(Long id) throws OficioNotFoundException {
         if(oficioRepository.findById(id).isEmpty())
         {
@@ -48,6 +53,8 @@ public class OficioServiceImpl implements OficioService {
         oficioRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public Oficio filtrarPorNombre(String nombreBuscado) throws OficioNotFoundException {
         Optional<Oficio> encontrado = oficioRepository.findByNombre(nombreBuscado);
         if(!encontrado.isPresent())

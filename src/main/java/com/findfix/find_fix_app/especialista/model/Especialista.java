@@ -2,15 +2,13 @@ package com.findfix.find_fix_app.especialista.model;
 
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
+import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +47,9 @@ public class Especialista {
 
     @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
     private List<TrabajoApp> trabajos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
+    private List<TrabajoExterno> trabajoExternos = new ArrayList<>();
 
     @Transient
     private Double calificacionPromedio;

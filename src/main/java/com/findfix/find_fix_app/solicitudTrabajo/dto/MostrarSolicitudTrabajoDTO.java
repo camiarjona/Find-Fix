@@ -18,8 +18,8 @@ public class MostrarSolicitudTrabajoDTO {
         this.id = solicitudTrabajo.getSolicitudTrabajoId();
         this.fechaCreacion = solicitudTrabajo.getFechaCreacion();
         this.estado = solicitudTrabajo.getEstado().toString();
-        this.nombreEspecialista = solicitudTrabajo.getEspecialista().getUsuario().getNombre();
-        this.apellidoEspecialista = solicitudTrabajo.getEspecialista().getUsuario().getApellido();
+        this.nombreEspecialista = solicitudTrabajo.getEspecialista() != null ? solicitudTrabajo.getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
+        this.apellidoEspecialista = solicitudTrabajo.getEspecialista() !=null ? solicitudTrabajo.getEspecialista().getUsuario().getApellido() : "Especialista desvinculado";
         this.descripcion = solicitudTrabajo.getDescripcion();
     }
 }
