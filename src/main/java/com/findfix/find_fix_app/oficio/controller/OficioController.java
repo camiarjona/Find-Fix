@@ -41,21 +41,21 @@ public class OficioController {
         return ResponseEntity.ok(new ApiResponse<>("Oficios disponibles",  disponibles.stream().map(Oficio::getNombre).toList()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Oficio>> buscarPorId(@PathVariable Long id) {
         Optional<Oficio> oficio = oficioService.buscarPorId(id);
         return ResponseEntity.ok(new ApiResponse<>("Oficio encontrado ✅",oficio.get()));
     }
 
-    @PostMapping
+    @PostMapping("/agregar")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> crearOficio(@Valid @RequestBody Oficio oficio) throws OficioException {
         Oficio guardado = oficioService.crearOficio(oficio);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Oficio registrado exitosamente ✅","Ingrese a la lista de oficios para verificar su registro")); // 201 Created
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/actualizar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> modificarOficio(@PathVariable Long id, @Valid @RequestBody Oficio nuevo) throws OficioNotFoundException {
             oficioService.modificarOficio(id, nuevo);
@@ -63,7 +63,7 @@ public class OficioController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> borrarOficioPorId(@PathVariable Long id) throws OficioNotFoundException {
        oficioService.borrarOficioPorId(id);

@@ -27,13 +27,24 @@ public class SecurityConfig {
                                         "/usuario/ver-ciudades-disponibles")
                                 .hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
 
-                                .requestMatchers("/usuario/**").hasRole("ADMIN")
+                                .requestMatchers("/usuario",
+                                        "/usuario/modificar/{email}",
+                                        "/usuario/filtrar")
+                                .hasRole("ADMIN")
 
                                 //OFICIOS CLIENTE
                                 .requestMatchers("/oficios/disponibles").hasRole("CLIENTE")
 
                                 // DELETE | OFICIOS | ROLES
-                                .requestMatchers("/admin/**", "/oficios/**", "/roles/**").hasRole("ADMIN") //todo admin
+                                .requestMatchers("/admin/**",
+                                        "/oficios",
+                                        "/oficios/buscar/{id}",
+                                        "/oficios/agregar",
+                                        "/oficios/actualizar/{id}",
+                                        "/oficios/eliminar/{id}",
+                                        "/oficios/nombre/{nombre}",
+                                        "/roles/**")
+                                .hasRole("ADMIN")
 
                                 //TRABAJOS EXTERNOS (para especialistas)
                                 .requestMatchers("/trabajos-externos/**").hasRole("ESPECIALISTA")
