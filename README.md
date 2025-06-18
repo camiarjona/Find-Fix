@@ -34,7 +34,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 - **Spring Boot**
 - **Spring Security**
 - **JPA / Hibernate**
-- **MySQL**
+- **SQL**
 - **Postman** (para pruebas)
 - **Lombok**
 - **Maven**
