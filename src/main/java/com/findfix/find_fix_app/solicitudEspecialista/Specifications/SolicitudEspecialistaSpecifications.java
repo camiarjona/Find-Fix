@@ -20,15 +20,21 @@ public class SolicitudEspecialistaSpecifications {
     public static Specification<SolicitudEspecialista> fechaEntre(LocalDate desde, LocalDate hasta) {
         return (root, query, criteriaBuilder) -> {
             if (desde == null && hasta == null) return null;
-            if(desde != null && hasta != null && !desde.isBefore(hasta)) {
+
+            if (desde != null && hasta != null) {
+                if (desde.isAfter(hasta)) {
+                    // Podés tirar excepción o loggear error acá si querés
+                    return null; // rango inválido
+                }
                 return criteriaBuilder.between(root.get("fechaSolicitud"), desde, hasta);
-            } else if(desde != null) {
+            } else if (desde != null) {
                 return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaSolicitud"), desde);
             } else {
                 return criteriaBuilder.lessThanOrEqualTo(root.get("fechaSolicitud"), hasta);
             }
         };
     }
+
 
     public static Specification<SolicitudEspecialista> tieneUsuarioEmail(String email) {
         return (root, query, criteriaBuilder) -> {
