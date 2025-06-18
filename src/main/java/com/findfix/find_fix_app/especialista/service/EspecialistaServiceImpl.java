@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -119,12 +120,17 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
     @Transactional(readOnly = true)
-    public List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
+    public List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException, UsuarioNotFoundException {
         List<Especialista> especialistas = especialistaRepository.findAll(EspecialistaSpecifications.tieneDatosCompletos());
-        if (especialistas.isEmpty()) {
+
+        Usuario usuario = authService.obtenerUsuarioAutenticado();
+
+        List<Especialista> especialistasDisponibles = especialistas.stream().filter(e -> !usuario.equals(e.getUsuario())).toList();
+
+        if (especialistasDisponibles.isEmpty()) {
             throw new EspecialistaNotFoundException("⚠️No hay especialistas disponibles en este momento.");
         }
-        return especialistas;
+        return especialistasDisponibles;
     }
 
 

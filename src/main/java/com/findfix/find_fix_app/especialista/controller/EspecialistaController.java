@@ -34,7 +34,7 @@ public class EspecialistaController {
 
     @GetMapping("/disponibles")
     @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException, UsuarioNotFoundException {
         List<Especialista> especialistas = especialistaService.obtenerEspecialistasDisponibles();
 
         return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas disponibles encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));

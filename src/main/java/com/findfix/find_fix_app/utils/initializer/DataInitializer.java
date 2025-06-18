@@ -45,10 +45,10 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void precargarOficios() {
-        List<String> oficios = List.of("Electricista", "Plomero", "Carpintero", "Pintor", "Gasista");
+        List<String> oficios = List.of("ELECTRICISTA", "PLOMERO", "CARPINTERO", "PINTOR", "GASISTA");
 
         for (String nombre : oficios) {
-            if (!oficioRepository.existsByNombre(nombre)) {
+            if (!oficioRepository.existsByNombreIgnoreCase(nombre)) {
                 oficioRepository.save(new Oficio(null, nombre));
                 log.info("🛠️ Oficio precargado: {}", nombre);
             }

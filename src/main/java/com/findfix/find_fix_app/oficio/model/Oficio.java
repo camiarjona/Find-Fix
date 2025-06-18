@@ -15,7 +15,7 @@ public class Oficio {
     @Column(name = "id_oficio")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     public void setNombre(String nombre) {

@@ -155,6 +155,7 @@ public class GlobalExceptionHandler {
             SolicitudEspecialistaException.class,
             FavoritoException.class,
             ResenaException.class,
+            OficioException.class,
     })
     public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
         ErrorResponse error = ErrorResponse.builder()

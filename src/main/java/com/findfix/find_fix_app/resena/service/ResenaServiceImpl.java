@@ -36,15 +36,14 @@ public class ResenaServiceImpl implements ResenaService {
         TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
                 .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo no encontrado"));
 
-        if(trabajo.getEstado() != EstadosTrabajos.FINALIZADO){
-            throw new TrabajoAppException("\n El trabajo debe estar finalizado para agregar una reseña. ");
+        boolean esCliente = trabajo.getUsuario().getUsuarioId().equals(usuario.getUsuarioId());
+
+        if (!esCliente) {
+            throw new UsuarioNotFoundException("No estás autorizado para dejar una reseña sobre este trabajo.");
         }
 
-        boolean esCliente = trabajo.getUsuario().getUsuarioId().equals(usuario.getUsuarioId());
-        boolean esEspecialista = trabajo.getEspecialista().getEspecialistaId().equals(usuario.getUsuarioId());
-
-        if (!esCliente && !esEspecialista) {
-            throw new UsuarioNotFoundException("No estás autorizado para dejar una reseña sobre este trabajo.");
+        if(trabajo.getEstado() != EstadosTrabajos.FINALIZADO){
+            throw new TrabajoAppException("El trabajo debe estar finalizado para agregar una reseña. ");
         }
 
         Resena resena = new Resena();

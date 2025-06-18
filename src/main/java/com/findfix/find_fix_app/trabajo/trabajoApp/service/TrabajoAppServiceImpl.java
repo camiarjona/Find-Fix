@@ -157,15 +157,15 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
             throw new TrabajoAppException("El trabajo ya se encuentra en ese estado");
         }
 
-        if (trabajoApp.getEstado().equals(EstadosTrabajos.CREADO) && !nombreEstado.equalsIgnoreCase(EstadosTrabajos.EN_PROCESO.name())) {
+        if (trabajoApp.getEstado().equals(EstadosTrabajos.CREADO) && !nombreEstado.equalsIgnoreCase(EstadosTrabajos.EN_PROCESO.getEstadoAmigable())) {
             throw new TrabajoAppException("El estado debe pasar obligatoriamente por el estado en proceso");
         }
 
-        if (trabajoApp.getEstado().equals(EstadosTrabajos.EN_PROCESO) && nombreEstado.equalsIgnoreCase(EstadosTrabajos.CREADO.name())) {
+        if (trabajoApp.getEstado().equals(EstadosTrabajos.EN_PROCESO) && nombreEstado.equalsIgnoreCase(EstadosTrabajos.CREADO.getEstadoAmigable())) {
             throw new TrabajoAppException("El trabajo ya esta en proceso, no puede volver atras");
         }
 
-        if (trabajoApp.getEstado().equals(EstadosTrabajos.EN_REVISION) && nombreEstado.equalsIgnoreCase(EstadosTrabajos.CREADO.name())) {
+        if (trabajoApp.getEstado().equals(EstadosTrabajos.EN_REVISION) && nombreEstado.equalsIgnoreCase(EstadosTrabajos.CREADO.getEstadoAmigable())) {
             throw new TrabajoAppException("El trabajo no puede volver a 'CREADO'. Como mucho puede revertir De EN REVISION A PROCESO ");
         }
     }

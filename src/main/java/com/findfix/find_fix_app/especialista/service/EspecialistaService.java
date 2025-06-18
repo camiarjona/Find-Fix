@@ -20,7 +20,7 @@ public interface EspecialistaService {
     Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion;
     Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, UsuarioNotFoundException, EspecialistaExcepcion;
     List<Especialista> obtenerEspecialistas() throws EspecialistaNotFoundException;
-    List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException;
+    List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException, UsuarioNotFoundException;
     void eliminarPorEmail(String email) throws EspecialistaNotFoundException, RolNotFoundException; ///ruta solo admitida para el admin
     Especialista actualizarOficioDeEspecialista(ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion, UsuarioNotFoundException;
     Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion;
