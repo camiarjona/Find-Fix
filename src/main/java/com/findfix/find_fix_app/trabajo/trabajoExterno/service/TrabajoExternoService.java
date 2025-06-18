@@ -12,12 +12,12 @@ import java.util.List;
 
 @Service
 public interface TrabajoExternoService {
-    TrabajoExterno crearTrabajoExterno(CrearTrabajoExternoDTO DTO) throws UserNotFoundException, EspecialistaNotFoundException;
-    List<TrabajoExterno> obtenerMisTrabajos() throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
-    List<TrabajoExterno> filtrarTrabajosExternos(BuscarTrabajoExternoDTO filtro) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
-    void modificarTrabajoExterno(String titulo, ModificarTrabajoExternoDTO DTO) throws OficioNotFoundException, TrabajoExternoNotFoundException, UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
-    void actualizarEstado(String titulo, String estadoNuevo) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException;
-    void borrarTrabajoExternoPorTitulo(String titulo) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
+    TrabajoExterno crearTrabajoExterno(CrearTrabajoExternoDTO DTO) throws UsuarioNotFoundException, EspecialistaNotFoundException;
+    List<TrabajoExterno> obtenerMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
+    List<TrabajoExterno> filtrarTrabajosExternos(BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
+    void modificarTrabajoExterno(String titulo, ModificarTrabajoExternoDTO DTO) throws OficioNotFoundException, TrabajoExternoNotFoundException, UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
+    void actualizarEstado(String titulo, String estadoNuevo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException;
+    void borrarTrabajoExternoPorTitulo(String titulo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException;
     void validarEspecialista(TrabajoExterno trabajoExterno, Especialista especialista) throws TrabajoExternoException;
     void validarEstado(TrabajoExterno trabajo, String estado) throws TrabajoExternoException;
 }

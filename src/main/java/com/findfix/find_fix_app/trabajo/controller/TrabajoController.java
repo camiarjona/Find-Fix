@@ -5,7 +5,7 @@ import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoExternoException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +24,7 @@ public class TrabajoController {
 
     @GetMapping
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<Map<String, List<?>>>> verTodosMisTrabajos() throws UserNotFoundException, TrabajoExternoException, EspecialistaNotFoundException, TrabajoAppException {
+    public ResponseEntity<ApiResponse<Map<String, List<?>>>> verTodosMisTrabajos() throws UsuarioNotFoundException, TrabajoExternoException, EspecialistaNotFoundException, TrabajoAppException {
         return ResponseEntity.ok(new ApiResponse<>("Trabajos", trabajoService.verTodosMisTrabajos()));
     }
 }

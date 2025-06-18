@@ -4,7 +4,7 @@ import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.service.SolicitudEspecialistaService;
@@ -24,7 +24,7 @@ public class SolicitudEspecialistaController {
 
     @PostMapping("/enviar")
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<ApiResponse<MandarSolicitudEspecialistaDTO>> mandarSolicitud (@Valid @RequestBody MandarSolicitudEspecialistaDTO solicitudEspecialistaDTO) throws UserNotFoundException, SolicitudEspecialistaException {
+    public ResponseEntity<ApiResponse<MandarSolicitudEspecialistaDTO>> mandarSolicitud (@Valid @RequestBody MandarSolicitudEspecialistaDTO solicitudEspecialistaDTO) throws UsuarioNotFoundException, SolicitudEspecialistaException {
         solicitudEspecialistaService.mandarSolicitud(solicitudEspecialistaDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Solicitud generada exitosamente✅", solicitudEspecialistaDTO));
@@ -41,7 +41,7 @@ public class SolicitudEspecialistaController {
 
     @GetMapping("/mis-solicitudes")
     @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<MostrarSolicitudEspecialistaDTO>>> obtenerMisSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UserNotFoundException {
+    public ResponseEntity<ApiResponse<List<MostrarSolicitudEspecialistaDTO>>> obtenerMisSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException {
         List<MostrarSolicitudEspecialistaDTO> solicitudesEspecialista = solicitudEspecialistaService.obtenerMisSolicitudesEspecialista();
 
 
@@ -50,7 +50,7 @@ public class SolicitudEspecialistaController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<FichaCompletaSolicitudEspecialistaDTO>> actualizarSolicitudEspecialista(@Valid @RequestBody ActualizarSolicitudEspecialistaDTO actualizarSolicitudEspecialistaDTO, @PathVariable Long id) throws UserNotFoundException, SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, RolNotFoundException {
+    public ResponseEntity<ApiResponse<FichaCompletaSolicitudEspecialistaDTO>> actualizarSolicitudEspecialista(@Valid @RequestBody ActualizarSolicitudEspecialistaDTO actualizarSolicitudEspecialistaDTO, @PathVariable Long id) throws UsuarioNotFoundException, SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, RolNotFoundException {
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaService.actualizarSolicitudEspecialistaAdmin(actualizarSolicitudEspecialistaDTO, id);
 
         return ResponseEntity.ok(new ApiResponse<>("Solicitud actualizada correctamente☑️", new FichaCompletaSolicitudEspecialistaDTO(solicitudEspecialista)));

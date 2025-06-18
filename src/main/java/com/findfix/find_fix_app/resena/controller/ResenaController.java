@@ -26,7 +26,7 @@ public class ResenaController {
 
     @PostMapping("/registrar")
     @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<MostrarResenaClienteDTO>> crearResena(@Valid @RequestBody CrearResenaDTO dto) throws TrabajoAppNotFoundException, UserNotFoundException {
+    public ResponseEntity<ApiResponse<MostrarResenaClienteDTO>> crearResena(@Valid @RequestBody CrearResenaDTO dto) throws TrabajoAppNotFoundException, UsuarioNotFoundException {
         Resena nueva = resenaService.crearResena(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 "Reseña creada con éxito",
@@ -52,7 +52,7 @@ public class ResenaController {
 
     @GetMapping("/recibidas")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<MostrarResenaEspecialistaDTO>>> verResenasDeMisTrabajos() throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<List<MostrarResenaEspecialistaDTO>>> verResenasDeMisTrabajos() throws UsuarioNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
         List<Resena> resenasRecibidas = resenaService.resenasDeMisTrabajos();
         return ResponseEntity.ok(new ApiResponse<>(
                 "Reseñas recibidas",
@@ -61,7 +61,7 @@ public class ResenaController {
 
     @GetMapping("/enviadas")
     @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<MostrarResenaClienteDTO>>> verResenasHechasPorMi() throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<List<MostrarResenaClienteDTO>>> verResenasHechasPorMi() throws UsuarioNotFoundException {
         List<Resena> resenasEnviadas = resenaService.resenasHechasPorMi();
         return ResponseEntity.ok(new ApiResponse<>(
                 "Reseñas enviadas",

@@ -75,8 +75,7 @@ public class GlobalExceptionHandler {
 
     // Maneja entidades no encontradas
     @ExceptionHandler({
-            WorkNotFoundException.class,
-            UserNotFoundException.class,
+            UsuarioNotFoundException.class,
             EspecialistaNotFoundException.class,
             RolNotFoundException.class,
             OficioNotFoundException.class,
@@ -150,7 +149,7 @@ public class GlobalExceptionHandler {
     // Manejo de errores personalizados de conflictos
     @ExceptionHandler({
             RolException.class,
-            UserException.class,
+            UsuarioException.class,
             EspecialistaExcepcion.class,
             TrabajoAppException.class,
             SolicitudEspecialistaException.class,

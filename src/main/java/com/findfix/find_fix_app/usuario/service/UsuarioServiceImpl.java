@@ -56,7 +56,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
+    public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UsuarioException {
         Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
         if (filtro.tieneRol()) {
@@ -75,7 +75,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         List<Usuario> usuariosEncontrados = usuarioRepository.findAll(spec);
 
         if (usuariosEncontrados.isEmpty()) {
-            throw new UserException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
+            throw new UsuarioException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
         }
 
         return usuariosEncontrados;
@@ -91,10 +91,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     //metodo para registrar un usuario nuevo
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException {
+    public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
-            throw new UserException("❗Ya existe un usuario registrado con ese email.");
+            throw new UsuarioException("❗Ya existe un usuario registrado con ese email.");
         }
 
         Usuario usuario = new Usuario();
@@ -121,7 +121,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     // metodo para actualizar la contraseña de un usuario
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException {
+    public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UsuarioNotFoundException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -136,7 +136,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     // metodo para actualizar atributos de un usuario
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException {
+    public void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UsuarioNotFoundException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -148,9 +148,9 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     //metodo para eliminar un usuario por su email
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void eliminarPorEmail(String email) throws UserNotFoundException {
+    public void eliminarPorEmail(String email) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
+                .orElseThrow(() -> new UsuarioNotFoundException("❌Usuario no encontrado❌"));
 
         usuarioDesvinculacionService.desvincularUsuario(usuario);
 
@@ -165,9 +165,9 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     //metodo para que el admin pueda actualizar los datos de un usuario
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException {
+    public void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
+                .orElseThrow(() -> new UsuarioNotFoundException("❌Usuario no encontrado❌"));
 
         actualizarDatosAModificar(actualizarUsuarioDTO, usuario);
 
@@ -216,7 +216,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     //metodo para que un usuario visualice su perfil
     @Override
     @Transactional(readOnly = true)
-    public VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException {
+    public VerPerfilUsuarioDTO verPerfilUsuario() throws UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         return new VerPerfilUsuarioDTO(usuario);
     }
