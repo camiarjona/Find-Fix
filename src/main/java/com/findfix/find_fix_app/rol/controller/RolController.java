@@ -44,12 +44,7 @@ public class RolController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Rol eliminado con exito ☑️","Consulte la lista de roles registrados si desea verificar que fue eliminado"));
 
     }
-     ///  endpoint para modificar rol, se busca por id
-    @PatchMapping("/{id}")   /// http://localhost:8080/roles/3?nuevoNombre=nuevoRol
-    public ResponseEntity<ApiResponse<String>> modificarRol(@PathVariable Long id, @Valid @RequestParam String nuevoNombre) throws RolNotFoundException, RolException {
-        rolService.modificarRol(nuevoNombre, id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Rol modificado con exito ☑️","Verifique el cambio buscando el rol que haya modificado"));
-    }
+
    ///  endpoint para obtener un rol filtrandolo por su nombre
     @GetMapping("/{rol}")
     public ResponseEntity<ApiResponse<Rol>> filtrarPorNombre(@PathVariable("rol") String nombre) throws RolNotFoundException {
