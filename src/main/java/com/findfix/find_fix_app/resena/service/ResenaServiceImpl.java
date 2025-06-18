@@ -3,6 +3,7 @@ package com.findfix.find_fix_app.resena.service;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.resena.dto.CrearResenaDTO;
 import com.findfix.find_fix_app.resena.model.Resena;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,11 +30,15 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Resena crearResena(CrearResenaDTO dto) throws UsuarioNotFoundException, TrabajoAppNotFoundException {
+    public Resena crearResena(CrearResenaDTO dto) throws UsuarioNotFoundException, TrabajoAppNotFoundException, TrabajoAppException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
         TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
                 .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo no encontrado"));
+
+        if(trabajo.getEstado() != EstadosTrabajos.FINALIZADO){
+            throw new TrabajoAppException("\n El trabajo debe estar finalizado para agregar una reseña. ");
+        }
 
         boolean esCliente = trabajo.getUsuario().getUsuarioId().equals(usuario.getUsuarioId());
         boolean esEspecialista = trabajo.getEspecialista().getEspecialistaId().equals(usuario.getUsuarioId());
@@ -127,5 +131,4 @@ public class ResenaServiceImpl implements ResenaService {
             throw new ResenaException("El trabajo que desea buscar no le pertenece. Corrobore el titulo ingresado.");
         }
     }
-
 }
