@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -38,6 +40,7 @@ public class TrabajoApp {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_especialista")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Especialista especialista;
 
     @ManyToOne(fetch = FetchType.LAZY)

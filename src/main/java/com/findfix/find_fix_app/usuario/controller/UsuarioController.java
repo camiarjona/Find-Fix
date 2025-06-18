@@ -16,9 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 @RestController
@@ -31,7 +29,7 @@ public class UsuarioController {
     //metodo para ver la lista de usuarios registrados
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> obtenerUsuarios() throws UserException {
+    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> obtenerUsuarios() {
         List<Usuario> usuarios = usuarioService.obtenerUsuarios();
         return ResponseEntity.ok(new ApiResponse<>(
                 "Lista de usuarios encontrada️☑️",
@@ -50,9 +48,9 @@ public class UsuarioController {
     //metodo para eliminar un usuario por su email
     @DeleteMapping("/eliminar/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException{
         usuarioService.eliminarPorEmail(email);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>(
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Usuario eliminado con éxito✅", "{}"));
     }
 
@@ -81,19 +79,9 @@ public class UsuarioController {
                 "Password modificado con éxito☑️", "{*****}"));
     }
 
-    //metodo para actualizar los roles de un usuario
-    @PatchMapping("/actualizar-roles/{email}") //CHEQUEADO
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<ActualizarRolesUsuarioDTO>> actualizarRoles(@PathVariable String email, @Valid @RequestBody ActualizarRolesUsuarioDTO rolesDTO) throws UserNotFoundException {
-        usuarioService.actualizarRolesUsuario(email, rolesDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
-                "Roles actualizados con éxito☑️", rolesDTO));
-    }
-
     @GetMapping("/ver-perfil") //CHEQUEADO
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> verPerfilUsuario() throws UserNotFoundException {
-        Map<String, VerPerfilUsuarioDTO> response = new HashMap<>();
         VerPerfilUsuarioDTO usuarioDTO = usuarioService.verPerfilUsuario();
         return ResponseEntity.ok(new ApiResponse<>("\uD83D\uDC64Perfil\uD83D\uDC64", usuarioDTO));
     }

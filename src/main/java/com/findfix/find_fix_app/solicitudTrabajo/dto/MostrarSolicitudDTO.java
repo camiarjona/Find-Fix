@@ -18,8 +18,8 @@ public class MostrarSolicitudDTO {
         this.id = solicitudTrabajo.getSolicitudTrabajoId();
         this.fechaCreacion = solicitudTrabajo.getFechaCreacion();
         this.estado = solicitudTrabajo.getEstado().toString();
-        this.nombreCliente = solicitudTrabajo.getUsuario().getNombre();
-        this.apellidoCliente = solicitudTrabajo.getUsuario().getApellido();
+        this.nombreCliente = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getNombre() : "Usuario desvinculado";
+        this.apellidoCliente = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getApellido() : "Usuario desvinculado";
         this.descripcion = solicitudTrabajo.getDescripcion();
     }
 }
