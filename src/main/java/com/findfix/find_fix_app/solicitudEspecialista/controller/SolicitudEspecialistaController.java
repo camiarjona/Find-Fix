@@ -38,9 +38,8 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Lista de solicitudes encontrada☑️", solicitudesEspecialista));
     }
 
-
     @GetMapping("/mis-solicitudes")
-    @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<List<MostrarSolicitudEspecialistaDTO>>> obtenerMisSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException {
         List<MostrarSolicitudEspecialistaDTO> solicitudesEspecialista = solicitudEspecialistaService.obtenerMisSolicitudesEspecialista();
 
@@ -48,7 +47,7 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Lista de solicitudes encontrada☑️", solicitudesEspecialista));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/actualizar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FichaCompletaSolicitudEspecialistaDTO>> actualizarSolicitudEspecialista(@Valid @RequestBody ActualizarSolicitudEspecialistaDTO actualizarSolicitudEspecialistaDTO, @PathVariable Long id) throws UsuarioNotFoundException, SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, RolNotFoundException {
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaService.actualizarSolicitudEspecialistaAdmin(actualizarSolicitudEspecialistaDTO, id);
@@ -65,7 +64,7 @@ public class SolicitudEspecialistaController {
     }
 
     @GetMapping("/filtrar")
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENTE', 'ESPECIALISTA')")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENTE')")
     public ResponseEntity<ApiResponse<List<FichaCompletaSolicitudEspecialistaDTO>>> filtrarSolicitudes(@RequestBody BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {
         List<FichaCompletaSolicitudEspecialistaDTO> solicitudesFiltradas = solicitudEspecialistaService.filtrarSolicitudes(filtro);
 

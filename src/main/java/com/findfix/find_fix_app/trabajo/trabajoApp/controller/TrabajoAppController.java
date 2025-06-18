@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/trabajo-app")
+@RequestMapping("/trabajos-app")
 @RequiredArgsConstructor
 @Validated
 public class TrabajoAppController {
