@@ -11,17 +11,17 @@ import java.util.Optional;
 @Service
 public interface UsuarioService {
     boolean tieneRol(Usuario usuario, String rol);
-    List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException;
+    List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UsuarioNotFoundException, UsuarioException;
     List<Usuario> obtenerUsuarios();
-    void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException;
-    void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException;
-    void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException;
-    void eliminarPorEmail(String email) throws UserNotFoundException;
+    void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException;
+    void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UsuarioNotFoundException;
+    void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UsuarioNotFoundException;
+    void eliminarPorEmail(String email) throws UsuarioNotFoundException;
     Optional<Usuario> obtenerUsuarioPorEmail(String email);
-    void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException;
+    void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UsuarioNotFoundException;
     void agregarRol(Usuario usuario, String nombreRol) throws RolNotFoundException;
     void eliminarRol(Usuario usuario, String nombreRol) throws RolNotFoundException;
-    VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException;
+    VerPerfilUsuarioDTO verPerfilUsuario() throws UsuarioNotFoundException;
     void actualizarUsuarioEspecialista(Usuario usuario);
     List<String> ciudadesDisponibles();
 

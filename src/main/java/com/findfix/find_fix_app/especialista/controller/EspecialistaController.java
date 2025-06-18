@@ -7,7 +7,7 @@ import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaExcepcion;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +51,7 @@ public class EspecialistaController {
 
     @PatchMapping("/actualizar-mis-datos")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException, UserNotFoundException {
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarEspecialista(@Valid @RequestBody ActualizarEspecialistaDTO dto) throws EspecialistaExcepcion, EspecialistaNotFoundException, UsuarioNotFoundException {
         Especialista especialista = especialistaService.actualizarEspecialista(dto);
 
         return ResponseEntity.ok(new ApiResponse<>("Especialista actualizado correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
@@ -76,7 +76,7 @@ public class EspecialistaController {
 
     @PatchMapping("/actualizar-mis-oficios")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialista(@Valid @RequestBody ActualizarOficioEspDTO dto) throws UserNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<EspecialistaRespuestaDTO>> actualizarOficiosDeEspecialista(@Valid @RequestBody ActualizarOficioEspDTO dto) throws UsuarioNotFoundException, EspecialistaExcepcion, EspecialistaNotFoundException {
        Especialista especialista = especialistaService.actualizarOficioDeEspecialista(dto);
 
         return ResponseEntity.ok(new ApiResponse<>("Oficios actualizados correctamente☑️", new EspecialistaRespuestaDTO(especialista)));
@@ -84,7 +84,7 @@ public class EspecialistaController {
 
     @GetMapping("/ver-perfil")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<VerPerfilEspecialistaDTO>> verPerfilEspecialista() throws UserNotFoundException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<VerPerfilEspecialistaDTO>> verPerfilEspecialista() throws UsuarioNotFoundException, EspecialistaNotFoundException {
         VerPerfilEspecialistaDTO especialistaDTO = especialistaService.verPerfilEspecialista();
 
         return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));

@@ -8,7 +8,7 @@ import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.FavoritoException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ public class FavoritoServiceImpl implements FavoritoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void agregarAFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException {
+    public void agregarAFavoritos(String emailEspecialista) throws UsuarioNotFoundException, EspecialistaNotFoundException, FavoritoException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
         Especialista especialista = especialistaService.buscarPorEmail(emailEspecialista)
@@ -37,7 +37,7 @@ public class FavoritoServiceImpl implements FavoritoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void eliminarDeFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
+    public void eliminarDeFavoritos(String emailEspecialista) throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
         Especialista especialista = especialistaService.buscarPorEmail(emailEspecialista)
@@ -48,7 +48,7 @@ public class FavoritoServiceImpl implements FavoritoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Especialista> obtenerFavoritos() throws UserNotFoundException, FavoritoException {
+    public List<Especialista> obtenerFavoritos() throws UsuarioNotFoundException, FavoritoException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
         return favoritoRepository.findAllByUsuario(usuario)

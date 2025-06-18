@@ -4,7 +4,7 @@ import com.findfix.find_fix_app.usuario.service.delete.DeleteService;
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class DeleteController {
 
     @DeleteMapping("/eliminar/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> eliminarUsuario(@PathVariable String email) throws UserNotFoundException, RolNotFoundException, EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<String>> eliminarUsuario(@PathVariable String email) throws UsuarioNotFoundException, RolNotFoundException, EspecialistaNotFoundException {
         deleteService.eliminarCuentaPorEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Usuario eliminado con éxito✅", "{}"));
