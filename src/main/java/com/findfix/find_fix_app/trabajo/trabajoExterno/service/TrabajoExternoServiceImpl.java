@@ -57,6 +57,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TrabajoExterno> filtrarTrabajosExternos(BuscarTrabajoExternoDTO filtro) throws UserNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 

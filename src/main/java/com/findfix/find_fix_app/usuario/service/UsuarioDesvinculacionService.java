@@ -8,9 +8,9 @@ import com.findfix.find_fix_app.solicitudTrabajo.repository.SolicitudTrabajoRepo
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.repository.TrabajoAppRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class UsuarioDesvinculacionService {
     private final SolicitudTrabajoRepository solicitudTrabajoRepository;
     private final FavoritoRepository favoritoRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void desvincularUsuario(Usuario usuario) {
         // Desvincular trabajos
         List<TrabajoApp> trabajos = trabajoAppRepository.findByUsuario(usuario);
