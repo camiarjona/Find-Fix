@@ -10,6 +10,7 @@ import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class FavoritoController {
     private final FavoritoService favoritoService;
 
     @GetMapping
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerFavoritos() throws UserNotFoundException, FavoritoException {
         List<Especialista> favoritos = favoritoService.obtenerFavoritos();
 
@@ -36,6 +38,7 @@ public class FavoritoController {
     }
 
     @DeleteMapping("/eliminar/{emailEspecialista}")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<String>> eliminar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
         favoritoService.eliminarDeFavoritos(emailEspecialista);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
@@ -44,6 +47,7 @@ public class FavoritoController {
     }
 
     @PostMapping("/agregar/{emailEspecialista}")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<String>> agregar(@PathVariable String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException {
         favoritoService.agregarAFavoritos(emailEspecialista);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
