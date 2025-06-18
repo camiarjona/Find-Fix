@@ -2,10 +2,7 @@ package com.findfix.find_fix_app.usuario.service;
 
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
-import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
-import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException;
+import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.usuario.specifications.UsuarioSpecifications;
@@ -36,6 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
     private final AuthService authService;
+    private final UsuarioDesvinculacionService usuarioDesvinculacionService;
 
     //metodo para guardar un usuario basico
     @Override
@@ -115,15 +113,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
-    // metodo para eliminar un usuario por id
-    @Override
-    public void eliminarPorId(Long id) throws UserNotFoundException {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
-
-        usuarioRepository.delete(usuario);
-    }
-
     // metodo para actualizar la contraseña de un usuario
     @Override
     public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException {
@@ -149,36 +138,13 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
-    @Override
-    public void actualizarRolesUsuario(String email, ActualizarRolesUsuarioDTO usuarioRolesDTO) throws UserNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
-
-        // agregar roles
-        if (usuarioRolesDTO.tieneRolesAgregar()) {
-            Set<Rol> rolesAAgregar = usuarioRolesDTO.rolesAgregar().stream()
-                    .map(nombre -> rolRepository.findByNombre(nombre)
-                            .orElseThrow(() -> new RuntimeException("❌Rol no encontrado: " + nombre)))
-                    .collect(Collectors.toSet());
-
-            usuario.getRoles().addAll(rolesAAgregar);
-        }
-
-        //eliminar roles
-        if (usuarioRolesDTO.tieneRolesEliminar()) {
-            for (String nombreRol : usuarioRolesDTO.rolesEliminar()) {
-                usuario.getRoles().removeIf(r -> r.getNombre().equalsIgnoreCase(nombreRol));
-            }
-        }
-
-        usuarioRepository.save(usuario);
-    }
-
     //metodo para eliminar un usuario por su email
     @Override
     public void eliminarPorEmail(String email) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
+
+        usuarioDesvinculacionService.desvincularUsuario(usuario);
 
         usuarioRepository.delete(usuario);
     }
@@ -217,6 +183,16 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
                 .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
 
         usuario.getRoles().add(rol);
+        usuarioRepository.save(usuario);
+    }
+
+    //metodo para eliminar un rol
+    @Override
+    public void eliminarRol(Usuario usuario, String nombreRol) throws RolNotFoundException {
+        Rol rol = rolRepository.findByNombre(nombreRol)
+                .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
+
+        usuario.getRoles().remove(rol);
         usuarioRepository.save(usuario);
     }
 

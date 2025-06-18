@@ -9,7 +9,6 @@ import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoApp.repository.TrabajoAppRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppNotFoundException;
@@ -30,7 +29,6 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     private final TrabajoAppRepository trabajoAppRepository;
     private final AuthService authService;
-    private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
 
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
@@ -209,7 +207,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     @Override
     public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UserNotFoundException, TrabajoAppException, TrabajoAppNotFoundException {
         List<TrabajoApp> trabajoAppDelEspecialista = obtenerTrabajosClientes();
-        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> trabajoApp.getTrabajoAppId() == id).findFirst();
+        Optional<TrabajoApp> trabajoBuscado = trabajoAppDelEspecialista.stream().filter(trabajoApp -> Objects.equals(trabajoApp.getTrabajoAppId(), id)).findFirst();
         if (trabajoBuscado.isEmpty()) {
             throw new TrabajoAppNotFoundException("No se pudo otorgar la ficha trabajo debido a que el id ingresado no pertenece a ningun registro. ");
         } else {
@@ -229,4 +227,5 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     public Optional<TrabajoApp> buscarPorId(Long trabajoId) {
         return trabajoAppRepository.findById(trabajoId);
     }
+
 }

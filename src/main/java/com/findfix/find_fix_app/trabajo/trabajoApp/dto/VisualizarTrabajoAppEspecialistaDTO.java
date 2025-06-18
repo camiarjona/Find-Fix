@@ -19,7 +19,7 @@ public class VisualizarTrabajoAppEspecialistaDTO {
     private static final DateTimeFormatter formatoAmigable = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public VisualizarTrabajoAppEspecialistaDTO(TrabajoApp trabajoApp) {
-        this.nombreCliente = trabajoApp.getUsuario().getNombre();
+        this.nombreCliente = trabajoApp.getUsuario() != null ? trabajoApp.getUsuario().getNombre() : "Usuario desvinculado";
         this.titulo = trabajoApp.getTitulo();
         this.descripcion = trabajoApp.getDescripcion();
         this.estado = trabajoApp.getEstado();

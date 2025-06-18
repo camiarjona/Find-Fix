@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppException;
 import com.findfix.find_fix_app.utils.exception.exceptions.TrabajoAppNotFoundException;
@@ -8,6 +9,7 @@ import com.findfix.find_fix_app.utils.exception.exceptions.UserNotFoundException
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
