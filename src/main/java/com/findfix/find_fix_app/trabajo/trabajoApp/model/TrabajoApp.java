@@ -24,7 +24,8 @@ public class TrabajoApp {
     private Long trabajoAppId;
 
     private LocalDate fechaInicio;
-    @Column(unique = true,nullable = false)
+
+    @Column(unique = true)
     private String titulo;
 
     @Column(nullable = false)

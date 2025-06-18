@@ -43,9 +43,10 @@ public class OficioController {
 
     @GetMapping("/buscar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Oficio>> buscarPorId(@PathVariable Long id) {
-        Optional<Oficio> oficio = oficioService.buscarPorId(id);
-        return ResponseEntity.ok(new ApiResponse<>("Oficio encontrado ✅",oficio.get()));
+    public ResponseEntity<ApiResponse<Oficio>> buscarPorId(@PathVariable Long id) throws OficioNotFoundException {
+        Oficio oficio = oficioService.buscarPorId(id)
+                .orElseThrow(() -> new OficioNotFoundException("Oficio no encontrado."));
+        return ResponseEntity.ok(new ApiResponse<>("Oficio encontrado ✅", oficio));
     }
 
     @PostMapping("/agregar")
@@ -67,7 +68,7 @@ public class OficioController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> borrarOficioPorId(@PathVariable Long id) throws OficioNotFoundException {
        oficioService.borrarOficioPorId(id);
-       return ResponseEntity.ok(new ApiResponse<>("Oficio eliminado exitosamente ✅","Ingrese a la lista de oficios para verificar la eliminacion del registro"));
+       return ResponseEntity.ok(new ApiResponse<>("Oficio eliminado exitosamente ✅","Ingrese a la lista de oficios para verificar la eliminación del registro"));
     }
 
     @GetMapping("/nombre/{oficio}")

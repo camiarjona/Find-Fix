@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -68,6 +69,8 @@ public class DataInitializer implements CommandLineRunner {
             admin.setApellido("Principal");
             admin.setPassword(passwordEncoder.encode("admin123")); // Cambialo si querés
             admin.setRoles(Set.of(rolAdmin));
+            admin.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+            admin.setTelefono("No especificado");
 
             usuarioRepository.save(admin);
             log.info("✔Usuario ADMIN creado correctamente con email: admin@admin.com y contraseña: admin123");

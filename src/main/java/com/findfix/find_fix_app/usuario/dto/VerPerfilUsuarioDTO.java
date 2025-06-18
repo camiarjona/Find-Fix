@@ -19,7 +19,7 @@ public class VerPerfilUsuarioDTO {
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
         this.email = usuario.getEmail();
-        this.ciudad = usuario.getCiudad().getNombreAmigable();
+        this.ciudad = usuario.getCiudad() == null ? "No especificada" : usuario.getCiudad().getNombreAmigable();
         this.telefono = usuario.getTelefono();
     }
 }
