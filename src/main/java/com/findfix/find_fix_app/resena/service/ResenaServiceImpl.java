@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Resena crearResena(CrearResenaDTO dto) throws UsuarioNotFoundException, TrabajoAppNotFoundException {
+    public Resena crearResena(CrearResenaDTO dto) throws UsuarioNotFoundException, TrabajoAppNotFoundException, TrabajoAppException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
         TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
@@ -132,5 +131,4 @@ public class ResenaServiceImpl implements ResenaService {
             throw new ResenaException("El trabajo que desea buscar no le pertenece. Corrobore el titulo ingresado.");
         }
     }
-
 }
