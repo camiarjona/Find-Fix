@@ -153,7 +153,8 @@ public class GlobalExceptionHandler {
             EspecialistaExcepcion.class,
             TrabajoAppException.class,
             SolicitudEspecialistaException.class,
-            FavoritoException.class
+            FavoritoException.class,
+            ResenaException.class,
     })
     public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
         ErrorResponse error = ErrorResponse.builder()
