@@ -49,13 +49,6 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ---
 
-## 📌 Estado del Proyecto
-
-- ✅ Backend funcional con endpoints listos.
-- 🛠️ En desarrollo la interfaz visual (frontend).
-
----
-
 ## ⚙️ Configuración del proyecto
 
 Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y permite conexión con bases de datos relacionales como PostgreSQL (por ejemplo con Neon), MySQL, entre otras.
@@ -113,9 +106,16 @@ Cuando se inicia la aplicación, se cargan automáticamente roles, ciudades y ot
 
 ---
 
+## 📌 Estado del Proyecto
+
+- ✅ Backend funcional con endpoints listos.
+- 🛠️ En desarrollo la interfaz visual (frontend).
+
+---
+
 ## ✍️ Autores
 
-**Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
+### **Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
 
 ---
 
