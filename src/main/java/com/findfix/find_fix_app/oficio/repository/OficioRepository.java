@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface OficioRepository extends JpaRepository<Oficio, Long> {
     Optional<Oficio> findByNombre(String name);
     Optional<Oficio> findById(Long id);
+    boolean existsByNombre(String nombre);
 }

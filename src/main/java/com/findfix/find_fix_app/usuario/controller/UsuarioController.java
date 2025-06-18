@@ -32,7 +32,7 @@ public class UsuarioController {
     public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> obtenerUsuarios() {
         List<Usuario> usuarios = usuarioService.obtenerUsuarios();
         return ResponseEntity.ok(new ApiResponse<>(
-                "Lista de usuarios encontrada️☑️",
+                "Lista de usuarios☑️",
                 usuarios.stream().map(MostrarUsuarioDTO::new).toList()));
     }
 
@@ -86,9 +86,9 @@ public class UsuarioController {
 
     @GetMapping("/filtrar")
     @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
-    public ResponseEntity<ApiResponse<Stream<MostrarUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
+    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UserNotFoundException, UserException {
         List<Usuario> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
-        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new)));
+        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new).toList()));
     }
 
 }
