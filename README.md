@@ -30,7 +30,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ## 🧱 Tecnologías Utilizadas
 
-- **Java 17**
+- **Java 21**
 - **Spring Boot**
 - **Spring Security**
 - **JPA / Hibernate**
