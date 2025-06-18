@@ -20,7 +20,7 @@ public class VisualizarTrabajoAppClienteDTO {
 
     public VisualizarTrabajoAppClienteDTO(TrabajoApp  trabajoApp) {
         this.id = trabajoApp.getTrabajoAppId();
-        this.nombreEspecialista = trabajoApp.getEspecialista().getUsuario().getNombre();
+        this.nombreEspecialista = (trabajoApp.getEspecialista() != null ) ? trabajoApp.getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
         this.descripcion = trabajoApp.getDescripcion();
         this.estado = trabajoApp.getEstado();
         this.presupuesto = trabajoApp.getPresupuesto();

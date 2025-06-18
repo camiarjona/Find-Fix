@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,11 +38,13 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para guardar un usuario basico
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void actualizarUsuarioEspecialista(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> ciudadesDisponibles() {
         return CiudadesDisponibles.ciudadesDisponibles();
     }
@@ -52,6 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
         Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
@@ -79,12 +83,14 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para obtener lista completa de usuarios
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
     }
 
     //metodo para registrar un usuario nuevo
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UserException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
@@ -120,6 +126,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para actualizar la contraseña de un usuario
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UserNotFoundException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
@@ -134,6 +141,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para actualizar atributos de un usuario
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UserNotFoundException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
@@ -145,6 +153,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para eliminar un usuario por su email
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarPorEmail(String email) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
@@ -161,6 +170,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para que el admin pueda actualizar los datos de un usuario
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void actualizarUsuarioAdmin(ActualizarUsuarioDTO actualizarUsuarioDTO, String email) throws UserNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("❌Usuario no encontrado❌"));
@@ -170,6 +180,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario){
 
         if (actualizarUsuarioDTO.tieneNombre()) {
@@ -188,6 +199,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // metodo para asignar un rol específico a un usuario (para solicitudes)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void agregarRol(Usuario usuario, String nombreRol) throws RolNotFoundException {
         Rol rol = rolRepository.findByNombre(nombreRol)
                 .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
@@ -198,6 +210,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para eliminar un rol
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarRol(Usuario usuario, String nombreRol) throws RolNotFoundException {
         Rol rol = rolRepository.findByNombre(nombreRol)
                 .orElseThrow(() -> new RolNotFoundException("❌Rol no encontrado❌"));
@@ -208,6 +221,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     //metodo para que un usuario visualice su perfil
     @Override
+    @Transactional(readOnly = true)
     public VerPerfilUsuarioDTO verPerfilUsuario() throws UserNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         return new VerPerfilUsuarioDTO(usuario);
@@ -215,6 +229,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> userOptional = usuarioRepository.findByEmail(username);
         Usuario usuario = userOptional.orElseThrow(() -> new UsernameNotFoundException("❌Usuario no encontrado❌"));
