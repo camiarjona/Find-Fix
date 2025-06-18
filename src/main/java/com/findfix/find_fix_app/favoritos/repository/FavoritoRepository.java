@@ -13,4 +13,6 @@ public interface FavoritoRepository extends JpaRepository<Favorito, Integer> {
     boolean existsByUsuarioAndEspecialista(Usuario usuario, Especialista especialista);
     List<Favorito> findAllByUsuario(Usuario usuario);
     void deleteByUsuarioAndEspecialista(Usuario usuario, Especialista especialista);
+    void deleteByUsuario(Usuario usuario);
+    void deleteByEspecialista(Especialista especialista);
 }

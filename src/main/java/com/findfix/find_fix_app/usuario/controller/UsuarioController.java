@@ -45,15 +45,6 @@ public class UsuarioController {
                 new MostrarRegistroDTO(registro)));
     }
 
-    //metodo para eliminar un usuario por su email
-    @DeleteMapping("/eliminar/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> eliminarUsuarioPorEmail(@PathVariable String email) throws UserNotFoundException{
-        usuarioService.eliminarPorEmail(email);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
-                "Usuario eliminado con éxito✅", "{}"));
-    }
-
     //metodo para que el usuario pueda modificar sus datos
     @PatchMapping("/modificar-datos") //CHEQUEADO
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")

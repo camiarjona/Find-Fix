@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.usuario.service;
 
+import com.findfix.find_fix_app.favoritos.repository.FavoritoRepository;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.repository.SolicitudEspecialistaRepository;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
@@ -20,6 +21,7 @@ public class UsuarioDesvinculacionService {
     private final TrabajoAppRepository trabajoAppRepository;
     private final SolicitudEspecialistaRepository solicitudEspecialistaRepository;
     private final SolicitudTrabajoRepository solicitudTrabajoRepository;
+    private final FavoritoRepository favoritoRepository;
 
     @Transactional
     public void desvincularUsuario(Usuario usuario) {
@@ -37,5 +39,8 @@ public class UsuarioDesvinculacionService {
         List<SolicitudTrabajo> solicitudesTrabajo = solicitudTrabajoRepository.findByUsuario(usuario);
         solicitudesTrabajo.forEach(solicitud -> solicitud.setUsuario(null));
         solicitudTrabajoRepository.saveAll(solicitudesTrabajo);
+
+        //eliminamos los favoritos del usuario
+        favoritoRepository.deleteByUsuario(usuario);
     }
 }

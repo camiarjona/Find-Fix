@@ -47,6 +47,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
+    public boolean tieneRol(Usuario usuario, String rol) {
+        return usuario.getRoles().stream().anyMatch(r -> r.getNombre().equalsIgnoreCase(rol));
+    }
+
+    @Override
     public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
         Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
@@ -147,6 +152,11 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuarioDesvinculacionService.desvincularUsuario(usuario);
 
         usuarioRepository.delete(usuario);
+    }
+
+    @Override
+    public Optional<Usuario> obtenerUsuarioPorEmail(String email){
+        return usuarioRepository.findByEmail(email);
     }
 
     //metodo para que el admin pueda actualizar los datos de un usuario

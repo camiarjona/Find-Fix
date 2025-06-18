@@ -40,7 +40,6 @@ public class TrabajoApp {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_especialista")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Especialista especialista;
 
     @ManyToOne(fetch = FetchType.LAZY)
