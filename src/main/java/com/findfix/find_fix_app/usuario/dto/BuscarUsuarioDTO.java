@@ -8,9 +8,9 @@ public record BuscarUsuarioDTO (
         String rol,
         List<String> roles
 ){
-    public boolean tieneEmail() { return email != null && email.isEmpty(); }
+    public boolean tieneEmail() { return email != null && !email.isEmpty(); }
     public boolean tieneId() { return id != null; }
-    public boolean tieneRol() { return rol != null && rol.isEmpty(); }
+    public boolean tieneRol() { return rol != null && !rol.isEmpty(); }
     public boolean tieneRoles(){ return roles != null && !roles.isEmpty(); }
 
 }

@@ -44,7 +44,7 @@ public class UsuarioSpecifications {
         return (root, query, criteriaBuilder) -> {
             if (id == null) return null;
             //WHERE id =?, muestra el usuario que coincide con el id
-            return criteriaBuilder.equal(root.get("id_usuario"), id);
+            return criteriaBuilder.equal(root.get("id"), id);
         };
     }
 }

@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
+import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.utils.auth.AuthService;
@@ -211,7 +212,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<TrabajoApp> filtrarTrabajosApp(BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
+    public List<TrabajoApp> filtrarTrabajosApp(BuscarTrabajoAppDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         Specification<TrabajoApp> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
