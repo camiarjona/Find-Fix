@@ -3,6 +3,7 @@ package com.findfix.find_fix_app.resena.service;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.resena.dto.CrearResenaDTO;
 import com.findfix.find_fix_app.resena.model.Resena;
@@ -28,11 +29,15 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Resena crearResena(CrearResenaDTO dto) throws UserNotFoundException, TrabajoAppNotFoundException {
+    public Resena crearResena(CrearResenaDTO dto) throws UserNotFoundException, TrabajoAppNotFoundException, TrabajoAppException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
         TrabajoApp trabajo = trabajoService.buscarPorId(dto.getTrabajoId())
                 .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo no encontrado"));
+
+        if(trabajo.getEstado() != EstadosTrabajos.FINALIZADO){
+            throw new TrabajoAppException("\n El trabajo debe estar finalizado para agregar una reseña. ");
+        }
 
         boolean esCliente = trabajo.getUsuario().getUsuarioId().equals(usuario.getUsuarioId());
         boolean esEspecialista = trabajo.getEspecialista().getEspecialistaId().equals(usuario.getUsuarioId());
