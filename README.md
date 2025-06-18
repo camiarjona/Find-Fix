@@ -56,6 +56,61 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ---
 
+## ⚙️ Configuración del proyecto
+
+Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y permite conexión con bases de datos relacionales como PostgreSQL (por ejemplo con Neon), MySQL, entre otras.
+
+✅ Requisitos previos
+
+- Java 17+
+
+- Base de datos relacional (PostgreSQL, MySQL, etc.)
+
+- Maven
+
+- IDE como IntelliJ o Eclipse
+
+
+## 🛠️ Configuración de la base de datos
+
+En el archivo application.properties o application.yml, completá los datos de tu base. A continuación hay un ejemplo con PostgreSQL (Neon):
+
+spring.datasource.url=jdbc:postgresql://tu-host.neon.tech:5432/tu_basededatos
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_contraseña
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+También podés usar MySQL o cualquier base de datos compatible con JPA cambiando el url y el dialect correspondiente.
+
+**¡No te olvides de agregar el driver o la dependencia correspondiente!**
+
+---
+
+## 📦 Precarga de datos
+
+Cuando se inicia la aplicación, se cargan automáticamente roles, ciudades y otros datos base necesarios para que el sistema funcione sin necesidad de ingresar datos manuales.
+
+
+---
+
+## 🚀 Cómo ejecutar
+
+1. Cloná el repositorio.
+
+
+2. Configurá tu archivo application.properties.
+
+
+3. Ejecutá la clase FindFixAppApplication.java.
+
+
+4. Usá Postman (u otra herramienta) para probar las rutas.
+
+---
+
 ## ✍️ Autores
 
 **Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
