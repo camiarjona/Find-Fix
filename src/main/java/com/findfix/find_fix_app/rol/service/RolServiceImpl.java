@@ -47,20 +47,7 @@ public class RolServiceImpl implements RolService {
         Rol encontrado = rolRepository.findByNombre(nombre).orElseThrow(() -> new RolNotFoundException("El rol que desea eliminar no existe."));
         rolRepository.delete(encontrado);
     }
-    ///  modificar un rol ya registrado en el sistema buscandolo por su id
-    @Override
-    public void modificarRol(String nombreNuevo, Long idBuscada) throws RolException,RolNotFoundException {
-        nombreNuevo = nombreNuevo.toUpperCase();
-        Rol encontrado = rolRepository.findById(idBuscada).orElseThrow(() -> new RolNotFoundException("El rol que desea modificar no existe."));
-        encontrado.setNombre(nombreNuevo);
-        Optional<Rol> verificacion = rolRepository.findByNombre(nombreNuevo);
-        if(verificacion.isPresent())
-        {
-            throw new RolException("El nombre ingresado ya pertenece a un rol del sistema.");
-        }
-
-        rolRepository.save(encontrado);
-    }
+    
    ///  filtro de roles por nombre
     @Override
     public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
