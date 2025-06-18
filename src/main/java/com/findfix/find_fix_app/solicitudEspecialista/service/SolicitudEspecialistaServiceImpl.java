@@ -23,7 +23,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaService{
+public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaService {
     private final AuthService authService;
     private final SolicitudEspecialistaRepository solicitudEspecialistaRepository;
     private final EspecialistaService especialistaService;
@@ -33,7 +33,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para que el usuario mande una solicitud para ser especialista
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
+    public void mandarSolicitud(MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = new SolicitudEspecialista();
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
@@ -59,7 +59,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para verificar si un usuario puede hacer una solicitud nueva para ser especialista
     private void verificarUsuario(Usuario usuario) throws SolicitudEspecialistaException {
 
-        if(usuario.getRoles().stream().anyMatch(rol -> rol.getNombre().equals("ESPECIALISTA"))){
+        if (usuario.getRoles().stream().anyMatch(rol -> rol.getNombre().equals("ESPECIALISTA"))) {
             throw new SolicitudEspecialistaException("⚠️Usted ya se encuentra como especialista en nuestro sistema.");
         }
 
@@ -80,7 +80,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     public List<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista() throws SolicitudEspecialistaNotFoundException {
         List<SolicitudEspecialista> solicitudesEspecialistas = solicitudEspecialistaRepository.findAll();
 
-        if(solicitudesEspecialistas.isEmpty()){
+        if (solicitudesEspecialistas.isEmpty()) {
             throw new SolicitudEspecialistaNotFoundException("⚠️No se encontraron solicitudes al momento.");
         }
 
@@ -100,7 +100,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     @Transactional(readOnly = true)
     public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
-        List<SolicitudEspecialista>solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
+        List<SolicitudEspecialista> solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
         if (solicitudEspecialistas.isEmpty()) {
             throw new SolicitudEspecialistaException("⚠️No se encontraron solicitudes para el usuario con email: " + usuario.getEmail());
         }
@@ -116,27 +116,27 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     /// Metodo para actualizar el estado y la respuesta de una solicitud, por parte del admin
     private void actualizarDatosSolicitud(SolicitudEspecialista solicitudEspecialista, ActualizarSolicitudEspecialistaDTO dto) throws RolNotFoundException, SolicitudEspecialistaException {
-        EstadosSolicitudes estadosSolicitudes = EstadosSolicitudes.valueOf(dto.estado().trim().toUpperCase() );
-        if(solicitudEspecialista.getEstado().name().equals("PENDIENTE")) {
 
-            if (estadosSolicitudes.name().equals("ACEPTADO")) {
-                solicitudEspecialista.setEstado(EstadosSolicitudes.ACEPTADO);
-                String respuesta = dto.respuesta() + " ‼️Atención: para aparecer en las búsquedas de clientes, debe completar su perfil de especialista (ciudad, teléfono y al menos un oficio).";
+        if (!solicitudEspecialista.getEstado().equals(EstadosSolicitudes.PENDIENTE)) {
+            throw new SolicitudEspecialistaException("⚠️Solo puede modificar una solicitud en estado pendiente.");
+
+        }
+
+        if(dto.tieneEstado()) {
+            EstadosSolicitudes nuevoEstado = EstadosSolicitudes.desdeString(dto.estado());
+            solicitudEspecialista.setEstado(nuevoEstado);
+            solicitudEspecialista.setRespuesta(dto.respuesta());
+
+            if(nuevoEstado == EstadosSolicitudes.ACEPTADO) {
+                String respuesta = dto.respuesta() + " ‼️Atención: para aparecer en las búsquedas de clientes," +
+                        " debe completar su perfil de especialista (ciudad, teléfono y al menos un oficio).";
+
                 solicitudEspecialista.setRespuesta(respuesta);
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
                 especialistaService.guardar(solicitudEspecialista.getUsuario());
-
             }
-
-            if (estadosSolicitudes.name().equals("RECHAZADO")) {
-                solicitudEspecialista.setEstado(EstadosSolicitudes.RECHAZADO);
-                solicitudEspecialista.setRespuesta(dto.respuesta());
-            }
-
-            solicitudEspecialistaRepository.save(solicitudEspecialista);
-        }else{
-            throw new SolicitudEspecialistaException("⚠️Solo puede modificar una solicitud en estado pendiente.");
         }
+        solicitudEspecialistaRepository.save(solicitudEspecialista);
     }
 
     /// Metodo que actualiza llamando al de actualizar los datos
@@ -145,7 +145,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     @Transactional(rollbackFor = Exception.class)
     public SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, RolNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = solicitudEspecialistaRepository.findById(id)
-                .orElseThrow(()-> new SolicitudEspecialistaNotFoundException("⚠️Solicitud no encontrada"));
+                .orElseThrow(() -> new SolicitudEspecialistaNotFoundException("⚠️Solicitud no encontrada"));
 
         solicitudEspecialista.setFechaResolucion(LocalDate.now());
         actualizarDatosSolicitud(solicitudEspecialista, dto);
@@ -159,14 +159,14 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     public void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException {
         String email = authService.obtenerEmailUsuarioAutenticado();
 
-        if(solicitudEspecialistaRepository.findById(id).isEmpty()){
+        if (solicitudEspecialistaRepository.findById(id).isEmpty()) {
             throw new SolicitudEspecialistaNotFoundException("⚠️Solicitud no encontrada");
         }
-        if(!email.equals(solicitudEspecialistaRepository.findById(id).get().getUsuario().getEmail())){
+        if (!email.equals(solicitudEspecialistaRepository.findById(id).get().getUsuario().getEmail())) {
             throw new SolicitudEspecialistaException("⚠️Solicitud no encontrada para el usuario: " + email);
         }
 
-        if(!solicitudEspecialistaRepository.findById(id).get().getEstado().name().equals("PENDIENTE")){
+        if (!solicitudEspecialistaRepository.findById(id).get().getEstado().name().equals("PENDIENTE")) {
             throw new SolicitudEspecialistaException("⚠️Solicitud no se puede eliminar porque ya ha sido aceptada o rechazada.");
         }
 
@@ -196,7 +196,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
         // Filtro por fecha exacta
         if (filtro.tieneFecha()) {
-           spec.and(SolicitudEspecialistaSpecifications.fechaEntre(filtro.fechaDesde(), filtro.fechaHasta()));
+            spec.and(SolicitudEspecialistaSpecifications.fechaEntre(filtro.fechaDesde(), filtro.fechaHasta()));
         }
 
         // Filtro por email de usuario
