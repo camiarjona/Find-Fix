@@ -59,22 +59,22 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     public List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UserException {
         Specification<Usuario> spec = (root, query, cb) -> cb.conjunction();
 
-        if(filtro.tieneRol()) {
+        if (filtro.tieneRol()) {
             spec = spec.and(UsuarioSpecifications.tieneRol(filtro.rol()));
         }
-        if(filtro.tieneRoles()) {
+        if (filtro.tieneRoles()) {
             spec = spec.and(UsuarioSpecifications.tieneAlgunRol(filtro.roles()));
         }
-        if(filtro.tieneEmail()) {
+        if (filtro.tieneEmail()) {
             spec = spec.and(UsuarioSpecifications.tieneEmail(filtro.email()));
         }
-        if(filtro.tieneId()){
+        if (filtro.tieneId()) {
             spec = spec.and(UsuarioSpecifications.tieneId(filtro.id()));
         }
 
         List<Usuario> usuariosEncontrados = usuarioRepository.findAll(spec);
 
-        if(usuariosEncontrados.isEmpty()){
+        if (usuariosEncontrados.isEmpty()) {
             throw new UserException("\uD83D\uDE13No hay coincidencias con su búsqueda\uD83D\uDE13");
         }
 
@@ -108,18 +108,12 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
         Rol rol;
 
-        if (obtenerUsuarios().isEmpty()) {
-            //si la lista esta vacia, al primer usuario creado se le asigna rol de admin
-            rol = rolRepository.findByNombre("ADMIN")
-                    .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
-            usuario.getRoles().add(rol);
-        } else {
-            //Se registra con rol cliente por default
-            rol = rolRepository.findByNombre("CLIENTE")
-                    .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
+        //Se registra con rol cliente por default
+        rol = rolRepository.findByNombre("CLIENTE")
+                .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
 
-            usuario.getRoles().add(rol);
-        }
+        usuario.getRoles().add(rol);
+
 
         usuarioRepository.save(usuario);
     }
@@ -164,7 +158,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
-    public Optional<Usuario> obtenerUsuarioPorEmail(String email){
+    public Optional<Usuario> obtenerUsuarioPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
@@ -181,7 +175,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario){
+    public void actualizarDatosAModificar(ActualizarUsuarioDTO actualizarUsuarioDTO, Usuario usuario) {
 
         if (actualizarUsuarioDTO.tieneNombre()) {
             usuario.setNombre(actualizarUsuarioDTO.nombre());
