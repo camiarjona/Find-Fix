@@ -60,7 +60,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y permite conexión con bases de datos relacionales como PostgreSQL (por ejemplo con Neon), MySQL, entre otras.
 
-✅ Requisitos previos
+### ✅ Requisitos previos
 
 - Java 17+
 
@@ -75,6 +75,7 @@ Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y pe
 
 En el archivo application.properties o application.yml, completá los datos de tu base. A continuación hay un ejemplo con PostgreSQL (Neon):
 
+```properties
 spring.datasource.url=jdbc:postgresql://tu-host.neon.tech:5432/tu_basededatos
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_contraseña
@@ -82,6 +83,7 @@ spring.datasource.password=tu_contraseña
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
 
 También podés usar MySQL o cualquier base de datos compatible con JPA cambiando el url y el dialect correspondiente.
 
