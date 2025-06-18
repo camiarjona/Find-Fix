@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.oficio.controller;
 
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
+import com.findfix.find_fix_app.utils.exception.exceptions.OficioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.OficioNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.service.OficioService;
@@ -33,6 +34,13 @@ public class OficioController {
         return ResponseEntity.ok(new ApiResponse<>("Lista de oficios encontrada ✅",oficios));
     }
 
+    @GetMapping("/disponibles")
+    @PreAuthorize("hasRole('ESPECIALISTA')")
+    public ResponseEntity<ApiResponse<List<String>>> oficiosDisponibles() {
+        List<Oficio> disponibles = oficioService.buscarTodos();
+        return ResponseEntity.ok(new ApiResponse<>("Oficios disponibles",  disponibles.stream().map(Oficio::getNombre).toList()));
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Oficio>> buscarPorId(@PathVariable Long id) {
@@ -42,7 +50,7 @@ public class OficioController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> crearOficio(@Valid @RequestBody Oficio oficio) {
+    public ResponseEntity<ApiResponse<String>> crearOficio(@Valid @RequestBody Oficio oficio) throws OficioException {
         Oficio guardado = oficioService.crearOficio(oficio);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Oficio registrado exitosamente ✅","Ingrese a la lista de oficios para verificar su registro")); // 201 Created
     }

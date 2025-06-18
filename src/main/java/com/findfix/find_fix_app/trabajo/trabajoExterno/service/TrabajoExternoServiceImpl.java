@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -108,7 +109,10 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
             trabajo.setNombreCliente(dto.nombreCliente());
         }
         if (dto.tieneTitulo()) {
-            trabajo.setTitulo(dto.titulo());
+            Optional<TrabajoExterno> existeTitulo = trabajoExternoRepository.findByTitulo(dto.titulo());
+            if(existeTitulo.isEmpty()){
+                trabajo.setTitulo(dto.titulo());
+            }
         }
 
         trabajoExternoRepository.save(trabajo);

@@ -1,10 +1,10 @@
 package com.findfix.find_fix_app.oficio.service;
 
+import com.findfix.find_fix_app.utils.exception.exceptions.OficioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.OficioNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,11 @@ public class OficioServiceImpl implements OficioService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Oficio crearOficio(Oficio oficio) {
+    public Oficio crearOficio(Oficio oficio) throws OficioException {
+
+    if(oficioRepository.existsByNombreIgnoreCase(oficio.getNombre())){
+        throw new OficioException("Ya existe un oficio con ese nombre");
+    }
         return oficioRepository.save(oficio);
     }
 
@@ -57,7 +61,7 @@ public class OficioServiceImpl implements OficioService {
     @Transactional(rollbackFor = Exception.class)
     public Oficio filtrarPorNombre(String nombreBuscado) throws OficioNotFoundException {
         Optional<Oficio> encontrado = oficioRepository.findByNombre(nombreBuscado);
-        if(!encontrado.isPresent())
+        if(encontrado.isEmpty())
         {
             throw new OficioNotFoundException("El oficio que desea buscar no esta registrado en el sistema :(");
         }else
@@ -65,4 +69,5 @@ public class OficioServiceImpl implements OficioService {
             return encontrado.get();
         }
     }
+
 }

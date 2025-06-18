@@ -2,7 +2,6 @@ package com.findfix.find_fix_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,8 +29,11 @@ public class SecurityConfig {
 
                                 .requestMatchers("/usuario/**").hasRole("ADMIN")
 
+                                //OFICIOS CLIENTE
+                                .requestMatchers("/oficios/disponibles").hasRole("CLIENTE")
+
                                 // DELETE | OFICIOS | ROLES
-                                .requestMatchers("/admin/**", "/oficios/**", "/roles/**").hasRole("ADMIN") // todo admin
+                                .requestMatchers("/admin/**", "/oficios/**", "/roles/**").hasRole("ADMIN") //todo admin
 
                                 //TRABAJOS EXTERNOS (para especialistas)
                                 .requestMatchers("/trabajos-externos/**").hasRole("ESPECIALISTA")
@@ -81,7 +83,6 @@ public class SecurityConfig {
                                         "/solicitud-especialista/actualizar/{id}")
                                 .hasRole("ADMIN")
 
-                                .requestMatchers(HttpMethod.PATCH, "/solicitud-especialista/{id}").hasRole("ADMIN")
                                 //ESPECIALISTAS
                                 .requestMatchers("/especialistas/disponibles").hasAnyRole("CLIENTE", "ESPECIALISTA")
 

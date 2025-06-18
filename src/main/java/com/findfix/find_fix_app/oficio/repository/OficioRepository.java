@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 public interface OficioRepository extends JpaRepository<Oficio, Long> {
     Optional<Oficio> findByNombre(String name);
-    Optional<Oficio> findById(Long id);
-    boolean existsByNombre(String nombre);
+    boolean existsByNombreIgnoreCase(String nombre);
 }
