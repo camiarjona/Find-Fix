@@ -17,7 +17,7 @@ public class DeleteService {
     private final UsuarioService usuarioService;
     private final EspecialistaService especialistaService;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarCuentaPorEmail(String email) throws UserNotFoundException, EspecialistaNotFoundException, RolNotFoundException {
         Usuario usuario = usuarioService.obtenerUsuarioPorEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado."));
