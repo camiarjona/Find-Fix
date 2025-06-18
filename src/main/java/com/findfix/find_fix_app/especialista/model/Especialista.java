@@ -48,7 +48,7 @@ public class Especialista {
     @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
     private List<TrabajoApp> trabajos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrabajoExterno> trabajoExternos = new ArrayList<>();
 
     @Transient
