@@ -1,7 +1,6 @@
 package com.findfix.find_fix_app.especialista.dto;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
-import com.findfix.find_fix_app.oficio.model.Oficio;
 import lombok.Data;
 
 import java.util.Set;
@@ -17,9 +16,9 @@ public class EspecialistaListadoDTO{
     private String email;
 
     public EspecialistaListadoDTO(Especialista especialista) {
-        this.nombre = validarYObtenerString(especialista.getUsuario().getNombre());
-        this.apellido = validarYObtenerString(especialista.getUsuario().getApellido());
-        this.email = validarYObtenerString(especialista.getUsuario().getEmail());
+        this.nombre = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getNombre() : "Usuario desvinculado");
+        this.apellido = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getApellido() : "Usuario desvinculado");
+        this.email = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getEmail() : "Usuario desvinculado");
 
         // Manejo de ciudad nula
         this.ciudad = (especialista.getUsuario().getCiudad() != null)

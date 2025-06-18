@@ -14,6 +14,6 @@ public class MostrarResenaClienteDTO {
         this.resenaId = resena.getResenaId();
         this.puntuacion = resena.getPuntuacion();
         this.comentario = resena.getComentario();
-        this.nombreEspecialista = resena.getTrabajoApp().getEspecialista().getUsuario().getNombre();
+        this.nombreEspecialista = resena.getTrabajoApp().getEspecialista() != null ? resena.getTrabajoApp().getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
     }
 }

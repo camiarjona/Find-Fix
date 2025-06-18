@@ -17,6 +17,7 @@ import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -32,11 +33,12 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para guardar un usuario como especialista
     @Override
-    public Especialista guardar(Usuario usuario){
+    @Transactional(rollbackFor = Exception.class)
+    public void guardar(Usuario usuario){
         Especialista especialista = new Especialista();
         especialista.setUsuario(usuario);
 
-        return especialistaRepository.save(especialista);
+        especialistaRepository.save(especialista);
     }
 
 
@@ -80,6 +82,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para que el admin actualice los atributos de un especialista
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
                 .orElseThrow(() -> new EspecialistaNotFoundException("⚠️Especialista no encontrado"));
@@ -92,6 +95,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para que el especialista actualice sus atributos
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, UserNotFoundException, EspecialistaExcepcion {
         Especialista especialista = obtenerEspecialistaAutenticado();
 
@@ -103,6 +107,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para mostrar todos los especialistas para el Admin
     @Override
+    @Transactional(readOnly = true)
     public List<Especialista> obtenerEspecialistas() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaRepository.findAll();
         if (especialistas.isEmpty()) {
@@ -113,6 +118,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para mostrar todos los especialistas para el cliente y especialista
     @Override
+    @Transactional(readOnly = true)
     public List<Especialista> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaRepository.findAll(EspecialistaSpecifications.tieneDatosCompletos());
         if (especialistas.isEmpty()) {
@@ -124,6 +130,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     ///Metodo para que el admin pueda eliminar un especialista por email
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarPorEmail(String email) throws EspecialistaNotFoundException, RolNotFoundException {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email).orElseThrow(()-> new EspecialistaNotFoundException("⚠️Especialista no encontrado"));
 
@@ -135,6 +142,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para buscar un especialista por Email
     @Override
+    @Transactional(readOnly = true)
     public Optional<Especialista> buscarPorEmail(String email) {
         return especialistaRepository.findByUsuarioEmail(email);
     }
@@ -187,6 +195,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para actualizar (agregar o eliminar) oficios de un especialista por el Admin
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion {
         Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
                 .orElseThrow(() -> new EspecialistaNotFoundException("⚠️Especialista no encontrado"));
@@ -199,6 +208,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para actualizar (agregar o eliminar) oficios
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Especialista actualizarOficioDeEspecialista(ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion, UserNotFoundException {
         Especialista especialista = obtenerEspecialistaAutenticado();
 
@@ -210,6 +220,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
 /// Metodo para ver mi perfil de especialista
     @Override
+    @Transactional(readOnly = true)
     public VerPerfilEspecialistaDTO verPerfilEspecialista() throws UserNotFoundException, EspecialistaNotFoundException {
         Especialista especialista = obtenerEspecialistaAutenticado();
         return new VerPerfilEspecialistaDTO(especialista);
@@ -217,6 +228,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
 /// Metodo para filtrar especialistas
     @Override
+    @Transactional(readOnly = true)
     public List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion {
         List<Specification<Especialista>> specifications = new ArrayList<>();
 
@@ -224,12 +236,10 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         if (filtro.tieneId()) {
             specifications.add(EspecialistaSpecifications.tieneId(filtro.id()));
         }
-
         // 2. Filtro por Oficio
         if (filtro.tieneOficio()) {
             specifications.add(EspecialistaSpecifications.tieneOficio(filtro.oficio().toUpperCase()));
         }
-
         // 3. Filtro por Ciudad
         if (filtro.tieneCiudad()) {
             try {
@@ -240,7 +250,6 @@ public class EspecialistaServiceImpl implements EspecialistaService {
                         CiudadesDisponibles.ciudadesDisponibles());
             }
         }
-
         // 4. Filtro por DNI
         if (filtro.tieneDni()) {
             if (filtro.dni().toString().length() == 8) {
@@ -248,7 +257,6 @@ public class EspecialistaServiceImpl implements EspecialistaService {
             }
             specifications.add(EspecialistaSpecifications.tieneDni(filtro.dni()));
         }
-
         // 5. Filtro por Email
         if (filtro.tieneEmail()) {
             if (!filtro.email().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
@@ -256,7 +264,6 @@ public class EspecialistaServiceImpl implements EspecialistaService {
             }
             specifications.add(EspecialistaSpecifications.tieneEmail(filtro.email()));
         }
-
         // 6. Filtro por Calificación Mínima
         if (filtro.tieneCalificacionMinima()) {
             if (filtro.minCalificacion() < 0 || filtro.minCalificacion() > 5) {
@@ -274,7 +281,6 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         if (especialistas.isEmpty()) {
             throw new EspecialistaExcepcion("⚠️No se encontraron especialistas con los criterios especificados");
         }
-
 
         return especialistas.stream()
                 .map(EspecialistaFichaCompletaDTO::new)
