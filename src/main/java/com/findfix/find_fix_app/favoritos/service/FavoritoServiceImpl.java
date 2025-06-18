@@ -23,6 +23,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     private final AuthService authService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void agregarAFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException, FavoritoException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -35,7 +36,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarDeFavoritos(String emailEspecialista) throws UserNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
@@ -46,6 +47,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Especialista> obtenerFavoritos() throws UserNotFoundException, FavoritoException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 

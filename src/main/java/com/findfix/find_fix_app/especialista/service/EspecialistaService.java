@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public interface EspecialistaService {
 
-    Especialista guardar(Usuario usuario);
+    void guardar(Usuario usuario);
     Especialista obtenerEspecialistaAutenticado() throws UserNotFoundException, EspecialistaNotFoundException;
     Especialista actualizarEspecialistaAdmin(String email, ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion;
     Especialista actualizarEspecialista(ActualizarEspecialistaDTO dto) throws EspecialistaNotFoundException, UserNotFoundException, EspecialistaExcepcion;

@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class RolServiceImpl implements RolService {
 
  ///  guardar nuevo rol  en el sistema
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void guardarRol(Rol rol)  throws RolException{
         String nombre = rol.getNombre();
         rol.setNombre(nombre.toUpperCase());
@@ -30,6 +32,7 @@ public class RolServiceImpl implements RolService {
     }
   ///  mostrar lista de roles registrados en el sistema
     @Override
+    @Transactional(readOnly = true)
     public List<Rol> mostrarRoles() throws RolException{
         List<Rol> roles = rolRepository.findAll();
         if(roles.isEmpty())
@@ -42,6 +45,7 @@ public class RolServiceImpl implements RolService {
     }
    ///  eliminar un rol registrado del sistema
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void eliminarRol(String nombre) throws RolNotFoundException {
         nombre = nombre.toUpperCase();
         Rol encontrado = rolRepository.findByNombre(nombre).orElseThrow(() -> new RolNotFoundException("El rol que desea eliminar no existe."));
@@ -50,6 +54,7 @@ public class RolServiceImpl implements RolService {
     
    ///  filtro de roles por nombre
     @Override
+    @Transactional(readOnly = true)
     public Rol filtrarPorNombre(String nombreBuscado) throws RolNotFoundException {
         Optional<Rol> encontrado = rolRepository.findByNombre(nombreBuscado);
         if(encontrado.isEmpty())

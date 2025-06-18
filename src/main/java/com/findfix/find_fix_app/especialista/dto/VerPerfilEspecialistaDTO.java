@@ -18,16 +18,16 @@ public class VerPerfilEspecialistaDTO {
 
     public VerPerfilEspecialistaDTO(Especialista especialista) {
 
-        this.nombre = validarYObtenerString(especialista.getUsuario().getNombre());
-        this.apellido = validarYObtenerString(especialista.getUsuario().getApellido());
-        this.email = validarYObtenerString(especialista.getUsuario().getEmail());
+        this.nombre = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getNombre() : "Usuario desvinculado");
+        this.apellido = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getApellido() : "Usuario desvinculado");
+        this.email = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getEmail() : "Usuario desvinculado");
 
         // Verificar ciudad
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
                 ? especialista.getUsuario().getCiudad().getNombreAmigable()
                 : "No especificado";
 
-        this.telefono = validarYObtenerString(especialista.getUsuario().getTelefono());
+        this.telefono = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getTelefono() : "Usuario desvinculado");
         this.descripcion = validarYObtenerString(especialista.getDescripcion());
 
         // Verificar oficios
@@ -39,7 +39,7 @@ public class VerPerfilEspecialistaDTO {
         // Verificar DNI
         this.dni = (especialista.getDni() != null)
                 ? especialista.getDni()
-                : 00000000;
+                : 0;
     }
 
      ///Valida strings y retorna "No especificado" si es null o vacío
@@ -53,14 +53,12 @@ public class VerPerfilEspecialistaDTO {
             return "No especificado";
         }
 
-        String oficiosStr = especialista.getOficios().stream()
+        return especialista.getOficios().stream()
                 .filter(oficio -> oficio != null && oficio.getNombre() != null)
                 .map(oficio -> oficio.getNombre().trim())
-                .filter(nombre -> !nombre.isEmpty())
+                .filter(nombre1 -> !nombre1.isEmpty())
                 .reduce((a, b) -> a + ", " + b)
                 .orElse("No especificado");
-
-        return oficiosStr;
     }
 
     /// Promedio de calificaciones por especialista

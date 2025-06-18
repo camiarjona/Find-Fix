@@ -82,7 +82,7 @@ public class ResenaServiceImpl implements ResenaService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void borrarResena(Long id) throws ResenaNotFoundException {
         Resena resena = buscarPorId(id)
                 .orElseThrow(() -> new ResenaNotFoundException("No se encontró una reseña con el id: " + id));
