@@ -91,7 +91,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void modificarTrabajoExterno(String titulo, ModificarTrabajoExternoDTO dto) throws TrabajoExternoNotFoundException, UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
-        TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
+        TrabajoExterno trabajo = trabajoExternoRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new TrabajoExternoNotFoundException("Trabajo externo no encontrado."));
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
@@ -122,7 +122,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     @Transactional(rollbackFor = Exception.class)
     public void actualizarEstado(String titulo, String estadoNuevo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppNotFoundException, TrabajoExternoException {
 
-        TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
+        TrabajoExterno trabajo = trabajoExternoRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new TrabajoAppNotFoundException("Trabajo externo no encontrado."));
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
@@ -151,7 +151,7 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void borrarTrabajoExternoPorTitulo(String titulo) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
-        TrabajoExterno trabajo = trabajoExternoRepository.findByTitulo(titulo)
+        TrabajoExterno trabajo = trabajoExternoRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new EntityNotFoundException("Trabajo externo no encontrado."));
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();

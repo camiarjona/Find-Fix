@@ -16,7 +16,7 @@ Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus
 
 ---
 
-## 🚀 Funcionalidades Principales
+## ⚔️ Funcionalidades Principales
 
 - Registro e inicio de sesión de usuarios.
 - Solicitud para convertirse en especialista.
