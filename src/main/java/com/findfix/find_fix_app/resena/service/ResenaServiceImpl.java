@@ -114,6 +114,12 @@ public class ResenaServiceImpl implements ResenaService {
 
         validarCliente(resena, usuario);
 
+        TrabajoApp trabajo = resena.getTrabajoApp();
+        if (trabajo != null) {
+            trabajo.setResena(null);
+            trabajoService.guardarTrabajoApp(trabajo); // opcional pero recomendable
+        }
+
         repository.delete(resena);
     }
 

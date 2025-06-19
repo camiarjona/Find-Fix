@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public interface TrabajoAppService {
     void registrarDesdeSolicitud (SolicitudTrabajo solicitudTrabajo, Especialista especialista);
+
+    @Transactional(rollbackFor = Exception.class)
+    void guardarTrabajoApp(TrabajoApp trabajoApp);
+
     List<TrabajoApp> obtenerTrabajosClientes() throws UsuarioNotFoundException, TrabajoAppException;
     List<TrabajoApp> obtenerTrabajosEspecialista() throws UsuarioNotFoundException, TrabajoAppException, EspecialistaNotFoundException;
     Optional<TrabajoApp> buscarPorTitulo(String tituloBuscado);

@@ -2,7 +2,6 @@ package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
-import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.utils.auth.AuthService;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
@@ -44,6 +43,12 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
         trabajoApp = trabajoAppRepository.save(trabajoApp);
         trabajoApp.setTitulo("NuevoTrabajo" + trabajoApp.getTrabajoAppId());
 
+        trabajoAppRepository.save(trabajoApp);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void guardarTrabajoApp(TrabajoApp trabajoApp) {
         trabajoAppRepository.save(trabajoApp);
     }
 
@@ -91,7 +96,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
-        TrabajoApp trabajoApp = trabajoAppRepository.findByTitulo(titulo)
+        TrabajoApp trabajoApp = trabajoAppRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema."));
 
         //  si todos los datos del dto estan vacio o son null significa que no se mandaron datos para modificar
@@ -127,7 +132,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         //buscamos el trabajo solicitado
-        TrabajoApp trabajoApp = trabajoAppRepository.findByTitulo(titulo)
+        TrabajoApp trabajoApp = trabajoAppRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new TrabajoAppNotFoundException("El trabajo que desea modificar no esta registrado en el sistema."));
 
         //validamos el especialista
