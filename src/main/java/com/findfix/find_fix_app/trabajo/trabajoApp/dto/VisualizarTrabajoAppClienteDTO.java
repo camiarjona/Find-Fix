@@ -23,7 +23,7 @@ public class VisualizarTrabajoAppClienteDTO {
         this.nombreEspecialista = (trabajoApp.getEspecialista() != null ) ? trabajoApp.getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
         this.descripcion = trabajoApp.getDescripcion();
         this.estado = trabajoApp.getEstado();
-        this.presupuesto = trabajoApp.getPresupuesto();
+        this.presupuesto = trabajoApp.getPresupuesto() == null ? 0.0 : trabajoApp.getPresupuesto();
         this.fechaInicio = (trabajoApp.getFechaInicio() == null) ? "No se inició el trabajo aún" :  trabajoApp.getFechaInicio().format(formatoAmigable);
         this.fechaFin = (trabajoApp.getFechaFin() == null) ? "No se finalizó el trabajo aún" : trabajoApp.getFechaFin().format(formatoAmigable);
     }

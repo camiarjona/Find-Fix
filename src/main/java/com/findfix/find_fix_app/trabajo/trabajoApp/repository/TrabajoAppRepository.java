@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface TrabajoAppRepository extends JpaRepository<TrabajoApp,Long>, JpaSpecificationExecutor<TrabajoApp> {
     Optional<TrabajoApp> findByTitulo(String titulo);
+    Optional<TrabajoApp> findByTituloIgnoreCase(String titulo);
     List<TrabajoApp> findByEspecialista(Especialista especialista);
     List<TrabajoApp> findByUsuario(Usuario usuario);
 
