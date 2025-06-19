@@ -18,7 +18,7 @@ public class TrabajoExternoSpecifications {
     public static Specification<TrabajoExterno>tituloEs(String titulo) {
         return (root, query, criteriaBuilder) -> {
             if (titulo == null) return null;
-            return criteriaBuilder.equal(root.get("titulo"), titulo);
+            return criteriaBuilder.equal(criteriaBuilder.lower(root.get("titulo")), titulo.toLowerCase());
         };
     }
 

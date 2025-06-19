@@ -4,6 +4,7 @@ package com.findfix.find_fix_app.especialista.Specifications;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 public class EspecialistaSpecifications {
@@ -39,21 +40,25 @@ public class EspecialistaSpecifications {
 
     public static Specification<Especialista> tieneDatosCompletos() {
         return (root, query, criteriaBuilder) -> {
-            // Join con oficios
-            Join<Object, Object> oficios = root.join("oficios", JoinType.INNER);
+            // Join inner con oficios (filtra especialistas que tienen al menos un oficio)
+            root.join("oficios", JoinType.INNER);
 
-            // Evita duplicados si un especialista tiene varios oficios
-            assert query != null;
+            // Evitar duplicados por múltiples oficios
             query.distinct(true);
 
-            return criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(root.get("usuario").get("telefono")),
-                    criteriaBuilder.notEqual(root.get("usuario").get("telefono"), ""),
-                    criteriaBuilder.isNotNull(root.get("usuario").get("ciudad"))
+            // Predicados para validar que telefono no sea nulo ni vacío ni solo espacios
+            Predicate telefonoNoNulo = criteriaBuilder.isNotNull(root.get("usuario").get("telefono"));
+            Predicate telefonoNoVacio = criteriaBuilder.notEqual(
+                    criteriaBuilder.trim(root.get("usuario").get("telefono")),
+                    ""
             );
+
+            // Predicado para que ciudad no sea nulo
+            Predicate ciudadNoNula = criteriaBuilder.isNotNull(root.get("usuario").get("ciudad"));
+
+            // Combinar todos los predicados con AND
+            return criteriaBuilder.and(telefonoNoNulo, telefonoNoVacio, ciudadNoNula);
         };
     }
-
-
 }
 

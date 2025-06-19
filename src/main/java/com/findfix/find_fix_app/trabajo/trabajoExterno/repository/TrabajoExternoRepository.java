@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface TrabajoExternoRepository extends JpaRepository<TrabajoExterno,Long>, JpaSpecificationExecutor<TrabajoExterno> {
     List<TrabajoExterno> findByEspecialista(Especialista especialistaId);
     Optional<TrabajoExterno> findByTitulo(String titulo);
+    Optional<TrabajoExterno> findByTituloIgnoreCase(String titulo);
 }
