@@ -21,7 +21,7 @@ public record ModificarTrabajoExternoDTO (
         @Positive(message = "El presupuesto no puede ser cero ni negativo.")
         Double presupuesto,
         @Pattern(
-                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
+                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+)*$",
                 message = "El titulo no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
         @Size(min = 2, max = 20)
