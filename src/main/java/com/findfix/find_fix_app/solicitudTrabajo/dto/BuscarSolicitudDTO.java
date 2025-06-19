@@ -10,4 +10,5 @@ public record BuscarSolicitudDTO(
 ) {
     public boolean tieneFecha() { return desde != null || hasta != null; }
     public boolean tieneEstado() { return estado != null && !estado.isEmpty(); }
+    public boolean tieneEmail() { return emailEspecialista != null && !emailEspecialista.isEmpty(); }
 }

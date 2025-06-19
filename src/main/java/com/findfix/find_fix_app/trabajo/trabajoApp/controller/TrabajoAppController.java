@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.controller;
 
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
+import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.VisualizarTrabajoAppClienteDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.VisualizarTrabajoAppEspecialistaDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
@@ -72,7 +73,7 @@ public class TrabajoAppController {
 
     @GetMapping("/especialista/filtrar")
     @PreAuthorize("hasRole('ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<VisualizarTrabajoAppEspecialistaDTO>>> filtrarMisTrabajos(@RequestBody BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
+    public ResponseEntity<ApiResponse<List<VisualizarTrabajoAppEspecialistaDTO>>> filtrarMisTrabajos(@RequestBody BuscarTrabajoAppDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
         List<TrabajoApp> trabajos = trabajoAppService.filtrarTrabajosApp(filtro);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 "Coincidencias⬇️",

@@ -43,10 +43,11 @@ public class SolicitudEspecialistaController {
     @GetMapping("/mis-solicitudes")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<List<MostrarSolicitudEspecialistaDTO>>> obtenerMisSolicitudes() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException {
-        List<MostrarSolicitudEspecialistaDTO> solicitudesEspecialista = solicitudEspecialistaService.obtenerMisSolicitudesEspecialista();
+        List<SolicitudEspecialista> solicitudesEspecialista = solicitudEspecialistaService.obtenerMisSolicitudesEspecialista();
 
-
-        return ResponseEntity.ok(new ApiResponse<>("Lista de solicitudes encontrada☑️", solicitudesEspecialista));
+        return ResponseEntity.ok(new ApiResponse<>(
+                "Lista de solicitudes encontrada☑️",
+                solicitudesEspecialista.stream().map(MostrarSolicitudEspecialistaDTO::new).toList()));
     }
 
     @PatchMapping("/actualizar/{id}")

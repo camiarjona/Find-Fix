@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
+import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.dto.BuscarTrabajoExternoDTO;
 import com.findfix.find_fix_app.utils.auth.AuthService;
@@ -100,19 +101,19 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
         validarEspecialista(trabajoApp, especialista);
 
-        if (dto.tieneTitulo()) {
-            Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
-            if (verificacion.isEmpty()) {
-                trabajoApp.setTitulo(dto.titulo());
-            }
-        }
-
         if (dto.tieneDescripcion()) {
             trabajoApp.setDescripcion(dto.descripcion());
         }
 
         if (dto.tienePresupuesto()) {
             trabajoApp.setPresupuesto(dto.presupuesto());
+        }
+
+        if (dto.tieneTitulo()) {
+            Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
+            if (verificacion.isEmpty()) {
+                trabajoApp.setTitulo(dto.titulo());
+            }
         }
 
         return trabajoAppRepository.save(trabajoApp);
@@ -211,7 +212,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<TrabajoApp> filtrarTrabajosApp(BuscarTrabajoExternoDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
+    public List<TrabajoApp> filtrarTrabajosApp(BuscarTrabajoAppDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         Specification<TrabajoApp> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();

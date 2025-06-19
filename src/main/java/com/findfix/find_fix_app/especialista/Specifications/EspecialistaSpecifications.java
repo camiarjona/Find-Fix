@@ -2,6 +2,8 @@ package com.findfix.find_fix_app.especialista.Specifications;
 
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 public class EspecialistaSpecifications {
@@ -36,14 +38,22 @@ public class EspecialistaSpecifications {
         }
 
     public static Specification<Especialista> tieneDatosCompletos() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.and(
-                criteriaBuilder.isNotNull(root.get("usuario").get("telefono")),
-                criteriaBuilder.notEqual(root.get("usuario").get("telefono"), ""),
-                criteriaBuilder.isNotNull(root.get("usuario").get("ciudad")),
-                criteriaBuilder.notEqual(root.get("usuario").get("ciudad"), ""),
-                criteriaBuilder.isNotEmpty(root.get("oficios"))
-        );
+        return (root, query, criteriaBuilder) -> {
+            // Join con oficios
+            Join<Object, Object> oficios = root.join("oficios", JoinType.INNER);
+
+            // Evita duplicados si un especialista tiene varios oficios
+            assert query != null;
+            query.distinct(true);
+
+            return criteriaBuilder.and(
+                    criteriaBuilder.isNotNull(root.get("usuario").get("telefono")),
+                    criteriaBuilder.notEqual(root.get("usuario").get("telefono"), ""),
+                    criteriaBuilder.isNotNull(root.get("usuario").get("ciudad"))
+            );
+        };
     }
+
 
 }
 
