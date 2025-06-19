@@ -42,7 +42,6 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         especialistaRepository.save(especialista);
     }
 
-
     /// Metodo para traerme el especialista segun el usuario registrado
     public Especialista obtenerEspecialistaAutenticado() throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();

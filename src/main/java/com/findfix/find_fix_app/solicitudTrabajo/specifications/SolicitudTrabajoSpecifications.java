@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.solicitudTrabajo.specifications;
 
+import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,10 +14,10 @@ public class SolicitudTrabajoSpecifications {
     public static Specification<SolicitudTrabajo> fechaEntre(LocalDate desde, LocalDate hasta) {
         return (root, query, criteriaBuilder) -> {
             if (desde == null && hasta == null) return null;
-            if(desde != null && hasta != null && !desde.isBefore(hasta)) {
+            if (desde != null && hasta != null && !desde.isBefore(hasta)) {
                 //BETWEEN sql, muestra todas las solicitudes entre desde y hasta
-             return criteriaBuilder.between(root.get("fechaCreacion"), desde, hasta);
-            } else if(desde != null) {
+                return criteriaBuilder.between(root.get("fechaCreacion"), desde, hasta);
+            } else if (desde != null) {
                 //fechaCreacion >= desde, muestra todas las solicitudes posteriores al desde
                 return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaCreacion"), desde);
             } else {
@@ -27,10 +28,14 @@ public class SolicitudTrabajoSpecifications {
     }
 
     public static Specification<SolicitudTrabajo> estadoEs(EstadosSolicitudes estado) {
-        return (root, query, criteriaBuilder) ->  {
+        return (root, query, criteriaBuilder) -> {
             if (estado == null) return null;
             return criteriaBuilder.equal(root.get("estado"), estado);
         };
+    }
+
+    public static Specification<SolicitudTrabajo> tieneEmail(String email) {
+        return (root, query, cb) -> email != null ? cb.equal(root.get("usuario").get("email"), email) : null;
     }
 
 }

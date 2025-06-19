@@ -170,7 +170,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
             spec = spec.and(SolicitudTrabajoSpecifications.fechaEntre(filtro.desde(), filtro.hasta()));
         }
         if (filtro.tieneEstado()) {
-            spec = spec.and(SolicitudTrabajoSpecifications.estadoEs(EstadosSolicitudes.valueOf(filtro.estado().toUpperCase())));
+            spec = spec.and(SolicitudTrabajoSpecifications.estadoEs(EstadosSolicitudes.desdeString(filtro.estado())));
+        }
+        if (filtro.tieneEmail()) {
+            spec = spec.and(SolicitudTrabajoSpecifications.tieneEmail(filtro.emailEspecialista()));
         }
 
         List<SolicitudTrabajo> solicitudesEncontradas = solicitudTrabajoRepository.findAll(spec).stream()

@@ -101,19 +101,19 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
         validarEspecialista(trabajoApp, especialista);
 
-        if (dto.tieneTitulo()) {
-            Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
-            if (verificacion.isEmpty()) {
-                trabajoApp.setTitulo(dto.titulo());
-            }
-        }
-
         if (dto.tieneDescripcion()) {
             trabajoApp.setDescripcion(dto.descripcion());
         }
 
         if (dto.tienePresupuesto()) {
             trabajoApp.setPresupuesto(dto.presupuesto());
+        }
+
+        if (dto.tieneTitulo()) {
+            Optional<TrabajoApp> verificacion = buscarPorTitulo(dto.titulo());
+            if (verificacion.isEmpty()) {
+                trabajoApp.setTitulo(dto.titulo());
+            }
         }
 
         return trabajoAppRepository.save(trabajoApp);

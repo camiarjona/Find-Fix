@@ -98,20 +98,13 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<MostrarSolicitudEspecialistaDTO> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
+    public List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
         List<SolicitudEspecialista> solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
         if (solicitudEspecialistas.isEmpty()) {
             throw new SolicitudEspecialistaException("⚠️No se encontraron solicitudes para el usuario con email: " + usuario.getEmail());
         }
-
-        return solicitudEspecialistas.stream()
-                .map(solicitud -> new MostrarSolicitudEspecialistaDTO(
-                        solicitud.getFechaSolicitud(),
-                        solicitud.getEstado().name(),
-                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado",
-                        solicitud.getRespuesta()
-                )).toList();
+        return solicitudEspecialistas;
     }
 
     /// Metodo para actualizar el estado y la respuesta de una solicitud, por parte del admin
@@ -196,7 +189,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
         // Filtro por fecha exacta
         if (filtro.tieneFecha()) {
-            spec.and(SolicitudEspecialistaSpecifications.fechaEntre(filtro.fechaDesde(), filtro.fechaHasta()));
+            spec = spec.and(SolicitudEspecialistaSpecifications.fechaEntre(filtro.fechaDesde(), filtro.fechaHasta()));
         }
 
         // Filtro por email de usuario
