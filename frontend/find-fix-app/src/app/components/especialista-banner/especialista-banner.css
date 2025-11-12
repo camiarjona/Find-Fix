@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  background-color: #ffffff;
+  padding: 60px 0;
+}
+
+.banner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px;
+
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+}
+
+.banner-content {
+  flex: 1;
+  max-width: 480px;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 12px 0;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin: 0 0 20px 0;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    margin-bottom: 32px;
+  }
+}
+
+.banner-image {
+  flex: 1;
+  max-width: 400px;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* ---- Responsive para Celulares ---- */
+@media (max-width: 900px) {
+  .banner-container {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 30px 24px;
+  }
+
+  .banner-image {
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+}
