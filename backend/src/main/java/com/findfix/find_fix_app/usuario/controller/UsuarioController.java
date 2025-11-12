@@ -8,11 +8,17 @@ import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundExcept
 import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +30,33 @@ import java.util.List;
 @Validated
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private final AuthenticationManager authenticationManager;
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> login(@Valid @RequestBody UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException {
+        Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
+
+        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+
+        VerPerfilUsuarioDTO perfil = usuarioService.verPerfilUsuario();
+
+        return ResponseEntity.ok(new ApiResponse<>("Login exitoso, bienvenido!", perfil));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(HttpServletRequest request) {
+        // Obtenemos la sesión actual y la invalidamos
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Invalida la sesión
+        }
+        // Limpiamos el contexto de seguridad
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok(new ApiResponse<>("Has cerrado sesión exitosamente.", null));
+    }
 
     //metodo para ver la lista de usuarios registrados
     @GetMapping
