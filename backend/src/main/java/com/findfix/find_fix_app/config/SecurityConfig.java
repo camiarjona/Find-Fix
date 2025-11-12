@@ -1,9 +1,21 @@
 package com.findfix.find_fix_app.config;
 
+// --- ¡NUEVO! ---
+// Importa las clases de CORS
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+// --- FIN NUEVO ---
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,11 +26,21 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(
+        return http
+                // --- ¡NUEVO! ---
+                // 1. Aplica la configuración CORS (definida en el Bean de abajo)
+                // Esto asegura que CUALQUIER respuesta (éxito o error) incluya los headers.
+                .cors(Customizer.withDefaults())
+                // --- FIN NUEVO ---
+
+                .authorizeHttpRequests(
                         request -> request
 
                                 //USUARIO
-                                .requestMatchers("/usuario/registrar").permitAll()
+                                // --- ¡NUEVO! ---
+                                // 2. Agrega tus endpoints de login y logout a permitAll
+                                .requestMatchers("/usuario/registrar", "/usuario/login", "/usuario/logout").permitAll()
+                                // --- FIN NUEVO ---
 
                                 .requestMatchers(
                                         "/usuario/modificar-datos",
@@ -31,6 +53,10 @@ public class SecurityConfig {
                                         "/usuario/modificar/{email}",
                                         "/usuario/filtrar")
                                 .hasRole("ADMIN")
+
+                                //... (El resto de tus reglas .requestMatchers(...) siguen igual)
+                                //... (las he omitido aquí para que sea más corto)
+                                //...
 
                                 //OFICIOS CLIENTE
                                 .requestMatchers("/oficios/disponibles").hasRole("CLIENTE")
@@ -129,7 +155,8 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
-                        // Manejar 401 Unauthorized (credenciales inválidas o no proporcionadas)
+                        // Tu exceptionHandling personalizado está perfecto, no lo toques.
+                        // Ahora respetará la configuración de CORS.
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
                             response.setContentType("application/json");
@@ -140,7 +167,6 @@ public class SecurityConfig {
                                     }
                                     """);
                         })
-                        // Manejar 403 Forbidden (sin permisos debidos)
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setStatus(HttpStatus.FORBIDDEN.value());
                             response.setContentType("application/json");
@@ -156,4 +182,32 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    // --- ¡NUEVO! ---
+    // 3. Este es el Bean que .cors(Customizer.withDefaults()) buscará.
+    // Define tu configuración global de CORS aquí.
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 4. El origen de tu app Angular
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*")); // Permite todos los headers
+
+        // ¡LA CLAVE! Esto le da permiso al withCredentials: true de Angular
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica a TODAS las rutas
+
+        return source;
+    }
+    // --- FIN NUEVO ---
 }
