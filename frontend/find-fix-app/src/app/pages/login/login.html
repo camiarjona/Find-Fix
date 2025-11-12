@@ -1,0 +1,50 @@
+<div class="login-container">
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <img src="/images/findfix-logo.png" alt="FindFix Logo" class="login-logo" />
+
+    <h2>Iniciar Sesión</h2>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="tu.email@ejemplo.com"
+      />
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <small class="error-message">Por favor, ingresa un email válido.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="password">Contraseña</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+      />
+      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <small class="error-message">La contraseña es obligatoria.</small>
+      }
+    </div>
+
+    @if (loginError()) {
+      <div class="server-error-message">
+        {{ loginError() }}
+      </div>
+    }
+
+    <button classL="cta-button" type="submit" [disabled]="loginForm.invalid">
+      Ingresar
+    </button>
+
+    <p class="register-link">
+      ¿No tienes una cuenta?
+      <a [routerLink]="['/registro']">Regístrate aquí</a>
+    </p>
+
+  </form>
+</div>
