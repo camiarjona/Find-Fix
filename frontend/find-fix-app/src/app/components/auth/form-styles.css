@@ -1,0 +1,118 @@
+/* Estilos para el formulario hijo (login/register) */
+.app-form-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
+  text-align: center;
+  background-color: #fff;
+}
+
+.app-form-content h1 {
+  font-weight: 800;
+  margin: 0 0 16px 0;
+}
+
+.app-form-content span {
+  font-size: 12px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.app-form-content a {
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+  margin: 15px 0 10px;
+}
+
+/* --- ESTILOS DE ETIQUETA FLOTANTE --- */
+
+/* 1. Contenedor del campo */
+.form-field {
+  position: relative; /* Clave para posicionar la label */
+  width: 100%;
+  margin-top: 16px; /* Espacio para que la label flote */
+}
+
+/* 2. Estilo de la Label (el "placeholder") */
+.form-field label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 14px;
+  pointer-events: none; /* Para poder hacer clic "a través" de la label */
+  transition: all 0.2s ease-in-out;
+}
+
+/* 3. Estilo del Input */
+.app-form-content input {
+  background-color: #eee;
+  border: 1px solid #eee; /* Añadimos un borde */
+  margin: 0; /* Quitamos el margen de 8px */
+  padding: 18px 15px 6px; /* Más padding abajo para el texto */
+  font-size: 14px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.app-form-content input:focus {
+  outline: none; /* Quitamos el outline feo */
+  border-color: var(--primary-color, #F58634); /* Resaltamos el borde */
+}
+
+/* 4. LA ANIMACIÓN (Versión Corregida) */
+.app-form-content input:focus + label,
+.app-form-content input:not(:placeholder-shown) + label {
+
+  /* Mueve la etiqueta MÁS ARRIBA (valor negativo)
+     para que se siente "sobre" el borde */
+  top: -8px;
+
+  transform: translateY(0);
+  font-size: 12px; /* Un poco más grande para que se lea bien */
+  color: var(--primary-color, #F58634);
+
+  /* Esto crea el efecto de "corte" */
+  background-color: #fff; /* El fondo blanco tapa la línea del borde */
+  padding: 0 6px; /* Añade espacio a los lados del texto */
+  left: 10px; /* Ajusta la posición horizontal */
+}
+
+/* El fondo del input cambia a blanco al escribir
+   (para que el "corte" de la línea funcione) */
+.app-form-content input:focus,
+.app-form-content input:not(:placeholder-shown) {
+  background-color: #fff;
+}
+
+/* (Resto de estilos que ya teníamos) */
+.app-form-content .cta-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+.error-message {
+  color: #d93025;
+  font-size: 0.85rem;
+  text-align: left;
+  width: 100%;
+  margin-top: 4px;
+}
+.server-error-message {
+  color: #d93025;
+  background-color: #fbeae9;
+  border: 1px solid #d93025;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
+}

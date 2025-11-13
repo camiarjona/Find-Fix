@@ -1,0 +1,45 @@
+<form class="app-form-content" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+  <h1>Iniciar Sesión</h1>
+  <div class="social-icons"></div>
+  <span>Usa tu email y contraseña</span>
+
+  <div class="form-field">
+    <input
+      id="login-email"
+      formControlName="email"
+      type="email"
+      placeholder=" "
+    />
+    <label for="login-email">Email</label>
+  </div>
+  @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+    <small class="error-message">Por favor, ingresa un email válido.</small>
+  }
+
+  <div class="form-field">
+    <input
+      id="login-password"
+      formControlName="password"
+      type="password"
+      placeholder=" "
+    />
+    <label for="login-password">Contraseña</label>
+  </div>
+  @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+    <small class="error-message">La contraseña es obligatoria.</small>
+  }
+
+  @if (loginError) {
+    <div class="server-error-message">
+      {{ loginError }}
+    </div>
+  }
+
+  <a href="#">¿Olvidaste tu contraseña?</a>
+
+  <button class="cta-button" type="submit" [disabled]="loginForm.invalid">
+    Ingresar
+  </button>
+
+</form>

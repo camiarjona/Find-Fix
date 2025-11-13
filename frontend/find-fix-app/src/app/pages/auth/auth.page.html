@@ -1,0 +1,36 @@
+<div class="container" [class.active]="!isLoginView()">
+
+  <div class="form-container sign-up">
+    <app-register-form
+      (registerSubmit)="onRegister($event)"
+      [registerError]="authError()"
+    ></app-register-form>
+  </div>
+
+  <div class="form-container sign-in">
+    <app-login-form
+      (loginSubmit)="onLogin($event)"
+      [loginError]="authError()"
+    ></app-login-form>
+  </div>
+
+  <div class="toggle-container">
+    <div class="toggle">
+
+      <div class="toggle-panel toggle-left">
+        <h1>¿Ya tienes una cuenta?</h1>
+        <p>Ingresa con tus datos</p>
+
+        <button class="cta-button ghost" (click)="showLoginView()">Ingresar</button>
+      </div>
+
+      <div class="toggle-panel toggle-right">
+        <h1>¿No tienes una cuenta?</h1>
+        <p>Regístrate para tener acceso a todas las funcionalidades</p>
+
+        <button class="cta-button ghost" (click)="showRegisterView()">Registrarse</button>
+      </div>
+
+    </div>
+  </div>
+</div>

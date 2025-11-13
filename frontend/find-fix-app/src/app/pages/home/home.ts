@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Hero } from "../../components/hero/hero";
-import { EspecialistaBanner } from "../../components/especialista-banner/especialista-banner";
+import { Hero } from "../../components/landing-page/hero/hero";
+import { EspecialistaBanner } from "../../components/landing-page/especialista-banner/especialista-banner";
 
 @Component({
   selector: 'app-home',

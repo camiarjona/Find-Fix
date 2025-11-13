@@ -1,0 +1,49 @@
+<form class="app-form-content" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+  <h1>Crear Cuenta</h1>
+  <div class="social-icons"></div>
+  <span>Usa tu email para registrarte</span>
+
+  <div class="form-field">
+    <input id="reg-nombre" formControlName="nombre" type="text" placeholder=" " />
+    <label for="reg-nombre">Nombre</label>
+  </div>
+  @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
+    <small class="error-message">El nombre es obligatorio.</small>
+  }
+
+  <div class="form-field">
+    <input id="reg-apellido" formControlName="apellido" type="text" placeholder=" " />
+    <label for="reg-apellido">Apellido</label>
+  </div>
+  @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
+    <small class="error-message">El apellido es obligatorio.</small>
+  }
+
+  <div class="form-field">
+    <input id="reg-email" formControlName="email" type="email" placeholder=" " />
+    <label for="reg-email">Email</label>
+  </div>
+  @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+    <small class="error-message">Ingresa un email válido.</small>
+  }
+
+  <div class="form-field">
+    <input id="reg-password" formControlName="password" type="password" placeholder=" " />
+    <label for="reg-password">Contraseña</label>
+  </div>
+  @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+    <small class="error-message">La contraseña debe tener al menos 6 caracteres.</small>
+  }
+
+  @if (registerError) {
+    <div class="server-error-message">
+      {{ registerError }}
+    </div>
+  }
+
+  <button class="cta-button" type="submit" [disabled]="registerForm.invalid">
+    Registrarse
+  </button>
+
+</form>
