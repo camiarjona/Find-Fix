@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  width: 100%;
+  background-color: #fff;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  box-sizing: border-box;
+}
+
+.navbar-logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
+
+.navbar-container .cta-button {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

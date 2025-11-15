@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { LoginCredentials, UserProfile } from '../../models/user.model';
-import { ApiResponse } from '../../models/apiResponse.model';
+import { LoginCredentials, UserProfile } from '../../models/user/user.model';
+import { ApiResponse } from '../../models/api-response/apiResponse.model';
 import { tap } from 'rxjs';
 
 type ActiveRole = 'cliente' | 'especialista' | 'admin';
@@ -10,7 +10,7 @@ type ActiveRole = 'cliente' | 'especialista' | 'admin';
 })
 export class AuthService {
 
-  private apiUrl = 'htpp://localhost:8080'
+  private apiUrl = 'http://localhost:8080'
 
   private http = inject(HttpClient);
 
