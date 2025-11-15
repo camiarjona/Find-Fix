@@ -1,0 +1,24 @@
+<div class="modal-overlay">
+
+  <div class="selection-card">
+
+    <h1>¡Hola, {{ authService.currentUser()?.nombre }}!</h1>
+    <p>¿Cómo quieres ingresar hoy?</p>
+
+    <div class="role-options">
+
+      <div class="role-box" (click)="seleccionar('cliente')">
+        <span class="role-icon">👤</span>
+        <h2>Ingresar como Cliente</h2>
+        <p>Buscar profesionales y gestionar mis trabajos.</p>
+      </div>
+
+      <div class="role-box" (click)="seleccionar('especialista')">
+        <span class="role-icon">🛠️</span>
+        <h2>Ingresar como Especialista</h2>
+        <p>Gestionar solicitudes y ver mi perfil.</p>
+      </div>
+
+    </div>
+  </div>
+</div>

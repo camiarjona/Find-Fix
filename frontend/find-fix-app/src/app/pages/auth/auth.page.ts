@@ -19,15 +19,11 @@ import { LoginForm } from "../../components/auth/login-form/login-form";
 })
 export class AuthPage {
 
-  // --- Inyecciones ---
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // --- Estado de la Página ---
   public isLoginView = signal<boolean>(true);
   public authError = signal<string | null>(null);
-
-  // --- Métodos de Transición ---
 
   showLoginView(): void {
     this.isLoginView.set(true);
@@ -39,7 +35,6 @@ export class AuthPage {
     this.authError.set(null);
   }
 
-  // --- Métodos de Lógica (los "oyentes" de los @Output) ---
   onLogin(credentials: LoginCredentials): void {
     this.authError.set(null);
 
@@ -67,12 +62,6 @@ export class AuthPage {
 
   onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
-
-    // --- ¡AQUÍ IRÁ TU LÓGICA DE REGISTRO! ---
-    // 1. Llama a un método 'authService.register(credentials)' (que aún no existe).
-    // 2. En el 'next:', muéstrale un mensaje de éxito y pon 'this.isLoginView.set(true)'
-    // 3. En el 'error:', usa 'this.authError.set(err.message)'
-
     console.log('Datos de registro:', credentials);
     alert('¡Registro exitoso! (Aún no conectado al backend). Ahora inicia sesión.');
     this.showLoginView();
