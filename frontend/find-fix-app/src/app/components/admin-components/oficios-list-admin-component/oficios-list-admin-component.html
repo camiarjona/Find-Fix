@@ -1,0 +1,28 @@
+<div class="general-html">
+ <div class="header-contenedor">
+  <h1 class="oficios-titulo">Gestion Oficios!</h1>
+  <p class="admin-subtitulo">
+   Actualmente esta visualizando todos los oficios registrados en el sistema
+  </p>
+  </div>
+
+<div class="contenedor-oficios">
+
+  @for (oficio of oficios(); track $index) {
+  <article class="tarjeta-oficio">
+    <img
+      src="https://media.istockphoto.com/id/1455890574/es/foto/casco-deferente-amarillo-herramientas-de-construcci%C3%B3n-para-seguridad-industrial-aisladas-sobre.jpg?s=612x612&w=0&k=20&c=EUkhuovVmAfW7lD3BjTobT4VIsEambJVx9Dm8tcoW2Q="
+      alt="">
+    <h4>{{oficio.nombre}}</h4>
+
+  </article>
+  }
+</div>
+
+<div class="oficio-list-footer">
+    <a  class="boton-agregar-oficio">
+        + AGREGAR NUEVO OFICIO
+    </a>
+</div>
+
+</div>
