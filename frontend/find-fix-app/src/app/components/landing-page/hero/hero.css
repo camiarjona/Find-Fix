@@ -76,7 +76,7 @@
 
   .hero-image {
     order: -1;
-    max-width: 350px;
+    max-width: 250px;
     margin-bottom: 30px;
   }
 }

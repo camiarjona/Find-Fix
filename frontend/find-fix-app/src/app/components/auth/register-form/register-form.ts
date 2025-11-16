@@ -16,6 +16,8 @@ export class RegisterForm {
   @Input() registerError: string | null = null;
 
   @Output() registerSubmit = new EventEmitter<RegisterCredentials>();
+  @Output() toggleView = new EventEmitter<void>();
+  
 
   public registerForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required]],
@@ -31,5 +33,9 @@ export class RegisterForm {
     }
 
     this.registerSubmit.emit(this.registerForm.getRawValue());
+  }
+
+  onToggle(): void {
+    this.toggleView.emit(); // "Toca el timbre"
   }
 }

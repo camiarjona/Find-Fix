@@ -1,8 +1,8 @@
 import { HttpClient} from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { LoginCredentials, UserProfile } from '../../models/user/user.model';
+import { LoginCredentials, RegisterCredentials, UserProfile } from '../../models/user/user.model';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 type ActiveRole = 'cliente' | 'especialista' | 'admin';
 @Injectable({
@@ -27,12 +27,9 @@ export class AuthService {
     return user?.roles.includes('CLIENTE') && user.roles.includes('ESPECIALISTA');
   })
 
-  private httpOptions = {
-    withCredentials: true
-  }
 
   login(credentials: LoginCredentials) {
-    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials, this.httpOptions)
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials)
       .pipe(
         tap(response => {
           this.currentUser.set(response.data);
@@ -41,13 +38,17 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/usuario/logout`, {}, this.httpOptions)
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/usuario/logout`, {})
       .pipe(
         tap(() => {
           this.currentUser.set(null);
           this.activeRole.set(null);
         })
       );
+  }
+
+  register(register: RegisterCredentials): Observable<ApiResponse<UserProfile>> {
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/registrar`, register);
   }
 
   public setInitialRole(role: ActiveRole) {
