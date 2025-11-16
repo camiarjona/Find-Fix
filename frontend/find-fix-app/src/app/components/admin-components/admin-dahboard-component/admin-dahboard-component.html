@@ -1,0 +1,22 @@
+<div class="admin-dashboard-contenedor">
+  <div class="header-contenedor">
+    <h1 class="admin-titulo">Hola, Administrador!</h1>
+    <p class="admin-subtitulo">
+      A continuacion esta visualizando su panel, selecciona la opcion que desea y sera guiado a ese apartado.
+    </p>
+  </div>
+  <div class="panel-grid">
+    @for (panel of adminPanels; track panel.title) {
+    <a [routerLink]="panel.routerLink" class="panel-card" [style.border-left-color]="panel.color">
+      <div class="card-icon" [style.background-color]="panel.color">
+        <span class="icon">{{ panel.icon }}</span>
+      </div>
+      <div class="card-content">
+        <h2>{{ panel.title }}</h2>
+        <p>{{ panel.description }}</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+    }
+  </div>
+</div>

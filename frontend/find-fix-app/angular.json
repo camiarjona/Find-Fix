@@ -56,7 +56,8 @@
               "buildTarget": "find-fix-app:build:production"
             },
             "development": {
-              "buildTarget": "find-fix-app:build:development"
+              "buildTarget": "find-fix-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -81,5 +82,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "de3851aa-a432-498d-8402-d84000f55ee7"
   }
 }
