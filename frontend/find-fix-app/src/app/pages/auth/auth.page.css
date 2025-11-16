@@ -9,10 +9,8 @@
       rgba(0, 0, 0, 0) 40%,
       rgba(0, 0, 0, 0.5) 90%),
     url('/images/fondo.png');
-
-  background-repeat: repeat;
+    background-size: cover;
 }
-
 
 .container {
   background-color: #fff;

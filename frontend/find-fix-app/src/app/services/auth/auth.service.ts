@@ -27,8 +27,12 @@ export class AuthService {
     return user?.roles.includes('CLIENTE') && user.roles.includes('ESPECIALISTA');
   })
 
+  private httpOptions = {
+    withCredentials: true
+  }
+
   login(credentials: LoginCredentials) {
-    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials)
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials, this.httpOptions)
       .pipe(
         tap(response => {
           this.currentUser.set(response.data);
@@ -37,7 +41,7 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/usuario/logout`, {})
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/usuario/logout`, {}, this.httpOptions)
       .pipe(
         tap(() => {
           this.currentUser.set(null);
