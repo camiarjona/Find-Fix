@@ -3,8 +3,8 @@ export interface UserProfile {
   nombre: string;
   apellido: string;
   email: string;
-  ciudad: string;
-  telefono: string;
+  ciudad?: string;
+  telefono?: string;
   roles: string[];
 }
 

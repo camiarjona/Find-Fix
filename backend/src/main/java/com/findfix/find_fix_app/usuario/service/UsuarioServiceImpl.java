@@ -91,7 +91,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     //metodo para registrar un usuario nuevo
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException {
+    public Usuario registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
             throw new UsuarioException("❗Ya existe un usuario registrado con ese email.");
@@ -114,8 +114,9 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
         usuario.getRoles().add(rol);
 
-
         usuarioRepository.save(usuario);
+
+        return usuario;
     }
 
     // metodo para actualizar la contraseña de un usuario

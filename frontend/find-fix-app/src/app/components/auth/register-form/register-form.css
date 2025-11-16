@@ -1,1 +1,28 @@
 @import url('../form-styles.css');
+
+.mobile-toggle-link {
+  display: none;
+  margin-top: 15px;
+  color: #555;
+}
+
+.mobile-toggle-link a {
+  color: var(--primary-color, #F58634);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mobile-toggle-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .mobile-toggle-link {
+    display: block;
+  }
+
+  .app-form-content {
+    border-radius: 8px;
+  }
+}

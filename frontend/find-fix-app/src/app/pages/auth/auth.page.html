@@ -4,6 +4,8 @@
     <app-register-form
       (registerSubmit)="onRegister($event)"
       [registerError]="authError()"
+
+      (toggleView)="onToggleView()"
     ></app-register-form>
   </div>
 
@@ -11,6 +13,8 @@
     <app-login-form
       (loginSubmit)="onLogin($event)"
       [loginError]="authError()"
+
+      (toggleView)="onToggleView()"
     ></app-login-form>
   </div>
 
@@ -18,19 +22,18 @@
     <div class="toggle">
 
       <div class="toggle-panel toggle-left">
-        <h1>¿Ya tienes una cuenta?</h1>
-        <p>Ingresa con tus datos</p>
-
+        <h1>¡Bienvenido de vuelta!</h1>
+        <p>Ingresa tus datos para usar todas las funciones del sitio</p>
         <button class="cta-button ghost" (click)="showLoginView()">Ingresar</button>
       </div>
 
       <div class="toggle-panel toggle-right">
-        <h1>¿No tienes una cuenta?</h1>
-        <p>Regístrate para tener acceso a todas las funcionalidades</p>
-
+        <h1>¡Hola, Amigo!</h1>
+        <p>Regístrate con tus datos para usar todas las funciones del sitio</p>
         <button class="cta-button ghost" (click)="showRegisterView()">Registrarse</button>
       </div>
 
     </div>
   </div>
+
 </div>

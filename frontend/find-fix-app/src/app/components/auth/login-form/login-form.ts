@@ -17,6 +17,8 @@ export class LoginForm {
 
   @Output() loginSubmit = new EventEmitter<LoginCredentials>();
 
+  @Output() toggleView = new EventEmitter<void>();
+
   public loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
@@ -31,4 +33,7 @@ export class LoginForm {
     this.loginSubmit.emit(this.loginForm.getRawValue());
   }
 
+  onToggle(): void {
+    this.toggleView.emit();
+  }
 }

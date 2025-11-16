@@ -1,7 +1,6 @@
 <form class="app-form-content" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
   <h1>Crear Cuenta</h1>
-  <div class="social-icons"></div>
   <span>Usa tu email para registrarte</span>
 
   <div class="form-field">
@@ -45,5 +44,10 @@
   <button class="cta-button" type="submit" [disabled]="registerForm.invalid">
     Registrarse
   </button>
+
+  <p class="mobile-toggle-link">
+    ¿Ya tienes una cuenta?
+    <a (click)="onToggle()">Inicia sesión aquí</a>
+  </p>
 
 </form>

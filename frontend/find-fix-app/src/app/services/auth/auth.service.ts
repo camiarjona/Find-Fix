@@ -1,8 +1,8 @@
 import { HttpClient} from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { LoginCredentials, UserProfile } from '../../models/user/user.model';
+import { LoginCredentials, RegisterCredentials, UserProfile } from '../../models/user/user.model';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 type ActiveRole = 'cliente' | 'especialista' | 'admin';
 @Injectable({
@@ -27,6 +27,7 @@ export class AuthService {
     return user?.roles.includes('CLIENTE') && user.roles.includes('ESPECIALISTA');
   })
 
+
   login(credentials: LoginCredentials) {
     return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials)
       .pipe(
@@ -44,6 +45,10 @@ export class AuthService {
           this.activeRole.set(null);
         })
       );
+  }
+
+  register(register: RegisterCredentials): Observable<ApiResponse<UserProfile>> {
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/registrar`, register);
   }
 
   public setInitialRole(role: ActiveRole) {
