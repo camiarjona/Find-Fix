@@ -33,12 +33,13 @@ public class UsuarioController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> login(@Valid @RequestBody UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException {
+    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> login(@Valid @RequestBody UsuarioLoginDTO loginDTO, HttpServletRequest request) throws UsuarioNotFoundException {
         Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
-
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
-
         SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         VerPerfilUsuarioDTO perfil = usuarioService.verPerfilUsuario();
 

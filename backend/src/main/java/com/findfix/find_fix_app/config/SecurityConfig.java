@@ -1,14 +1,10 @@
 package com.findfix.find_fix_app.config;
 
-// --- ¡NUEVO! ---
-// Importa las clases de CORS
-
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-// --- FIN NUEVO ---
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,20 +23,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // --- ¡NUEVO! ---
-                // 1. Aplica la configuración CORS (definida en el Bean de abajo)
-                // Esto asegura que CUALQUIER respuesta (éxito o error) incluya los headers.
                 .cors(Customizer.withDefaults())
-                // --- FIN NUEVO ---
-
                 .authorizeHttpRequests(
                         request -> request
 
-                                //USUARIO
-                                // --- ¡NUEVO! ---
-                                // 2. Agrega tus endpoints de login y logout a permitAll
                                 .requestMatchers("/usuario/registrar", "/usuario/login", "/usuario/logout").permitAll()
-                                // --- FIN NUEVO ---
 
                                 .requestMatchers(
                                         "/usuario/modificar-datos",
@@ -179,7 +166,7 @@ public class SecurityConfig {
                         })
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
+                //.httpBasic(Customizer.withDefaults())
                 .build();
     }
 
@@ -188,20 +175,15 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // --- ¡NUEVO! ---
-    // 3. Este es el Bean que .cors(Customizer.withDefaults()) buscará.
-    // Define tu configuración global de CORS aquí.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 4. El origen de tu app Angular
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*")); // Permite todos los headers
 
-        // ¡LA CLAVE! Esto le da permiso al withCredentials: true de Angular
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -209,5 +191,4 @@ public class SecurityConfig {
 
         return source;
     }
-    // --- FIN NUEVO ---
 }
