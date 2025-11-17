@@ -13,7 +13,7 @@ public interface UsuarioService {
     boolean tieneRol(Usuario usuario, String rol);
     List<Usuario> filtrarUsuarios(BuscarUsuarioDTO filtro) throws UsuarioNotFoundException, UsuarioException;
     List<Usuario> obtenerUsuarios();
-    void registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException;
+    Usuario registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException;
     void actualizarPassword(ActualizarPasswordDTO actualizarPasswordDTO) throws UsuarioNotFoundException;
     void actualizarUsuario(ActualizarUsuarioDTO actualizarUsuarioDTO) throws UsuarioNotFoundException;
     void eliminarPorEmail(String email) throws UsuarioNotFoundException;

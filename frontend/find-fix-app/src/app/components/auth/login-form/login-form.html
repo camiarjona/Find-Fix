@@ -1,7 +1,6 @@
 <form class="app-form-content" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <h1>Iniciar Sesión</h1>
-  <div class="social-icons"></div>
   <span>Usa tu email y contraseña</span>
 
   <div class="form-field">
@@ -36,10 +35,15 @@
     </div>
   }
 
-  <a href="#">¿Olvidaste tu contraseña?</a>
+  <a href="#" class="forgot-pass-link">¿Olvidaste tu contraseña?</a>
 
   <button class="cta-button" type="submit" [disabled]="loginForm.invalid">
     Ingresar
   </button>
+
+  <p class="mobile-toggle-link">
+    ¿No tienes una cuenta?
+    <a (click)="onToggle()">Regístrate aquí</a>
+  </p>
 
 </form>

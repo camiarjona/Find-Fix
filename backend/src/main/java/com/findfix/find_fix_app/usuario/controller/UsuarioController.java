@@ -71,11 +71,11 @@ public class UsuarioController {
 
     //metodo para que un usuario se registre en el sistema
     @PostMapping("/registrar") //CHEQUEADO
-    public ResponseEntity<ApiResponse<MostrarRegistroDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UsuarioException, RolException {
-        usuarioService.registrarNuevoUsuario(registro);
+    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UsuarioException, RolException {
+        Usuario user = usuarioService.registrarNuevoUsuario(registro);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 "Usuario registrado con éxito✅",
-                new MostrarRegistroDTO(registro)));
+                new VerPerfilUsuarioDTO(user)));
     }
 
     //metodo para que el usuario pueda modificar sus datos

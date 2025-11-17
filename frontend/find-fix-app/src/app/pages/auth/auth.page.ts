@@ -62,8 +62,14 @@ export class AuthPage {
 
   onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
+    this.authService.register(credentials).subscribe();
     console.log('Datos de registro:', credentials);
-    alert('¡Registro exitoso! (Aún no conectado al backend). Ahora inicia sesión.');
+    alert('¡Registro exitoso!. Ahora inicia sesión.');
     this.showLoginView();
+  }
+
+  onToggleView(): void {
+    this.isLoginView.set(!this.isLoginView());
+    this.authError.set(null);
   }
 }
