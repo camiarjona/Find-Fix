@@ -14,14 +14,14 @@ export class AdminDahboardComponent {
       title: 'Gestión de Usuarios',
       description: 'Ver, filtrar, y gestionar cuentas de clientes y especialistas.',
       icon: '🧑​', // Usarás un ícono relevante
-     //  routerLink: '/admin/usuarios', // Ruta propuesta para la gestión de usuarios
+     //  routerLink: '/admin/usuarios',
       color: '#F58634'
     },
     {
       title: 'Solicitudes de Especialista',
       description: 'Revisar y aprobar o rechazar solicitudes para ser especialista.',
       icon: '👷🏻​',
-     //  routerLink: '/admin/solicitudes-especialista', // Ruta propuesta
+     //  routerLink: '/admin/solicitudes-especialista',
       color: '#F58634'
     },
     {
@@ -35,7 +35,7 @@ export class AdminDahboardComponent {
       title: 'Gestión de Roles',
       description: 'Ver la lista de roles del sistema y gestionarlos (Solo ADMIN).',
       icon: '📋​',
-     // routerLink: '/admin/roles', // Ruta propuesta
+     // routerLink: '/admin/roles',
       color: '#F58634'
     },
   ];
