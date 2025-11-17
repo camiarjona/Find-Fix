@@ -1,0 +1,197 @@
+:host {
+  display: block;
+}
+
+/* Encabezado  */
+.dash-header {
+  margin-bottom: 2rem;
+}
+
+.dash-header h2 {
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 800;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.dash-header p {
+  color: var(--text-light, #555);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Botón de Acción Principal */
+.cta-container {
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+
+  background-color: var(--primary-color, #F58634);
+  color: white;
+  padding: 16px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(245, 134, 52, 0.2);
+}
+
+.cta-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cta-button:hover {
+  background-color: #e07024;
+  box-shadow: 0 6px 16px rgba(245, 134, 52, 0.3);
+  transform: translateY(-2px);
+}
+
+
+/* 3. Tarjetas de Estado */
+.tarjetas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.tarjeta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+}
+
+.tarjeta-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.tarjeta-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.icon-solicitudes { background-color: #3b82f6; }
+.icon-trabajos { background-color: #f59e0b; }
+.icon-favoritos { background-color: #ec4899; }
+
+
+.tarjeta-numero {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-dark, #1a1a1a);
+  line-height: 1;
+}
+
+.tarjeta-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-light, #555);
+  margin-top: 0.25rem;
+}
+
+
+/* Banner "Ser Especialista */
+
+.promo-banner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.promo-content {
+  flex: 1;
+}
+
+.promo-content h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+}
+
+.promo-content h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin: 0 0 1rem 0;
+}
+
+.promo-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  max-width: 450px;
+}
+
+.promo-image {
+  flex: 1;
+  max-width: 300px;
+  display: block;
+}
+.promo-image img {
+  width: 100%;
+  height: auto;
+}
+
+/* Botón secundario */
+.cta-button.secondary {
+  background-color: #fdfaf7;
+  color: var(--primary-color);
+  font-weight: 600;
+  border: 1px solid #fde4ce;
+  box-shadow: none;
+}
+.cta-button.secondary:hover {
+  background-color: #fef8f3;
+  border-color: #fbcda8;
+  transform: none;
+  box-shadow: none;
+}
+
+/* el banner se apile en pantallas chicas */
+@media (max-width: 900px) {
+  .promo-banner-container {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+  .promo-image {
+    max-width: 250px;
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,218 @@
+:host {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/*
+ ESTILOS DE GRID
+*/
+.content-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-top: 4px solid var(--primary-color, #F58634);
+  overflow: hidden;
+}
+
+.form-columna {
+  padding: 2rem;
+}
+
+/*
+  ESTILOS DE LA COLUMNA DE INFO
+*/
+.info-columna {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-left: 1px solid #e5e7eb;
+  border-radius: 0 12px 12px 0;
+}
+
+.info-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+.info-icono svg {
+  width: 28px;
+  height: 28px;
+  color: var(--primary-color, #F58634);
+}
+
+.info-columna h3 {
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.info-columna p {
+  color: var(--text-light, #555);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.pasos-lista {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+.pasos-lista li {
+  color: var(--text-light, #555);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.pasos-lista li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--primary-color, #F58634);
+}
+
+.info-footer {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #6c757d;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+  margin-bottom: 0;
+}
+
+
+/* Tipografía */
+h2 {
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 700;
+  font-size: 1.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+p {
+  color: var(--text-light, #555);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilos del Formulario */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+form label { display: none; }
+
+form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  box-sizing: border-box;
+  background-color: #fdfdfd;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #F58634);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+  background-color: #fff;
+}
+
+.form-error[role="alert"] {
+  color: #d93025;
+  font-size: 0.875rem;
+}
+
+/* Estilos de Botón */
+.cta-button {
+  background-color: var(--primary-color, #F58634);
+  color: white;
+  padding: 16px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  margin-top: 1rem;
+  box-shadow: 0 4px 12px rgba(245, 134, 52, 0.2);
+}
+
+.cta-button:hover:not(:disabled) {
+  background-color: #e07024;
+  box-shadow: 0 6px 16px rgba(245, 134, 52, 0.3);
+  transform: translateY(-2px);
+}
+
+.cta-button:disabled,
+.cta-button:disabled:hover {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+
+/* Mensajes de Éxito y Error */
+.exito, .error {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+.exito { color: #0f5132; background-color: #d1e7dd; border: 1px solid #badbcc; }
+.error { color: #842029; background-color: #f8d7da; border: 1px solid #f5c2c7; }
+
+
+/*
+ ESTILOS RESPONSIVE
+*/
+@media (max-width: 900px) {
+  /* En pantallas chicas, se apilan las columnas */
+  .content-card {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0;
+  }
+
+  .form-columna {
+    padding: 1.5rem;
+  }
+
+  .info-columna {
+    padding: 1.5rem;
+    border-left: none;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0 0 12px 12px;
+  }
+}
