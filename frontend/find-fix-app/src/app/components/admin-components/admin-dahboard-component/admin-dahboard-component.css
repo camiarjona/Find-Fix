@@ -21,20 +21,19 @@
   font-size: 2.2rem;
   font-weight: 800;
   margin: 0 0 8px 0;
-  color: var(--text-dark); /* Color oscuro para el título */
+  color: var(--text-dark);
 }
 
 .admin-subtitulo {
   font-size: 1rem;
   font-weight: 500;
   margin: 0;
-  color: var(--text-light); /* Color más suave para el subtítulo */
+  color: var(--text-light);
 }
 
-/* Ajusta el margen del título, que por defecto suele ser grande */
 h1 {
   text-align: center;
-  margin-bottom: 40px; /* ANTES: 40px. Reducimos el espacio debajo del título */
+  margin-bottom: 40px;
   color: var(--text-dark);
 }
 
@@ -48,7 +47,7 @@ h1 {
 .panel-grid {
   display: grid;
  gap: 30px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* ANTES: minmax(300px, 1fr) */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .panel-card {
@@ -62,7 +61,7 @@ h1 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: var(--text-dark);
-  border-left: 8px solid; /* Usamos esta propiedad para el color */
+  border-left: 8px solid;
 }
 
 .panel-card:hover {

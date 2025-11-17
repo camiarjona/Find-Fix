@@ -1,7 +1,5 @@
-
-
 .header-contenedor {
- max-width: 95%;
+  max-width: 95%;
   margin: 40px auto 30px auto;
   padding: 20px;
   background-color: #ffffff;
@@ -20,23 +18,21 @@
 }
 
 .oficios-subtitulo {
-  font-size: 0.9rem;;
+  font-size: 0.9rem;
+  ;
   font-weight: 500;
   margin: 0;
-  color: var(--text-light); /
+  color: var(--text-light);/
 }
 
-
-
 .contenedor-oficios {
- display: grid;
-  grid-template-columns: 1fr; /* Una columna por defecto */
-  gap: 1rem; /* Usamos el gap más pequeño para ahorrar espacio */
-  max-width: 95%; /* Se ajusta al 95% del ancho disponible */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
-
-
 }
 
 .tarjeta-oficio {
@@ -48,6 +44,10 @@
   border: 2px solid transparent;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
 }
 
 .tarjeta-oficio img {
@@ -101,17 +101,19 @@
   font-weight: 500;
 }
 
+.buttons-container{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .tarjeta-oficio button {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
   color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  width: 350px;
 }
 
 .tarjeta-oficio button:hover {
@@ -124,8 +126,10 @@
   transform: translateY(0);
 }
 
+
+
+
 @media (min-width: 768px) {
-  /* Reajustes del Contenedor Principal */
   .header-contenedor {
     max-width: 800px;
     padding: 30px;
@@ -133,73 +137,54 @@
   }
 
   .oficios-titulo {
-    font-size: 2.2rem; /* Tamaño normal del título */
+    font-size: 2.2rem;
   }
 
-  /* Reajustes de la Cuadrícula: Pasa a 2 Columnas */
+
   .contenedor-oficios {
-    /* 2 columnas flexibles para tablets */
+
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem; /* Volvemos al gap original */
+    gap: 1.5rem;
     max-width: 1000px;
   }
 
   .tarjeta-oficio {
-    padding: 1.5rem; /* Volvemos al padding original */
+    padding: 1.5rem;
   }
 }
-/* Estilos para el pie de página de la lista (donde irá el botón) */
+
+
 .oficio-list-footer {
-    text-align: center;
-    padding: 30px 0 10px 0; /* Espacio superior para separarlo de la lista */
-    margin-top: 30px;
-}
-
-/* Estilo para el botón grande */
-.boton-agregar-oficio {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
-
+  text-align: center;
+  padding: 30px 0 10px 0;
+  margin-top: 30px;
 }
 
 
-.boton-agregar-oficio:hover{
-   background: linear-gradient(135deg, #b91c1c, #991b1b);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
-}
+
+
+
+
+
 
 .alert-message {
-    /* 1. Posicionamiento Fijo y Centrado */
-    position: fixed;
-    top: 50px; /* Distancia desde la parte superior de la ventana */
-    left: 50%;
-    transform: translateX(-50%); /* Técnica para centrar horizontalmente */
-    z-index: 1050; /* Asegura que esté por encima de todo */
-
-    /* 2. Diseño del Cuadro */
-    max-width: 500px;
-    width: 90%; /* Asegura que se vea bien en móviles */
-    padding: 15px 25px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Le da un efecto "flotante" */
-
+  background-color: var(--primary-color);
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  max-width: 500px;
+  width: 90%;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .alert-message.success {
-    background-color: #F58634;
-    color: #ffffff;
-    border-color: #F58634;
+  background-color: #F58634;
+  color: #ffffff;
+  border-color: #F58634;
 }
-
-
