@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, TRANSLATIONS } from '@angular/core';
 import { FichaCompletaSolicitud, MandarSolicitud, MostrarSolicitud } from '../../models/cliente/solicitud-especialista.model';
 import { Observable, of } from 'rxjs';
-import { ApiResponse } from '../../models/apiResponse.model';
+import { ApiResponse } from '../../models/api-response/apiResponse.model';
+
 
 @Injectable({
   providedIn: 'root',
