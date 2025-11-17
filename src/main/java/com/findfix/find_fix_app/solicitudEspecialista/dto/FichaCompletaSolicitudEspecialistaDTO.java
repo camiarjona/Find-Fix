@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class FichaCompletaSolicitudEspecialistaDTO {
+        private long seId;
         private LocalDate fechaSolicitud;
         private String fechaResolucion;
         private String estado;

@@ -2,7 +2,7 @@ package com.findfix.find_fix_app.solicitudEspecialista.dto;
 
 import jakarta.validation.constraints.Pattern;
 
-public record MandarSolicitudEspecialistaDTO(
+public record   MandarSolicitudEspecialistaDTO(
 
         @Pattern(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
