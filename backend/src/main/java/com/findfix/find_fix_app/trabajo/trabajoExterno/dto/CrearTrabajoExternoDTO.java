@@ -27,7 +27,7 @@ public record CrearTrabajoExternoDTO(
         @NotBlank(message="El título no puede quedar en blanco.")
         @NotNull(message = "El título es obligatorio.")
         @Pattern(
-                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
+                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+)*$",
                 message = "El titulo no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
         @Size(min = 1, max = 20, message = "El titulo debe tener entre 1 y 20 caracteres")

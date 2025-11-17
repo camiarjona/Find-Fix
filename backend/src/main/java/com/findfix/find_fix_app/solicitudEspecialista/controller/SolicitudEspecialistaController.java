@@ -66,6 +66,15 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Solicitud eliminada correctamente✅", "[]"));
     }
 
+    @GetMapping("/ficha/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENTE')")
+    public ResponseEntity<ApiResponse<FichaCompletaSolicitudEspecialistaDTO>> obtenerFichaSolicitudPorId(@PathVariable Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException, UsuarioNotFoundException {
+
+        FichaCompletaSolicitudEspecialistaDTO ficha = solicitudEspecialistaService.obtenerFichaPorId(id);
+
+        return ResponseEntity.ok(new ApiResponse<>("Ficha de solicitud encontrada☑️", ficha));
+    }
+
     @GetMapping("/filtrar")
     @PreAuthorize("hasAnyRole('ADMIN','CLIENTE')")
     public ResponseEntity<ApiResponse<List<FichaCompletaSolicitudEspecialistaDTO>>> filtrarSolicitudes(@RequestBody BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {

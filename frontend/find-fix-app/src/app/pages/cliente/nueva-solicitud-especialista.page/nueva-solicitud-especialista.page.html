@@ -1,0 +1,72 @@
+<div class="content-card">
+
+  <div class="form-columna">
+    <h2>Solicitar ser Especialista</h2>
+    <p>Envía una solicitud para que un administrador revise tu perfil. Describe por qué quieres unirte a nuestra red.</p>
+
+    @if (mensajeError()) {
+      <div class="error" role="alert">{{ mensajeError() }}</div>
+    }
+
+    <form [formGroup]="solicitudForm" (ngSubmit)="enviarSolicitud()">
+      <div class="form-field">
+        <textarea
+          id="motivo"
+          formControlName="motivo"
+          rows="6"
+          placeholder="Ej: Soy plomero con 5 años de experiencia..."></textarea>
+
+        @if (solicitudForm.get('motivo')?.invalid && (solicitudForm.get('motivo')?.touched || solicitudForm.get('motivo')?.dirty)) {
+          <div class="form-error" role="alert">
+            @if (solicitudForm.get('motivo')?.hasError('required')) {
+              El motivo es requerido.
+            }
+            @if (solicitudForm.get('motivo')?.hasError('minlength')) {
+              El motivo debe tener al menos 10 caracteres.
+            }
+          </div>
+        }
+      </div>
+
+      <button class="cta-button" type="submit" [disabled]="solicitudForm.invalid">
+        Enviar Solicitud
+      </button>
+    </form>
+  </div>
+
+  <div class="info-columna">
+    <div class="info-icono">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"
+     stroke-linecap="round" stroke-linejoin="round">
+
+      <!-- Llave 1 -->
+      <path d="M3 3l4 1 2 2-3 3 7 7-2 2-7-7-3 3-2-2 3-4z" />
+
+      <!-- Llave 2 -->
+      <path d="M21 3l-4 1-2 2 3 3-7 7 2 2 7-7 3 3 2-2-3-4z" />
+</svg>
+
+    </div>
+    <h3>¿Qué sigue después?</h3>
+    <p>Una vez que envíes tu solicitud, nuestro equipo la revisará.</p>
+    <ul class="pasos-lista">
+      <li><span>1.</span> Envío de la solicitud.</li>
+      <li><span>2.</span> Revisión por un administrador.</li>
+      <li><span>3.</span> Recibirás una respuesta en tu historial.</li>
+    </ul>
+    <p class="info-footer">Este proceso puede tardar de 24 a 48hs hábiles.</p>
+  </div>
+
+</div>
+
+
+@if (isModalOpen()) {
+  <app-modal-confirmacion
+    titulo="¡Solicitud Enviada!"
+    mensaje="Tu solicitud ha sido creada con éxito. Un administrador la revisará pronto."
+    (irInicio)="onModalIrInicio()"
+    (irHistorial)="onModalIrHistorial()"
+    (cerrarModal)="onModalCerrar()"
+  />
+}

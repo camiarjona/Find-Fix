@@ -1,0 +1,186 @@
+:host {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Estilo de Tarjeta */
+.content-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+h2 {
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+  margin-top: 0;
+
+p {
+  color: var(--text-light, #555);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Estilos del Formulario */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+form label {
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+}
+
+form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #F58634);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+/* Validación del formulario*/
+.form-error[role="alert"] {
+  color: #d93025;
+  font-size: 0.875rem;
+}
+
+/* Botón de Enviar*/
+.cta-button {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.cta-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.cta-button:disabled:hover {
+  background-color: #ccc;
+}
+
+
+/* Mensajes de Éxito y Error */
+.exito, .error {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.exito {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+}
+
+.error {
+  color: #842029;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+}
+
+
+/* Estilos de la Tabla (Historial)*/
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead tr {
+  background-color: #f9fafb;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+th {
+  color: var(--text-light, #555);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: #fcfcfc;
+}
+
+/* Estilos para los Estados */
+.status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.status.pendiente {
+  color: #a16207;
+  background-color: #fef9c3;
+}
+.status.aceptado {
+  color: #166534;
+  background-color: #dcfce7;
+}
+.status.rechazado {
+  color: #991b1b;
+  background-color: #fee2e2;
+}
+
+
+/* Botón "Eliminar" */
+.btn-eliminar {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  color: #d93025;
+  background-color: #fbeae9;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-eliminar:hover {
+  background-color: #d93025;
+  color: #fff;
+}
+}

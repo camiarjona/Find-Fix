@@ -1,0 +1,23 @@
+<div class="modal-overlay" (click)="cerrarModal.emit()"></div>
+
+<div class="modal-content">
+
+  <div class="modal-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+    </svg>
+  </div>
+
+  <h2>{{ titulo }}</h2>
+  <p>{{ mensaje }}</p>
+
+  <div class="modal-actions">
+    <button class="btn btn-secondary" (click)="irInicio.emit()">
+      Ir a Inicio
+    </button>
+    <button class="btn btn-primary" (click)="irHistorial.emit()">
+      Ver Historial
+    </button>
+  </div>
+
+</div>

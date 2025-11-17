@@ -5,6 +5,7 @@ import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialist
 import java.time.LocalDate;
 
 public class MostrarSolicitudEspecialistaDTO{
+        private long seId;
         private LocalDate fechaSolicitud;
         private String estado;
         private String email;

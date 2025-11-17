@@ -1,0 +1,133 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1001;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  margin: 1rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #e0e7ff;
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.modal-icon svg { width: 24px; height: 24px; }
+
+h2 {
+  color: var(--text-dark, #1a1a1a);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Lista de detalles */
+.detalle-lista {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: left;
+}
+.detalle-lista li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+}
+.detalle-lista li:last-child {
+  border-bottom: none;
+}
+.detalle-lista li strong {
+  font-weight: 600;
+  color: var(--text-light, #555);
+}
+.detalle-lista li span {
+  font-weight: 500;
+  color: var(--text-dark, #1a1a1a);
+}
+.detalle-texto {
+  grid-column: 1 / -1;
+  margin: 0.25rem 0 0 0;
+  padding: 0.6rem 0.75rem;
+  background-color: #f9fafb;
+  border-radius: 6px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  white-space: normal;
+}
+
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Estilos de Botones */
+.btn {
+  padding: 0.7rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary {
+  background-color: var(--primary-color, #F58634);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: #e07024;
+}
+
+.status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.status.pendiente { color: #a16207; background-color: #fef9c3; }
+.status.aceptado { color: #166534; background-color: #dcfce7; }
+.status.rechazado { color: #991b1b; background-color: #fee2e2; }
