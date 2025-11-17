@@ -1,0 +1,32 @@
+<div class="modal-overlay" (click)="cancel()">
+
+  <div class="form-container" (click)="$event.stopPropagation()">
+
+    <form (ngSubmit)="submitOficio()">
+      <h2>Agregar Nuevo Oficio</h2>
+
+      <input
+        type="text"
+        placeholder="Nombre del Oficio (Ej: ALBAÑIL)"
+        [(ngModel)]="oficioName"
+        name="oficioName"
+        required
+      >
+
+      @if (errorMessage()) {
+        <div class="form-error-message">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="button" class="cta-button-cancel" (click)="cancel()" [disabled]="isLoading()">
+          Cancelar
+        </button>
+        <button type="submit" class="cta-button" [disabled]="!oficioName.trim() || isLoading()">
+          {{ isLoading() ? 'Agregando...' : 'Agregar' }}
+        </button>
+      </div>
+    </form>
+
+  </div> </div> ```
