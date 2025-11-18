@@ -4,6 +4,8 @@ import { Home } from './pages/home/home.page';
 import { SeleccionarRolPage } from './pages/seleccionar-rol/seleccionar-rol.page';
 import { AdminDahboardComponent } from './components/admin-components/admin-dahboard-component/admin-dahboard-component';
 import { OficiosListAdminComponent } from './components/admin-components/oficios-list-admin-component/oficios-list-admin-component';
+import { Component } from '@angular/core';
+import { RolesListAdminComponent } from './components/admin-components/roles-list-admin-component/roles-list-admin-component';
 
 export const routes: Routes = [
   {
@@ -25,5 +27,9 @@ export const routes: Routes = [
   {
     path: 'admin/oficios',
     component: OficiosListAdminComponent,
+  },
+  {
+    path: 'admin/roles',
+    component : RolesListAdminComponent,
   }
 ];
