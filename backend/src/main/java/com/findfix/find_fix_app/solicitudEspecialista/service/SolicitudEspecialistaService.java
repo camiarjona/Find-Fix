@@ -19,5 +19,5 @@ public interface SolicitudEspecialistaService {
     void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException;
     List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException;
     List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException;
-
+    FichaCompletaSolicitudEspecialistaDTO obtenerFichaPorId(Long id) throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, SolicitudEspecialistaException;
     }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record ActualizarTrabajoAppDTO(
         @Size(max = 30,message = "El título no puede contener mas de 30 caracteres")
         @Pattern(
-                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
+                regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+)*$",
                 message = "El titulo no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
         String titulo,

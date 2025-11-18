@@ -1,0 +1,77 @@
+<div class="content-card">
+  <h2>Solicitar ser Especialista</h2>
+  <p>Envía una solicitud para que un administrador revise tu perfil. Describe por qué quieres unirte a nuestra red.</p>
+
+  <form [formGroup]="solicitudForm" (ngSubmit)="enviarSolicitud()">
+
+    <div class="form-field">
+      <label for="motivo">Motivo de la solicitud:</label>
+      <textarea id="motivo" formControlName="motivo" rows="5" placeholder="Ej: Soy plomero con 5 años de experiencia y me gustaría..."></textarea>
+
+      @if (solicitudForm.get('motivo')?.invalid && (solicitudForm.get('motivo')?.touched || solicitudForm.get('motivo')?.dirty)) {
+        <div class="form-error" role="alert">
+          @if (solicitudForm.get('motivo')?.hasError('required')) {
+            El motivo es requerido.
+          }
+          @if (solicitudForm.get('motivo')?.hasError('minlength')) {
+            El motivo debe tener al menos 10 caracteres.
+          }
+        </div>
+      }
+    </div>
+
+    <button class="cta-button" type="submit" [disabled]="solicitudForm.invalid">
+      Enviar Solicitud
+    </button>
+  </form>
+</div>
+
+<div class="content-card">
+  <h2>Mi Historial de Solicitudes</h2>
+
+  @if (mensajeExito()) {
+    <div class="exito" role="alert">{{ mensajeExito() }}</div>
+  }
+  @if (mensajeError()) {
+    <div class="error" role="alert">{{ mensajeError() }}</div>
+  }
+
+  @if (misSolicitudes().length > 0) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Respuesta del Administrador</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sol of misSolicitudes(); track sol.seId) {
+            <tr>
+              <td>{{ sol.fechaSolicitud | date:'dd/MM/yyyy' }}</td>
+
+              <td>
+                <span class="status" [ngClass]="sol.estado.toLowerCase()">
+                  {{ sol.estado }}
+                </span>
+              </td>
+
+              <td>{{ sol.respuesta || 'Sin respuesta aún.' }}</td>
+              <td>
+                @if (sol.estado === 'Pendiente') {
+                  <button class="btn-eliminar" (click)="eliminarSolicitud(sol.seId)">
+                    Eliminar
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p>No tienes ninguna solicitud enviada.</p>
+  }
+</div>

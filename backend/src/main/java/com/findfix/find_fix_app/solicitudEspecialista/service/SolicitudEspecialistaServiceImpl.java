@@ -208,4 +208,27 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 .toList();
     }
 
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public FichaCompletaSolicitudEspecialistaDTO obtenerFichaPorId(Long id)
+            throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, SolicitudEspecialistaException {
+
+        SolicitudEspecialista solicitud = solicitudEspecialistaRepository.findById(id)
+                .orElseThrow(() -> new SolicitudEspecialistaNotFoundException("No se encontró una solicitud con el ID: " + id));
+
+        Usuario usuarioAutenticado = authService.obtenerUsuarioAutenticado();
+
+        boolean esAdmin = usuarioAutenticado.getRoles().stream()
+                .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
+
+        boolean esPropietario = solicitud.getUsuario().equals(usuarioAutenticado);
+
+        if (!esAdmin && !esPropietario) {
+            throw new SolicitudEspecialistaException("No tiene permisos para ver esta solicitud.");
+        }
+
+        return new FichaCompletaSolicitudEspecialistaDTO(solicitud);
+    }
 }

@@ -1,0 +1,74 @@
+<div class="content-card">
+  <h2>Mi Historial de Solicitudes</h2>
+
+  @if (mensajeExito()) {
+    <div class="exito" role="alert">{{ mensajeExito() }}</div>
+  }
+  @if (mensajeError()) {
+    <div class="error" role="alert">{{ mensajeError() }}</div>
+  }
+
+  @if (isLoading()) {
+    <p>Cargando historial...</p>
+  } @else {
+    @if (misSolicitudes().length > 0) {
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Respuesta del Administrador</th>
+              <th class="acciones-header">Acciones</th> </tr>
+          </thead>
+          <tbody>
+            @for (sol of misSolicitudes(); track sol.seId) {
+              <tr>
+                <td>{{ sol.fechaSolicitud | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="status" [ngClass]="sol.estado.toLowerCase()">
+                    {{ sol.estado }}
+                  </span>
+                </td>
+                <td class="respuesta">{{ sol.respuesta || 'Sin respuesta aún.' }}</td>
+
+                <td class="celda-acciones">
+                  <button class="btn-ver" (click)="abrirModalDetalle(sol.seId)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                  </button>
+
+                  @if (sol.estado === 'Pendiente') {
+                    <button class="btn-eliminar" (click)="abrirModalEliminar(sol.seId)">
+                      Eliminar
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p>No tienes ninguna solicitud enviada.</p>
+    }
+  }
+</div>
+
+@if (isAlertaOpen()) {
+  <app-modal-alerta
+    titulo="¿Eliminar Solicitud?"
+    mensaje="Esta acción no se puede deshacer. ¿Estás seguro?"
+    textoBotonConfirmar="Sí, Eliminar"
+    (confirmar)="onModalConfirmarEliminar()"
+    (cancelar)="onModalCancelar()"
+  />
+}
+@if (isDetalleOpen()) {
+  <app-modal-detalle-solicitud
+    [solicitud]="solicitudDetalle()"
+    (cerrar)="cerrarModalDetalle()"
+  />
+}
