@@ -1,0 +1,229 @@
+.general-html {
+  width: 95%;
+  margin: 20px auto;
+  padding: 0;
+  background-color: transparent;
+}
+
+/* --- HEADER --- */
+.header-contenedor {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 30px;
+  padding: 20px 15px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  border-top: 5px solid var(--primary-color);
+  box-sizing: border-box;
+}
+
+.rol-titulo {
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  margin: 0 0 10px 0;
+}
+
+.rol-subtitulo {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.tabla-general {
+  overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.roles-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  min-width: 300px;
+}
+
+.roles-tabla th {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.roles-tabla td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: var(--text-dark);
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.roles-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.roles-tabla tr:hover {
+  background-color: #fffaf5;
+}
+
+.rol-nombre {
+  background-color: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.acciones-col {
+  text-align: center;
+  width: 60px; /
+}
+
+.acciones-cell {
+  text-align: center;
+}
+
+.icon-btn{
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #fee2e2;
+}
+
+.form-contenedor {
+  width: 100%;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: slideUp 0.3s ease-out;
+  box-sizing: border-box;
+}
+
+.role-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+
+
+
+.form-contenedor button {
+  width: 100%;
+}
+
+.button-form-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.alert-message {
+  background-color: var(--primary-color);
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  max-width: 90%;
+  width: 90%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+}
+
+.alert-message.success {
+  background-color: #F58634;
+  color: #ffffff;
+  border-color: #F58634;
+}
+
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 768px) {
+
+  .general-html {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .header-contenedor {
+    margin: 0 auto 50px;
+    padding: 20px 30px;
+  }
+
+  .rol-titulo {
+    font-size: 2.2rem;
+  }
+
+
+  .roles-tabla th {
+    padding: 18px 25px;
+    font-size: 0.85rem;
+  }
+
+  .roles-tabla td {
+    padding: 20px 25px;
+  }
+
+  .acciones-col {
+    width: 100px;
+  }
+
+  .form-contenedor {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .role-input {
+    flex-grow: 1;
+    width: auto;
+  }
+
+  .form-actions {
+    width: auto;
+    flex-direction: row;
+  }
+
+  .form-contenedor button {
+    width: auto;
+  }
+
+  .alert-message {
+    top: 50px;
+    max-width: 500px;
+    font-size: 1rem;
+  }
+}

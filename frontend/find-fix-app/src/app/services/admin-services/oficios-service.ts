@@ -8,7 +8,7 @@ import { Observable, tap, catchError, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class OficiosService {
-  private apiUrl = '/oficios'; // 🌟 CORRECCIÓN 2: URL Base completa 🌟
+  private apiUrl = '/oficios';
   private oficiosState = signal<OficioModel[]>([]);
   oficios = this.oficiosState.asReadonly();
   public formStatus: WritableSignal<'hidden' | 'creating' | 'editing'> = signal('hidden');
@@ -52,7 +52,7 @@ export class OficiosService {
         }),
         catchError((err: HttpErrorResponse) => {
           console.error("Error en addOficio:", err.error?.mensaje || err.message);
-          return throwError(() => err); // Propaga el error al componente
+          return throwError(() => err);
         })
       );
   }
