@@ -43,7 +43,7 @@ export const routes: Routes = [
   },
   // --- Rutas Privadas del Cliente (¡Aquí está lo nuevo!) ---
   {
-    path: 'app', // Prefijo para todas las rutas de cliente (ej: /app/dashboard)
+    path: 'cliente', // Prefijo para todas las rutas de cliente (ej: /app/dashboard)
     component: ClienteLayout, // Usa el Layout como "cáscara"
     // canActivate: [authGuard], // <-- Agrega tu guardia de autenticación aquí
     children: [
