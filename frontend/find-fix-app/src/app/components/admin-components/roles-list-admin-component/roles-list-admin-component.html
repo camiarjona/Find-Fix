@@ -1,0 +1,66 @@
+<div class="general-html">
+
+
+  @if (showConfirmDialog()) {
+  <app-admin-dialog-confirm [itemName]="currentRolToDelete.nombre!" (confirm)="handleDelete($event)">
+  </app-admin-dialog-confirm>
+  }
+
+  <div class="header-contenedor">
+    <h1 class="rol-titulo">Gestion Roles</h1>
+    <p class="rol-subtitulo">
+      Bienvenido a la seccion de roles, la lista que ve a continuacion contiene todos los roles registrados en el sistema actualmente.
+    </p>
+  </div>
+
+  @if (pageMessage().visible) {
+  <div class="alert-message" [class]="pageMessage().type">
+    {{ pageMessage().message }}
+  </div>
+  }
+  <div class="tabla-general">
+    <table class="roles-tabla">
+      <thead>
+        <tr>
+          <th>Nombre del Rol</th>
+          <th class="acciones-col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (rol of roles(); track $index) {
+        <tr>
+          <td class="nombre-contenedor">
+            <span class="rol-nombre">{{ rol.nombre }}</span>
+          </td>
+          <td class="acciones-opciones">
+            <button class="icon-btn" (click)="confirmarEliminacion(rol.nombre)" title="Eliminar">
+              🗑️
+            </button>
+            <button class="icon-btn" (click)="mostrarAvisoEdicion()" title="Modificar">
+              📋
+            </button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="3" class="empty-cell">No hay roles registrados.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<div class="button-form-contenedor">
+  <button class="cta-button" (click)="toggleForm()">
+    {{ formStatus() === 'creating' ? 'Cerrar' : 'Nuevo Rol' }}
+  </button>
+</div>
+<div class="oficio-list-footer">
+  @if (formStatus() === 'creating') {
+  <div class="form-contenedor">
+    <input type="text" [(ngModel)]="nuevoRolNombre" placeholder="Nombre del Rol (ej: SUPERVISOR)" class="role-input">
+    <button class="cta-button" (click)="submitRol()">Guardar</button>
+  </div>
+  }
+</div>

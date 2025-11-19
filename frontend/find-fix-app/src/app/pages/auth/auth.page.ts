@@ -51,7 +51,7 @@ export class AuthPage {
 
           } else {
             this.authService.setInitialRole('cliente');
-            this.router.navigateByUrl('/app/dashboard');
+            this.router.navigateByUrl('/cliente/dashboard');
           }
         },
         error: (err) => {
