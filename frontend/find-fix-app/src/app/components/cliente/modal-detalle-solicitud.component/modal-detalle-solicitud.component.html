@@ -13,6 +13,7 @@
     </div>
 
     <ul class="detalle-lista">
+
       <li>
         <strong>Estado:</strong>
         <span class="status" [ngClass]="solicitud.estado.toLowerCase()">
@@ -20,22 +21,40 @@
         </span>
       </li>
       <li>
-        <strong>Fecha de Solicitud:</strong>
+        <strong>Fecha Solicitud:</strong>
         <span>{{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}</span>
       </li>
       <li>
-        <strong>Fecha de Resolución:</strong>
+        <strong>Fecha Resolución:</strong>
         <span>
-          {{ solicitud.fechaResolucion ? (solicitud.fechaResolucion | date:'dd/MM/yyyy') : 'Sin respuesta' }}
+          @if (solicitud.fechaResolucion) {
+            {{ solicitud.fechaResolucion | date:'dd/MM/yyyy' }}
+          } @else {
+            Sin resolución
+          }
         </span>
       </li>
-      <li>
+
+     <li>
         <strong>Tu Motivo:</strong>
-        <p class="detalle-texto">{{ solicitud.motivo }}</p>
+        <div class="detalle-texto">
+          @if (solicitud.motivo) {
+            {{ solicitud.motivo }}
+          } @else {
+            <span class="texto-vacio">No especificaste un motivo.</span>
+          }
+        </div>
       </li>
+
       <li>
-        <strong>Respuesta del Admin:</strong>
-        <p class="detalle-texto">{{ solicitud.respuesta || 'Sin respuesta aún.' }}</p>
+        <strong>Respuesta Admin:</strong>
+        <div class="detalle-texto">
+          @if (solicitud.respuesta) {
+            {{ solicitud.respuesta }}
+          } @else {
+            <span class="texto-vacio">No hay respuesta aún.</span>
+          }
+        </div>
       </li>
     </ul>
 

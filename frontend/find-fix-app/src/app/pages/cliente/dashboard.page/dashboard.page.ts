@@ -26,22 +26,22 @@ export class DashboardPage {
   // funciones para navegar
 
   irABuscarEspecialistas() {
-    this.router.navigate(['/app/buscar-especialistas']);
+    this.router.navigate(['/cliente/buscar-especialistas']);
   }
 
   irASolicitudes() {
-    this.router.navigate(['/app/mis-solicitudes']);
+    this.router.navigate(['/cliente/mis-solicitudes']);
   }
 
   irATrabajos() {
-    this.router.navigate(['/app/mis-trabajos']);
+    this.router.navigate(['/cliente/mis-trabajos']);
   }
 
   irAFavoritos() {
-    this.router.navigate(['/app/mis-favoritos']);
+    this.router.navigate(['/cliente/mis-favoritos']);
   }
 
   irASerEspecialista() {
-    this.router.navigate(['/app/solicitar-especialista/nueva']);
+    this.router.navigate(['/cliente/solicitar-especialista/nueva']);
   }
 }
