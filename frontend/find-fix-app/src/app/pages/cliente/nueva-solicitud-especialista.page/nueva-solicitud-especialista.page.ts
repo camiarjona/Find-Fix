@@ -46,12 +46,12 @@ export class NuevaSolicitudEspecialistaPage {
 
   onModalIrInicio() {
     this.isModalOpen.set(false);
-    this.router.navigate(['/app/dashboard']);
+    this.router.navigate(['/cliente/dashboard']);
   }
 
   onModalIrHistorial() {
     this.isModalOpen.set(false);
-    this.router.navigate(['/app/solicitar-especialista/historial']);
+    this.router.navigate(['/cliente/solicitar-especialista/historial']);
   }
 
   onModalCerrar() {
