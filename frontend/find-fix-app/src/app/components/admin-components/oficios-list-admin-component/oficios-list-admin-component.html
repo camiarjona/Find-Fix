@@ -23,6 +23,9 @@
   </div>
 
   <div class="contenedor-oficios">
+    @if (isLoading()) {
+    <div class="loading-spinner">Cargando oficios...</div>
+    } @else {
     @for (oficio of oficios(); track $index) {
     <article class="tarjeta-oficio">
       <img
@@ -38,6 +41,7 @@
         </button>
       </div>
     </article>
+    }
     }
   </div>
 
