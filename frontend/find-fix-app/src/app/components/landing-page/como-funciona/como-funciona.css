@@ -1,7 +1,7 @@
 :host {
   display: block;
   padding: 80px 20px;
-  background-color: #fcfaff; /* Un fondo gris muy claro para diferenciarlo */
+  background-color: #fcfaff;
 }
 
 .header-section {
