@@ -37,38 +37,35 @@ export const routes: Routes = [
     path: 'admin/oficios',
     component: OficiosListAdminComponent,
   },
+
+  // Rutas Privadas del Cliente
   {
-    path: 'admin/roles',
-    component : RolesListAdminComponent,
-  },
-  // --- Rutas Privadas del Cliente (¡Aquí está lo nuevo!) ---
-  {
-    path: 'cliente', // Prefijo para todas las rutas de cliente (ej: /app/dashboard)
-    component: ClienteLayout, // Usa el Layout como "cáscara"
-    // canActivate: [authGuard], // <-- Agrega tu guardia de autenticación aquí
+    path: 'cliente',
+    component: ClienteLayout,
+
     children: [
       {
         path: 'dashboard',
-        component: DashboardPage // (Un componente de dashboard)
+        component: DashboardPage
       },
       {
         path: 'mis-solicitudes',
-        component: MisSolicitudesPage // (Otra página de cliente)
+        component: MisSolicitudesPage
       },
       { path: 'buscar-especialistas', component: BuscarEspecialistas},
       { path: 'mis-resenas', component: MisResenas},
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritos },
       {
-        path: 'solicitar-especialista/nueva', // La del formulario
+        path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
       },
       {
-        path: 'solicitar-especialista/historial', // La de la tabla
+        path: 'solicitar-especialista/historial',
         component: HistorialSolicitudesEspecialistaPages
       },
       {
-        path: '', // Redirige /app a /app/dashboard
+        path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
       }

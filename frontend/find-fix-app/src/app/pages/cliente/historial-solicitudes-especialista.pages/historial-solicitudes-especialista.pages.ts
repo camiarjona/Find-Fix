@@ -31,22 +31,23 @@ export class HistorialSolicitudesEspecialistaPages implements OnInit {
     this.cargarSolicitudes();
   }
 
-  cargarSolicitudes(): void {
+cargarSolicitudes(): void {
     this.isLoading.set(true);
     this.mensajeError.set(null);
+
     this.solicitudService.obtenerMisSolicitudes().subscribe({
       next: (response) => {
         this.misSolicitudes.set(response.data);
         this.isLoading.set(false);
       },
       error: (err) => {
-        if (err.status === 404) {
+        if (err.status === 404 || err.status === 409 || err.error.message?.includes('No se encontraron')) {
           this.misSolicitudes.set([]);
+          this.mensajeError.set(null);
         } else {
-          this.mensajeError.set(err.error.message || 'Error al cargar solicitudes');
+          this.mensajeError.set('Ocurrió un error al cargar las solicitudes.');
         }
         this.isLoading.set(false);
-        console.error(err);
       }
     });
   }
@@ -60,38 +61,44 @@ export class HistorialSolicitudesEspecialistaPages implements OnInit {
     this.isAlertaOpen.set(false);
     this.solicitudParaEliminar.set(null);
   }
+onModalConfirmarEliminar(): void {
+    const id = this.solicitudParaEliminar();
+    if (id === null) return;
 
-  onModalConfirmarEliminar(): void {
-      const id = this.solicitudParaEliminar();
-      if (id === null) return;
+    console.log('Intentando eliminar solicitud con ID:', id);
 
-      this.mensajeError.set(null);
-      this.mensajeExito.set(null);
+    const listaOriginal = this.misSolicitudes();
+    this.misSolicitudes.update((lista) => lista.filter(s => s.seId !== id));
+    this.onModalCancelar();
 
-      this.solicitudService.eliminarSolicitud(id).subscribe({
-        next: () => {
-          this.mensajeExito.set('Solicitud eliminada con éxito.');
-          this.cargarSolicitudes();
-          setTimeout(() => this.mensajeExito.set(null), 3000);
-        },
-        error: (err) => this.mensajeError.set(err.error.message || 'Error al eliminar la solicitud')
-      });
+    this.solicitudService.eliminarSolicitud(id).subscribe({
+      next: () => {
+        console.log('Eliminación exitosa en backend');
+        this.mensajeExito.set('Solicitud eliminada correctamente.');
+        setTimeout(() => this.mensajeExito.set(null), 3000);
+      },
+      error: (err) => {
+        console.error('Error al eliminar en backend:', err);
 
-      this.onModalCancelar();
-    }
+        this.misSolicitudes.set(listaOriginal);
+
+        this.mensajeError.set('Error: No se pudo eliminar la solicitud de la base de datos.');
+      }
+    });
+  }
 
 
     abrirModalDetalle(id: number): void {
     this.solicitudDetalle.set(null);
-    this.isDetalleOpen.set(true); 
+    this.isDetalleOpen.set(true);
 
     this.solicitudService.obtenerDetalleSolicitud(id).subscribe({
       next: (response) => {
-        this.solicitudDetalle.set(response.data); // Cargamos los datos en el modal
+        this.solicitudDetalle.set(response.data);
       },
       error: (err) => {
         this.mensajeError.set(err.error.message || 'Error al cargar el detalle');
-        this.isDetalleOpen.set(false); // Cerramos el modal si hay error
+        this.isDetalleOpen.set(false);
       }
     });
   }

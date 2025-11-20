@@ -131,3 +131,8 @@ h2 {
 .status.pendiente { color: #a16207; background-color: #fef9c3; }
 .status.aceptado { color: #166534; background-color: #dcfce7; }
 .status.rechazado { color: #991b1b; background-color: #fee2e2; }
+
+.texto-vacio {
+  color: #9ca3af;
+  font-style: italic;
+}

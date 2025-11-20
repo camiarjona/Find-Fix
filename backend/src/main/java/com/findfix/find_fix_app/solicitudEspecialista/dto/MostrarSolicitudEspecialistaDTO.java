@@ -14,6 +14,7 @@ public class MostrarSolicitudEspecialistaDTO{
         private String respuesta;
 
         public MostrarSolicitudEspecialistaDTO(SolicitudEspecialista  solicitud) {
+            this.seId = solicitud.getSeId();
                 this.fechaSolicitud = solicitud.getFechaSolicitud();
                 this.estado = solicitud.getEstado().getNombreAmigable();
                 this.email = solicitud.getUsuario() ==  null ? "Usuario desvinculado" : solicitud.getUsuario().getEmail();
