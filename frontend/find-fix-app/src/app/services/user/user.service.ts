@@ -58,4 +58,15 @@ export class UserService {
   updatePassword(data: UpdatePasswordRequest): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/usuario/modificar-password`, data);
   }
+
+  getProfile(): Observable<ApiResponse<UserProfile>> {
+    return this.http.get<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/ver-perfil`);
+  }
+
+  getCities(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.apiUrl}/usuario/ciudades-disponibles`,
+      { withCredentials: true }
+    );
+  }
 }

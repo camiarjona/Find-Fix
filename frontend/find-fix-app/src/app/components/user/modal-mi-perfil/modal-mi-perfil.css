@@ -159,3 +159,81 @@ h2 {
   color: #9ca3af;
   font-style: italic;
 }
+
+.detalle-lista li {
+  /* Aseguramos que la fila se alinee bien verticalmente */
+  align-items: center;
+}
+
+.editable-container {
+  width: 100%;
+}
+
+/* Modo Ver: Texto + Botón Lápiz */
+.view-mode {
+  display: flex;
+  justify-content: space-between; /* Texto a la izq, botón a la der */
+  align-items: center;
+  width: 100%;
+}
+
+/* Modo Edición: Input + Botones */
+.edit-mode {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+}
+
+/* El input se ve integrado */
+.input-inline {
+  flex-grow: 1; /* Ocupa todo el espacio posible */
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.input-inline:focus {
+  outline: none;
+  border-color: var(--primary-color, #F58634);
+  box-shadow: 0 0 0 2px rgba(245, 134, 52, 0.1);
+}
+
+/* Botones pequeños de acción (Lápiz, Check, Cruz) */
+.btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-icon.edit {
+  opacity: 0.6; /* Un poco sutil */
+}
+.btn-icon.edit:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.btn-icon.save:hover {
+  background-color: #dcfce7; /* Verde clarito */
+}
+
+.btn-icon.cancel:hover {
+  background-color: #fee2e2; /* Rojo clarito */
+}
+
+.roles-container {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}

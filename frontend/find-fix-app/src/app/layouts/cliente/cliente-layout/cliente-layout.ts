@@ -1,11 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { AuthService } from '../../../services/auth/auth.service';
+import { UserService } from '../../../services/user/user.service';
+import { UserProfile } from '../../../models/user/user.model';
+import { ModalMiPerfil } from "../../../components/user/modal-mi-perfil/modal-mi-perfil";
 
 @Component({
   selector: 'app-cliente-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ModalMiPerfil],
   templateUrl: './cliente-layout.html',
   styleUrl: './cliente-layout.css',
 })
@@ -26,6 +29,11 @@ export class ClienteLayout {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private userService = inject(UserService);
+
+  // NUEVAS SEÑALES PARA EL PERFIL
+  showProfileModal = signal(false);
+  currentUserProfile = signal<UserProfile | null>(null);
 
   // --- Funciones de la Barra Lateral ---
   toggleSidebar() {
@@ -71,5 +79,28 @@ export class ClienteLayout {
     this.isEspecialistaMode.update(prev => !prev);
     // lógica para redirigir al dashboard de especialista
     console.log("Modo especialista:", this.isEspecialistaMode());
+  }
+
+  // --- FUNCIONES PERFIL ---
+  openProfile() {
+    console.log("1. Botón presionado");
+    this.handleLinkClick();
+
+    this.userService.getProfile().subscribe({
+      next: (res) => {
+        console.log("2. Datos recibidos:", res);
+        this.currentUserProfile.set(res.data);
+        this.showProfileModal.set(true);
+      },
+      error: (err) => {
+        console.error("3. ERROR al cargar perfil:", err);
+        console.error('Error al cargar perfil', err);
+      }
+    });
+  }
+
+  // 6. FUNCIÓN PARA CERRAR
+  closeProfile() {
+    this.showProfileModal.set(false);
   }
 }
