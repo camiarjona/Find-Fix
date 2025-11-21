@@ -6,8 +6,6 @@
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
-
-
   border-top: 5px solid var(--primary-color);
 }
 
@@ -46,7 +44,7 @@ h1 {
 
 .panel-grid {
   display: grid;
- gap: 30px;
+  gap: 30px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
@@ -109,4 +107,10 @@ h1 {
   .panel-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.card-icon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
 }

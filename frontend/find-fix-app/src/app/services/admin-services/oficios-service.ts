@@ -2,7 +2,7 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { OficioModel } from '../../models/admin-models/oficio-model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Observable, tap, catchError, throwError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,23 +13,27 @@ export class OficiosService {
   oficios = this.oficiosState.asReadonly();
   public formStatus: WritableSignal<'hidden' | 'creating' | 'editing'> = signal('hidden');
 
-  constructor(private http: HttpClient)
-  {
-    // Carga inicial de datos
-    this.getOficios();
+  constructor(private http: HttpClient) {
   }
-  getOficios()
-  {
-    this.http.get<ApiResponse<OficioModel[]>>(this.apiUrl).subscribe({
-      next: (response) => {
-        this.oficiosState.set(response.data);
-        console.log('Oficios cargados con éxito:', response.data);
-      },
-      error: (err) => {
-        console.error('Error al cargar oficios (Código HTTP:', err.status, ')', err);
-      }
-    });
+
+  getOficios(forceReload: boolean = false): Observable<ApiResponse<OficioModel[]> | OficioModel[]> {
+    if (!forceReload && this.oficiosState().length > 0) {
+      return of(this.oficiosState());
+    }
+
+    return this.http.get<ApiResponse<OficioModel[]>>(this.apiUrl).pipe(
+      tap({
+        next: (response) => {
+          this.oficiosState.set(response.data);
+          console.log('Oficios cargados y guardados en el estado');
+        },
+        error: (error) => {
+          console.error('Error al cargar oficios:', error);
+        }
+      })
+    )
   }
+
   deleteOficio(id: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/eliminar/${id}`).pipe(
       tap(() => {
@@ -39,16 +43,15 @@ export class OficiosService {
       })
     );
   }
-  addOficio(nombreOficio: string): Observable<ApiResponse<string>> {
 
+  addOficio(nombreOficio: string): Observable<ApiResponse<string>> {
     const newOficioPayload = { nombre: nombreOficio.toUpperCase() };
 
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/agregar`, newOficioPayload)
       .pipe(
         tap(() => {
           this.formStatus.set('hidden');
-
-          this.getOficios();
+          this.getOficios(true).subscribe();
         }),
         catchError((err: HttpErrorResponse) => {
           console.error("Error en addOficio:", err.error?.mensaje || err.message);

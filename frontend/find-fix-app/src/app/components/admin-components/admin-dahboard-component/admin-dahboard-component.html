@@ -9,7 +9,9 @@
     @for (panel of adminPanels; track panel.title) {
     <a [routerLink]="panel.routerLink" class="panel-card" [style.border-left-color]="panel.color">
       <div class="card-icon" [style.background-color]="panel.color">
-        <span class="icon">{{ panel.icon }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path [attr.d]="panel.icon" />
+        </svg>
       </div>
       <div class="card-content">
         <h2>{{ panel.title }}</h2>

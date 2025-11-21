@@ -20,6 +20,24 @@ export class RolesListAdminComponent {
   public pageMessage = signal({ visible: false, message: '', type: 'success' });
   public nuevoRolNombre = '';
 
+  public isLoading = signal(true);
+
+  ngOnInit(): void {
+    console.log("Iniciando carga de roles...");
+
+    this.isLoading.set(true);
+    this.rolesService.getRoles().subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        console.log("Carga completa, loader apagado.");
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.showMessage('Error al cargar los roles', err);
+      }
+    });
+  }
+
   toggleForm(): void {
     if (this.formStatus() === 'hidden') {
       this.rolesService.formStatus.set('creating');
@@ -60,8 +78,8 @@ export class RolesListAdminComponent {
   }
 
   mostrarAvisoEdicion(): void {
-  this.showMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
-}
+    this.showMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
+  }
 }
 
 
