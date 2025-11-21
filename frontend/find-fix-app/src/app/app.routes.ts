@@ -14,6 +14,7 @@ import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page
 import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
+import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 
 export const routes: Routes = [
   {
@@ -30,16 +31,34 @@ export const routes: Routes = [
   },
   {
     path: 'admin/dashboard',
-    component: AdminDahboardComponent,
+    component: AdminDahboardComponent
   },
   {
-    path: 'admin/oficios',
-    component: OficiosListAdminComponent,
+    path: 'admin',
+    component: AdminLayout,
+    children: [
+      {
+        path: 'oficios',
+        component: OficiosListAdminComponent
+      },
+      {
+        path: 'roles',
+        component: RolesListAdminComponent
+      },
+    ]
   },
-  {
-    path: 'admin/roles',
-    component: RolesListAdminComponent,
-  },
+  // {
+  //   path: 'admin/dashboard',
+  //   component: AdminDahboardComponent,
+  // },
+  // {
+  //   path: 'admin/oficios',
+  //   component: OficiosListAdminComponent,
+  // },
+  // {
+  //   path: 'admin/roles',
+  //   component: RolesListAdminComponent,
+  // },
 
   // Rutas Privadas del Cliente
   {
