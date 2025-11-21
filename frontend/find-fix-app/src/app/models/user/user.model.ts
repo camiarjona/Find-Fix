@@ -19,3 +19,15 @@ export interface RegisterCredentials {
   email: string;
   password: string;
 }
+
+export interface UpdateUserRequest {
+  nombre?: string;
+  apellido?: string;
+  telefono?: string;
+  ciudad?: string;
+}
+
+export interface UpdatePasswordRequest {
+  passwordActual: string;
+  passwordNuevo: string;
+}
