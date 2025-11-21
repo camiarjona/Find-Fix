@@ -15,6 +15,8 @@ import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.p
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
+import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
+import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
 
 export const routes: Routes = [
   {
@@ -39,11 +41,11 @@ export const routes: Routes = [
     children: [
       {
         path: 'oficios',
-        component: OficiosListAdminComponent
+        component: OficiosListPage
       },
       {
         path: 'roles',
-        component: RolesListAdminComponent
+        component: RolesListPage
       },
     ]
   },
