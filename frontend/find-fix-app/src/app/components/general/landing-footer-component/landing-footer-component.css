@@ -9,6 +9,13 @@
   border-top: 5px solid var(--primary-color); /* Borde naranja */
 }
 
+
+.footer-section img {
+  height: 30%;
+  width: 30%;
+}
+
+
 .footer-content {
   display: flex;
   flex-direction: column; /* Apilado en móvil */
