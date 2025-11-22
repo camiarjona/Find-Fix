@@ -22,4 +22,9 @@ export interface FichaCompletaSolicitud{
   respuesta: string;
 }
 
+export interface ActualizarSolicitudDTO {
+  estado: string;
+  respuesta: string;
+}
+
 

@@ -1,0 +1,99 @@
+.solicitudes-container {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    font-size: 1.8em;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95em;
+}
+
+th {
+    background-color: #f7f7f7;
+    color: #555;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Base de la fila para la transición */
+tr {
+    transition: background-color 0.1s ease, box-shadow 0.1s ease; /* Añadimos la transición aquí */
+}
+
+/* Sombreado Naranja con Animación al pasar el cursor */
+tr:hover {
+    background-color: #e6e6e6; /* Fondo blanco-naranja muy claro */
+    box-shadow: inset 6px 0 0 0 orange; /* Sombra a la izquierda de la fila */
+    cursor: pointer;
+}
+
+/* ETIQUETAS DE ESTADO */
+.status-badge {
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Colores de estado */
+.status-pendiente {
+    background-color: #ffc107; /* Amarillo */
+    color: #333;
+}
+.status-aprobado {
+    background-color: #28a745; /* Verde */
+}
+.status-rechazado {
+    background-color: #dc3545; /* Rojo */
+}
+
+/* ESTILO DEL BOTÓN */
+.btn-detail {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.btn-detail:hover {
+    background-color: #0056b3;
+}
+
+.no-data, .error-message {
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.1em;
+}

@@ -1,0 +1,45 @@
+<div class="solicitudes-container">
+  <h2>Solicitudes de Alta de Especialistas</h2>
+
+  <p *ngIf="loading()">Cargando solicitudes...</p>
+
+  <div *ngIf="error()" class="error-message">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="!loading() && solicitudes() && solicitudes()!.length === 0" class="no-data">
+    <p>No hay solicitudes de especialistas pendientes.</p>
+  </div>
+
+  <table *ngIf="solicitudes() && solicitudes()!.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha Solicitud</th>
+        <th>Email Cliente</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (solicitud of solicitudes(); track solicitud.seId) {
+        <tr>
+          <td>{{ solicitud.seId }}</td>
+
+          <td>{{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}</td>
+          <td>{{ solicitud.email }}</td>
+          <td>
+            <span class="status-badge status-{{ solicitud.estado | lowercase }}">
+              {{ solicitud.estado }}
+            </span>
+          </td>
+          <td>
+            <button [routerLink]="['/admin/solicitudes/detalle', solicitud.seId]" class="btn-detail">
+              Ver Detalle
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

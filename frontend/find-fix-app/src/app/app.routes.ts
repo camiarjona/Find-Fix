@@ -15,6 +15,8 @@ import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page
 import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
+import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
+import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
 
 export const routes: Routes = [
   {
@@ -40,6 +42,14 @@ export const routes: Routes = [
   {
     path: 'admin/roles',
     component : RolesListAdminComponent,
+  },
+  {
+    path: 'admin/solicitudes',
+    component: SolicitudesEspecialistaAdminComponent,
+  },
+  {
+  path: 'admin/solicitudes/detalle/:id',
+  component: SolicitudDetalleAdminComponent,
   },
   // --- Rutas Privadas del Cliente (¡Aquí está lo nuevo!) ---
   {

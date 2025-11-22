@@ -20,7 +20,7 @@ export class AdminDahboardComponent {
       title: 'Solicitudes de Especialista',
       description: 'Revisar y aprobar o rechazar solicitudes para ser especialista.',
       icon: '👷🏻​',
-     //  routerLink: '/admin/solicitudes-especialista',
+      routerLink: '/admin/solicitudes',
       color: '#F58634'
     },
     {
