@@ -2,8 +2,6 @@ import { AuthPage } from './pages/auth/auth.page';
 import { Home } from './pages/home/home.page';
 import { SeleccionarRolPage } from './pages/seleccionar-rol/seleccionar-rol.page';
 import { AdminDahboardComponent } from './components/admin-components/admin-dahboard-component/admin-dahboard-component';
-import { OficiosListAdminComponent } from './components/admin-components/oficios-list-admin-component/oficios-list-admin-component';
-import { RolesListAdminComponent } from './components/admin-components/roles-list-admin-component/roles-list-admin-component';
 import { Routes } from '@angular/router';
 import { ClienteLayout } from './layouts/cliente/cliente-layout/cliente-layout';
 import { DashboardPage } from './pages/cliente/dashboard.page/dashboard.page';
@@ -17,6 +15,7 @@ import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
+import { PerfilPage } from './pages/cliente/perfil/perfil';
 
 export const routes: Routes = [
   {
@@ -49,19 +48,6 @@ export const routes: Routes = [
       },
     ]
   },
-  // {
-  //   path: 'admin/dashboard',
-  //   component: AdminDahboardComponent,
-  // },
-  // {
-  //   path: 'admin/oficios',
-  //   component: OficiosListAdminComponent,
-  // },
-  // {
-  //   path: 'admin/roles',
-  //   component: RolesListAdminComponent,
-  // },
-
   // Rutas Privadas del Cliente
   {
     path: 'cliente',
@@ -76,8 +62,8 @@ export const routes: Routes = [
         path: 'mis-solicitudes',
         component: MisSolicitudesPage
       },
-      { path: 'buscar-especialistas', component: BuscarEspecialistas},
-      { path: 'mis-resenas', component: MisResenas},
+      { path: 'buscar-especialistas', component: BuscarEspecialistas },
+      { path: 'mis-resenas', component: MisResenas },
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritos },
       {
@@ -92,6 +78,10 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'mi-perfil',
+        component: PerfilPage
       }
     ]
   },
