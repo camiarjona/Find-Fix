@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angular/router';
+import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 
 @Component({
   selector: 'app-admin-layout',
@@ -9,7 +10,7 @@ import { Router, RouterOutlet, RouterLink, RouterLinkActive, RouterLinkWithHref 
   styleUrl: './admin-layout.css',
 })
 export class AdminLayout {
- isSidebarOpen = signal(true);
+  isSidebarOpen = signal(true);
   isEspecialistaMenuOpen = signal(false);
   isMobileMenuOpen = signal(false);
 

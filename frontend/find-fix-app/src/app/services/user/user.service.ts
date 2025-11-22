@@ -37,14 +37,17 @@ export class UserService {
     )
   }
 
-  deleteUser(email: string) {
-    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/admin/eliminar/${email}`).pipe(
-      tap(() => {
-        this.userState.update(currentUsers =>
-          currentUsers.filter(user => user.email !== email)
-        );
-      })
-    )
+  desactivarUsuario(email: string): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/usuario/desactivar/${email}`, {},
+      { withCredentials: true });
+  }
+
+  activarUsuario(email: string): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(
+      `${this.apiUrl}/usuario/activar/${email}`,
+      {},
+      { withCredentials: true }
+    );
   }
 
   updateProfile(data: UpdateUserRequest): Observable<ApiResponse<string>> {
@@ -66,6 +69,14 @@ export class UserService {
   getCities(): Observable<ApiResponse<string[]>> {
     return this.http.get<ApiResponse<string[]>>(
       `${this.apiUrl}/usuario/ciudades-disponibles`,
+      { withCredentials: true }
+    );
+  }
+
+  updateUserByAdmin(email: string, data: UpdateUserRequest): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(
+      `${this.apiUrl}/usuario/modificar/${email}`,
+      data,
       { withCredentials: true }
     );
   }

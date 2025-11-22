@@ -1,19 +1,36 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { FooterComponent } from "../../general/footer-component/footer-component";
+import { AuthService } from '../../../services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-dahboard-component',
-  imports: [RouterLink],
+  imports: [RouterLink, FooterComponent,CommonModule],
   templateUrl: './admin-dahboard-component.html',
   styleUrl: './admin-dahboard-component.css',
 })
 export class AdminDahboardComponent {
+
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/auth']),
+      error: (err) => {
+        console.error('Error al cerrar sesión', err);
+        this.router.navigate(['/auth']);
+      }
+    });
+  }
   public adminPanels = [
     {
       title: 'Gestión de Usuarios',
       description: 'Ver, filtrar, y gestionar cuentas de clientes y especialistas.',
       icon: 'm10,13h-2c-2.76,0-5,2.24-5,5v1c0,.55.45,1,1,1h10c.55,0,1-.45,1-1v-1c0-2.76-2.24-5-5-5Zm-5,5c0-1.65,1.35-3,3-3h2c1.65,0,3,1.35,3,3H5Zm7.73-11.49c-.08-.22-.19-.42-.3-.62,0,0,0,0,0-.01-.69-1.14-1.93-1.89-3.42-1.89-2.28,0-4,1.72-4,4s1.72,4,4,4c1.49,0,2.73-.74,3.42-1.89,0,0,0,0,0-.01.12-.2.22-.4.3-.62.02-.06.03-.12.05-.18.06-.17.11-.34.15-.52.05-.25.07-.51.07-.78s-.03-.53-.07-.78c-.03-.18-.09-.35-.15-.52-.02-.06-.03-.12-.05-.18Zm-3.73,3.49c-1.18,0-2-.82-2-2s.82-2,2-2,2,.82,2,2-.82,2-2,2Zm6,1.49c-.11,0-.22-.01-.33-.03-.22.66-.56,1.27-.98,1.81.41.13.84.22,1.31.22,2.28,0,4-1.72,4-4s-1.72-4-4-4c-.47,0-.9.09-1.31.22.43.53.76,1.14.98,1.81.11-.01.21-.03.33-.03,1.18,0,2,.82,2,2s-.82,2-2,2Zm1,3h-1.11c.6.58,1.08,1.27,1.44,2.03,1.5.17,2.67,1.43,2.67,2.97h-2v1c0,.35-.07.69-.18,1h3.18c.55,0,1-.45,1-1v-1c0-2.76-2.24-5-5-5Z',
-      //  routerLink: '/admin/usuarios',
+      routerLink: '/admin/usuarios',
       color: '#F58634'
     },
     {

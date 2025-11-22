@@ -7,16 +7,10 @@
   </button>
 </header>
 
-<div
-  class="sidebar-overlay"
-  [class.open]="isMobileMenuOpen()"
-  (click)="toggleMobileMenu()">
+<div class="sidebar-overlay" [class.open]="isMobileMenuOpen()" (click)="toggleMobileMenu()">
 </div>
 
-<div
-  class="admin-dashboard"
-  [class.sidebar-collapsed]="!isSidebarOpen()"
-  [class.mobile-menu-open]="isMobileMenuOpen()">
+<div class="admin-dashboard" [class.sidebar-collapsed]="!isSidebarOpen()" [class.mobile-menu-open]="isMobileMenuOpen()">
 
   <nav class="sidebar" [class.open]="isMobileMenuOpen()">
 
@@ -39,7 +33,8 @@
         <a routerLink="/admin/dashboard" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
               </svg>
             </span>
@@ -52,8 +47,10 @@
     <div class="sidebar-footer">
       <a (click)="logout()">
         <span class="nav-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M15.75 9l-2.25-2.25M15.75 9l2.25-2.25M15.75 9 18 6.75M15.75 9 18 11.25m.75-4.5h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Z" />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M15.75 9l-2.25-2.25M15.75 9l2.25-2.25M15.75 9 18 6.75M15.75 9 18 11.25m.75-4.5h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Z" />
           </svg>
         </span>
         <span class="nav-text">Cerrar Sesión</span>
@@ -65,26 +62,26 @@
 
     <header class="main-header">
       <div class="header-controls">
-        <button
-          class="theme-toggle"
-          title="Cambiar a tema {{ isDarkMode() ? 'claro' : 'oscuro' }}"
-          (click)="toggleTheme()"
-        >
-         @if (isDarkMode()) {
-            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
-            </svg>
+        <button class="theme-toggle" title="Cambiar a tema {{ isDarkMode() ? 'claro' : 'oscuro' }}"
+          (click)="toggleTheme()">
+          @if (isDarkMode()) {
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
+          </svg>
           } @else {
-            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <circle cx="12" cy="12" r="4.5" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.8 5.8l-1.8-1.8M20 20l-1.8-1.8M5.8 18.2l-1.8 1.8M20 4l-1.8 1.8" />
-            </svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor">
+            <circle cx="12" cy="12" r="4.5" />
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.8 5.8l-1.8-1.8M20 20l-1.8-1.8M5.8 18.2l-1.8 1.8M20 4l-1.8 1.8" />
+          </svg>
           }
         </button>
       </div>
     </header>
 
     <router-outlet></router-outlet>
-
   </main>
 </div>

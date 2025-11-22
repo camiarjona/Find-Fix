@@ -232,6 +232,8 @@
 
 /* --- Contenido Principal --- */
 .content-area {
+  display: flex;
+  flex-direction: column;
   padding: 1.5rem;
   height: 100vh;
   box-sizing: border-box;
@@ -240,6 +242,7 @@
 }
 
 .main-header {
+
   display: flex;
   justify-content: flex-end;
   align-items: center;
