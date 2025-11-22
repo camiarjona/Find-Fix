@@ -222,6 +222,27 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         return new VerPerfilUsuarioDTO(usuario);
     }
 
+    //metodo de borrado logico usuario
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void desactivarUsuario(String email) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
+
+        usuario.setActivo(false);
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void activarUsuario(String email) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
+
+        usuario.setActivo(true); // <--- Lo volvemos a TRUE
+        usuarioRepository.save(usuario);
+    }
+
     // Metodo para buscar un usuario por su email para autenticacion
     @Override
     @Transactional(readOnly = true)

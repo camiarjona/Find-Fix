@@ -62,11 +62,11 @@ public class UsuarioController {
     //metodo para ver la lista de usuarios registrados
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> obtenerUsuarios() {
+    public ResponseEntity<ApiResponse<List<VerPerfilUsuarioDTO>>> obtenerUsuarios() {
         List<Usuario> usuarios = usuarioService.obtenerUsuarios();
         return ResponseEntity.ok(new ApiResponse<>(
                 "Lista de usuarios☑️",
-                usuarios.stream().map(MostrarUsuarioDTO::new).toList()));
+                usuarios.stream().map(VerPerfilUsuarioDTO::new).toList()));
     }
 
     //metodo para que un usuario se registre en el sistema
@@ -124,4 +124,17 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new).toList()));
     }
 
+    @PatchMapping("/desactivar/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<String>> desactivarUsuario(@PathVariable String email) throws UsuarioNotFoundException {
+        usuarioService.desactivarUsuario(email);
+        return ResponseEntity.ok(new ApiResponse<>("Usuario desactivado", email));
+    }
+
+    @PatchMapping("/activar/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<String>> activarUsuario(@PathVariable String email) throws UsuarioNotFoundException {
+        usuarioService.activarUsuario(email);
+        return ResponseEntity.ok(new ApiResponse<>("Usuario reactivado", email));
+    }
 }
