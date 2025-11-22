@@ -1,13 +1,30 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { FooterComponent } from "../../general/footer-component/footer-component";
+import { AuthService } from '../../../services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-dahboard-component',
-  imports: [RouterLink],
+  imports: [RouterLink, FooterComponent,CommonModule],
   templateUrl: './admin-dahboard-component.html',
   styleUrl: './admin-dahboard-component.css',
 })
 export class AdminDahboardComponent {
+
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/auth']),
+      error: (err) => {
+        console.error('Error al cerrar sesión', err);
+        this.router.navigate(['/auth']);
+      }
+    });
+  }
   public adminPanels = [
     {
       title: 'Gestión de Usuarios',

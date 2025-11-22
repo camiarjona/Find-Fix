@@ -1,54 +1,67 @@
 <div class="general-html">
-  @if (showConfirmDialog()) {
-  <app-admin-dialog-confirm [itemName]="currentOffcioToDelete.nombre!" (confirm)="handleDeleteConfirmation($event)">
 
+  @if (showConfirmDialog()) {
+  <app-admin-dialog-confirm
+    [itemName]="currentOffcioToDelete.nombre!"
+    (confirm)="handleDeleteConfirmation($event)">
   </app-admin-dialog-confirm>
   }
 
-  @if (formStatus() === 'creating') {
-  <app-oficios-form-admin-component></app-oficios-form-admin-component>
-  }
+  <div class="header-contenedor">
+    <h1 class="rol-titulo">Gestión de Oficios</h1> <p class="rol-subtitulo">
+      Bienvenido a la sección de oficios, aquí podrá administrar los oficios disponibles en el sistema.
+    </p>
+  </div>
 
   @if (pageMessage().visible) {
-  <div class="alert-message" [ngClass]="pageMessage().type">
+  <div class="alert-message" [class]="pageMessage().type">
     {{ pageMessage().message }}
   </div>
   }
 
-  <div class="header-contenedor">
-    <h1 class="oficios-titulo">Gestion Oficios</h1>
-    <p class="admin-subtitulo">
-      Actualmente esta visualizando todos los oficios registrados en el sistema
-    </p>
+  <div class="tabla-general">
+    <table class="roles-tabla"> <thead>
+        <tr>
+          <th>Nombre del Oficio</th>
+          <th class="acciones-col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+          @for (oficio of oficios(); track oficio.id) {
+          <tr>
+            <td class="nombre-contenedor">
+              <span class="rol-nombre">{{ oficio.nombre }}</span>
+            </td>
+            <td class="acciones-opciones" style="text-align: center;">
+              <button class="icon-btn" (click)="eliminarOficio(+oficio.id, oficio.nombre.toString())" title="Eliminar">
+                🗑️
+              </button>
+              <button class="icon-btn" (click)="mostrarAvisoEdicion()" title="Modificar">
+                📋
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="2" class="empty-cell">No hay oficios registrados.</td>
+          </tr>
+          }
+
+      </tbody>
+    </table>
   </div>
 
-  <div class="contenedor-oficios">
-    @if (isLoading()) {
-    <div class="loading-spinner">Cargando oficios...</div>
-    } @else {
-    @for (oficio of oficios(); track $index) {
-    <article class="tarjeta-oficio">
-      <img
-        src="https://media.istockphoto.com/id/1455890574/es/foto/casco-deferente-amarillo-herramientas-de-construcci%C3%B3n-para-seguridad-industrial-aisladas-sobre.jpg?s=612x612&w=0&k=20&c=EUkhuovVmAfW7lD3BjTobT4VIsEambJVx9Dm8tcoW2Q="
-        alt="">
-      <h4>{{oficio.nombre}}</h4>
-      <div class="buttons-container">
-        <button class="cta-button" (click)="mostrarAvisoEdicion()">
-          Editar
-        </button>
-        <button class="cta-button" (click)="eliminarOficio(+oficio.id, oficio.nombre.toString())">
-          Eliminar
-        </button>
-      </div>
-    </article>
-    }
-    }
-  </div>
+</div>
 
-  <div class="oficio-list-footer">
-    <button class="cta-button" (click)="toggleForm()">
-      {{ formStatus() === 'creating' ? 'Ocultar Formulario' : 'AGREGAR NUEVO OFICIO' }}
-    </button>
-  </div>
+<div class="button-form-contenedor">
+  <button class="cta-button" (click)="toggleForm()">
+    {{ formStatus() === 'creating' ? 'Cerrar' : 'Nuevo Oficio' }}
+  </button>
+</div>
 
+<div class="oficio-list-footer"> @if (formStatus() === 'creating') {
+    <app-oficios-form-admin-component></app-oficios-form-admin-component>
+  }
 </div>

@@ -59,7 +59,7 @@ export class OficiosListAdminComponent {
       this.oficiosService.deleteOficio(id).subscribe({
         next: (response) => {
           const successMessage = response.mensaje || `Oficio "${nombre}" eliminado correctamente.`;
-          this.displayPageMessage(successMessage, 'success');
+          this.displayPageMessage('Oficio eliminado con exito ✔️​', 'success');
         },
         error: (err: HttpErrorResponse) => {
           const errorMessage = err.error?.mensaje || 'Error desconocido al eliminar el oficio.';
