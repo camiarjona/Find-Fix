@@ -1,3 +1,9 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .header-contenedor {
   max-width: 700px;
   margin: 0 auto 50px;
@@ -10,6 +16,7 @@
 }
 
 .admin-dashboard-contenedor {
+  flex: 1;
   max-width: 900px;
   margin: 30px auto;
   padding: 0 20px;
@@ -44,9 +51,11 @@ h1 {
 
 .panel-grid {
   display: grid;
-  gap: 30px;
+  gap: 80px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
 }
+
 
 .panel-card {
   width: 350px;
@@ -60,6 +69,7 @@ h1 {
   text-decoration: none;
   color: var(--text-dark);
   border-left: 8px solid;
+
 }
 
 .panel-card:hover {

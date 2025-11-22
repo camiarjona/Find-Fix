@@ -1,0 +1,125 @@
+
+:host {
+  display: block;
+  width: 100%;
+  margin-top: auto;
+}
+
+.site-footer {
+  background-color: #ffffff;
+  color: #000000;
+padding: 15px 20px; /* Mucho menos espacio arriba y abajo */  width: 100%;
+  height: 100%;
+  margin-top: auto;
+  border-top: 4px solid var(--primary-color);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+gap: 10px; /* Reduce el espacio entre el logo y las redes */  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+margin: 0;
+  color: var(--primary-color); /* Naranja */
+  letter-spacing: -0.5px;
+}
+
+.slogan {
+  font-size: 1rem;
+  color: #000000;
+  font-style:oblique;
+  margin: 0;
+  margin-top: 10px;
+
+}
+
+
+.social-handle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0 0 15px 0;
+  color: #000000;
+}
+
+.social-icons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.footer-brand img{
+   height: 100%;
+   width: 40%;
+
+}
+
+.social-link {
+  color: #000000;
+  transition: transform 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.social-link:hover {
+  color: var(--primary-color);
+  background-color: #000000;
+  transform: translateY(-3px);
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+.footer-divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: 30px auto 20px;
+  width: 100%;
+  max-width: none;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #000000;
+  opacity: 0.5;
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 0 20px;
+  }
+
+  .footer-brand {
+    max-width: 50%;
+  }
+
+  .footer-social {
+    text-align: right;
+  }
+
+  .social-icons {
+    justify-content: flex-end;
+  }
+
+  .brand-name {
+    font-size: 2rem;
+  }
+}

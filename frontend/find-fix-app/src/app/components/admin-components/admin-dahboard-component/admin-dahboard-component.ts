@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { FooterComponent } from "../../general/footer-component/footer-component";
 
 @Component({
   selector: 'app-admin-dahboard-component',
-  imports: [RouterLink],
+  imports: [RouterLink, FooterComponent],
   templateUrl: './admin-dahboard-component.html',
   styleUrl: './admin-dahboard-component.css',
 })

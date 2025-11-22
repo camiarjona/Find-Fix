@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angular/router';
+import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet, RouterLinkWithHref],
+  imports: [RouterOutlet, RouterLinkWithHref, FooterComponent],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
 })
