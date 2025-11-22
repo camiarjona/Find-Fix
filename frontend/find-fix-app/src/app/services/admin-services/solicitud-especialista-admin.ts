@@ -32,7 +32,7 @@ export class SolicitudEspecialistaAdminService {
   }
 
   actualizarEstado(id: number, dto: ActualizarSolicitudDTO): Observable<ApiResponse<FichaCompletaSolicitud>> {
-    const url = `${this.solicitudesUrl}/actualizar/${id}`; // URL: .../solicitud-especialista/actualizar/{id}
+    const url = `${this.solicitudesUrl}/actualizar/${id}`;
 
     return this.http.patch<ApiResponse<FichaCompletaSolicitud>>(url, dto);
   }

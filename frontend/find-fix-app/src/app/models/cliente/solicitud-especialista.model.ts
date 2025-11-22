@@ -13,7 +13,7 @@ export interface MostrarSolicitud{
 }
 
 export interface FichaCompletaSolicitud{
-   seId: number;
+  seId: number;
   fechaSolicitud: Date;
   fechaResolucion: Date;
   estado: EstadoSolicitud;

@@ -2,12 +2,14 @@ package com.findfix.find_fix_app.solicitudEspecialista.dto;
 
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 
 @Data
+@Getter
 public class FichaCompletaSolicitudEspecialistaDTO {
         private long seId;
         private LocalDate fechaSolicitud;
