@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { LoginCredentials, RegisterCredentials } from '../../models/user/user.model';
 import { RegisterForm } from "../../components/auth/register-form/register-form";
@@ -17,13 +17,25 @@ import { LoginForm } from "../../components/auth/login-form/login-form";
   templateUrl: './auth.page.html',
   styleUrl: './auth.page.css'
 })
-export class AuthPage {
+export class AuthPage implements OnInit {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   public isLoginView = signal<boolean>(true);
   public authError = signal<string | null>(null);
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const mode = params['mode'];
+      if (mode === 'register') {
+        this.showRegisterView();
+      } else {
+        this.showLoginView();
+      }
+    })
+  }
 
   showLoginView(): void {
     this.isLoginView.set(true);
@@ -51,7 +63,7 @@ export class AuthPage {
 
           } else {
             this.authService.setInitialRole('cliente');
-            this.router.navigateByUrl('/app/dashboard');
+            this.router.navigateByUrl('/cliente/dashboard');
           }
         },
         error: (err) => {

@@ -5,8 +5,14 @@
     <img src="images/nav-bar-logo.png" alt="FindFix Logo">
   </a>
 
-  <a [routerLink]="['/auth']" class="cta-button">
-    Iniciar Sesión
-  </a>
+  <div class="auth-buttons">
+    <a class="btn-login cta-button" [routerLink]="['/auth']" [queryParams]="{ mode: 'login' }">
+      Iniciar Sesión
+    </a>
+
+    <a class="btn-register cta-button" [routerLink]="['/auth']" [queryParams]="{ mode: 'register' }">
+      Registrarse
+    </a>
+  </div>
 
 </nav>

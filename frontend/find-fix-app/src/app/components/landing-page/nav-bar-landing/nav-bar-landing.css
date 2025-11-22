@@ -21,13 +21,31 @@
 }
 
 .navbar-logo img {
-  height: 50px;
+  height: 30px;
   width: auto;
   display: block;
 }
 
-.navbar-container .cta-button {
+.btn-login, .btn-register {
   padding: 8px 20px;
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-register {
+  background-color: #fffeee;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-register:hover {
+  background-color: #e4e3d6;
+  color: var(--primary-color);
+}
+
+

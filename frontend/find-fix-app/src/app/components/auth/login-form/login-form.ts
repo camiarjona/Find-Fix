@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginCredentials } from '../../../models/user/user.model';
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-login-form',
@@ -13,11 +14,15 @@ export class LoginForm {
 
   private fb = inject(FormBuilder);
 
+  public showPassword = signal(false);
+
   @Input() loginError: string | null = null;
 
   @Output() loginSubmit = new EventEmitter<LoginCredentials>();
 
   @Output() toggleView = new EventEmitter<void>();
+
+  public icons = UI_ICONS;
 
   public loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -35,5 +40,9 @@ export class LoginForm {
 
   onToggle(): void {
     this.toggleView.emit();
+  }
+
+  togglePassword() {
+    this.showPassword.update(val => !val);
   }
 }

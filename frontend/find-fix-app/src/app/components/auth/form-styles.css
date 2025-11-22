@@ -99,4 +99,41 @@
   font-weight: 500;
   width: 100%;
   box-sizing: border-box;
+  margin-top: 0.5rem;
+}
+
+/* --- Boton ver contraseña ---*/
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 45px !important;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.toggle-btn:hover {
+  color: #4b5563;
+}
+
+.toggle-btn svg {
+  width: 20px;
+  height: 20px;
 }

@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  padding: 80px 20px;
+  background-color: #fcfaff;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.header-section h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.header-section p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.steps-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.connecting-line {
+  position: absolute;
+  top: 50px;
+  left: 10%;
+  right: 10%;
+  height: 5px;
+  background-color: var(--primary-color, #F58634);
+  z-index: 0;
+  opacity: 0.3;
+  border-radius: 4px;
+}
+
+.step-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  text-align: center;
+  flex: 1;
+  max-width: 350px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-10px);
+}
+
+.icon-box {
+  width: 80px;
+  height: 80px;
+  background-color: #fff;
+  border: 2px solid var(--primary-color, #F58634);
+  border-radius: 50%;
+  margin: 0 auto 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icon-box img {
+  width: 40px;
+  height: auto;
+}
+
+.step-number {
+  position: absolute;
+  top: -10px;
+  right: px;
+  background-color: var(--primary-color, #F58634);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.step-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* --- Responsive para móviles --- */
+@media (max-width: 768px) {
+  .steps-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .connecting-line {
+    width: 8px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  .step-card {
+    width: 80%;
+    max-width: 100%;
+  }
+}

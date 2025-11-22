@@ -1,3 +1,67 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--primary-color); /* Naranja */
+}
+
+/* Botón de Cerrar Sesión */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #fee2e2; /* Borde rojo muy suave */
+  color: var(--primary-color);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.logout-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.logout-btn:hover {
+  background-color: #fef2f2; /* Fondo rojo suave al pasar mouse */
+  border-color: #dc2626;
+}
+
+/* Ajuste para Móvil: Solo mostrar icono */
+@media (max-width: 600px) {
+  .dashboard-header {
+    padding: 15px 20px;
+  }
+
+  .btn-text {
+    display: none; /* Ocultar texto "Cerrar Sesión" */
+  }
+
+  .logout-btn {
+    padding: 8px; /* Botón cuadrado */
+    border-color: transparent;
+  }
+}
+
 .header-contenedor {
   max-width: 700px;
   margin: 0 auto 50px;
@@ -6,12 +70,13 @@
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
-
-
   border-top: 5px solid var(--primary-color);
 }
 
+
+
 .admin-dashboard-contenedor {
+  flex: 1;
   max-width: 900px;
   margin: 30px auto;
   padding: 0 20px;
@@ -46,9 +111,11 @@ h1 {
 
 .panel-grid {
   display: grid;
- gap: 30px;
+  gap: 80px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
 }
+
 
 .panel-card {
   width: 350px;
@@ -62,6 +129,7 @@ h1 {
   text-decoration: none;
   color: var(--text-dark);
   border-left: 8px solid;
+
 }
 
 .panel-card:hover {
@@ -109,4 +177,12 @@ h1 {
   .panel-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.card-icon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+
+
 }

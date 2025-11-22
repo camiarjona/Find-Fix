@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class FichaCompletaSolicitudEspecialistaDTO {
         private long seId;
         private LocalDate fechaSolicitud;
-        private String fechaResolucion;
+        private LocalDate fechaResolucion;
         private String estado;
         private String motivo;
         private String respuesta;
@@ -22,8 +22,9 @@ public class FichaCompletaSolicitudEspecialistaDTO {
     private static final DateTimeFormatter formatoAmigable = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public FichaCompletaSolicitudEspecialistaDTO(SolicitudEspecialista solicitudEspecialista) {
+        this.seId = solicitudEspecialista.getSeId();
         this.fechaSolicitud = solicitudEspecialista.getFechaSolicitud();
-        this.fechaResolucion = String.format((solicitudEspecialista.getFechaResolucion() == null) ? "No se ha respondido a la solicitud" : solicitudEspecialista.getFechaResolucion().format(formatoAmigable));
+        this.fechaResolucion = solicitudEspecialista.getFechaResolucion();
         this.estado = solicitudEspecialista.getEstado().toString();
         this.motivo = solicitudEspecialista.getMotivo();
         this.respuesta = (solicitudEspecialista.getRespuesta() == null) ? "No se ha respondido a la solicitud" : solicitudEspecialista.getRespuesta();

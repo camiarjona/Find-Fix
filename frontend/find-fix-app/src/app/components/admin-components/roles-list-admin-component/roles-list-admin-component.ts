@@ -20,6 +20,24 @@ export class RolesListAdminComponent {
   public pageMessage = signal({ visible: false, message: '', type: 'success' });
   public nuevoRolNombre = '';
 
+  public isLoading = signal(true);
+
+  ngOnInit(): void {
+    console.log("Iniciando carga de roles...");
+
+    this.isLoading.set(true);
+    this.rolesService.getRoles().subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        console.log("Carga completa, loader apagado.");
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.showMessage('Error al cargar los roles', err);
+      }
+    });
+  }
+
   toggleForm(): void {
     if (this.formStatus() === 'hidden') {
       this.rolesService.formStatus.set('creating');
@@ -33,7 +51,7 @@ export class RolesListAdminComponent {
 
     this.rolesService.addRol(this.nuevoRolNombre).subscribe({
       next: () => {
-        this.showMessage('Rol creado con éxito', 'success');
+        this.showMessage('Rol creado con éxito ✔️​', 'success');
         this.nuevoRolNombre = '';
       },
       error: (err) => this.showMessage(err.error?.mensaje || 'Error al crear', 'error')
@@ -49,7 +67,7 @@ export class RolesListAdminComponent {
 
     if (confirmed && this.currentRolToDelete.nombre) {
       this.rolesService.deleteRol(this.currentRolToDelete.nombre).subscribe({
-        next: (res) => this.showMessage(res.mensaje, 'success'),
+        next: (res) => this.showMessage('Rol eliminado con exito ✔️​','success'),
         error: (err) => this.showMessage(err.error?.mensaje || 'Error al eliminar', 'error')
       });
     }
@@ -60,8 +78,8 @@ export class RolesListAdminComponent {
   }
 
   mostrarAvisoEdicion(): void {
-  this.showMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
-}
+    this.showMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
+  }
 }
 
 

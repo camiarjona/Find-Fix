@@ -51,7 +51,11 @@
   justify-content: center;
   flex-shrink: 0;
 }
-.modal-icon svg { width: 24px; height: 24px; }
+
+.modal-icon svg {
+  width: 24px;
+  height: 24px;
+}
 
 h2 {
   color: var(--text-dark, #1a1a1a);
@@ -67,6 +71,7 @@ h2 {
   margin: 1rem 0;
   text-align: left;
 }
+
 .detalle-lista li {
   padding: 0.6rem 0;
   border-bottom: 1px solid #f3f4f6;
@@ -74,17 +79,21 @@ h2 {
   grid-template-columns: 150px 1fr;
   gap: 1rem;
 }
+
 .detalle-lista li:last-child {
   border-bottom: none;
 }
+
 .detalle-lista li strong {
   font-weight: 600;
   color: var(--text-light, #555);
 }
+
 .detalle-lista li span {
   font-weight: 500;
   color: var(--text-dark, #1a1a1a);
 }
+
 .detalle-texto {
   grid-column: 1 / -1;
   margin: 0.25rem 0 0 0;
@@ -114,10 +123,12 @@ h2 {
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .btn-primary {
   background-color: var(--primary-color, #F58634);
   color: #ffffff;
 }
+
 .btn-primary:hover {
   background-color: #e07024;
 }
@@ -128,6 +139,23 @@ h2 {
   font-weight: 600;
   font-size: 0.875rem;
 }
-.status.pendiente { color: #a16207; background-color: #fef9c3; }
-.status.aceptado { color: #166534; background-color: #dcfce7; }
-.status.rechazado { color: #991b1b; background-color: #fee2e2; }
+
+.status.pendiente {
+  color: #a16207;
+  background-color: #fef9c3;
+}
+
+.status.aceptado {
+  color: #166534;
+  background-color: #dcfce7;
+}
+
+.status.rechazado {
+  color: #991b1b;
+  background-color: #fee2e2;
+}
+
+.texto-vacio {
+  color: #9ca3af;
+  font-style: italic;
+}

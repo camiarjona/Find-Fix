@@ -22,6 +22,12 @@ export class SeleccionarRolPage {
   seleccionar(rol: 'cliente' | 'especialista'){
     this.authService.setInitialRole(rol);
 
-    this.router.navigateByUrl('/home');
+    if(rol === 'cliente') {
+      this.router.navigateByUrl('/cliente/dashboard');
+      return;
+    } else {
+      this.router.navigateByUrl('/especialista/dashboard');
+      return;
+    }
   }
 }

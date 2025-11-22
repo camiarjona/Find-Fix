@@ -9,7 +9,7 @@ import { FichaCompletaSolicitud } from '../../../models/cliente/solicitud-especi
   templateUrl: './modal-detalle-solicitud.component.html',
   styleUrl: './modal-detalle-solicitud.component.css',
 })
-export class ModalDetalleSolicitud{
+export class ModalDetalleSolicitud {
 
   @Input() solicitud: FichaCompletaSolicitud | null = null;
 

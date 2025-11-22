@@ -2,9 +2,6 @@ import { AuthPage } from './pages/auth/auth.page';
 import { Home } from './pages/home/home.page';
 import { SeleccionarRolPage } from './pages/seleccionar-rol/seleccionar-rol.page';
 import { AdminDahboardComponent } from './components/admin-components/admin-dahboard-component/admin-dahboard-component';
-import { OficiosListAdminComponent } from './components/admin-components/oficios-list-admin-component/oficios-list-admin-component';
-import { Component } from '@angular/core';
-import { RolesListAdminComponent } from './components/admin-components/roles-list-admin-component/roles-list-admin-component';
 import { Routes } from '@angular/router';
 import { ClienteLayout } from './layouts/cliente/cliente-layout/cliente-layout';
 import { DashboardPage } from './pages/cliente/dashboard.page/dashboard.page';
@@ -17,6 +14,13 @@ import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
 import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
+import { RolesListAdminComponent } from './components/admin-components/roles-list-admin-component/roles-list-admin-component';
+import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
+import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
+import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
+import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
+import { PerfilPage } from './pages/cliente/perfil/perfil.page';
+
 
 export const routes: Routes = [
   {
@@ -33,12 +37,27 @@ export const routes: Routes = [
   },
   {
     path: 'admin/dashboard',
-    component: AdminDahboardComponent,
+    component: AdminDahboardComponent
   },
   {
-    path: 'admin/oficios',
-    component: OficiosListAdminComponent,
+    path: 'admin',
+    component: AdminLayout,
+    children: [
+      {
+        path: 'oficios',
+        component: OficiosListPage
+      },
+      {
+        path: 'roles',
+        component: RolesListPage
+      },
+      {
+        path: 'usuarios',
+        component: GestionUsers
+      }
+    ]
   },
+  // Rutas Privadas del Cliente
   {
     path: 'admin/roles',
     component : RolesListAdminComponent,
@@ -53,34 +72,38 @@ export const routes: Routes = [
   },
   // --- Rutas Privadas del Cliente (¡Aquí está lo nuevo!) ---
   {
-    path: 'app', // Prefijo para todas las rutas de cliente (ej: /app/dashboard)
-    component: ClienteLayout, // Usa el Layout como "cáscara"
-    // canActivate: [authGuard], // <-- Agrega tu guardia de autenticación aquí
+    path: 'cliente',
+    component: ClienteLayout,
+
     children: [
       {
         path: 'dashboard',
-        component: DashboardPage // (Un componente de dashboard)
+        component: DashboardPage
       },
       {
         path: 'mis-solicitudes',
-        component: MisSolicitudesPage // (Otra página de cliente)
+        component: MisSolicitudesPage
       },
-      { path: 'buscar-especialistas', component: BuscarEspecialistas},
-      { path: 'mis-resenas', component: MisResenas},
+      { path: 'buscar-especialistas', component: BuscarEspecialistas },
+      { path: 'mis-resenas', component: MisResenas },
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritos },
       {
-        path: 'solicitar-especialista/nueva', // La del formulario
+        path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
       },
       {
-        path: 'solicitar-especialista/historial', // La de la tabla
+        path: 'solicitar-especialista/historial',
         component: HistorialSolicitudesEspecialistaPages
       },
       {
-        path: '', // Redirige /app a /app/dashboard
+        path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'mi-perfil',
+        component: PerfilPage
       }
     ]
   },
