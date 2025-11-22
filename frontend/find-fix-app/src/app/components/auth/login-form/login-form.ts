@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginCredentials } from '../../../models/user/user.model';
 
@@ -12,6 +12,8 @@ import { LoginCredentials } from '../../../models/user/user.model';
 export class LoginForm {
 
   private fb = inject(FormBuilder);
+
+  public showPassword = signal(false);
 
   @Input() loginError: string | null = null;
 
@@ -35,5 +37,9 @@ export class LoginForm {
 
   onToggle(): void {
     this.toggleView.emit();
+  }
+
+  togglePassword() {
+    this.showPassword.update(val => !val);
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterCredentials } from '../../../models/user/user.model';
 
@@ -13,11 +13,12 @@ export class RegisterForm {
 
   private fb = inject(FormBuilder);
 
+  public showPassword = signal(false);
+
   @Input() registerError: string | null = null;
 
   @Output() registerSubmit = new EventEmitter<RegisterCredentials>();
   @Output() toggleView = new EventEmitter<void>();
-  
 
   public registerForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required]],
@@ -37,5 +38,9 @@ export class RegisterForm {
 
   onToggle(): void {
     this.toggleView.emit(); // "Toca el timbre"
+  }
+
+  togglePassword() {
+    this.showPassword.update(val => !val);
   }
 }
