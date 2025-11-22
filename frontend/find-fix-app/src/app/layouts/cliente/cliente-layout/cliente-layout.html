@@ -150,16 +150,16 @@
         }
       </li>
       <li>
-        <a style="cursor: pointer;" (click)="openProfile()">
+        <a routerLink="mi-perfil" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 18 22.5H6a1.875 1.875 0 0 1-1.499-2.382Z" />
               </svg>
             </span>
-            <span class="nav-text">Mi Perfil</span>
+            <span class="nav-text">Mi Cuenta</span>
           </div>
         </a>
       </li>
@@ -254,8 +254,3 @@
     <router-outlet></router-outlet>
   </main>
 </div>
-
-@if (showProfileModal() && currentUserProfile()) {
-<app-modal-mi-perfil [usuario]="currentUserProfile()!" (cerrar)="closeProfile()"
-  (perfilActualizado)="openProfile()"></app-modal-mi-perfil>
-}
