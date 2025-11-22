@@ -3,14 +3,13 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/rou
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
 import { UserProfile } from '../../../models/user/user.model';
-import { ModalMiPerfil } from "../../../components/user/modal-mi-perfil/modal-mi-perfil";
 import { FooterComponent } from "../../../components/general/footer-component/footer-component";
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-cliente-layout',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ModalMiPerfil, FooterComponent],
   templateUrl: './cliente-layout.html',
   styleUrl: './cliente-layout.css',
 })
@@ -20,6 +19,8 @@ export class ClienteLayout {
   isSidebarOpen = signal(true);
   isEspecialistaMenuOpen = signal(false);
   isMobileMenuOpen = signal(false);
+
+  public icons = UI_ICONS;
 
   //ESTADOS PARA LOS CONTROLES DEL HEADER
 

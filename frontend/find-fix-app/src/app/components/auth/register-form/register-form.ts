@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterCredentials } from '../../../models/user/user.model';
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-register-form',
@@ -19,6 +20,8 @@ export class RegisterForm {
 
   @Output() registerSubmit = new EventEmitter<RegisterCredentials>();
   @Output() toggleView = new EventEmitter<void>();
+
+  public icons = UI_ICONS;
 
   public registerForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required]],

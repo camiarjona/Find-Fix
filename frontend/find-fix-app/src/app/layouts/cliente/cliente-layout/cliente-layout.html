@@ -37,8 +37,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.INICIO" />
               </svg>
             </span>
             <span class="nav-text">Inicio</span>
@@ -51,8 +50,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.SEARCH" />
               </svg>
             </span>
             <span class="nav-text">Buscar Especialistas</span>
@@ -66,8 +64,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.MIS_SOLICITUDES"/>
               </svg>
             </span>
             <span class="nav-text">Mis Solicitudes</span>
@@ -81,7 +78,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                  [attr.d]="icons.MIS_TRABAJOS" />
               </svg>
             </span>
             <span class="nav-text">Mis Trabajos</span>
@@ -94,8 +91,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.FAV" />
               </svg>
             </span>
             <span class="nav-text">Mis Favoritos</span>
@@ -108,8 +104,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.4c.566 0 .81.758.36 1.11l-4.37 3.1a.563.563 0 0 0-.215.66l1.625 5.02a.563.563 0 0 1-.84.62l-4.42-3.15a.563.563 0 0 0-.65 0l-4.42 3.15a.563.563 0 0 1-.84-.62l1.625-5.02a.563.563 0 0 0-.215-.66l-4.37-3.1a.563.563 0 0 1 .36-1.11h5.4a.563.563 0 0 0 .475-.31L11.48 3.5Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.RESENA" />
               </svg>
             </span>
             <span class="nav-text">Mis Reseñas</span>
@@ -121,7 +116,7 @@
         <a href="#" (click)="toggleEspecialistaMenu($event)">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+              <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" width="24" height="24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
@@ -155,8 +150,7 @@
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 18 22.5H6a1.875 1.875 0 0 1-1.499-2.382Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
               </svg>
             </span>
             <span class="nav-text">Mi Cuenta</span>
@@ -170,12 +164,14 @@
         <span class="nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M15.75 9l-2.25-2.25M15.75 9l2.25-2.25M15.75 9 18 6.75M15.75 9 18 11.25m.75-4.5h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Zm.008 0h.008v.008H18.75V6.75Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.LOGOUT"/>
           </svg>
         </span>
         <span class="nav-text">Cerrar Sesión</span>
       </a>
+      <div class="app-version">
+        <small>FindFix v1.0 © 2025</small>
+      </div>
     </div>
   </nav>
 
@@ -195,8 +191,7 @@
             <span class="icon-cliente">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 18 22.5H6a1.875 1.875 0 0 1-1.499-2.382Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
               </svg>
             </span>
             <!-- Icono Especialista -->
