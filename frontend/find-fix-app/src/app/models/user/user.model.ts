@@ -6,6 +6,7 @@ export interface UserProfile {
   ciudad?: string;
   telefono?: string;
   roles: string[];
+  activo: boolean;
 }
 
 export interface LoginCredentials {
