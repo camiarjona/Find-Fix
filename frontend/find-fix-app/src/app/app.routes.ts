@@ -15,7 +15,7 @@ import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
-import { PerfilPage } from './pages/cliente/perfil/perfil';
+import { PerfilPage } from './pages/cliente/perfil/perfil.page';
 import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
 
 export const routes: Routes = [

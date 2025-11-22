@@ -2,82 +2,135 @@
   <h2>Mi Historial de Solicitudes</h2>
 
   @if (mensajeExito()) {
-    <div class="exito" role="alert">{{ mensajeExito() }}</div>
+  <div class="exito" role="alert">{{ mensajeExito() }}</div>
   }
   @if (mensajeError()) {
-    <div class="error" role="alert">{{ mensajeError() }}</div>
+  <div class="error" role="alert">{{ mensajeError() }}</div>
   }
 
-  @if (isLoading()) {
-    <p>Cargando historial...</p>
-  } @else {
-    @if (misSolicitudes().length > 0) {
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Respuesta del Administrador</th>
-              <th class="acciones-header">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (sol of misSolicitudes(); track sol.seId) {
-              <tr>
-                <td data-label="Fecha">
-                  {{ sol.fechaSolicitud | date:'dd/MM/yyyy' }}
-                </td>
+  <div class="filter-container">
 
-                <td data-label="Estado">
-                  <span class="status" [ngClass]="sol.estado.toLowerCase()">
-                    {{ sol.estado }}
-                  </span>
-                </td>
+    <div class="filter-controls">
 
-                <td class="respuesta" data-label="Respuesta">
-                  {{ sol.respuesta || 'Sin respuesta aún.' }}
-                </td>
-
-                <td class="celda-acciones" data-label="Acciones">
-                  <div class="botones-wrapper">
-                    <button class="btn-ver" (click)="abrirModalDetalle(sol.seId)">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                      </svg>
-                    </button>
-
-                    @if (sol.estado === 'Pendiente') {
-                      <button class="btn-eliminar" (click)="abrirModalEliminar(sol.seId)">
-                        Eliminar
-                      </button>
-                    }
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+      <div class="search-box">
+        <input type="text" placeholder="Buscar por motivo..." [(ngModel)]="searchText"
+          (keyup.enter)="addFilter('motivo', searchText)">
+        <button class="btn-search" (click)="addFilter('motivo', searchText)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+        </button>
       </div>
-    } @else {
-      <p>No tienes ninguna solicitud enviada.</p>
+
+      <select [(ngModel)]="selectedState" (change)="addFilter('estado', selectedState)" class="filter-select">
+        <option value="" disabled selected>Estado</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="ACEPTADO">Aceptada</option>
+        <option value="RECHAZADO">Rechazada</option>
+      </select>
+
+      <div class="date-range-wrapper">
+
+        <input type="date" class="filter-date" [(ngModel)]="dateFrom" (change)="addFilter('fechaDesde', dateFrom)"
+          title="Fecha Desde">
+
+        <span class="separator">-</span>
+
+        <input type="date" class="filter-date" [(ngModel)]="dateTo" (change)="addFilter('fechaHasta', dateTo)"
+          title="Fecha Hasta">
+      </div>
+
+    </div>
+
+    @if (activeChips().length > 0) {
+    <div class="active-filters-area">
+
+      <span class="filters-label">Filtros activos:</span>
+
+      <div class="chips-wrapper">
+        @for (chip of activeChips(); track chip.label) {
+        <div class="chip">
+          <span>{{ chip.label }}</span>
+          <button (click)="removeFilter(chip)" class="chip-close">×</button>
+        </div>
+        }
+
+        <button class="clear-all-btn" (click)="clearAllFilters()">
+          Borrar todos
+        </button>
+      </div>
+
+    </div>
     }
+
+  </div>
+
+  @if (isLoading()) {
+  <p>Cargando historial...</p>
+  } @else {
+  @if (misSolicitudes().length > 0) {
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Respuesta del Administrador</th>
+          <th class="acciones-header">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sol of misSolicitudes(); track sol.seId) {
+        <tr>
+          <td data-label="Fecha">
+            {{ sol.fechaSolicitud | date:'dd/MM/yyyy' }}
+          </td>
+
+          <td data-label="Estado">
+            <span class="status" [ngClass]="sol.estado.toLowerCase()">
+              {{ sol.estado }}
+            </span>
+          </td>
+
+          <td class="respuesta" data-label="Respuesta">
+            {{ sol.respuesta || 'Sin respuesta aún.' }}
+          </td>
+
+          <td class="celda-acciones" data-label="Acciones">
+            <div class="botones-wrapper">
+              <button class="btn-ver" (click)="abrirModalDetalle(sol.seId)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+              </button>
+
+              @if (sol.estado === 'Pendiente') {
+              <button class="btn-eliminar" (click)="abrirModalEliminar(sol.seId)">
+                Eliminar
+              </button>
+              }
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  } @else {
+  <p>No tienes ninguna solicitud enviada.</p>
+  }
   }
 </div>
 
 @if (isAlertaOpen()) {
-  <app-modal-alerta
-    titulo="¿Eliminar Solicitud?"
-    mensaje="Esta acción no se puede deshacer. ¿Estás seguro?"
-    textoBotonConfirmar="Sí, Eliminar"
-    (confirmar)="onModalConfirmarEliminar()"
-    (cancelar)="onModalCancelar()"
-  />
+<app-modal-alerta titulo="¿Eliminar Solicitud?" mensaje="Esta acción no se puede deshacer. ¿Estás seguro?"
+  textoBotonConfirmar="Sí, Eliminar" (confirmar)="onModalConfirmarEliminar()" (cancelar)="onModalCancelar()" />
 }
 @if (isDetalleOpen()) {
-  <app-modal-detalle-solicitud
-    [solicitud]="solicitudDetalle()"
-    (cerrar)="cerrarModalDetalle()"
-  />
+<app-modal-detalle-solicitud [solicitud]="solicitudDetalle()" (cerrar)="cerrarModalDetalle()" />
 }

@@ -215,3 +215,81 @@ input:checked+.slider:before {
 input:focus+.slider {
   box-shadow: 0 0 1px #16a34a;
 }
+
+/* --- BARRA DE FILTROS --- */
+.filters-bar {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  /* Alinea los inputs con los botones */
+  flex-wrap: wrap;
+  border: 1px solid #f3f4f6;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.filter-input,
+.filter-select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  min-width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #F58634;
+  box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
+}
+
+/* BOTONES DE FILTRO */
+.filter-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btn-filter {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-filter.search {
+  background-color: #F58634;
+  color: white;
+}
+
+.btn-filter.search:hover {
+  background-color: #ea580c;
+}
+
+.btn-filter.clear {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.btn-filter.clear:hover {
+  background-color: #e5e7eb;
+}

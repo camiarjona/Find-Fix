@@ -13,7 +13,10 @@
 
     <section class="card personal-info-card">
       <div class="card-header">
-        <div class="header-icon">👤</div>
+        <div class="header-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24"
+            stroke-width="1.3" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
+          </svg></div>
         <h2>Información Personal</h2>
       </div>
 
@@ -37,14 +40,12 @@
                 <input type="text" [(ngModel)]="tempValue" class="input-inline">
                 <button class="action-btn save" (click)="saveEdit('nombre')"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="M9 15.59 4.71 11.3 3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11-1.41-1.41L9.02 15.59Z">
+                    <path [attr.d]="icons.SAVE">
                     </path>
                   </svg></button>
                 <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z">
+                    <path [attr.d]="icons.CANCEL">
                     </path>
                   </svg></button>
               </div>
@@ -52,8 +53,7 @@
               <span class="value">{{ usuario()?.nombre }}</span>
               <button class="edit-pencil" (click)="startEdit('nombre', usuario()?.nombre)"><svg
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path
-                    d="m19.41,3c-.78-.78-2.05-.78-2.83,0L4.29,15.29c-.13.13-.22.29-.26.46l-1,4c-.08.34.01.7.26.95.19.19.45.29.71.29.08,0,.16,0,.24-.03l4-1c.18-.04.34-.13.46-.26l12.29-12.29c.78-.78.78-2.05,0-2.83l-1.59-1.59Zm-11.93,15.1l-2.11.53.53-2.11L15,7.41l1.59,1.59-9.1,9.1Zm10.51-10.51l-1.59-1.59,1.59-1.59,1.59,1.58-1.59,1.59Z">
+                  <path [attr.d]="icons.EDIT">
                   </path>
                 </svg></button>
               }
@@ -68,14 +68,12 @@
                 <input type="text" [(ngModel)]="tempValue" class="input-inline">
                 <button class="action-btn save" (click)="saveEdit('apellido')"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="M9 15.59 4.71 11.3 3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11-1.41-1.41L9.02 15.59Z">
+                    <path [attr.d]="icons.SAVE">
                     </path>
                   </svg></button>
                 <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z">
+                    <path [attr.d]="icons.CANCEL">
                     </path>
                   </svg></button>
               </div>
@@ -83,8 +81,7 @@
               <span class="value">{{ usuario()?.apellido }}</span>
               <button class="edit-pencil" (click)="startEdit('apellido', usuario()?.apellido)"><svg
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path
-                    d="m19.41,3c-.78-.78-2.05-.78-2.83,0L4.29,15.29c-.13.13-.22.29-.26.46l-1,4c-.08.34.01.7.26.95.19.19.45.29.71.29.08,0,.16,0,.24-.03l4-1c.18-.04.34-.13.46-.26l12.29-12.29c.78-.78.78-2.05,0-2.83l-1.59-1.59Zm-11.93,15.1l-2.11.53.53-2.11L15,7.41l1.59,1.59-9.1,9.1Zm10.51-10.51l-1.59-1.59,1.59-1.59,1.59,1.58-1.59,1.59Z">
+                  <path [attr.d]="icons.EDIT">
                   </path>
                 </svg></button>
               }
@@ -95,7 +92,10 @@
             <span class="label">Email</span>
             <div class="value-container">
               <span class="value locked">{{ usuario()?.email }}</span>
-              <span class="lock-icon" title="No editable">🔒</span>
+              <span class="lock-icon" title="No editable"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  fill="#000000" viewBox="0 0 24 24">
+                  <path [attr.d]="icons.LOCK"></path>
+                </svg></span>
             </div>
           </li>
 
@@ -107,14 +107,12 @@
                 <input type="text" [(ngModel)]="tempValue" class="input-inline">
                 <button class="action-btn save" (click)="saveEdit('telefono')"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="M9 15.59 4.71 11.3 3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11-1.41-1.41L9.02 15.59Z">
+                    <path [attr.d]="icons.SAVE">
                     </path>
                   </svg></button>
                 <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z">
+                    <path [attr.d]="icons.CANCEL">
                     </path>
                   </svg></button>
               </div>
@@ -122,8 +120,7 @@
               <span class="value">{{ usuario()?.telefono || 'No especificado' }}</span>
               <button class="edit-pencil" (click)="startEdit('telefono', usuario()?.telefono)"><svg
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path
-                    d="m19.41,3c-.78-.78-2.05-.78-2.83,0L4.29,15.29c-.13.13-.22.29-.26.46l-1,4c-.08.34.01.7.26.95.19.19.45.29.71.29.08,0,.16,0,.24-.03l4-1c.18-.04.34-.13.46-.26l12.29-12.29c.78-.78.78-2.05,0-2.83l-1.59-1.59Zm-11.93,15.1l-2.11.53.53-2.11L15,7.41l1.59,1.59-9.1,9.1Zm10.51-10.51l-1.59-1.59,1.59-1.59,1.59,1.58-1.59,1.59Z">
+                  <path [attr.d]="icons.EDIT">
                   </path>
                 </svg></button>
               }
@@ -142,14 +139,12 @@
                 </select>
                 <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="M9 15.59 4.71 11.3 3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11-1.41-1.41L9.02 15.59Z">
+                    <path [attr.d]="icons.SAVE">
                     </path>
                   </svg></button>
                 <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path
-                      d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z">
+                    <path [attr.d]="icons.CANCEL">
                     </path>
                   </svg></button>
               </div>
@@ -157,8 +152,7 @@
               <span class="value">{{ usuario()?.ciudad || 'No especificada' }}</span>
               <button class="edit-pencil" (click)="startEdit('ciudad', usuario()?.ciudad)"><svg
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path
-                    d="m19.41,3c-.78-.78-2.05-.78-2.83,0L4.29,15.29c-.13.13-.22.29-.26.46l-1,4c-.08.34.01.7.26.95.19.19.45.29.71.29.08,0,.16,0,.24-.03l4-1c.18-.04.34-.13.46-.26l12.29-12.29c.78-.78.78-2.05,0-2.83l-1.59-1.59Zm-11.93,15.1l-2.11.53.53-2.11L15,7.41l1.59,1.59-9.1,9.1Zm10.51-10.51l-1.59-1.59,1.59-1.59,1.59,1.58-1.59,1.59Z">
+                  <path [attr.d]="icons.EDIT">
                   </path>
                 </svg></button>
               }
@@ -170,7 +164,10 @@
 
     <section class="card security-card">
       <div class="card-header">
-        <div class="header-icon locked-icon">🛡️</div>
+        <div class="header-icon locked-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24"
+            stroke-width="1.3" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.ESCUDO" />
+          </svg></div>
         <h2>Seguridad</h2>
       </div>
 

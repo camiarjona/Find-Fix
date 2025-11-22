@@ -32,3 +32,10 @@ export interface UpdatePasswordRequest {
   passwordActual: string;
   passwordNuevo: string;
 }
+
+export interface UserSearchFilters {
+  email?: string;
+  id?: number;
+  rol?: string;
+  roles?: string[];
+}

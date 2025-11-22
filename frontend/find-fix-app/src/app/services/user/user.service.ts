@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { UpdatePasswordRequest, UpdateUserRequest, UserProfile } from '../../models/user/user.model';
+import { UpdatePasswordRequest, UpdateUserRequest, UserProfile, UserSearchFilters } from '../../models/user/user.model';
 import { Observable, of, tap } from 'rxjs';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
 
@@ -77,6 +77,14 @@ export class UserService {
     return this.http.patch<ApiResponse<string>>(
       `${this.apiUrl}/usuario/modificar/${email}`,
       data,
+      { withCredentials: true }
+    );
+  }
+
+  filterUsers(filters: UserSearchFilters): Observable<ApiResponse<UserProfile[]>> {
+    return this.http.post<ApiResponse<UserProfile[]>>(
+      `${this.apiUrl}/usuario/filtrar`,
+      filters,
       { withCredentials: true }
     );
   }

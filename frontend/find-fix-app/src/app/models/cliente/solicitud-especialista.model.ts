@@ -22,4 +22,15 @@ export interface FichaCompletaSolicitud{
   respuesta: string;
 }
 
+export interface SolicitudFilter {
+  motivo?: string;
+  estado?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+}
 
+export interface FilterChip {
+  key: keyof SolicitudFilter;
+  label: string;
+  value: any;
+}

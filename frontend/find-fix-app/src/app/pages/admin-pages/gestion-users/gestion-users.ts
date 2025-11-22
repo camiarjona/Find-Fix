@@ -1,12 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
-import { UserProfile } from '../../../models/user/user.model';
+import { UserProfile, UserSearchFilters } from '../../../models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { ModalDetalleUsuario } from '../../../components/admin-components/modal-detalle-usuario/modal-detalle-usuario';
+import { FormsModule } from '@angular/forms';
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-gestion-users',
-  imports: [CommonModule, ModalDetalleUsuario],
+  imports: [CommonModule, ModalDetalleUsuario, FormsModule],
   templateUrl: './gestion-users.html',
   styleUrl: './gestion-users.css',
 })
@@ -17,7 +19,14 @@ export class GestionUsers implements OnInit{
   public usuarios = signal<UserProfile[]>([]);
   public isLoading = signal(true);
 
+  public icons = UI_ICONS;
+
   public usuarioSeleccionado = signal<UserProfile | null>(null);
+
+  public filtros: UserSearchFilters = {
+    email: '',
+    rol: ''
+  };
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -92,4 +101,40 @@ export class GestionUsers implements OnInit{
       }
     )
   }
+
+  // MÉTODO PARA FILTRAR
+  aplicarFiltros() {
+    // Si no hay nada escrito, recargamos todos
+    if (!this.filtros.email && !this.filtros.rol) {
+      this.cargarUsuarios();
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    // Limpiamos el objeto para no enviar strings vacíos
+    const filtrosLimpios: UserSearchFilters = {
+      email: this.filtros.email || undefined,
+      rol: this.filtros.rol || undefined
+    };
+
+    this.userService.filterUsers(filtrosLimpios).subscribe({
+      next: (res) => {
+        this.usuarios.set(res.data); // Actualizamos la tabla con los resultados
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading.set(false);
+        alert('Error al filtrar');
+      }
+    });
+  }
+
+  // MÉTODO PARA LIMPIAR
+  limpiarFiltros() {
+    this.filtros = { email: '', rol: '' }; // Reset variables
+    this.cargarUsuarios(); // Recargar lista completa
+  }
 }
+

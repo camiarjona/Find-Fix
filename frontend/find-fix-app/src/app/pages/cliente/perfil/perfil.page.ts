@@ -3,17 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
 import { UserProfile, UpdateUserRequest, UpdatePasswordRequest } from '../../../models/user/user.model';
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-mi-perfil-page',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './perfil.html',
-  styleUrls: ['./perfil.css']
+  templateUrl: './perfil.page.html',
+  styleUrls: ['./perfil.page.css']
 })
 export class PerfilPage implements OnInit {
 
   private userService = inject(UserService);
+
+  public icons = UI_ICONS;
 
   // --- ESTADO DE DATOS ---
   public usuario = signal<UserProfile | null>(null);
