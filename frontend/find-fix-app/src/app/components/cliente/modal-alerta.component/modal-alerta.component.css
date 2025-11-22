@@ -42,10 +42,9 @@
   margin: 0 auto 1.5rem auto;
 }
 
-/* ¡NUEVO! Estilo de Peligro (Rojo) */
 .modal-icon.danger {
-  background-color: #fee2e2; /* Rojo suave */
-  color: #b91c1c; /* Rojo oscuro */
+  background-color: #fee2e2;
+  color: #b91c1c;
 }
 
 .modal-icon svg {
@@ -92,11 +91,10 @@ p {
   background-color: #d1d5db;
 }
 
-/* ¡NUEVO! Botón de Peligro (Rojo) */
 .btn-danger {
-  background-color: #dc3545; /* Rojo */
+  background-color: #dc3545;
   color: #ffffff;
 }
 .btn-danger:hover {
-  background-color: #b91c1c; /* Rojo oscuro */
+  background-color: #b91c1c;
 }

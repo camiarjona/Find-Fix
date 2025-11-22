@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, TRANSLATIONS } from '@angular/core';
-import { FichaCompletaSolicitud, MandarSolicitud, MostrarSolicitud } from '../../models/cliente/solicitud-especialista.model';
+import { FichaCompletaSolicitud, MandarSolicitud, MostrarSolicitud, SolicitudFilter } from '../../models/cliente/solicitud-especialista.model';
 import { Observable, of } from 'rxjs';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
 
@@ -29,5 +29,13 @@ export class SolicitudEspecialistaService {
   eliminarSolicitud(id: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(`${this.apiURL}/eliminar/${id}`, { withCredentials: true })
 
+  }
+
+  filtrarMisSolicitudes(filtros: SolicitudFilter): Observable<ApiResponse<MostrarSolicitud[]>> {
+    return this.http.post<ApiResponse<MostrarSolicitud[]>>(
+      `${this.apiURL}/filtrar`,
+      filtros,
+      { withCredentials: true }
+    );
   }
 }

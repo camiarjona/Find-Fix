@@ -17,6 +17,7 @@ public class VerPerfilUsuarioDTO {
     private String ciudad;
     private String telefono;
     private Set<String> roles;
+    private boolean activo;
 
 
     public VerPerfilUsuarioDTO(Usuario usuario) {
@@ -29,5 +30,7 @@ public class VerPerfilUsuarioDTO {
         this.roles = usuario.getRoles().stream()
                 .map(Rol::getNombre)
                 .collect(Collectors.toSet());
+
+        this.activo = usuario.isActivo();
     }
 }

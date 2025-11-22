@@ -10,7 +10,7 @@ import { FooterComponent } from "../../../components/general/footer-component/fo
   styleUrl: './admin-layout.css',
 })
 export class AdminLayout {
- isSidebarOpen = signal(true);
+  isSidebarOpen = signal(true);
   isEspecialistaMenuOpen = signal(false);
   isMobileMenuOpen = signal(false);
 

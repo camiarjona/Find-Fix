@@ -4,6 +4,7 @@ import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,8 @@ public interface UsuarioService {
     VerPerfilUsuarioDTO verPerfilUsuario() throws UsuarioNotFoundException;
     void actualizarUsuarioEspecialista(Usuario usuario);
     List<String> ciudadesDisponibles();
+    void desactivarUsuario(String email) throws UsuarioNotFoundException;
 
+    @Transactional(rollbackFor = Exception.class)
+    void activarUsuario(String email) throws UsuarioNotFoundException;
 }

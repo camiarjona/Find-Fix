@@ -42,6 +42,9 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private CiudadesDisponibles ciudad;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean activo = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_usuarios",

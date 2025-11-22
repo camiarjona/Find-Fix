@@ -75,9 +75,9 @@ public class SolicitudEspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Ficha de solicitud encontrada☑️", ficha));
     }
 
-    @GetMapping("/filtrar")
+    @PostMapping("/filtrar")
     @PreAuthorize("hasAnyRole('ADMIN','CLIENTE')")
-    public ResponseEntity<ApiResponse<List<FichaCompletaSolicitudEspecialistaDTO>>> filtrarSolicitudes(@RequestBody BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {
+    public ResponseEntity<ApiResponse<List<FichaCompletaSolicitudEspecialistaDTO>>> filtrarSolicitudes(@RequestBody BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException, UsuarioNotFoundException {
         List<FichaCompletaSolicitudEspecialistaDTO> solicitudesFiltradas = solicitudEspecialistaService.filtrarSolicitudes(filtro);
 
         return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", solicitudesFiltradas));
