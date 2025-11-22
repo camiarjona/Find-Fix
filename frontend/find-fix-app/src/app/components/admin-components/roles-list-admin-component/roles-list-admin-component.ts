@@ -51,7 +51,7 @@ export class RolesListAdminComponent {
 
     this.rolesService.addRol(this.nuevoRolNombre).subscribe({
       next: () => {
-        this.showMessage('Rol creado con éxito', 'success');
+        this.showMessage('Rol creado con éxito ✔️​', 'success');
         this.nuevoRolNombre = '';
       },
       error: (err) => this.showMessage(err.error?.mensaje || 'Error al crear', 'error')
@@ -67,7 +67,7 @@ export class RolesListAdminComponent {
 
     if (confirmed && this.currentRolToDelete.nombre) {
       this.rolesService.deleteRol(this.currentRolToDelete.nombre).subscribe({
-        next: (res) => this.showMessage(res.mensaje, 'success'),
+        next: (res) => this.showMessage('Rol eliminado con exito ✔️​','success'),
         error: (err) => this.showMessage(err.error?.mensaje || 'Error al eliminar', 'error')
       });
     }
