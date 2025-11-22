@@ -117,11 +117,11 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse<>("Ciudades disponibles", ciudadesDisponibles));
     }
 
-    @GetMapping("/filtrar")
+    @PostMapping("/filtrar")
     @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
-    public ResponseEntity<ApiResponse<List<MostrarUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UsuarioNotFoundException, UsuarioException {
+    public ResponseEntity<ApiResponse<List<VerPerfilUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UsuarioNotFoundException, UsuarioException {
         List<Usuario> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
-        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(MostrarUsuarioDTO::new).toList()));
+        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(VerPerfilUsuarioDTO::new).toList()));
     }
 
     @PatchMapping("/desactivar/{email}")

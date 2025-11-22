@@ -169,15 +169,26 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para filtrar solicitudes
     @Override
     @Transactional(readOnly = true)
-    public List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException {
+    public List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException, UsuarioNotFoundException {
+
+        Usuario usuarioAuth = authService.obtenerUsuarioAutenticado();
+
+        boolean esAdmin = usuarioAuth.getRoles().stream()
+                .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
+
         Specification<SolicitudEspecialista> spec = (root, query, cb) -> cb.conjunction();
+
+        if (!esAdmin) {
+            spec = spec.and(SolicitudEspecialistaSpecifications.tieneUsuarioEmail(usuarioAuth.getEmail()));
+        }
+
 
         // Filtro por ID
         if (filtro.tieneId()) {
             spec = spec.and(SolicitudEspecialistaSpecifications.tieneId(filtro.id()));
         }
 
-        // Filtro por Estado (String a Enum)
+        // Filtro por Estado
         if (filtro.tieneEstado()) {
             try {
                 EstadosSolicitudes estadoEnum = EstadosSolicitudes.valueOf(filtro.estado().toUpperCase());
@@ -187,13 +198,12 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
             }
         }
 
-        // Filtro por fecha exacta
+        // Filtro por Fecha
         if (filtro.tieneFecha()) {
             spec = spec.and(SolicitudEspecialistaSpecifications.fechaEntre(filtro.fechaDesde(), filtro.fechaHasta()));
         }
 
-        // Filtro por email de usuario
-        if (filtro.tieneEmail()) {
+        if (esAdmin && filtro.tieneEmail()) {
             spec = spec.and(SolicitudEspecialistaSpecifications.tieneUsuarioEmail(filtro.email()));
         }
 

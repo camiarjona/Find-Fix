@@ -18,6 +18,6 @@ public interface SolicitudEspecialistaService {
     SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, RolNotFoundException, SolicitudEspecialistaException;
     void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException;
     List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException;
-    List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException;
+    List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException, UsuarioNotFoundException;
     FichaCompletaSolicitudEspecialistaDTO obtenerFichaPorId(Long id) throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, SolicitudEspecialistaException;
     }
