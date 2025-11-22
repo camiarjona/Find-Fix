@@ -1,4 +1,3 @@
-
 :host {
   display: block;
   width: 100%;
@@ -8,8 +7,9 @@
 .site-footer {
   background-color: #ffffff;
   color: #000000;
-padding: 15px 20px; /* Mucho menos espacio arriba y abajo */  width: 100%;
-  height: 100%;
+  padding: 10px 20px;
+  height: auto;
+  min-height: 50px;
   margin-top: auto;
   border-top: 4px solid var(--primary-color);
 }
@@ -19,32 +19,40 @@ padding: 15px 20px; /* Mucho menos espacio arriba y abajo */  width: 100%;
   flex-direction: column;
   align-items: center;
   text-align: center;
-gap: 10px; /* Reduce el espacio entre el logo y las redes */  max-width: 1200px;
+  gap: 15px;
+  max-width: 1100px;
   margin: 0 auto;
+  height: auto;
+}
+
+.footer-container img {
+  margin-top: 2px;
+  max-width: 150px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .brand-name {
   font-size: 1.4rem;
   font-weight: 800;
-margin: 0;
-  color: var(--primary-color); /* Naranja */
+  margin: 0;
+  color: var(--primary-color);
   letter-spacing: -0.5px;
 }
 
 .slogan {
   font-size: 1rem;
   color: #000000;
-  font-style:oblique;
-  margin: 0;
-  margin-top: 10px;
-
+  font-style: oblique;
+  margin: 5px 0 0 0;
+  height: auto;
 }
-
 
 .social-handle {
   font-weight: 600;
   font-size: 1.1rem;
-  margin: 0 0 15px 0;
+  margin: 10px 0;
   color: #000000;
 }
 
@@ -52,16 +60,11 @@ margin: 0;
   display: flex;
   gap: 20px;
   justify-content: center;
-}
-
-.footer-brand img{
-   height: 100%;
-   width: 40%;
-
+  margin-bottom: 10px;
 }
 
 .social-link {
-  color: #000000;
+  color: #302020;
   transition: transform 0.2s, color 0.2s;
   display: flex;
   align-items: center;
@@ -73,7 +76,7 @@ margin: 0;
 
 .social-link:hover {
   color: var(--primary-color);
-  background-color: #000000;
+  background-color: rgba(245, 134, 52, 0.1);
   transform: translateY(-3px);
 }
 
@@ -82,13 +85,11 @@ margin: 0;
   height: 20px;
 }
 
-
 .footer-divider {
   height: 1px;
   background-color: rgba(0, 0, 0, 0.1);
-  margin: 30px auto 20px;
+  margin: 15px auto;
   width: 100%;
-  max-width: none;
 }
 
 .footer-bottom {
@@ -96,30 +97,63 @@ margin: 0;
   font-size: 0.85rem;
   color: #000000;
   opacity: 0.5;
+  height: auto;
+  margin-bottom: 5px;
 }
 
+
+
 @media (min-width: 768px) {
+
+  .site-footer {
+    padding: 10px 40px;
+  }
+
   .footer-container {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     text-align: left;
-    padding: 0 20px;
+    gap: 0;
   }
 
   .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     max-width: 50%;
+  }
+
+  .footer-container img {
+    margin: 0;
   }
 
   .footer-social {
     text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .social-handle {
+    margin: 0 0 10px 0;
   }
 
   .social-icons {
     justify-content: flex-end;
+    margin: 0;
   }
 
   .brand-name {
     font-size: 2rem;
+  }
+
+  .slogan {
+    margin-top: 5px;
+  }
+
+
+  .footer-divider {
+    margin: 20px auto;
   }
 }

@@ -1,31 +1,24 @@
-/* ======================================= */
-/* 1. ESTILOS BASE (MÓVIL PRIMERO) */
-/* ======================================= */
 
 .landing-footer {
-  background-color: #ffffff; /* Fondo oscuro */
+  background-color: #ffffff;
   color: #e5e5e5;
   padding: 40px 20px 20px;
-  border-top: 5px solid var(--primary-color); /* Borde naranja */
+  border-top: 5px solid var(--primary-color);
 }
-
-
 .footer-section img {
   height: 30%;
   width: 30%;
 }
-
-
 .footer-content {
   display: flex;
-  flex-direction: column; /* Apilado en móvil */
+  flex-direction: column;
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto 40px;
-  text-align: center; /* Centrado en móvil */
+  text-align: center;
 }
 
-/* --- Sección de Marca --- */
+
 .footer-logo {
   font-size: 2rem;
   font-weight: 800;
@@ -39,12 +32,10 @@
   line-height: 1.6;
   color: #000000;
   margin-bottom: 20px;
-  max-width: 400px; /* Para que no se estire demasiado el texto */
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
-
-/* Redes Sociales */
 .social-icons {
   display: flex;
   justify-content: center;
@@ -75,8 +66,6 @@
   color: #000000;
   margin-left: 5px;
 }
-
-/* --- Secciones de Links --- */
 .links-section h3 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -107,7 +96,7 @@
   text-decoration: underline;
 }
 
-/* --- Footer Bottom --- */
+
 .footer-bottom {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
@@ -121,36 +110,30 @@
   opacity: 0.5;
 }
 
-
-/* ======================================= */
-/* 2. ESTILOS DESKTOP (min-width: 768px) */
-/* ======================================= */
-
 @media (min-width: 768px) {
 
   .footer-content {
-    flex-direction: row; /* Columnas lado a lado */
+    flex-direction: row;
     justify-content: space-between;
-    text-align: left; /* Alinear a la izquierda en desktop */
+    text-align: left;
     align-items: flex-start;
   }
 
-  /* Ajustes específicos por columna */
   .brand-section {
-    flex: 2; /* Ocupa más espacio (40-50%) */
+    flex: 2;
     padding-right: 40px;
   }
 
   .links-section {
-    flex: 1; /* Ocupan menos espacio */
+    flex: 1;
   }
 
-  /* Re-alinear elementos a la izquierda */
+
   .footer-desc {
-    margin-left: 0; /* Quitar auto margin */
+    margin-left: 0;
   }
 
   .social-icons {
-    justify-content: flex-start; /* Alinear iconos a la izquierda */
+    justify-content: flex-start;
   }
 }

@@ -5,7 +5,7 @@ import { FooterComponent } from "../../../components/general/footer-component/fo
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet, RouterLinkWithHref, FooterComponent],
+  imports: [RouterOutlet, RouterLinkWithHref],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
 })
