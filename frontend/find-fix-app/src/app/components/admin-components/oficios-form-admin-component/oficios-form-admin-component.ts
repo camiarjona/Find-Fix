@@ -28,7 +28,6 @@ private oficiosService = inject(OficiosService);
       next: () => {
         this.isLoading.set(false);
         this.oficioName = '';
-
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);

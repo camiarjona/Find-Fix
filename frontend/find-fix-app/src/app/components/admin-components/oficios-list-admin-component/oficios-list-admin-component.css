@@ -1,183 +1,182 @@
+.general-html {
+  width: 95%;
+  margin: 20px auto;
+  padding: 0;
+  background-color: transparent;
+}
+
+
 .header-contenedor {
-  max-width: 95%;
-  margin: 40px auto 30px auto;
-  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 30px;
+  padding: 20px 15px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
   border-top: 5px solid var(--primary-color);
-  user-select: none;
+  box-sizing: border-box;
 }
 
-.oficios-titulo {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin: 0 0 8px 0;
+.rol-titulo {
   color: var(--text-dark);
+  font-size: 1.8rem;
+  margin: 0 0 10px 0;
 }
 
-.oficios-subtitulo {
+.rol-subtitulo {
+  color: var(--text-light);
   font-size: 0.9rem;
-  ;
-  font-weight: 500;
-  margin: 0;
-  color: var(--text-light);/
 }
 
-.contenedor-oficios {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.tarjeta-oficio {
-  background: #ffffff;
+/* --- TABLA --- */
+.tabla-general {
+  overflow-x: auto;
+  background: white;
   border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.roles-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  min-width: 300px;
+}
+
+.roles-tabla th {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.roles-tabla td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: var(--text-dark);
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.roles-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.roles-tabla tr:hover {
+  background-color: #fffaf5;
+}
+
+
+.rol-nombre {
+  background-color: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.acciones-col {
+  text-align: center;
+  width: 100px;
+}
+
+.acciones-opciones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #fee2e2;
+}
+
+
+.button-form-contenedor {
   display: flex;
   flex-direction: column;
   align-items: center;
-  user-select: none;
+  margin-top: 20px;
 }
-
-.tarjeta-oficio img {
-
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-.tarjeta-oficio::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #F58634, #F58634);
-}
-
-.tarjeta-oficio:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-  border-color: #ff6b1a;
-}
-
-.tarjeta-oficio h2 {
-  margin: 0 0 1rem 0;
-  font-size: 1.5rem;
-  text-align: left;
-  text-shadow: none;
-}
-
-.tarjeta-oficio h2 a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.tarjeta-oficio h2 a:hover {
-  color: #ff6b1a;
-  text-decoration: underline;
-}
-
-.tarjeta-oficio p {
-  color: #f7f7f7;
-  font-size: 1.1rem;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.6;
-  font-weight: 500;
-}
-
-.buttons-container{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.tarjeta-oficio button {
-  color: white;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  width: 350px;
-}
-
-.tarjeta-oficio button:hover {
-  background: linear-gradient(135deg, #b91c1c, #991b1b);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
-}
-
-.tarjeta-oficio button:active {
-  transform: translateY(0);
-}
-
-
-
-
-@media (min-width: 768px) {
-  .header-contenedor {
-    max-width: 800px;
-    padding: 30px;
-    margin-top: 60px;
-  }
-
-  .oficios-titulo {
-    font-size: 2.2rem;
-  }
-
-
-  .contenedor-oficios {
-
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    max-width: 1000px;
-  }
-
-  .tarjeta-oficio {
-    padding: 1.5rem;
-  }
-}
-
 
 .oficio-list-footer {
-  text-align: center;
-  padding: 30px 0 10px 0;
-  margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
+
 
 .alert-message {
   background-color: var(--primary-color);
   position: fixed;
-  top: 50px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1050;
-  max-width: 500px;
+  max-width: 90%;
   width: 90%;
-  padding: 15px 25px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  align-items: center;
 }
 
 .alert-message.success {
   background-color: #F58634;
   color: #ffffff;
   border-color: #F58634;
+}
+
+
+@media (min-width: 768px) {
+  .general-html {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .header-contenedor {
+    margin: 0 auto 50px;
+    padding: 20px 30px;
+  }
+
+  .rol-titulo {
+    font-size: 2.2rem;
+  }
+
+  .roles-tabla th {
+    padding: 18px 25px;
+    font-size: 0.85rem;
+  }
+
+  .roles-tabla td {
+    padding: 20px 25px;
+  }
+
+  .alert-message {
+    top: 50px;
+    max-width: 500px;
+    font-size: 1rem;
+  }
 }
