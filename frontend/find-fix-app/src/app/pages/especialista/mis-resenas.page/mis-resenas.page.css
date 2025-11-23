@@ -1,0 +1,23 @@
+.page-container { padding: 2rem; max-width: 900px; margin: 0 auto; }
+
+.header-box {
+  background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.header-box h1 { margin: 0; font-size: 1.5rem; color: #2d3748; }
+
+.score-box { text-align: center; display: flex; flex-direction: column; }
+.score { font-size: 2.5rem; font-weight: 800; color: #F58634; line-height: 1; }
+.count { font-size: 0.85rem; color: #718096; margin-top: 5px; }
+
+.resenas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+.resena-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #edf2f7; }
+.top { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+.user { display: flex; align-items: center; gap: 10px; color: #4a5568; }
+.avatar { width: 30px; height: 30px; background: #fed7e2; color: #b83280; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; }
+
+.stars-display { color: #cbd5e0; }
+.stars-display .filled { color: #ecc94b; }
+.texto { font-style: italic; color: #718096; line-height: 1.5; margin: 0; }

@@ -15,6 +15,11 @@ import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page
 import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
+import { EspecialistaLayout } from './layouts/especialista/especialista-layout/especialista-layout';
+import { DashboardEspecialistaPage } from './pages/especialista/dashboard-especialista.page/dashboard-especialista.page';
+import { SolicitudesPage } from './pages/especialista/solicitudes.page/solicitudes.page';
+import { MisTrabajosPage } from './pages/especialista/mis-trabajos.page/mis-trabajos.page';
+import { MisResenasPage } from './pages/especialista/mis-resenas.page/mis-resenas.page';
 
 export const routes: Routes = [
   {
@@ -71,4 +76,35 @@ export const routes: Routes = [
       }
     ]
   },
+  // Rutas Privadas del Especialista
+{
+    path: 'especialista',
+    component: EspecialistaLayout, 
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardEspecialistaPage
+      },
+
+      {
+        path: 'solicitudes',
+        component: SolicitudesPage
+      },
+      {
+        path: 'mis-trabajos',
+        component: MisTrabajosPage
+      },
+      {
+        path: 'mis-resenas',
+        component: MisResenasPage
+      },
+
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+
 ];
