@@ -1,0 +1,44 @@
+<div class="page-container">
+  <header class="page-header">
+    <h1>{{ tituloPagina() }}</h1>
+    <p>Gestiona y visualiza el estado de tus tareas.</p>
+  </header>
+
+  <div class="trabajos-list">
+    @for (trabajo of trabajosVisibles(); track $index) {
+      <div class="trabajo-item" [class.externo]="trabajo.tipo === 'EXTERNO'">
+
+        <!-- Icono Tipo -->
+        <div class="tipo-icon" [title]="trabajo.tipo === 'APP' ? 'Trabajo de FindFix' : 'Trabajo Externo'">
+          @if (trabajo.tipo === 'APP') {
+            📱
+          } @else {
+            🔧
+          }
+        </div>
+
+        <div class="trabajo-info">
+          <h3>{{ trabajo.titulo }}</h3>
+          <span class="cliente">Cliente: {{ trabajo.nombreCliente }}</span>
+          <div class="meta-info">
+            <span class="fecha">📅 {{ trabajo.fechaInicio }}</span>
+            <span class="precio">💰 ${{ trabajo.presupuesto }}</span>
+          </div>
+        </div>
+
+        <div class="trabajo-status">
+          <!-- Badge dinámico según el estado -->
+          <span class="status-badge"
+            [class.proceso]="trabajo.estado.includes('PROCESO')"
+            [class.finalizado]="trabajo.estado.includes('FINALIZADO')">
+            {{ trabajo.estado }}
+          </span>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>No se encontraron trabajos en esta categoría.</p>
+      </div>
+    }
+  </div>
+</div>

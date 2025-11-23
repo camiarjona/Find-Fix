@@ -38,3 +38,5 @@ src/main/resources/application.properties
 frontend/node_modules/
 frontend/dist/
 frontend/coverage/
+frontend/find-fix-app/package-lock.json
+frontend/find-fix-app/package-lock.json

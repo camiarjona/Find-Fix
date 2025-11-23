@@ -12,15 +12,18 @@ import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page
 import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
-import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
-import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
+import { EspecialistaLayout } from './layouts/especialista/especialista-layout/especialista-layout';
+import { DashboardEspecialistaPage } from './pages/especialista/dashboard-especialista.page/dashboard-especialista.page';
+import { SolicitudesPage } from './pages/especialista/solicitudes.page/solicitudes.page';
+import { MisTrabajosPage } from './pages/especialista/mis-trabajos.page/mis-trabajos.page';
+import { MisResenasPage } from './pages/especialista/mis-resenas.page/mis-resenas.page';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
 import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
+import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
+import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
-import { SolicitudEspecialista } from './pages/cliente/solicitud-especialista/solicitud-especialista.page';
-
 
 export const routes: Routes = [
   {
@@ -101,4 +104,35 @@ export const routes: Routes = [
       }
     ]
   },
+  // Rutas Privadas del Especialista
+{
+    path: 'especialista',
+    component: EspecialistaLayout, 
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardEspecialistaPage
+      },
+
+      {
+        path: 'solicitudes',
+        component: SolicitudesPage
+      },
+      {
+        path: 'mis-trabajos',
+        component: MisTrabajosPage
+      },
+      {
+        path: 'mis-resenas',
+        component: MisResenasPage
+      },
+
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+
 ];

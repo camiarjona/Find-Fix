@@ -95,3 +95,13 @@ p {
 .btn-secondary:hover {
   background-color: #d1d5db;
 }
+
+.icon-success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.icon-question {
+  background-color: #ffedd5; 
+  color: #c2410c;
+}

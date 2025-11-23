@@ -1,22 +1,34 @@
-<div class="modal-overlay" (click)="cerrarModal.emit()"></div>
+<div class="modal-overlay" (click)="cancelar.emit()"></div>
 
 <div class="modal-content">
 
-  <div class="modal-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-    </svg>
+  <div class="modal-icon" [ngClass]="{'icon-success': tipo === 'exito', 'icon-question': tipo === 'pregunta'}">
+
+    @if (tipo === 'exito') {
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+      </svg>
+    }
+
+    @if (tipo === 'pregunta') {
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 17.125h.008v.008H12v-.008z" />
+      </svg>
+    }
   </div>
 
   <h2>{{ titulo }}</h2>
   <p>{{ mensaje }}</p>
 
   <div class="modal-actions">
-    <button class="btn btn-secondary" (click)="irInicio.emit()">
-      Ir a Inicio
-    </button>
-    <button class="btn btn-primary" (click)="irHistorial.emit()">
-      Ver Historial
+    @if (tipo === 'pregunta') {
+      <button class="btn btn-secondary" (click)="cancelar.emit()">
+        {{ textoCancelar }}
+      </button>
+    }
+
+    <button class="btn btn-primary" (click)="confirmar.emit()">
+      {{ textoConfirmar }}
     </button>
   </div>
 

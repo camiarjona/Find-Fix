@@ -1,0 +1,190 @@
+<div class="dashboard-container">
+
+  <header class="dash-header">
+    <div>
+      <h1>¡Hola, {{ nombreUsuario() }}! 👋</h1>
+      <p class="subtitle">Tu resumen profesional de hoy.</p>
+    </div>
+    <div class="date-badge">{{ fechaActual | date:'mediumDate' }}</div>
+  </header>
+
+  <section class="stats-grid">
+
+    <div class="flip-card" (click)="irASolicitudes()">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-blue">
+          <div class="icon-container">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ solicitudesPendientes() }}</span>
+            <span class="stat-label">Solicitudes</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <span class="mini-label">Tasa de Aceptación</span>
+          <div class="mini-chart-container">
+            <canvas baseChart [data]="datosSolicitudes" [options]="opcionesDona" [type]="'doughnut'"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" (click)="irATrabajos()">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-orange">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.276a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276c-3.409-1.23-7.163.66-8.484 4.234" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ trabajosEnCurso() }}</span>
+            <span class="stat-label">Trabajos En Curso</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <span class="mini-label">Carga Actual</span>
+          <div class="mini-chart-container">
+            <canvas baseChart [data]="datosEnCurso" [options]="opcionesDona" [type]="'doughnut'"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-green">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" /></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ trabajosCompletados() }}</span>
+            <span class="stat-label">Trabajos Finalizados</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+           <span class="mini-label">Historial (3 Meses)</span>
+           <div class="mini-chart-container">
+            <canvas baseChart [data]="datosCompletados" [options]="opcionesBarras" [type]="'bar'"></canvas>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-yellow">
+          <div class="icon-container">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" /></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ calificacionPromedio() }}</span>
+            <span class="stat-label">Ranking</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+           <span class="mini-label">Distribución Estrellas</span>
+           <div class="mini-chart-container">
+            <canvas baseChart [data]="datosCalificacion" [options]="opcionesDona" [type]="'doughnut'"></canvas>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-emerald">
+          <div class="icon-container">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+             </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">${{ ingresosMes() }}</span>
+            <span class="stat-label">Ingreso Mensual</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <span class="mini-label">Evolución Mensual</span>
+          <div class="mini-chart-container">
+            <canvas baseChart [data]="datosIngresos" [options]="opcionesLineas" [type]="'line'"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front card-pink">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ totalResenas() }}</span>
+            <span class="stat-label">Reseñas Recibidas</span>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <span class="mini-label">Actividad Reciente</span>
+          <div class="mini-chart-container">
+            <canvas baseChart [data]="datosResenas" [options]="opcionesBarras" [type]="'bar'"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="recent-activity">
+    <div class="section-header">
+      <h2>⭐ Opiniones Recientes</h2>
+      <button class="btn-link">Ver todas</button>
+    </div>
+
+    <div class="activity-table-container">
+      <table class="activity-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Trabajo</th>
+            <th>Calificación</th>
+            <th>Comentario</th>
+          </tr>
+        </thead>
+        <tbody>
+         @for (resena of ultimasResenas(); track resena.resenaId) {
+          <div class="resena-item">
+
+            <div class="avatar-circle">
+                {{ resena.nombreCliente ? resena.nombreCliente.charAt(0) : 'C' }}
+            </div>
+
+            <div class="resena-info">
+                <span class="user-name">{{ resena.nombreCliente }}</span>
+
+                <div class="rating-pill" [class.high-rating]="resena.puntuacion >= 4">
+                    <span>★ {{ resena.puntuacion }}</span>
+                </div>
+            </div>
+
+            <div class="comentario">
+                <p>"{{ resena.comentario }}"</p>
+            </div>
+
+          </div>
+        } @empty {
+            <tr>
+              <td colspan="4" style="text-align: center; padding: 20px; color: #888;">
+                Aún no tienes reseñas.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

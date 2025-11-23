@@ -1,0 +1,35 @@
+.page-container { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+.page-header { margin-bottom: 2rem; }
+.page-header h1 { color: #2d3748; font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+.trabajos-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.trabajo-item {
+  background: white; padding: 1.5rem; border-radius: 12px;
+  display: flex; align-items: center; gap: 1.5rem;
+  border: 1px solid #edf2f7; transition: all 0.2s;
+}
+.trabajo-item:hover { border-color: #cbd5e0; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+
+/* Estilo diferente para Externos (Borde izquierdo) */
+.trabajo-item.externo { border-left: 4px solid var(--primary-color); } /* Amarillo para externos */
+.trabajo-item:not(.externo) { border-left: 4px solid #00498d; } /* Azul para App */
+
+.tipo-icon { font-size: 1.5rem; background: #f7fafc; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+.trabajo-info { flex-grow: 1; }
+.trabajo-info h3 { margin: 0 0 0.25rem 0; color: #2d3748; font-size: 1.1rem; }
+.cliente { color: #718096; font-size: 0.9rem; display: block; margin-bottom: 0.5rem; }
+
+.meta-info { display: flex; gap: 1rem; font-size: 0.85rem; color: #4a5568; font-weight: 500; }
+
+.status-badge {
+  padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+}
+.status-badge.proceso { background: #fffaf0; color: #dd6b20; }
+.status-badge.finalizado { background: #f0fff4; color: #38a169; }
+
+@media (max-width: 600px) {
+  .trabajo-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .trabajo-status { width: 100%; text-align: right; }
+}

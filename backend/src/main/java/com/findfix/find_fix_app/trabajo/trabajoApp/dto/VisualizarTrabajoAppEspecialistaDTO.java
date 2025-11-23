@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class VisualizarTrabajoAppEspecialistaDTO {
+    private long id;
         private String nombreCliente;
     private String titulo;
     private String descripcion;
@@ -19,6 +20,7 @@ public class VisualizarTrabajoAppEspecialistaDTO {
     private static final DateTimeFormatter formatoAmigable = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public VisualizarTrabajoAppEspecialistaDTO(TrabajoApp trabajoApp) {
+        this.id = trabajoApp.getTrabajoAppId();
         this.nombreCliente = trabajoApp.getUsuario() != null ? trabajoApp.getUsuario().getNombre() : "Usuario desvinculado";
         this.titulo = trabajoApp.getTitulo();
         this.descripcion = trabajoApp.getDescripcion();

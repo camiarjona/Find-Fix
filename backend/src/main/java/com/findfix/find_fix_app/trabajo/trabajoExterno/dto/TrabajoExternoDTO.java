@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class TrabajoExternoDTO {
+    private long id;
     private String nombreCliente;
     private String titulo;
     private String fechaInicio;
@@ -14,6 +15,7 @@ public class TrabajoExternoDTO {
     private Double presupuesto;
 
     public TrabajoExternoDTO(TrabajoExterno trabajo) {
+        this.id = trabajo.getTrabajoExternoId();
         this.titulo = trabajo.getTitulo();
         this.nombreCliente = trabajo.getNombreCliente();
         this.fechaInicio = trabajo.getFechaInicio() == null ? "Sin iniciar" : trabajo.getFechaInicio().toString();

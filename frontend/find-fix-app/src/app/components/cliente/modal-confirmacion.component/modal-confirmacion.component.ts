@@ -10,12 +10,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ModalConfirmacionComponent {
 
-  // --- Entradas (Inputs) ---
-  @Input() titulo: string = '¡Éxito!';
-  @Input() mensaje: string = 'La operación se completó correctamente.';
+// Datos para mostrar
+  @Input() titulo: string = '';
+  @Input() mensaje: string = '';
 
-  // --- Salidas (Outputs) ---
-  @Output() irInicio = new EventEmitter<void>();
-  @Output() irHistorial = new EventEmitter<void>();
-  @Output() cerrarModal = new EventEmitter<void>();
+  // Configuración de botones (con valores por defecto)
+  @Input() textoCancelar: string = 'Cancelar';
+  @Input() textoConfirmar: string = 'Confirmar';
+  
+  @Input() tipo: 'pregunta' | 'exito' = 'pregunta';
+
+  // Eventos
+  @Output() cancelar = new EventEmitter<void>();
+  @Output() confirmar = new EventEmitter<void>();
 }

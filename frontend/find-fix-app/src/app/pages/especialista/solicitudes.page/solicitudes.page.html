@@ -1,0 +1,57 @@
+<div class="page-container">
+
+  <header class="page-header">
+    <h1>Solicitudes de Trabajo</h1>
+    <p>Clientes que quieren contratarte.</p>
+  </header>
+
+  @if (mostrarModal()) {
+    <app-modal-confirmacion
+      [titulo]="datosModal().titulo"
+      [mensaje]="datosModal().mensaje"
+      [tipo]="datosModal().tipo"
+      [textoConfirmar]="datosModal().textoConfirmar"
+      (cancelar)="cerrarModal()"
+      (confirmar)="confirmarAccion()">
+    </app-modal-confirmacion>
+  }
+
+  <div class="solicitudes-grid">
+
+    @for (solicitud of solicitudes(); track solicitud.id) {
+
+      <div class="solicitud-card">
+        <div class="card-header">
+          <span class="fecha">{{ solicitud.fecha | date:'mediumDate' }}</span>
+          <span class="badge-pendiente">Pendiente</span>
+        </div>
+
+        <div class="card-body">
+          <div class="cliente-info">
+            <div class="avatar-circle">
+              {{ solicitud.nombreCliente.charAt(0) }}
+            </div>
+            <span class="cliente-name">{{ solicitud.nombreCliente }}</span>
+          </div>
+          <p class="descripcion">"{{ solicitud.descripcion }}"</p>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-rechazar" (click)="iniciarRespuesta(solicitud.id, 'RECHAZADA')">
+            Rechazar
+          </button>
+          <button class="btn-aceptar" (click)="iniciarRespuesta(solicitud.id, 'ACEPTADA')">
+            Aceptar Trabajo
+          </button>
+        </div>
+      </div>
+
+    } @empty {
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No tienes solicitudes pendientes</h3>
+        <p>¡Mejora tu perfil para atraer más clientes!</p>
+      </div>
+    }
+    </div>
+</div>

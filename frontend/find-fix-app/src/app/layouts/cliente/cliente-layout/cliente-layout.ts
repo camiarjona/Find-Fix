@@ -75,8 +75,7 @@ export class ClienteLayout {
 
   /** Cambia el rol de cliente a especialista y viceversa */
   toggleRole() {
-    this.isEspecialistaMode.update(prev => !prev);
-    // lógica para redirigir al dashboard de especialista
-    console.log("Modo especialista:", this.isEspecialistaMode());
+    this.isEspecialistaMode.set(true);
+    this.router.navigateByUrl('/especialista/dashboard');
   }
 }
