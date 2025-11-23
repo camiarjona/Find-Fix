@@ -74,10 +74,10 @@
               </button>
               <button
                 type="button"
-                (click)="handleResolution('APROBADO')"
+                (click)="handleResolution('ACEPTADO')"
                 [disabled]="isResolving()"
                 class="btn-aprobar">
-                @if (isResolving() && resolutionForm.value.estado === 'APROBADO') {
+                @if (isResolving() && resolutionForm.value.estado === 'ACEPTADO') {
                   Aprobando...
                 } @else {
                   Aprobar Solicitud

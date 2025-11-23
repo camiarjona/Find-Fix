@@ -81,7 +81,7 @@ export class SolicitudDetalleAdminComponent implements OnInit {
   }
 
   // Método para manejar la resolución (Aprobar o Rechazar)
-  handleResolution(estado: 'APROBADO' | 'RECHAZADO'): void {
+  handleResolution(estado: 'ACEPTADO' | 'RECHAZADO'): void {
     this.resolutionForm.get('estado')?.setValue(estado);
 
     if (this.resolutionForm.invalid) {
