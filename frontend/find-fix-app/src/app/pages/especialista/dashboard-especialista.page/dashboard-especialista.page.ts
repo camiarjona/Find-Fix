@@ -15,7 +15,7 @@ import { ResenaEspecialista, TrabajoEspecialista } from '../../../models/especia
   styleUrl: './dashboard-especialista.page.css',
 })
 export class DashboardEspecialistaPage {
-  private router = inject(Router);
+private router = inject(Router);
   private authService = inject(AuthService);
   private especialistaService = inject(EspecialistaService);
 
@@ -33,7 +33,73 @@ export class DashboardEspecialistaPage {
   ultimasResenas = signal<ResenaEspecialista[]>([]);
 
   ngOnInit() {
-    this.cargarDatosReales();
+    // this.cargarDatosReales(); // Comentado para usar datos falsos
+    this.cargarDatosFalsos();
+  }
+
+  //MÉTODO NUEVO PARA DATOS FALSOS
+  cargarDatosFalsos() {
+    console.log('Cargando datos falsos para visualización...');
+
+    // 1. Solicitudes
+    this.solicitudesPendientes.set(5);
+    // Gráfico: [Pendientes, Rechazadas]
+    this.datosSolicitudes.datasets[0].data = [5, 2];
+
+    // 2. Trabajos en Curso
+    this.trabajosEnCurso.set(3);
+    // Gráfico: [En Curso, Pendientes]
+    this.datosEnCurso.datasets[0].data = [3, 5];
+
+    // 3. Trabajos Completados (Historial)
+    this.trabajosCompletados.set(12);
+    // Gráfico: [Hace 2 meses, Hace 1 mes, Este mes]
+    this.datosCompletados.datasets[0].data = [8, 15, 12];
+
+    // 4. Ingresos
+    this.ingresosMes.set(450000);
+    // Gráfico: [Semana 1, S2, S3, S4] - Simula una curva de ingresos
+    this.datosIngresos.datasets[0].data = [50000, 120000, 80000, 200000];
+
+    // 5. Calificación y Reseñas
+    this.totalResenas.set(28);
+    this.calificacionPromedio.set(4.8);
+
+    // Gráfico Estrellas: [5 estrellas, 4 estrellas, 3 o menos]
+    this.datosCalificacion.datasets[0].data = [24, 3, 1];
+
+    // Lista de reseñas falsas
+    // Nota: Uso 'as any' para evitar errores si tu interfaz difiere un poco
+    this.ultimasResenas.set([
+      {
+        id: 1,
+        nombreCliente: 'Ana García',
+        puntuacion: 5,
+        comentario: 'Excelente trabajo, muy prolijo y puntual.',
+        fecha: new Date('2023-11-20')
+      },
+      {
+        id: 2,
+        nombreCliente: 'Carlos López',
+        puntuacion: 4,
+        comentario: 'Buen servicio, aunque llegó unos minutos tarde.',
+        fecha: new Date('2023-11-18')
+      },
+      {
+        id: 3,
+        nombreCliente: 'María Rodriguez',
+        puntuacion: 5,
+        comentario: 'Me salvó con la instalación eléctrica. Recomendado.',
+        fecha: new Date('2023-11-15')
+      },
+      {
+        id: 4,
+        nombreCliente: 'Juan Pérez',
+        puntuacion: 5,
+        comentario: 'Todo perfecto.',
+        fecha: new Date('2023-11-10')
+      }
+    ] as any[]);
   }
 
   cargarDatosReales() {
@@ -102,10 +168,9 @@ export class DashboardEspecialistaPage {
     });
   }
 
-  // Actualiza los datos de un gráfico y fuerza el redibujado
+  // Actualiza los datos de un gráfico
   private actualizarGrafico(datasetConfig: ChartConfiguration['data'], nuevosDatos: number[]) {
     datasetConfig.datasets[0].data = nuevosDatos;
-    datasetConfig = { ...datasetConfig };
   }
 
   private calcularHistorialMeses(trabajos: TrabajoEspecialista[]): number[] {
