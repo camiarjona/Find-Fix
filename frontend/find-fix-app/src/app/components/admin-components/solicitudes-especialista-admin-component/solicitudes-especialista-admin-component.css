@@ -1,99 +1,229 @@
+/* ========================================================= */
+/* --- ESTILOS BASE (MÓVIL / POR DEFECTO: TARJETAS) --- */
+/* ========================================================= */
+
+:host {
+  display: block;
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .solicitudes-container {
-    padding: 30px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
+  animation: fadeIn 0.5s ease;
 }
 
+/* Títulos y Mensajes */
 h2 {
-    color: #333;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-    font-size: 1.8em;
+  font-size: 1.5rem;
+  color: #1f2937;
+  font-weight: 700;
+  margin-top: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
 }
 
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
+.loading-message, .no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f3f4f6;
 }
 
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-    font-size: 0.95em;
+.error-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
-th {
-    background-color: #f7f7f7;
-    color: #555;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* --- ESTRUCTURA MÓVIL (TARJETAS) --- */
+.table-container {
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
-/* Base de la fila para la transición */
+table, tbody, tr, td {
+  display: block;
+  width: 100%;
+}
+
+thead { display: none; } /* Ocultamos encabezados */
+
+/* La Fila es una Tarjeta */
 tr {
-    transition: background-color 0.1s ease, box-shadow 0.1s ease; /* Añadimos la transición aquí */
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* Sombreado Naranja con Animación al pasar el cursor */
-tr:hover {
-    background-color: #e6e6e6; /* Fondo blanco-naranja muy claro */
-    box-shadow: inset 6px 0 0 0 orange; /* Sombra a la izquierda de la fila */
-    cursor: pointer;
+/* La Celda es una Fila Flex (Etiqueta - Valor) */
+td {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: right;
 }
 
-/* ETIQUETAS DE ESTADO */
+td:last-child { border-bottom: none; }
+
+/* Etiqueta generada con data-label */
+td::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-align: left;
+  margin-right: 1rem;
+}
+
+/* --- COMPONENTES VISUALES --- */
+
+/* Badges */
 .status-badge {
-    padding: 6px 10px;
-    border-radius: 15px;
-    font-size: 0.85em;
-    font-weight: bold;
-    color: white;
-    display: inline-block;
-    min-width: 80px;
-    text-align: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  display: inline-block;
 }
 
-/* Colores de estado */
-.status-pendiente {
-    background-color: #ffc107; /* Amarillo */
-    color: #333;
-}
-.status-aprobado {
-    background-color: #28a745; /* Verde */
-}
-.status-rechazado {
-    background-color: #dc3545; /* Rojo */
+.status-pendiente { background-color: #fef9c3; color: #a16207; }
+.status-aprobado, .status-aceptado { background-color: #dcfce7; color: #166534; }
+.status-rechazado { background-color: #fee2e2; color: #991b1b; }
+
+/* Botón Ver (Circular en móvil y escritorio) */
+.btn-ver {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background-color: #f3f4f6; /* Gris suave en móvil */
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* ESTILO DEL BOTÓN */
-.btn-detail {
-    background-color: #007bff;
-    color: white;
+.btn-ver:hover {
+  background-color: #F58634;
+  color: white;
+  border-color: #F58634;
+}
+
+.btn-ver svg {
+  width: 20px;
+  height: 20px;
+}
+
+.celda-acciones {
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* ========================================================= */
+/* --- VISTA ESCRITORIO (min-width: 900px): ESTILO TABLA --- */
+/* ========================================================= */
+
+@media (min-width: 900px) {
+
+  :host {
+    padding: 2rem;
+    max-width: 1200px;
+  }
+
+  h2 { font-size: 1.8rem; margin-bottom: 2rem; }
+
+  /* Restaurar Tabla */
+  .table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    overflow-x: auto;
+    border: 1px solid #f3f4f6;
+  }
+
+  table {
+    display: table;
+    border-collapse: collapse;
+    min-width: 800px;
+  }
+
+  thead { display: table-header-group; }
+  tbody { display: table-row-group; }
+
+  tr {
+    display: table-row;
     border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.9em;
-    transition: background-color 0.2s;
+    box-shadow: none;
+    padding: 0;
+    border-bottom: 1px solid #e5e7eb; /* Borde entre filas */
+  }
+
+  /* Encabezados (Estilo Gestión Usuarios) */
+  th {
+    padding: 1rem;
+    text-align: left;
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  th.acciones-header { text-align: right; }
+
+  /* Celdas Normales */
+  td {
+    display: table-cell;
+    padding: 1rem;
+    border-bottom: none; /* El borde lo lleva el TR */
+    vertical-align: middle;
+    color: #374151;
+    font-size: 0.95rem;
+    text-align: left;
+  }
+
+  /* Ocultar etiquetas data-label */
+  td::before { display: none; }
+
+  /* Ajustes específicos desktop */
+  td.celda-acciones {
+    text-align: right;
+    margin-top: 0;
+    display: table-cell;
+  }
+
+  .botones-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-ver {
+    background-color: transparent; /* Transparente en desktop */
+  }
+
+  tr:hover {
+    background-color: #fff7ed; /* Hover Naranja Suave */
+  }
 }
 
-.btn-detail:hover {
-    background-color: #0056b3;
-}
-
-.no-data, .error-message {
-    padding: 20px;
-    border-radius: 6px;
-    margin-top: 20px;
-    text-align: center;
-    font-size: 1.1em;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

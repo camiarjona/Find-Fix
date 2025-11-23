@@ -95,7 +95,6 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
 
 
     /// Metodo para mostrar mis solicitudes
-
     @Override
     @Transactional(readOnly = true)
     public List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {

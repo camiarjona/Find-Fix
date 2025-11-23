@@ -9,7 +9,6 @@ import { switchMap } from 'rxjs';
 @Component({
   selector: 'app-solicitud-detalle-admin',
   standalone: true,
-  // ReactiveFormsModule es necesario para usar FormBuilder
   imports: [CommonModule, DatePipe, ReactiveFormsModule],
   templateUrl: './solicitud-detalle-admin.html',
   styleUrl: './solicitud-detalle-admin.css',
@@ -51,7 +50,6 @@ export class SolicitudDetalleAdminComponent implements OnInit {
 
   loadSolicitud(): void {
     this.loading.set(true);
-    // Escucha el ID de la URL y carga la ficha completa
     this.route.paramMap.pipe(
       switchMap(params => {
         const idString = params.get('id');
@@ -88,7 +86,6 @@ export class SolicitudDetalleAdminComponent implements OnInit {
 
     if (this.resolutionForm.invalid) {
       this.submissionError.set("La respuesta es obligatoria y el estado debe estar seleccionado.");
-      // Opcional: Marcar todos los campos como 'touched' para mostrar errores
       this.resolutionForm.markAllAsTouched();
       return;
     }
