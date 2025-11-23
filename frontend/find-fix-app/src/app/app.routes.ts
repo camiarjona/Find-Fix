@@ -19,6 +19,7 @@ import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-l
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
 import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
+import { SolicitudEspecialista } from './pages/cliente/solicitud-especialista/solicitud-especialista.page';
 
 
 export const routes: Routes = [
