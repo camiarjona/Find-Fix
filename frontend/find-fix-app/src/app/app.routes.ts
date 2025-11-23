@@ -14,7 +14,6 @@ import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
 import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
-import { RolesListAdminComponent } from './components/admin-components/roles-list-admin-component/roles-list-admin-component';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
@@ -57,25 +56,15 @@ export const routes: Routes = [
         component: GestionUsers
       },
       {
+        path: 'solicitudes/detalle/:id',
+        component: SolicitudDetalleAdminComponent,
+      },
+      {
         path: 'solicitudes',
-        component: SolicitudesEspecialistaAdminComponent
+        component: SolicitudesEspecialistaAdminComponent,
       }
     ]
   },
-  // Rutas Privadas del Cliente
-  {
-    path: 'admin/roles',
-    component : RolesListAdminComponent,
-  },
-  {
-    path: 'admin/solicitudes',
-    component: SolicitudesEspecialistaAdminComponent,
-  },
-  {
-  path: 'admin/solicitudes/detalle/:id',
-  component: SolicitudDetalleAdminComponent,
-  },
-  // --- Rutas Privadas del Cliente (¡Aquí está lo nuevo!) ---
   {
     path: 'cliente',
     component: ClienteLayout,
@@ -102,13 +91,13 @@ export const routes: Routes = [
         component: HistorialSolicitudesEspecialistaPages
       },
       {
+        path: 'mi-perfil',
+        component: PerfilPage
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
-      },
-      {
-        path: 'mi-perfil',
-        component: PerfilPage
       }
     ]
   },

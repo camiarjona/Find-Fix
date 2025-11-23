@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 // Importaciones necesarias
 import { SolicitudEspecialistaAdminService } from '../../../services/admin-services/solicitud-especialista-admin';
@@ -9,7 +9,6 @@ import { MostrarSolicitud } from '../../../models/cliente/solicitud-especialista
 @Component({
   selector: 'app-solicitudes-especialista-admin',
   standalone: true,
-  // Importa DatePipe para el formato de fecha en el HTML
   imports: [CommonModule, RouterLink, DatePipe],
   templateUrl: './solicitudes-especialista-admin-component.html',
   styleUrl: './solicitudes-especialista-admin-component.css',
@@ -18,10 +17,11 @@ export class SolicitudesEspecialistaAdminComponent implements OnInit {
 
   private solicitudService = inject(SolicitudEspecialistaAdminService);
 
-  // Estado con signals fuertemente tipadas
   public solicitudes: WritableSignal<MostrarSolicitud[] | null> = signal(null);
   public loading = signal(false);
   public error = signal<string | null>(null);
+
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadSolicitudes();
@@ -49,7 +49,7 @@ export class SolicitudesEspecialistaAdminComponent implements OnInit {
   }
 
   verDetalle(id: number): void {
-    // Lógica para navegación o modal de detalle
     console.log(`Ver detalle de la solicitud: ${id}`);
+    this.router.navigate(['/admin/solicitudes/ficha', id]);
   }
 }
