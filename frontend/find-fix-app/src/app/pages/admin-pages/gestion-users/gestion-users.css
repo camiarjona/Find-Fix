@@ -1,0 +1,296 @@
+.admin-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.page-header p {
+  color: #6b7280;
+}
+
+/* TABLA */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  overflow-x: auto;
+  /* Responsive */
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.users-table th {
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.users-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  color: #374151;
+}
+
+.users-table tr:hover {
+  background-color: #fff7ed;
+  /* Naranja muy suave */
+}
+
+/* FILA DESACTIVADA (Visualmente apagada) */
+.disabled-row {
+  background-color: #f9fafb;
+  opacity: 0.7;
+}
+
+/* PERFIL DE USUARIO */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #F58634;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-names {
+  display: flex;
+  flex-direction: column;
+}
+
+.fullname {
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* BADGES */
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Roles */
+.badge.role {
+  background-color: #e5e7eb;
+  color: #374151;
+  margin-right: 4px;
+}
+
+.badge.role.admin {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+/* Estados */
+.badge.status.active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge.status.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* BOTONES */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-icon.danger:hover {
+  background-color: #fee2e2;
+}
+
+
+/* --- SWITCH / TOGGLE BUTTON --- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+/* Ocultamos el checkbox real */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* La "pista" o fondo del switch */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  /* Gris cuando está inactivo */
+  transition: .4s;
+  border-radius: 34px;
+}
+
+/* El círculo blanco que se mueve */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estado ACTIVO (Checked) */
+input:checked+.slider {
+  background-color: #16a34a;
+  /* Verde bonito */
+}
+
+/* Mover el círculo a la derecha */
+input:checked+.slider:before {
+  transform: translateX(18px);
+}
+
+/* Efecto de foco para accesibilidad */
+input:focus+.slider {
+  box-shadow: 0 0 1px #16a34a;
+}
+
+/* --- BARRA DE FILTROS --- */
+.filters-bar {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  /* Alinea los inputs con los botones */
+  flex-wrap: wrap;
+  border: 1px solid #f3f4f6;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.filter-input,
+.filter-select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  min-width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #F58634;
+  box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
+}
+
+/* BOTONES DE FILTRO */
+.filter-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btn-filter {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-filter.search {
+  background-color: #F58634;
+  color: white;
+}
+
+.btn-filter.search:hover {
+  background-color: #ea580c;
+}
+
+.btn-filter.clear {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.btn-filter.clear:hover {
+  background-color: #e5e7eb;
+}
+

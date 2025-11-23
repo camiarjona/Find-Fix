@@ -1,0 +1,229 @@
+/* ========================================================= */
+/* --- ESTILOS BASE (MÓVIL / POR DEFECTO: TARJETAS) --- */
+/* ========================================================= */
+
+:host {
+  display: block;
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.solicitudes-container {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Títulos y Mensajes */
+h2 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  font-weight: 700;
+  margin-top: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.loading-message, .no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f3f4f6;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* --- ESTRUCTURA MÓVIL (TARJETAS) --- */
+.table-container {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+table, tbody, tr, td {
+  display: block;
+  width: 100%;
+}
+
+thead { display: none; } /* Ocultamos encabezados */
+
+/* La Fila es una Tarjeta */
+tr {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* La Celda es una Fila Flex (Etiqueta - Valor) */
+td {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: right;
+}
+
+td:last-child { border-bottom: none; }
+
+/* Etiqueta generada con data-label */
+td::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-align: left;
+  margin-right: 1rem;
+}
+
+/* --- COMPONENTES VISUALES --- */
+
+/* Badges */
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  display: inline-block;
+}
+
+.status-pendiente { background-color: #fef9c3; color: #a16207; }
+.status-aprobado, .status-aceptado { background-color: #dcfce7; color: #166534; }
+.status-rechazado { background-color: #fee2e2; color: #991b1b; }
+
+/* Botón Ver (Circular en móvil y escritorio) */
+.btn-ver {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background-color: #f3f4f6; /* Gris suave en móvil */
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ver:hover {
+  background-color: #F58634;
+  color: white;
+  border-color: #F58634;
+}
+
+.btn-ver svg {
+  width: 20px;
+  height: 20px;
+}
+
+.celda-acciones {
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* ========================================================= */
+/* --- VISTA ESCRITORIO (min-width: 900px): ESTILO TABLA --- */
+/* ========================================================= */
+
+@media (min-width: 900px) {
+
+  :host {
+    padding: 2rem;
+    max-width: 1200px;
+  }
+
+  h2 { font-size: 1.8rem; margin-bottom: 2rem; }
+
+  /* Restaurar Tabla */
+  .table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    overflow-x: auto;
+    border: 1px solid #f3f4f6;
+  }
+
+  table {
+    display: table;
+    border-collapse: collapse;
+    min-width: 800px;
+  }
+
+  thead { display: table-header-group; }
+  tbody { display: table-row-group; }
+
+  tr {
+    display: table-row;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-bottom: 1px solid #e5e7eb; /* Borde entre filas */
+  }
+
+  /* Encabezados (Estilo Gestión Usuarios) */
+  th {
+    padding: 1rem;
+    text-align: left;
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  th.acciones-header { text-align: right; }
+
+  /* Celdas Normales */
+  td {
+    display: table-cell;
+    padding: 1rem;
+    border-bottom: none; /* El borde lo lleva el TR */
+    vertical-align: middle;
+    color: #374151;
+    font-size: 0.95rem;
+    text-align: left;
+  }
+
+  /* Ocultar etiquetas data-label */
+  td::before { display: none; }
+
+  /* Ajustes específicos desktop */
+  td.celda-acciones {
+    text-align: right;
+    margin-top: 0;
+    display: table-cell;
+  }
+
+  .botones-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-ver {
+    background-color: transparent; /* Transparente en desktop */
+  }
+
+  tr:hover {
+    background-color: #fff7ed; /* Hover Naranja Suave */
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

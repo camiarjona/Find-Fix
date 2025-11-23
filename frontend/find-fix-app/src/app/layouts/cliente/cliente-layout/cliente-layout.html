@@ -7,15 +7,10 @@
   </button>
 </header>
 
-<div
-  class="sidebar-overlay"
-  [class.open]="isMobileMenuOpen()"
-  (click)="toggleMobileMenu()">
+<div class="sidebar-overlay" [class.open]="isMobileMenuOpen()" (click)="toggleMobileMenu()">
 </div>
 
-<div
-  class="cliente-dashboard"
-  [class.sidebar-collapsed]="!isSidebarOpen()"
+<div class="cliente-dashboard" [class.sidebar-collapsed]="!isSidebarOpen()"
   [class.mobile-menu-open]="isMobileMenuOpen()">
 
   <nav class="sidebar" [class.open]="isMobileMenuOpen()">
@@ -36,11 +31,13 @@
 
     <ul class="nav-menu">
       <li>
-        <a routerLink="dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="handleLinkClick()">
+        <a routerLink="dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+          (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.INICIO" />
               </svg>
             </span>
             <span class="nav-text">Inicio</span>
@@ -51,8 +48,9 @@
         <a routerLink="buscar-especialistas" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.SEARCH" />
               </svg>
             </span>
             <span class="nav-text">Buscar Especialistas</span>
@@ -64,8 +62,9 @@
         <a routerLink="mis-solicitudes" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.MIS_SOLICITUDES"/>
               </svg>
             </span>
             <span class="nav-text">Mis Solicitudes</span>
@@ -76,8 +75,10 @@
         <a routerLink="mis-trabajos" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  [attr.d]="icons.MIS_TRABAJOS" />
               </svg>
             </span>
             <span class="nav-text">Mis Trabajos</span>
@@ -88,8 +89,9 @@
         <a routerLink="mis-favoritos" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.FAV" />
               </svg>
             </span>
             <span class="nav-text">Mis Favoritos</span>
@@ -100,8 +102,9 @@
         <a routerLink="mis-resenas" routerLinkActive="active" (click)="handleLinkClick()">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.4c.566 0 .81.758.36 1.11l-4.37 3.1a.563.563 0 0 0-.215.66l1.625 5.02a.563.563 0 0 1-.84.62l-4.42-3.15a.563.563 0 0 0-.65 0l-4.42 3.15a.563.563 0 0 1-.84-.62l1.625-5.02a.563.563 0 0 0-.215-.66l-4.37-3.1a.563.563 0 0 1 .36-1.11h5.4a.563.563 0 0 0 .475-.31L11.48 3.5Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.RESENA" />
               </svg>
             </span>
             <span class="nav-text">Mis Reseñas</span>
@@ -113,16 +116,13 @@
         <a href="#" (click)="toggleEspecialistaMenu($event)">
           <div class="nav-link-content">
             <span class="nav-icon">
-              <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M12 6v2" />
+              <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" width="24" height="24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
                 <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M9.5 13.2h-.5m6 0h-.5" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M7 20c1-3 3-5 5-5s4 2 5 5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
               </svg>
             </span>
             <span class="nav-text">Ser Especialista</span>
@@ -130,19 +130,32 @@
           <span class="arrow" [class.open]="isEspecialistaMenuOpen()"></span>
         </a>
         @if (isEspecialistaMenuOpen()) {
-          <ul class="submenu">
-            <li>
-              <a routerLink="solicitar-especialista/nueva" routerLinkActive="active-sub" (click)="handleLinkClick()">
-                <span class="nav-text">Nueva Solicitud</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="solicitar-especialista/historial" routerLinkActive="active-sub" (click)="handleLinkClick()">
-                <span class="nav-text">Ver Historial</span>
-              </a>
-            </li>
-          </ul>
+        <ul class="submenu">
+          <li>
+            <a routerLink="solicitar-especialista/nueva" routerLinkActive="active-sub" (click)="handleLinkClick()">
+              <span class="nav-text">Nueva Solicitud</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="solicitar-especialista/historial" routerLinkActive="active-sub" (click)="handleLinkClick()">
+              <span class="nav-text">Ver Historial</span>
+            </a>
+          </li>
+        </ul>
         }
+      </li>
+      <li>
+        <a routerLink="mi-perfil" routerLinkActive="active" (click)="handleLinkClick()">
+          <div class="nav-link-content">
+            <span class="nav-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
+              </svg>
+            </span>
+            <span class="nav-text">Mi Cuenta</span>
+          </div>
+        </a>
       </li>
     </ul>
 
@@ -152,11 +165,14 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </svg>
-            </span>
-            <span class="nav-text">Cerrar Sesión</span>
-          </a>
-        </div>
-      </nav>
+        </span>
+        <span class="nav-text">Cerrar Sesión</span>
+      </a>
+      <div class="app-version">
+        <small>FindFix v1.0 © 2025</small>
+      </div>
+    </div>
+  </nav>
 
   <main class="content-area">
 
@@ -167,32 +183,25 @@
         <label class="role-toggle" title="Cambiar a vista de {{ isEspecialistaMode() ? 'Cliente' : 'Especialista' }}">
 
           <!-- Conectado al signal -->
-          <input
-            type="checkbox"
-            class="toggle-checkbox"
-            [checked]="isEspecialistaMode()"
-            (change)="toggleRole()"
-          >
+          <input type="checkbox" class="toggle-checkbox" [checked]="isEspecialistaMode()" (change)="toggleRole()">
 
           <span class="toggle-icons">
             <!-- Icono Cliente -->
             <span class="icon-cliente">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 18 22.5H6a1.875 1.875 0 0 1-1.499-2.382Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
               </svg>
             </span>
             <!-- Icono Especialista -->
             <span class="icon-especialista">
-               <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M12 6v2" />
+              <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
                 <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M9.5 13.2h-.5m6 0h-.5" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M7 20c1-3 3-5 5-5s4 2 5 5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
               </svg>
             </span>
           </span>
@@ -203,36 +212,33 @@
         <div class="header-divider"></div>
 
         <!-- Botón de Tema (Sol/Luna) -->
-        <button
-          class="theme-toggle"
-          aria-label="Cambiar tema"
-          title="Cambiar a tema {{ isDarkMode() ? 'claro' : 'oscuro' }}"
-          (click)="toggleTheme()"
-        >
-         @if (isDarkMode()) {
-            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
-            </svg>
+        <button class="theme-toggle" aria-label="Cambiar tema"
+          title="Cambiar a tema {{ isDarkMode() ? 'claro' : 'oscuro' }}" (click)="toggleTheme()">
+          @if (isDarkMode()) {
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
+          </svg>
           } @else {
-            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                stroke-linecap="round" stroke-linejoin="round">
-              <!-- Círculo central -->
-              <circle cx="12" cy="12" r="4.5" />
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Círculo central -->
+            <circle cx="12" cy="12" r="4.5" />
 
-              <!-- Rayos suaves estilo minimal -->
-              <path d="M12 2.5v2.5" />
-              <path d="M12 19v2.5" />
+            <!-- Rayos suaves estilo minimal -->
+            <path d="M12 2.5v2.5" />
+            <path d="M12 19v2.5" />
 
-              <path d="M4.5 12H2" />
-              <path d="M22 12h-2.5" />
+            <path d="M4.5 12H2" />
+            <path d="M22 12h-2.5" />
 
-              <path d="M5.8 5.8l-1.8-1.8" />
-              <path d="M20 20l-1.8-1.8" />
+            <path d="M5.8 5.8l-1.8-1.8" />
+            <path d="M20 20l-1.8-1.8" />
 
-              <path d="M5.8 18.2l-1.8 1.8" />
-              <path d="M20 4l-1.8 1.8" />
-            </svg>
+            <path d="M5.8 18.2l-1.8 1.8" />
+            <path d="M20 4l-1.8 1.8" />
+          </svg>
 
           }
         </button>
@@ -240,6 +246,6 @@
     </header>
 
     <router-outlet></router-outlet>
-  </main>
 
+  </main>
 </div>

@@ -1,24 +1,74 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--primary-color);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.logout-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.logout-btn:hover {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+}
+.btn-text {
+  display: none;
+}
+
+/* --- Contenedores --- */
 .header-contenedor {
+  width: 100%;
   max-width: 700px;
-  margin: 0 auto 50px;
-  padding: 20px 30px;
+  margin: 0 auto 30px;
+  padding: 20px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
-
-
   border-top: 5px solid var(--primary-color);
+  box-sizing: border-box;
 }
-
 .admin-dashboard-contenedor {
+  flex: 1;
+  width: 100%;
   max-width: 900px;
-  margin: 30px auto;
-  padding: 0 20px;
+  margin: 20px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
-
 .admin-titulo {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   margin: 0 0 8px 0;
   color: var(--text-dark);
@@ -33,25 +83,20 @@
 
 h1 {
   text-align: center;
-  margin-bottom: 40px;
-  color: var(--text-dark);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   color: var(--text-dark);
   user-select: none;
+  font-size: 1.5rem;
 }
-
 .panel-grid {
   display: grid;
- gap: 30px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  grid-template-columns: 1fr;
+  width: 100%;
 }
 
 .panel-card {
-  width: 350px;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 20px;
@@ -62,6 +107,7 @@ h1 {
   text-decoration: none;
   color: var(--text-dark);
   border-left: 8px solid;
+  box-sizing: border-box;
 }
 
 .panel-card:hover {
@@ -80,6 +126,12 @@ h1 {
   color: white;
   font-size: 24px;
   margin-right: 20px;
+}
+
+.card-icon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
 }
 
 .card-content {
@@ -104,9 +156,51 @@ h1 {
   margin-left: 20px;
   color: var(--text-light);
 }
+@media (min-width: 768px) {
 
-@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 15px 30px;
+  }
+
+  .logout-btn {
+    padding: 8px 16px;
+    border: 1px solid #fee2e2;
+  }
+
+  .logout-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .btn-text {
+    display: inline;
+  }
+
+  .header-contenedor {
+    margin: 0 auto 50px;
+    padding: 20px 30px;
+  }
+
+  .admin-dashboard-contenedor {
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+
+  .admin-titulo {
+    font-size: 2.2rem;
+  }
+
+  h1 {
+    margin-bottom: 40px;
+    font-size: 2em;
+  }
+
   .panel-grid {
-    grid-template-columns: 1fr;
+    gap: 80px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .panel-card {
+    width: 350px;
   }
 }

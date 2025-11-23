@@ -1,0 +1,66 @@
+<div class="solicitudes-container">
+  <h2>Solicitudes de Alta de Especialistas</h2>
+
+  @if (loading()) {
+    <div class="loading-message">Cargando solicitudes...</div>
+  }
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+
+  @if (!loading() && solicitudes() && solicitudes()!.length === 0) {
+    <div class="no-data">
+      <p>No hay solicitudes de especialistas pendientes.</p>
+    </div>
+  }
+
+  @if (solicitudes() && solicitudes()!.length > 0) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha Solicitud</th>
+            <th>Email Cliente</th>
+            <th>Estado</th>
+            <th class="acciones-header">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (solicitud of solicitudes(); track solicitud.seId) {
+            <tr>
+              <!-- FECHA -->
+              <td data-label="Fecha">
+                {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
+              </td>
+
+              <!-- EMAIL -->
+              <td data-label="Email Cliente">
+                {{ solicitud.email }}
+              </td>
+
+              <!-- ESTADO -->
+              <td data-label="Estado">
+                <span class="status-badge status-{{ solicitud.estado | lowercase }}">
+                  {{ solicitud.estado }}
+                </span>
+              </td>
+
+              <!-- ACCIONES -->
+              <td class="celda-acciones" data-label="Acciones">
+                <div class="botones-wrapper">
+                  <button [routerLink]="['/admin/solicitudes/detalle', solicitud.seId]" class="btn-ver" title="Ver Detalle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

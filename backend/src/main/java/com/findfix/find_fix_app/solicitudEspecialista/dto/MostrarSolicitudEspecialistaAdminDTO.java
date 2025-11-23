@@ -3,7 +3,7 @@ package com.findfix.find_fix_app.solicitudEspecialista.dto;
 import java.time.LocalDate;
 
 public record MostrarSolicitudEspecialistaAdminDTO(
-        Long id,
+        Long seId,
         LocalDate fechaSolicitud,
         String estado,
         String email

@@ -1,14 +1,15 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { SolicitudEspecialistaService } from '../../../services/cliente/solicitud-especialista.service';
-import { FichaCompletaSolicitud, MostrarSolicitud } from '../../../models/cliente/solicitud-especialista.model';
+import { FichaCompletaSolicitud, FilterChip, MostrarSolicitud, SolicitudFilter } from '../../../models/cliente/solicitud-especialista.model';
 import { ModalAlertaComponent } from "../../../components/cliente/modal-alerta.component/modal-alerta.component";
 import { ModalDetalleSolicitud } from '../../../components/cliente/modal-detalle-solicitud.component/modal-detalle-solicitud.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-historial-solicitudes-especialista.pages',
   standalone: true,
-  imports: [CommonModule, DatePipe, ModalAlertaComponent, ModalDetalleSolicitud],
+  imports: [CommonModule, DatePipe, ModalAlertaComponent, ModalDetalleSolicitud, FormsModule],
   templateUrl: './historial-solicitudes-especialista.pages.html',
   styleUrl: './historial-solicitudes-especialista.pages.css',
 })
@@ -27,15 +28,34 @@ export class HistorialSolicitudesEspecialistaPages implements OnInit {
   isDetalleOpen = signal(false);
   solicitudDetalle = signal<FichaCompletaSolicitud | null>(null);
 
+  // Variables para los inputs del HTML
+  public searchText = '';
+  public selectedState = '';
+  public dateFrom = '';
+  public dateTo = '';
+
+  // Señal para la lista de "Chips" (etiquetas) visibles
+  public activeChips = signal<FilterChip[]>([]);
+
   ngOnInit(): void {
     this.cargarSolicitudes();
   }
 
-cargarSolicitudes(): void {
+  cargarSolicitudes(filtros: SolicitudFilter = {}): void {
     this.isLoading.set(true);
     this.mensajeError.set(null);
 
-    this.solicitudService.obtenerMisSolicitudes().subscribe({
+    const tieneFiltros = Object.values(filtros).some(val => val !== undefined && val !== '');
+
+    let requestObservable;
+
+    if (tieneFiltros) {
+      requestObservable = this.solicitudService.filtrarMisSolicitudes(filtros);
+    } else {
+      requestObservable = this.solicitudService.obtenerMisSolicitudes();
+    }
+
+    requestObservable.subscribe({
       next: (response) => {
         this.misSolicitudes.set(response.data);
         this.isLoading.set(false);
@@ -61,7 +81,7 @@ cargarSolicitudes(): void {
     this.isAlertaOpen.set(false);
     this.solicitudParaEliminar.set(null);
   }
-onModalConfirmarEliminar(): void {
+  onModalConfirmarEliminar(): void {
     const id = this.solicitudParaEliminar();
     if (id === null) return;
 
@@ -88,7 +108,7 @@ onModalConfirmarEliminar(): void {
   }
 
 
-    abrirModalDetalle(id: number): void {
+  abrirModalDetalle(id: number): void {
     this.solicitudDetalle.set(null);
     this.isDetalleOpen.set(true);
 
@@ -106,6 +126,62 @@ onModalConfirmarEliminar(): void {
   cerrarModalDetalle(): void {
     this.isDetalleOpen.set(false);
     this.solicitudDetalle.set(null);
+  }
+
+  // --- FILTROS
+  addFilter(type: 'motivo' | 'estado' | 'fechaDesde' | 'fechaHasta', value: string) {
+    if (!value) return;
+
+    let label = '';
+    let key: keyof SolicitudFilter;
+
+    switch (type) {
+      case 'motivo':
+        key = 'motivo';
+        label = `🔍 "${value}"`;
+        this.searchText = '';
+        break;
+      case 'estado':
+        key = 'estado';
+        label = `Estado: ${value}`;
+        this.selectedState = '';
+        break;
+      case 'fechaDesde':
+        key = 'fechaDesde';
+        label = `Desde: ${value}`;
+        break;
+        case 'fechaHasta':
+        key = 'fechaHasta';
+        label = `📅 Hasta: ${value}`;
+        break;
+    }
+
+    this.activeChips.update(chips => {
+      const filtered = chips.filter(c => c.key !== key);
+      return [...filtered, { key, label, value }];
+    });
+
+    this.aplicarCambios();
+  }
+
+  removeFilter(chip: FilterChip) {
+    this.activeChips.update(chips => chips.filter(c => c !== chip));
+    this.aplicarCambios();
+  }
+
+  clearAllFilters() {
+    this.activeChips.set([]);
+    this.aplicarCambios();
+  }
+
+  private aplicarCambios() {
+    const filtrosDTO: SolicitudFilter = {};
+
+    this.activeChips().forEach(chip => {
+      (filtrosDTO as any)[chip.key] = chip.value;
+    });
+
+    this.cargarSolicitudes(filtrosDTO);
   }
 
 }

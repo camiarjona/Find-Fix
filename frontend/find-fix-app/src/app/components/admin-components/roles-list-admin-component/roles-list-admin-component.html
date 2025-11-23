@@ -9,7 +9,8 @@
   <div class="header-contenedor">
     <h1 class="rol-titulo">Gestion Roles</h1>
     <p class="rol-subtitulo">
-      Bienvenido a la seccion de roles, la lista que ve a continuacion contiene todos los roles registrados en el sistema actualmente.
+      Bienvenido a la seccion de roles, la lista que ve a continuacion contiene todos los roles registrados en el
+      sistema actualmente.
     </p>
   </div>
 
@@ -27,6 +28,9 @@
         </tr>
       </thead>
       <tbody>
+        @if (isLoading()) {
+        <td>Cargando roles...</td>
+        } @else {
         @for (rol of roles(); track $index) {
         <tr>
           <td class="nombre-contenedor">
@@ -45,6 +49,7 @@
         <tr>
           <td colspan="3" class="empty-cell">No hay roles registrados.</td>
         </tr>
+        }
         }
       </tbody>
     </table>

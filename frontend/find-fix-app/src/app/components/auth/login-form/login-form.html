@@ -1,38 +1,49 @@
 <form class="app-form-content" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <h1>Iniciar Sesión</h1>
-  <span>Usa tu email y contraseña</span>
+  <span>Ingresá tu email y contraseña</span>
 
   <div class="form-field">
-    <input
-      id="login-email"
-      formControlName="email"
-      type="email"
-      placeholder=" "
-    />
+    <input id="login-email" formControlName="email" type="email" placeholder=" " />
     <label for="login-email">Email</label>
   </div>
   @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-    <small class="error-message">Por favor, ingresa un email válido.</small>
+  <small class="error-message">Por favor, ingresa un email válido.</small>
   }
 
   <div class="form-field">
-    <input
-      id="login-password"
-      formControlName="password"
-      type="password"
-      placeholder=" "
-    />
-    <label for="login-password">Contraseña</label>
+
+    <div class="password-wrapper">
+
+      <input id="login-password" formControlName="password" [type]="showPassword() ? 'text' : 'password'"
+        placeholder=" " />
+
+      <label for="login-password">Contraseña</label>
+
+      <button type="button" class="toggle-btn" (click)="togglePassword()" tabindex="-1">
+        @if (showPassword()) {
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_OPEN" />
+        </svg>
+        } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_CLOSED" />
+        </svg>
+        }
+      </button>
+
+    </div>
   </div>
   @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-    <small class="error-message">La contraseña es obligatoria.</small>
+  <small class="error-message">La contraseña es obligatoria.</small>
   }
 
   @if (loginError) {
-    <div class="server-error-message">
-      {{ loginError }}
-    </div>
+  <div class="server-error-message">
+    {{ loginError }}
+  </div>
   }
 
   <a href="#" class="forgot-pass-link">¿Olvidaste tu contraseña?</a>

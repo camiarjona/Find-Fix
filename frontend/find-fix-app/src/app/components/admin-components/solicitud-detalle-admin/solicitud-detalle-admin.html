@@ -1,0 +1,95 @@
+<div class="detalle-container">
+  <button (click)="goBack()" class="btn-volver">← Volver al Listado</button>
+
+  @if (loading()) {
+    <div class="loading-state">Cargando detalles de la solicitud...</div>
+  } @else if (solicitud()) {
+    <div class="ficha-card">
+      <h1>Detalle de Solicitud N° {{ solicitud()!.seId }}</h1>
+      <hr>
+
+      <section class="details-grid">
+        <div class="detail-item">
+          <strong>Email del Solicitante:</strong>
+          <p>{{ solicitud()!.email }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Fecha de Solicitud:</strong>
+          <p>{{ solicitud()!.fechaSolicitud | date:'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Estado Actual:</strong>
+          <span class="status-badge status-{{ solicitud()!.estado | lowercase }}">{{ solicitud()!.estado }}</span>
+        </div>
+
+        @if (solicitud()!.fechaResolucion) {
+          <div class="detail-item">
+            <strong>Fecha de Resolución:</strong>
+            <p>{{ solicitud()!.fechaResolucion | date:'dd/MM/yyyy' }}</p>
+          </div>
+        }
+      </section>
+
+      <section class="motivo-section">
+        <h3>Motivo del Solicitante</h3>
+        <p class="motivo-content">{{ solicitud()!.motivo }}</p>
+      </section>
+
+      @if (!isPending) {
+        <section class="respuesta-section">
+          <h3>Respuesta del Administrador</h3>
+          <p class="respuesta-content">{{ solicitud()!.respuesta }}</p>
+        </section>
+      }
+
+      @if (isPending) {
+        <section class="resolucion-section">
+          <h3>Resolución de Solicitud</h3>
+
+          @if (submissionError()) {
+            <div class="error-message">{{ submissionError() }}</div>
+          }
+
+          <form [formGroup]="resolutionForm" class="resolution-form">
+            <div class="form-group">
+              <label for="respuesta">Respuesta/Observación para el Cliente:</label>
+              <textarea id="respuesta" formControlName="respuesta" rows="4"></textarea>
+
+              @if (resolutionForm.get('respuesta')?.invalid && resolutionForm.get('respuesta')?.touched) {
+                <div class="validation-error">La respuesta es obligatoria.</div>
+              }
+            </div>
+
+            <div class="action-buttons">
+              <button
+                type="button"
+                (click)="handleResolution('RECHAZADO')"
+                [disabled]="isResolving()"
+                class="btn-rechazar">
+                @if (isResolving() && resolutionForm.value.estado === 'RECHAZADO') {
+                  Rechazando...
+                } @else {
+                  Rechazar Solicitud
+                }
+              </button>
+              <button
+                type="button"
+                (click)="handleResolution('APROBADO')"
+                [disabled]="isResolving()"
+                class="btn-aprobar">
+                @if (isResolving() && resolutionForm.value.estado === 'APROBADO') {
+                  Aprobando...
+                } @else {
+                  Aprobar Solicitud
+                }
+              </button>
+            </div>
+          </form>
+        </section>
+      }
+
+    </div>
+  } @else {
+    <div class="error-state">No se pudo cargar la solicitud.</div>
+  }
+</div>
