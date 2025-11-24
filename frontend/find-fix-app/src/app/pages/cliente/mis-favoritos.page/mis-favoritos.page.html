@@ -1,8 +1,49 @@
-<div class="content-card">
-  <h2>Mis Especialistas Favoritos</h2>
-  <p>Aquí aparecerá la lista de todos los especialistas que guardaste como favoritos para contactarlos fácilmente.</p>
+<div class="favoritos-container">
+  <h1 class="page-title">🌟 Mis Especialistas Favoritos</h1>
+  <p class="subtitle">Aquí puedes ver a todos los profesionales que guardaste.</p>
 
-  <div class="placeholder-contenido">
-    <p><em>(Próximamente: Lista de especialistas favoritos)</em></p>
+  <div *ngIf="isLoading" class="loading-message">
+    Cargando lista de favoritos...
+  </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && favoritos.length === 0" class="empty-state">
+    <img src="assets/images/no-favorites.png" alt="Sin favoritos" class="empty-img">
+    <p>Aún no tienes especialistas guardados.</p>
+    <a routerLink="/cliente/buscar-especialistas" class="btn btn-primary">Buscar especialistas ahora</a>
+  </div>
+
+  <div *ngIf="favoritos.length > 0" class="favoritos-list">
+
+    <div *ngFor="let fav of favoritos" class="favorito-card">
+      <div class="card-header">
+        <span class="initials">{{ fav.especialistaNombre ? fav.especialistaNombre[0] : 'E' }}</span>
+        <div class="info">
+          <h2>{{ fav.especialistaNombre }}</h2>
+          <p class="email">{{ fav.especialistaEmail }}</p> <p class="oficio">{{ fav.especialistaOficio }}</p>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <p class="meta">Agregado el: {{ fav.fechaCreacion | date:'dd/MM/yyyy' }}</p>
+
+        <div class="actions">
+          <button
+            class="btn btn-secondary"
+            (click)="verPerfilEspecialista(fav.especialistaEmail)">
+            Ver Perfil
+          </button>
+
+          <button
+            class="btn btn-danger"
+            (click)="eliminarDeFavoritos(fav.especialistaEmail)">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
