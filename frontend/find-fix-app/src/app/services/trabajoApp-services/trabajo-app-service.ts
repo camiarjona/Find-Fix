@@ -8,44 +8,54 @@ import { ActualizarTrabajoApp, BuscarTrabajoApp, VisualizarTrabajoAppCliente, Vi
   providedIn: 'root',
 })
 export class TrabajoAppService {
-   private apiUrl = 'http://localhost:8080/trabajos-app';
-   private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8080/trabajos-app';
+  private http = inject(HttpClient);
 
 
-   /// Metodos para el Cliente
+  /// Metodos para el Cliente
   obtenerTrabajosCliente(): Observable<ApiResponse<VisualizarTrabajoAppCliente[]>> {
-    return this.http.get<ApiResponse<VisualizarTrabajoAppCliente[]>>(`${this.apiUrl}/cliente/mis-trabajos`);
+    return this.http.get<ApiResponse<VisualizarTrabajoAppCliente[]>>(`${this.apiUrl}/cliente/mis-trabajos`, { withCredentials: true });
   }
 
 
   obtenerFichaCliente(id: number): Observable<ApiResponse<VisualizarTrabajoAppCliente>> {
-    return this.http.get<ApiResponse<VisualizarTrabajoAppCliente>>(`${this.apiUrl}/cliente/ficha-trabajo/${id}`);
+    return this.http.get<ApiResponse<VisualizarTrabajoAppCliente>>(`${this.apiUrl}/cliente/ficha-trabajo/${id}`, { withCredentials: true });
   }
 
   filtrarTrabajosCliente(estado: string): Observable<ApiResponse<VisualizarTrabajoAppCliente[]>> {
-    return this.http.get<ApiResponse<VisualizarTrabajoAppCliente[]>>(`${this.apiUrl}/cliente/filtrar/${estado}`);
+    return this.http.post<ApiResponse<VisualizarTrabajoAppCliente[]>>(
+      `${this.apiUrl}/cliente/filtrar/${estado}`,
+      {},
+      { withCredentials: true }
+    );
   }
 
- /// Metodos para el especialista
+  /// Metodos para el especialista
   obtenerTrabajosEspecialista(): Observable<ApiResponse<VisualizarTrabajoAppEspecialista[]>> {
-    return this.http.get<ApiResponse<VisualizarTrabajoAppEspecialista[]>>(`${this.apiUrl}/especialista/mis-trabajos`);
+    return this.http.get<ApiResponse<VisualizarTrabajoAppEspecialista[]>>(`${this.apiUrl}/especialista/mis-trabajos`, { withCredentials: true });
   }
 
 
   obtenerFichaEspecialista(tituloBuscado: string): Observable<ApiResponse<VisualizarTrabajoAppEspecialista>> {
-    return this.http.get<ApiResponse<VisualizarTrabajoAppEspecialista>>(`${this.apiUrl}/especialista/ficha-trabajo/${tituloBuscado}`);
+    return this.http.get<ApiResponse<VisualizarTrabajoAppEspecialista>>(`${this.apiUrl}/especialista/ficha-trabajo/${tituloBuscado}`, { withCredentials: true });
   }
 
 
   actualizarDatosTrabajo(tituloBuscado: string, datos: ActualizarTrabajoApp): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-datos/${tituloBuscado}`, datos);
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-datos/${tituloBuscado}`, datos, { withCredentials: true });
   }
 
 
   actualizarEstadoTrabajo(titulo: string, nuevoEstado: string): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-estado/${titulo}/${nuevoEstado}`, {});
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-estado/${titulo}/${nuevoEstado}`, {}, { withCredentials: true });
   }
 
-  /// FALTARIA FILTRADOO
+  filtrarTrabajosEspecialista(filtro: BuscarTrabajoApp): Observable<ApiResponse<VisualizarTrabajoAppEspecialista[]>> {
+    return this.http.post<ApiResponse<VisualizarTrabajoAppEspecialista[]>>(
+      `${this.apiUrl}/especialista/filtrar`,
+      filtro,
+      { withCredentials: true }
+    );
+  }
 
 }

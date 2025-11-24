@@ -106,7 +106,7 @@
   line-height: 1.6;
 }
 
-/* --- Responsive para móviles --- */
+
 @media (max-width: 768px) {
   .steps-wrapper {
     flex-direction: column;
@@ -126,3 +126,4 @@
     max-width: 100%;
   }
 }
+

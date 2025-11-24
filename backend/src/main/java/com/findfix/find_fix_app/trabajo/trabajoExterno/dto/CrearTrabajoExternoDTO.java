@@ -21,7 +21,6 @@ public record CrearTrabajoExternoDTO(
         String descripcion,
 
         @NotNull(message = "El presupuesto no puede ser nulo.")
-        @Positive(message = "El presupuesto debe ser mayor a cero.")
         Double presupuesto,
 
         @NotBlank(message="El título no puede quedar en blanco.")

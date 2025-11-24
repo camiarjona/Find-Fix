@@ -46,19 +46,7 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse<>("Login exitoso, bienvenido!", perfil));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<String>> logout(HttpServletRequest request) {
-        // Obtenemos la sesión actual y la invalidamos
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate(); // Invalida la sesión
-        }
-        // Limpiamos el contexto de seguridad
-        SecurityContextHolder.clearContext();
-
-        return ResponseEntity.ok(new ApiResponse<>("Has cerrado sesión exitosamente.", null));
-    }
-
+    
     //metodo para ver la lista de usuarios registrados
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")

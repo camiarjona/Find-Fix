@@ -16,21 +16,21 @@
   margin-bottom: 2rem;
 }
 
-/* --- GRID LAYOUT --- */
+
 .profile-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: start;
 }
 
 @media (max-width: 768px) {
   .profile-grid {
-    grid-template-columns: 1fr; /* Una columna en móvil */
+    grid-template-columns: 1fr;
   }
 }
 
-/* --- ESTILO DE TARJETAS --- */
+
 .card {
   background: white;
   border-radius: 16px;
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background-color: #fff7ed; /* Fondo naranja muy suave */
+  background-color: #fff7ed; 
 }
 
 .header-icon {
@@ -70,7 +70,7 @@
   padding: 1.5rem;
 }
 
-/* --- SECCIÓN DATOS PERSONALES --- */
+
 .user-banner {
   display: flex;
   align-items: center;
@@ -109,7 +109,7 @@
   margin-top: 4px;
 }
 
-/* Lista de Datos */
+
 .data-list {
   list-style: none;
   padding: 0;
@@ -151,7 +151,7 @@
   color: #9ca3af;
 }
 
-/* Botones e Inputs Inline */
+
 .edit-pencil {
   background: none;
   border: none;
@@ -199,7 +199,7 @@
   background-color: #f3f4f6;
 }
 
-/* --- SECCIÓN SEGURIDAD --- */
+
 .security-form {
   display: flex;
   flex-direction: column;
@@ -256,3 +256,4 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
 
+
 @RestController
 @RequestMapping("/especialistas")
 @RequiredArgsConstructor
@@ -27,19 +28,19 @@ public class EspecialistaController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistas() throws EspecialistaNotFoundException {
+    public ResponseEntity<ApiResponse<List<EspecialistaListadoDTO>>> obtenerEspecialistas() throws EspecialistaNotFoundException {
         List<Especialista> especialistas = especialistaService.obtenerEspecialistas();
 
-        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
+        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new).toList()));
     }
 
 
     @GetMapping("/disponibles")
     @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException, UsuarioNotFoundException {
+    public ResponseEntity<ApiResponse<List<EspecialistaListadoDTO>>> obtenerEspecialistasDisponibles() throws EspecialistaNotFoundException, UsuarioNotFoundException {
         List<Especialista> especialistas = especialistaService.obtenerEspecialistasDisponibles();
 
-        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas disponibles encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
+        return ResponseEntity.ok(new ApiResponse<>("Lista de especialistas disponibles encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new).toList()));
     }
 
 
@@ -92,13 +93,28 @@ public class EspecialistaController {
         return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));
     }
 
-    @GetMapping("/filtrar")
+    @PostMapping("/filtrar")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<List<EspecialistaFichaCompletaDTO>>> filtrarEspecialistas(@RequestBody BuscarEspecialistaDTO filtro)
-            throws EspecialistaExcepcion {
+            throws EspecialistaExcepcion, UsuarioNotFoundException {
         List<EspecialistaFichaCompletaDTO> especialistasFiltrados = especialistaService.filtrarEspecialistas(filtro);
 
         return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", especialistasFiltrados));
+    }
+
+    @GetMapping("/detalle")
+    @PreAuthorize("hasAnyRole('CLIENTE')")
+   public ResponseEntity<ApiResponse<VerPerfilEspecialistaDTO>> verDetalle(@RequestParam String email) throws UsuarioNotFoundException, EspecialistaNotFoundException {
+        Especialista especialista = especialistaService.buscarPorEmail(email).orElseThrow (() -> new EspecialistaNotFoundException("Especialista no encontrado"));
+       VerPerfilEspecialistaDTO especialistaDTO = new VerPerfilEspecialistaDTO(especialista);
+        return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));
+    }
+
+    @GetMapping("/publico")
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasPublico() throws EspecialistaNotFoundException, UsuarioNotFoundException {
+        // Reutilizamos el servicio existente
+        List<Especialista> especialistas = especialistaService.obtenerEspecialistasDisponibles();
+        return ResponseEntity.ok(new ApiResponse<>("Lista pública encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
     }
 
 }

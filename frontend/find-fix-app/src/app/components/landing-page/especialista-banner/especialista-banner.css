@@ -53,7 +53,7 @@
   }
 }
 
-/* ---- Responsive para Celulares ---- */
+
 @media (max-width: 900px) {
   .banner-container {
     flex-direction: column-reverse;
@@ -66,3 +66,4 @@
     margin-bottom: 20px;
   }
 }
+

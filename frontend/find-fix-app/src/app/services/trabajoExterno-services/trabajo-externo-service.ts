@@ -12,23 +12,23 @@ export class TrabajoExternoService {
   private http = inject(HttpClient);
 
   crearTrabajo(dto: CrearTrabajoExternoDTO): Observable<ApiResponse<TrabajoExternoDTO>> {
-    return this.http.post<ApiResponse<TrabajoExternoDTO>>(`${this.apiUrl}/agregar`, dto);
+    return this.http.post<ApiResponse<TrabajoExternoDTO>>(`${this.apiUrl}/agregar`, dto, { withCredentials: true });
   }
 
   obtenerMisTrabajos(): Observable<ApiResponse<TrabajoExternoDTO[]>> {
-    return this.http.get<ApiResponse<TrabajoExternoDTO[]>>(`${this.apiUrl}/mis-trabajos`);
+    return this.http.get<ApiResponse<TrabajoExternoDTO[]>>(`${this.apiUrl}/mis-trabajos`, { withCredentials: true });
   }
 
   modificarTrabajo(tituloOriginal: string, dto: ModificarTrabajoExternoDTO): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/modificar/${tituloOriginal}`, dto);
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/modificar/${tituloOriginal}`, dto, { withCredentials: true });
   }
 
   eliminarTrabajo(titulo: string): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/eliminar/${titulo}`);
+    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/eliminar/${titulo}`, { withCredentials: true });
   }
 
   actualizarEstado(titulo: string, nuevoEstado: string): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-estado/${titulo}/${nuevoEstado}`, {});
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-estado/${titulo}/${nuevoEstado}`, {}, { withCredentials: true });
   }
 
   /// FALTARIA FILTRADOO

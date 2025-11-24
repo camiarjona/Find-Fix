@@ -28,14 +28,14 @@ public class OficioController {
     private final OficioService oficioService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ESPECIALISTA', 'ADMIN')")
     public ResponseEntity<ApiResponse<List<Oficio>>> buscarTodos() {
         List<Oficio> oficios = oficioService.buscarTodos();
         return ResponseEntity.ok(new ApiResponse<>("Lista de oficios encontrada ✅",oficios));
     }
 
     @GetMapping("/disponibles")
-    @PreAuthorize("hasRole('ESPECIALISTA')")
+    @PreAuthorize("hasAnyRole('ESPECIALISTA', 'CLIENTE')")
     public ResponseEntity<ApiResponse<List<String>>> oficiosDisponibles() {
         List<Oficio> disponibles = oficioService.buscarTodos();
         return ResponseEntity.ok(new ApiResponse<>("Oficios disponibles",  disponibles.stream().map(Oficio::getNombre).toList()));

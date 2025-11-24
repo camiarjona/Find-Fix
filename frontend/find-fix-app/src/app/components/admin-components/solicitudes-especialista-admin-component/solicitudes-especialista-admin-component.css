@@ -1,7 +1,3 @@
-/* ========================================================= */
-/* --- ESTILOS BASE (MÓVIL / POR DEFECTO: TARJETAS) --- */
-/* ========================================================= */
-
 :host {
   display: block;
   padding: 1rem;
@@ -13,7 +9,7 @@
   animation: fadeIn 0.5s ease;
 }
 
-/* Títulos y Mensajes */
+
 h2 {
   font-size: 1.5rem;
   color: #1f2937;
@@ -41,7 +37,7 @@ h2 {
   margin-bottom: 1rem;
 }
 
-/* --- ESTRUCTURA MÓVIL (TARJETAS) --- */
+
 .table-container {
   background: transparent;
   box-shadow: none;
@@ -53,9 +49,9 @@ table, tbody, tr, td {
   width: 100%;
 }
 
-thead { display: none; } /* Ocultamos encabezados */
+thead { display: none; }
 
-/* La Fila es una Tarjeta */
+
 tr {
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -65,7 +61,7 @@ tr {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* La Celda es una Fila Flex (Etiqueta - Valor) */
+
 td {
   display: flex;
   justify-content: space-between;
@@ -77,7 +73,7 @@ td {
 
 td:last-child { border-bottom: none; }
 
-/* Etiqueta generada con data-label */
+
 td::before {
   content: attr(data-label);
   font-weight: 600;
@@ -88,9 +84,9 @@ td::before {
   margin-right: 1rem;
 }
 
-/* --- COMPONENTES VISUALES --- */
 
-/* Badges */
+
+
 .status-badge {
   padding: 0.25rem 0.6rem;
   border-radius: 1rem;
@@ -104,7 +100,7 @@ td::before {
 .status-aprobado, .status-aceptado { background-color: #dcfce7; color: #166534; }
 .status-rechazado { background-color: #fee2e2; color: #991b1b; }
 
-/* Botón Ver (Circular en móvil y escritorio) */
+
 .btn-ver {
   display: flex;
   align-items: center;
@@ -112,7 +108,7 @@ td::before {
   padding: 0.5rem;
   border-radius: 50%;
   border: 1px solid #e5e7eb;
-  background-color: #f3f4f6; /* Gris suave en móvil */
+  background-color: #f3f4f6;
   color: #4b5563;
   cursor: pointer;
   transition: all 0.2s;
@@ -133,11 +129,7 @@ td::before {
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
-
-/* ========================================================= */
-/* --- VISTA ESCRITORIO (min-width: 900px): ESTILO TABLA --- */
-/* ========================================================= */
-
+/* --- Responsive --- */
 @media (min-width: 900px) {
 
   :host {
@@ -147,7 +139,6 @@ td::before {
 
   h2 { font-size: 1.8rem; margin-bottom: 2rem; }
 
-  /* Restaurar Tabla */
   .table-container {
     background: white;
     border-radius: 12px;
@@ -171,10 +162,10 @@ td::before {
     border: none;
     box-shadow: none;
     padding: 0;
-    border-bottom: 1px solid #e5e7eb; /* Borde entre filas */
+    border-bottom: 1px solid #e5e7eb;
   }
 
-  /* Encabezados (Estilo Gestión Usuarios) */
+
   th {
     padding: 1rem;
     text-align: left;
@@ -188,21 +179,18 @@ td::before {
 
   th.acciones-header { text-align: right; }
 
-  /* Celdas Normales */
   td {
     display: table-cell;
     padding: 1rem;
-    border-bottom: none; /* El borde lo lleva el TR */
+    border-bottom: none;
     vertical-align: middle;
     color: #374151;
     font-size: 0.95rem;
     text-align: left;
   }
 
-  /* Ocultar etiquetas data-label */
   td::before { display: none; }
 
-  /* Ajustes específicos desktop */
   td.celda-acciones {
     text-align: right;
     margin-top: 0;
@@ -215,11 +203,11 @@ td::before {
   }
 
   .btn-ver {
-    background-color: transparent; /* Transparente en desktop */
+    background-color: transparent;
   }
 
   tr:hover {
-    background-color: #fff7ed; /* Hover Naranja Suave */
+    background-color: #fff7ed;
   }
 }
 

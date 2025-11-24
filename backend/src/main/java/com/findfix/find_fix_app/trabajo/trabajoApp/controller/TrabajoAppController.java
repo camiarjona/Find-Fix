@@ -71,7 +71,7 @@ public class TrabajoAppController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Estado del trabajo modificado con exito ☑️", "Busque la ficha del trabajo para visualizar los cambios"));
     }
 
-    @GetMapping("/especialista/filtrar")
+    @PostMapping("/especialista/filtrar")
     @PreAuthorize("hasRole('ESPECIALISTA')")
     public ResponseEntity<ApiResponse<List<VisualizarTrabajoAppEspecialistaDTO>>> filtrarMisTrabajos(@RequestBody BuscarTrabajoAppDTO filtro) throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoAppException {
         List<TrabajoApp> trabajos = trabajoAppService.filtrarTrabajosApp(filtro);
@@ -80,7 +80,7 @@ public class TrabajoAppController {
                 trabajos.stream().map(VisualizarTrabajoAppEspecialistaDTO::new).toList()));
     }
 
-    @GetMapping("/cliente/filtrar/{estado}")
+    @PostMapping("/cliente/filtrar/{estado}")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<List<VisualizarTrabajoAppClienteDTO>>> filtrarPorEstado(@PathVariable String estado) throws UsuarioNotFoundException, TrabajoAppException {
         List<TrabajoApp> trabajos = trabajoAppService.filtrarPorEstadoCliente(estado);

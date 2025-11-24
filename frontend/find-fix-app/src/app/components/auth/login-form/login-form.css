@@ -29,4 +29,24 @@
   .app-form-content {
     border-radius: 8px;
   }
+
+  
+  .mobile-cta-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 12px 0;
+  }
+
+  .mobile-cta-icon svg {
+    width: 48px;
+    height: 48px;
+    color: var(--primary-color, #F58634);
+  }
 }
+
+
+.mobile-cta-icon {
+  display: none;
+}
+

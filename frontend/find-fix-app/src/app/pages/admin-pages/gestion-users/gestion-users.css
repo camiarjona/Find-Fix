@@ -17,14 +17,14 @@
   color: #6b7280;
 }
 
-/* TABLA */
+
 .table-container {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   overflow-x: auto;
-  /* Responsive */
+  
 }
 
 .users-table {
@@ -53,16 +53,16 @@
 
 .users-table tr:hover {
   background-color: #fff7ed;
-  /* Naranja muy suave */
+  
 }
 
-/* FILA DESACTIVADA (Visualmente apagada) */
+
 .disabled-row {
   background-color: #f9fafb;
   opacity: 0.7;
 }
 
-/* PERFIL DE USUARIO */
+
 .user-profile {
   display: flex;
   align-items: center;
@@ -100,7 +100,7 @@
   flex-direction: column;
 }
 
-/* BADGES */
+
 .badge {
   padding: 4px 8px;
   border-radius: 12px;
@@ -109,7 +109,7 @@
   display: inline-block;
 }
 
-/* Roles */
+
 .badge.role {
   background-color: #e5e7eb;
   color: #374151;
@@ -121,7 +121,7 @@
   color: #c2410c;
 }
 
-/* Estados */
+
 .badge.status.active {
   background-color: #dcfce7;
   color: #166534;
@@ -132,7 +132,7 @@
   color: #991b1b;
 }
 
-/* BOTONES */
+
 .actions {
   display: flex;
   gap: 8px;
@@ -157,7 +157,7 @@
 }
 
 
-/* --- SWITCH / TOGGLE BUTTON --- */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -165,14 +165,14 @@
   height: 22px;
 }
 
-/* Ocultamos el checkbox real */
+
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* La "pista" o fondo del switch */
+
 .slider {
   position: absolute;
   cursor: pointer;
@@ -181,12 +181,12 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  /* Gris cuando está inactivo */
+  
   transition: .4s;
   border-radius: 34px;
 }
 
-/* El círculo blanco que se mueve */
+
 .slider:before {
   position: absolute;
   content: "";
@@ -200,23 +200,23 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Estado ACTIVO (Checked) */
+
 input:checked+.slider {
   background-color: #16a34a;
-  /* Verde bonito */
+  
 }
 
-/* Mover el círculo a la derecha */
+
 input:checked+.slider:before {
   transform: translateX(18px);
 }
 
-/* Efecto de foco para accesibilidad */
+
 input:focus+.slider {
   box-shadow: 0 0 1px #16a34a;
 }
 
-/* --- BARRA DE FILTROS --- */
+
 .filters-bar {
   background-color: white;
   padding: 1rem 1.5rem;
@@ -226,7 +226,7 @@ input:focus+.slider {
   display: flex;
   gap: 1.5rem;
   align-items: flex-end;
-  /* Alinea los inputs con los botones */
+  
   flex-wrap: wrap;
   border: 1px solid #f3f4f6;
 }
@@ -260,7 +260,7 @@ input:focus+.slider {
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
 
-/* BOTONES DE FILTRO */
+
 .filter-actions {
   display: flex;
   gap: 0.8rem;
@@ -293,4 +293,174 @@ input:focus+.slider {
 .btn-filter.clear:hover {
   background-color: #e5e7eb;
 }
+
+
+@media (max-width: 640px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .page-header p {
+    font-size: 0.9rem;
+  }
+
+  .table-container {
+    border-radius: 8px;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .users-table {
+    min-width: auto;
+    font-size: 0.95rem;
+    display: block;
+  }
+
+  
+  .users-table thead {
+    display: none;
+  }
+
+  .users-table tbody {
+    display: block;
+  }
+
+  .users-table tr {
+    display: block;
+    margin-bottom: 0.875rem;
+    background: #ffffff;
+    padding: 0.75rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f3f4f6;
+  }
+
+  .users-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border: none;
+    color: #374151;
+  }
+
+    
+    .users-table tr td:nth-child(1)::before { content: "Usuario"; }
+    .users-table tr td:nth-child(2)::before { content: "Roles"; }
+    .users-table tr td:nth-child(3)::before { content: "Estado"; }
+    .users-table tr td:nth-child(4)::before { content: "Acciones"; }
+
+  .users-table tr td::before {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  
+  .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    margin-right: 0.6rem;
+  }
+
+  .user-profile {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .user-names,
+  .fullname,
+  .text-muted,
+  .contact-info {
+    font-size: 0.95rem;
+  }
+
+  .badge {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+
+  .actions {
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .btn-icon {
+    padding: 4px;
+    font-size: 1rem;
+  }
+
+  .switch {
+    width: 34px;
+    height: 18px;
+  }
+
+  .slider:before {
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 3px;
+  }
+
+  input:checked+.slider:before {
+    transform: translateX(16px);
+  }
+
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-input,
+  .filter-select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-filter {
+    width: 100%;
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 0.5rem;
+  }
+
+  .avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .btn-icon {
+    font-size: 0.9rem;
+    padding: 3px;
+  }
+}
+
 
