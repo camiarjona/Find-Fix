@@ -9,7 +9,7 @@ import { MisSolicitudesPage } from './pages/cliente/mis-solicitudes.page/mis-sol
 import { BuscarEspecialistas } from './pages/cliente/buscar-especialistas.page/buscar-especialistas.page';
 import { MisResenas } from './pages/cliente/mis-resenas/mis-resenas';
 import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page';
-import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
+import { MisFavoritosPage } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
 import { EspecialistaLayout } from './layouts/especialista/especialista-layout/especialista-layout';
@@ -84,7 +84,7 @@ export const routes: Routes = [
       { path: 'buscar-especialistas', component: BuscarEspecialistas },
       { path: 'mis-resenas', component: MisResenas },
       { path: 'mis-trabajos', component: MisTrabajos },
-      { path: 'mis-favoritos', component: MisFavoritos },
+      { path: 'mis-favoritos', component: MisFavoritosPage },
       {
         path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
@@ -107,7 +107,7 @@ export const routes: Routes = [
   // Rutas Privadas del Especialista
 {
     path: 'especialista',
-    component: EspecialistaLayout, 
+    component: EspecialistaLayout,
     children: [
       {
         path: 'dashboard',
