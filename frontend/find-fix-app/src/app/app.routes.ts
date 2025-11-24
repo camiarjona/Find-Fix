@@ -26,6 +26,8 @@ import { SolicitudesEspecialistaAdminComponent } from './components/admin-compon
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
 import { MiPerfilEspecialista } from './pages/especialista/mi-perfil/mi-perfil';
 import { LandingListEspecialistasComponent } from './pages/landing-page/landing-list-especialistas-component/landing-list-especialistas-component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -34,11 +36,12 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    component: AuthPage
+    component: AuthPage,
   },
   {
     path: 'seleccionar-rol',
-    component: SeleccionarRolPage
+    component: SeleccionarRolPage,
+    canActivate: [authGuard]
   },
   {
     path: 'admin/dashboard',
@@ -51,6 +54,8 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayout,
+    canActivate: [authGuard,roleGuard],
+    data: { role: 'ADMIN' },
     children: [
       {
         path: 'oficios',
@@ -77,7 +82,8 @@ export const routes: Routes = [
   {
     path: 'cliente',
     component: ClienteLayout,
-
+    canActivate: [authGuard,roleGuard],
+    data: { role: 'CLIENTE' },
     children: [
       {
         path: 'dashboard',
@@ -114,6 +120,8 @@ export const routes: Routes = [
 {
     path: 'especialista',
     component: EspecialistaLayout,
+    canActivate: [authGuard,roleGuard],
+    data: { role: 'ESPECIALISTA' },
     children: [
       {
         path: 'dashboard',
