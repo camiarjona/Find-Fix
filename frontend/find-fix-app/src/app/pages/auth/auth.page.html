@@ -1,21 +1,13 @@
 <div class="container" [class.active]="!isLoginView()">
 
   <div class="form-container sign-up">
-    <app-register-form
-      (registerSubmit)="onRegister($event)"
-      [registerError]="authError()"
-
-      (toggleView)="onToggleView()"
-    ></app-register-form>
+    <app-register-form (registerSubmit)="onRegister($event)" [registerError]="authError()"
+      (toggleView)="onToggleView()"></app-register-form>
   </div>
 
   <div class="form-container sign-in">
-    <app-login-form
-      (loginSubmit)="onLogin($event)"
-      [loginError]="authError()"
-
-      (toggleView)="onToggleView()"
-    ></app-login-form>
+    <app-login-form (loginSubmit)="onLogin($event)" [loginError]="authError()"
+      (toggleView)="onToggleView()"></app-login-form>
   </div>
 
   <div class="toggle-container">
@@ -37,3 +29,9 @@
   </div>
 
 </div>
+
+@if (feedbackData.visible) {
+<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
+  (cerrar)="cerrarFeedback()">
+</app-modal-feedback>
+}

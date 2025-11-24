@@ -1,6 +1,6 @@
 export interface OficioModel {
-  id:Number;
-  nombre:String;
+  id: number;
+  nombre: string;
 }
 
 export interface OficioToDelete {

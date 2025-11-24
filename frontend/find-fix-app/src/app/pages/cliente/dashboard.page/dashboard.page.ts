@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { TrabajoExternoService } from '../../../services/trabajoExterno-services/trabajo-externo-service';
+import { FavoritoService } from '../../../services/favoritos/lista-favs.service';
 @Component({
   selector: 'app-dashboard.page',
   standalone: true,
@@ -15,18 +16,17 @@ import { TrabajoExternoService } from '../../../services/trabajoExterno-services
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.css',
 })
-export class DashboardPage implements OnInit{
+export class DashboardPage implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private trabajoAppService = inject(TrabajoAppService);
   private trabajoExternoService = inject(TrabajoExternoService);
 
   // private solicitudService = inject(SolicitudService);
-  // private favoritoService = inject(FavoritoService);
+  private favoritoService = inject(FavoritoService);
   // private resenaService = inject(ResenaService);
 
   solicitudesPendientes = signal(2);
-  favoritosGuardados = signal(3);
 
   nombreUsuario = computed(() => {
     return this.authService.currentUser()?.nombre || 'Cliente';
@@ -36,12 +36,15 @@ export class DashboardPage implements OnInit{
   //   () => this.solicitudService.solicitudesCliente().filter((s) => s.estado === 'PENDIENTE').length
   // );
 
+  favoritosGuardados = signal<number>(0);
+
   // señal que guarda el conteo combinado de trabajos en proceso
   trabajosEnProcesoCount = signal<number>(0);
   trabajosEnProceso = computed(() => this.trabajosEnProcesoCount());
 
   ngOnInit(): void {
     this.cargarTrabajosEnProceso();
+    this.cargarFavoritos();
   }
 
   private cargarTrabajosEnProceso() {
@@ -79,7 +82,20 @@ export class DashboardPage implements OnInit{
       }
     });
   }
-  // favoritosGuardados = computed(() => this.favoritoService.favoritos().length);
+
+  private cargarFavoritos() {
+    this.favoritosGuardados.set(0);
+    this.favoritoService.obtenerFavoritosPorCliente().subscribe({
+      next: (resp) => {
+        const listaFavs = (resp?.data || []) as any[];
+        const conuntFavs = listaFavs.length;
+        this.favoritosGuardados.set(conuntFavs);
+      },
+      error: (err) => {
+        console.error('Error cargando favoritos');
+      }
+    })
+  }
 
   // resenasPendientes = computed(
   //   () => this.resenaService.resenasPendientesCliente().length

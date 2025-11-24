@@ -1,40 +1,52 @@
 <header class="dashboard-header">
-  <div class="brand">
-    <span class="brand-text">FindFix Admin</span>
-  </div>
+  <div class="container-header">
+    <div class="brand">
+      <span class="brand-text">FindFix Admin</span>
+    </div>
 
-  <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
-    <span class="btn-text">Cerrar Sesión</span>
-    <span class="btn-icon">
+    <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+      <span class="btn-text">Cerrar Sesión</span>
+      <span class="btn-icon">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
         </svg>
-    </span>
-  </button>
+      </span>
+    </button>
+  </div>
 </header>
 
+<div class="main-content">
+  <div class="admin-dashboard-contenedor">
 
-<div class="admin-dashboard-contenedor">
-  <div class="header-contenedor">
-    <h1 class="admin-titulo">Hola, Administrador!</h1>
-    <p class="admin-subtitulo">
-      A continuacion esta visualizando su panel, selecciona la opcion que desea y sera guiado a ese apartado.
-    </p>
-  </div>
-  <div class="panel-grid">
-    @for (panel of adminPanels; track panel.title) {
-    <a [routerLink]="panel.routerLink" class="panel-card" [style.border-left-color]="panel.color">
-      <div class="card-icon" [style.background-color]="panel.color">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path [attr.d]="panel.icon" />
-        </svg>
-      </div>
-      <div class="card-content">
-        <h2>{{ panel.title }}</h2>
-        <p>{{ panel.description }}</p>
-      </div>
-      <span class="card-arrow">→</span>
-    </a>
-    }
+    <div class="header-contenedor">
+      <h1 class="admin-titulo">¡Hola, Administrador!</h1>
+      <p class="admin-subtitulo">
+        Selecciona una opción del panel para comenzar a gestionar la plataforma.
+      </p>
+    </div>
+
+    <div class="panel-grid">
+      @for (panel of adminPanels; track panel.title) {
+      <a [routerLink]="panel.routerLink" class="panel-card" [style.--accent-color]="panel.color">
+        <div class="card-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path [attr.d]="panel.icon" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <h2>{{ panel.title }}</h2>
+          <p>{{ panel.description }}</p>
+        </div>
+        <div class="card-action">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+      }
+    </div>
   </div>
 </div>
