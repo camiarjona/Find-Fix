@@ -1,8 +1,9 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { EspecialistaDTO, FiltroEspecialistasDTO, CrearSolicitudTrabajoDTO } from '../../models/cliente/buscar-especialistas-models';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { PerfilEspecialista } from '../../models/especialista/especialista.model';
 
 @Injectable({
   providedIn: 'root',
@@ -52,5 +53,10 @@ export class BuscarEspecialistaService {
     this.http.get<ApiResponse<string[]>>(`${this.apiUrl}/oficios/disponibles`).subscribe(
       res => this.oficios.set(res.data)
     );
+  }
+
+  obtenerPerfilCompleto(email: string): Observable<ApiResponse<PerfilEspecialista>> {
+    const params = new HttpParams().set('email', email);
+    return this.http.get<ApiResponse<PerfilEspecialista>>(`${this.apiUrl}/especialistas/detalle`, { params });
   }
 }

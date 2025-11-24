@@ -97,7 +97,8 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/solicitud-especialista/mis-solicitudes",
                                         "/solicitud-especialista/enviar",
-                                        "/solicitud-especialista/eliminar/{id}")
+                                        "/solicitud-especialista/eliminar/{id}",
+                                        "/especialistas/detalle")
                                 .hasRole("CLIENTE")
 
                                 .requestMatchers("/solicitud-especialista/filtrar").hasAnyRole("CLIENTE", "ADMIN")
@@ -124,7 +125,6 @@ public class SecurityConfig {
                                         "/especialistas/actualizar/oficios/{email}",
                                         "/especialistas/eliminar/{email}")
                                 .hasRole("ADMIN")
-
                                 //RESEÑA
                                 .requestMatchers(
                                         "/resenas/registrar",

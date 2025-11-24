@@ -3,6 +3,7 @@ import { FiltroEspecialistasDTO, EspecialistaDTO } from '../../../models/cliente
 import { BuscarEspecialistaService } from '../../../services/cliente/buscar-especialista-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PerfilEspecialista } from '../../../models/especialista/especialista.model';
 
 @Component({
   selector: 'app-buscar-especialistas-component',
@@ -22,23 +23,24 @@ private clienteService = inject(BuscarEspecialistaService);
   public filtros: FiltroEspecialistasDTO = {
     ciudad: '',
     oficio: '',
-    minCalificacion: 0 // 0 significa todos
+    minCalificacion: 0
   };
-
-  // Estado del Modal de Contratación
   public showModalContratar = signal(false);
-  public especialistaSeleccionado: EspecialistaDTO | null = null;
+  public showModalDetalle = signal(false);
+  public especialistaSeleccionado: EspecialistaDTO | any ;
+  public especialistaSeleccionaCompleto=  signal<PerfilEspecialista | any>(null);
   public descripcionTrabajo = '';
   public isSubmitting = signal(false);
+  public isLoadingDetalle = signal(false);
 
   ngOnInit() {
     this.clienteService.obtenerEspecialistas();
     this.clienteService.cargarDatosFiltros();
   }
 
-  // --- Lógica de Filtros ---
+
   aplicarFiltros() {
-    // Limpiamos valores vacíos para no enviarlos
+
     const filtrosEnviar: FiltroEspecialistasDTO = {};
     if (this.filtros.ciudad) filtrosEnviar.ciudad = this.filtros.ciudad;
     if (this.filtros.oficio) filtrosEnviar.oficio = this.filtros.oficio;
@@ -46,7 +48,7 @@ private clienteService = inject(BuscarEspecialistaService);
        filtrosEnviar.minCalificacion = this.filtros.minCalificacion;
     }
 
-    // Si no hay filtros, recargamos todos. Si hay, filtramos.
+
     if (Object.keys(filtrosEnviar).length === 0) {
       this.clienteService.obtenerEspecialistas();
     } else {
@@ -59,14 +61,14 @@ private clienteService = inject(BuscarEspecialistaService);
     this.clienteService.obtenerEspecialistas();
   }
 
-  // --- Lógica de Contratación (Modal) ---
+
   abrirModalContratar(especialista: EspecialistaDTO) {
     this.especialistaSeleccionado = especialista;
     this.descripcionTrabajo = '';
     this.showModalContratar.set(true);
   }
 
-  cerrarModal() {
+  cerrarModalContratar() {
     this.showModalContratar.set(false);
     this.especialistaSeleccionado = null;
   }
@@ -83,7 +85,7 @@ private clienteService = inject(BuscarEspecialistaService);
       next: () => {
         alert('Solicitud enviada con éxito!');
         this.isSubmitting.set(false);
-        this.cerrarModal();
+        this.cerrarModalContratar();
       },
       error: (err) => {
         alert('Error al enviar solicitud: ' + (err.error?.mensaje || 'Intente nuevamente'));
@@ -92,7 +94,36 @@ private clienteService = inject(BuscarEspecialistaService);
     });
   }
 
-  // --- Favoritos (Placeholder) ---
+ abrirModalDetalle(espListado: EspecialistaDTO) {
+    // 2. Resetea el estado ANTES de abrir
+    this.especialistaSeleccionaCompleto.set(null);
+    this.isLoadingDetalle.set(true);
+    this.showModalDetalle.set(true);
+
+    this.clienteService.obtenerPerfilCompleto(espListado.email).subscribe({
+      next: (res) => {
+        console.log("Datos recibidos:", res.data); // Debug
+
+        // 3. Actualiza la Signal con los datos
+        this.especialistaSeleccionaCompleto.set(res.data);
+
+        // 4. Apaga el loading AL FINAL
+        this.isLoadingDetalle.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoadingDetalle.set(false);
+        this.cerrarModalDetalle();
+        alert("No se pudo cargar el detalle.");
+      }
+    });
+}
+
+  cerrarModalDetalle() {
+    this.showModalDetalle.set(false);
+  }
+
+
   toggleFavorito(esp: EspecialistaDTO) {
     alert('La funcionalidad de Favoritos estará disponible próximamente.');
   }

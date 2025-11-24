@@ -2,6 +2,7 @@
 .page-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 15px; /* Padding lateral para móvil */
 }
 
 /* --- FILTROS --- */
@@ -11,6 +12,11 @@
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     margin-bottom: 30px;
+}
+
+h2 {
+    margin-top: 0;
+    color: var(--text-dark, #1a1a1a);
 }
 
 .filters-grid {
@@ -31,6 +37,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
+    background-color: white;
 }
 
 .filter-actions {
@@ -59,11 +66,13 @@
     transition: transform 0.2s;
     display: flex;
     flex-direction: column;
+    border: 1px solid #f0f0f0;
 }
 
 .esp-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: var(--primary-color);
 }
 
 .card-header {
@@ -93,27 +102,48 @@
 .header-info h3 {
     margin: 0;
     font-size: 1.1rem;
+    color: #333;
 }
 
 .city-badge {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #666;
     background: #f0f0f0;
     padding: 2px 8px;
     border-radius: 10px;
 }
 
-.fav-btn {
-    background: none;
+
+/* Botón Ojito (Ver Detalle) */
+
+.header-actions {
+    margin-left: auto; /* Empuja todo el bloque a la derecha */
+    display: flex;
+    gap: 8px; /* Espacio entre el corazón y el ojo */
+}
+
+.icon-action-btn {
+   background: #f3f4f6;
     border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    color: #ccc; /* Gris por defecto */
-    transition: color 0.2s;
+    color: #6b7280;
+    transition: all 0.2s;
 }
-.fav-btn:hover {
-    color: #e74c3c; /* Rojo al hover */
+.icon-action-btn:hover {
+    background: var(--primary-color);
+    color: white;
 }
-.fav-btn svg { width: 24px; height: 24px; }
+.icon-action-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
 
 .card-body {
     flex-grow: 1;
@@ -123,6 +153,18 @@
 .rating {
     font-weight: 700;
     margin-bottom: 10px;
+    color: #f59e0b;
+}
+.rating-label {
+    color: #999;
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+
+.oficios-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .oficio-tag {
@@ -132,8 +174,7 @@
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.85rem;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    font-weight: 500;
 }
 
 /* --- BOTONES --- */
@@ -145,19 +186,36 @@
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
+.cta-button:hover { background-color: #e07024; }
+.cta-button:disabled { background-color: #ccc; cursor: not-allowed; }
+
 .cta-button-outline {
     background: transparent;
-    color: var(--text-dark);
+    color: var(--text-dark, #333);
     border: 1px solid #ccc;
     padding: 10px 20px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
 }
+.cta-button-outline:hover { background-color: #f9f9f9; }
+
 .full-width { width: 100%; }
 
-/* --- MODAL --- */
+/* Empty State */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+}
+
+/* --- MODALES GENERALES --- */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -175,16 +233,20 @@
     border-radius: 12px;
     width: 100%;
     max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    position: relative;
 }
 
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin: 10px 0 20px;
     font-family: inherit;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
 .modal-actions {
@@ -192,6 +254,126 @@ textarea {
     justify-content: flex-end;
     gap: 10px;
 }
+
+/* --- ESTILOS ESPECÍFICOS MODAL PERFIL --- */
+.profile-modal {
+    max-width: 400px;
+    text-align: center;
+    padding: 0; /* Reset padding para manejarlo internamente */
+    overflow: hidden;
+}
+
+.profile-header-modal {
+    background-color: #f9fafb;
+    padding: 30px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-large {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(245, 134, 52, 0.3);
+}
+
+.profile-header-modal h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111;
+}
+
+.profile-city {
+    color: #666;
+    margin: 5px 0 10px;
+}
+
+.rating-large {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f59e0b;
+}
+.rating-count { font-size: 0.9rem; color: #999; font-weight: 400; }
+
+.profile-body-modal {
+    padding: 20px;
+}
+
+.oficios-tags-large {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tag-large {
+    background-color: #eff6ff;
+    color: #2563eb;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.contact-info {
+    text-align: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.profile-actions-modal {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary-icon {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    width: 45px; /* Cuadrado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #e74c3c;
+}
+.btn-secondary-icon:hover { background: #fef2f2; border-color: #fecaca; }
+.btn-secondary-icon svg { width: 24px; height: 24px; }
+
+.flex-grow { flex: 1; }
+
+.close-corner-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.close-corner-btn:hover { color: #333; background-color: rgba(0,0,0,0.05); border-radius: 50%; }
 
 /* Desktop */
 @media (min-width: 768px) {
