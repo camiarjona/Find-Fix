@@ -9,10 +9,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../../components/general/footer-component/footer-component';
 import { LandingFooterComponent } from "../../../components/general/landing-footer-component/landing-footer-component";
+import { NavBarLanding } from "../../../components/landing-page/nav-bar-landing/nav-bar-landing";
 
 @Component({
   selector: 'app-landing-list-especialistas-component',
-  imports: [CommonModule, FormsModule, RouterLink, LandingFooterComponent],
+  imports: [CommonModule, FormsModule, RouterLink, LandingFooterComponent, NavBarLanding],
   templateUrl: './landing-list-especialistas-component.html',
   styleUrl: './landing-list-especialistas-component.css',
 })
