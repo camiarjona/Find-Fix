@@ -98,7 +98,7 @@ public class EspecialistaController {
     @PostMapping("/filtrar")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<List<EspecialistaFichaCompletaDTO>>> filtrarEspecialistas(@RequestBody BuscarEspecialistaDTO filtro)
-            throws EspecialistaExcepcion {
+            throws EspecialistaExcepcion, UsuarioNotFoundException {
         List<EspecialistaFichaCompletaDTO> especialistasFiltrados = especialistaService.filtrarEspecialistas(filtro);
 
         return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", especialistasFiltrados));

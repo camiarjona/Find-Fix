@@ -233,8 +233,9 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
 /// Metodo para filtrar especialistas
     @Override
-    @Transactional(readOnly = true)
-    public List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion {
+    @Transactional(rollbackFor = Exception.class)
+    public List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion, UsuarioNotFoundException {
+
         List<Specification<Especialista>> specifications = new ArrayList<>();
 
         // 1. Filtro por ID
@@ -249,7 +250,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         if (filtro.tieneCiudad()) {
             try {
                 CiudadesDisponibles ciudadEnum = CiudadesDisponibles.desdeString(filtro.ciudad());
-                specifications.add(EspecialistaSpecifications.enCiudad(ciudadEnum.getNombreAmigable()));
+                specifications.add(EspecialistaSpecifications.enCiudad(ciudadEnum));
             } catch (IllegalArgumentException e) {
                 throw new EspecialistaExcepcion("⚠️La ciudad ingresada no es válida. Ciudades disponibles: " +
                         CiudadesDisponibles.ciudadesDisponibles());
@@ -283,6 +284,17 @@ public class EspecialistaServiceImpl implements EspecialistaService {
                 .and(EspecialistaSpecifications.tieneDatosCompletos());
 
         List<Especialista> especialistas = especialistaRepository.findAll(finalSpec);
+
+        try {
+            Usuario usuarioLogueado = authService.obtenerUsuarioAutenticado();
+
+            especialistas = especialistas.stream()
+                    .filter(e -> !e.getUsuario().equals(usuarioLogueado))
+                    .toList();
+
+        } catch (UsuarioNotFoundException e) {
+        }
+
         if (especialistas.isEmpty()) {
             throw new EspecialistaExcepcion("⚠️No se encontraron especialistas con los criterios especificados");
         }

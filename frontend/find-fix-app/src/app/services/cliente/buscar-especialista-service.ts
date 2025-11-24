@@ -26,7 +26,7 @@ export class BuscarEspecialistaService {
 
   // 2. Filtrar Especialistas
   filtrarEspecialistas(filtros: FiltroEspecialistasDTO): void {
-    this.http.request<ApiResponse<EspecialistaDTO[]>>('GET', `${this.apiUrl}/especialistas/filtrar`, {
+    this.http.request<ApiResponse<EspecialistaDTO[]>>('POST', `${this.apiUrl}/especialistas/filtrar`, {
       body: filtros,
       headers: { 'Content-Type': 'application/json' }
     }).subscribe({

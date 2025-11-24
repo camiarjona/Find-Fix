@@ -2,6 +2,7 @@ package com.findfix.find_fix_app.especialista.Specifications;
 
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -20,7 +21,7 @@ public class EspecialistaSpecifications {
             };
         }
 
-        public static Specification<Especialista> enCiudad(String ciudad) {
+        public static Specification<Especialista> enCiudad(CiudadesDisponibles ciudad) {
             return (root, query, cb) -> ciudad != null ? cb.equal(root.get("usuario").get("ciudad"), ciudad) : null;
         }
 
