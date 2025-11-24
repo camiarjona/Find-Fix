@@ -1,27 +1,164 @@
-:host {
-  display: block;
+/* Contenedor principal de la página */
+.favoritos-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
 }
 
-.placeholder-contenido {
-  padding: 2rem;
-  text-align: center;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  margin-top: 1.5rem;
-  border: 1px dashed #d1d5db;
-  color: var(--text-light);
+.page-title {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 2.2rem;
 }
 
-h2 {
-  color: var(--text-dark, #1a1a1a);
-  font-weight: 700;
-  margin-top: 0;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+.subtitle {
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
 }
 
-p {
-  color: var(--text-light, #555);
-  font-size: 1rem;
-  line-height: 1.6;
+/* Estilos de la lista (Grid) */
+.favoritos-list {
+    display: grid;
+    gap: 25px;
+    /* Crea columnas responsivas que midan al menos 300px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* Estilos de la Tarjeta (Card) individual */
+.favorito-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.favorito-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 15px;
+}
+
+.initials {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.info h2 {
+    font-size: 1.3rem;
+    margin: 0 0 3px;
+    color: #343a40;
+}
+
+.info .email {
+    font-size: 0.9rem;
+    color: #999;
+    margin: 0;
+}
+
+.oficio {
+    font-size: 1rem;
+    color: #495057;
+    font-weight: 500;
+    margin: 5px 0 0;
+}
+
+.card-body {
+    flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-body .meta {
+    font-size: 0.85rem;
+    color: #adb5bd;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto; /* Empuja las acciones al final */
+}
+
+/* Estilos de botones (adaptar a tu librería si usas Bootstrap/Material) */
+.btn {
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+    transition: background-color 0.2s, opacity 0.2s;
+    flex-grow: 1;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Estado Vacío y Mensajes de Estado */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    border: 2px dashed #ced4da;
+    border-radius: 10px;
+    margin-top: 30px;
+    background: #fff;
+}
+.empty-state p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 25px;
+}
+.loading-message, .error-message {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
