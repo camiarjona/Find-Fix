@@ -48,13 +48,12 @@ public class TrabajoExternoServiceImpl implements TrabajoExternoService {
     @Transactional(readOnly = true)
     public List<TrabajoExterno> obtenerMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException, TrabajoExternoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoExterno> misTrabajos = trabajoExternoRepository.findByEspecialista(especialista);
 
-        if (misTrabajos.isEmpty()) {
-            throw new TrabajoExternoException("Todavía no hay trabajos ingresados en su lista.");
-        }
+//        if (misTrabajos.isEmpty()) {
+//            throw new TrabajoExternoException("Todavía no hay trabajos ingresados en su lista.");
+//        }
 
-        return misTrabajos;
+        return trabajoExternoRepository.findByEspecialista(especialista);
     }
 
     @Override

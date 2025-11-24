@@ -7,31 +7,36 @@
     </div>
 
     <button class="btn-agregar-trabajo" (click)="agregarTrabajoExterno()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
       Nuevo Trabajo
     </button>
   </div>
 
   <div class="barra-filtros">
     <div class="grupo-filtro pequeno">
-        <div class="contenedor-select-filtro">
-          <select [(ngModel)]="filtros.origen" (change)="aplicarFiltros()" class="select-filtro texto-negrita">
-              <option value="">Origen: Todos</option>
-              <option value="APP">App</option>
-              <option value="EXTERNO">Externo</option>
-          </select>
-        </div>
+      <div class="contenedor-select-filtro">
+        <select [(ngModel)]="filtros.origen" (change)="aplicarFiltros()" class="select-filtro texto-negrita">
+          <option value="">Origen: Todos</option>
+          <option value="APP">App</option>
+          <option value="EXTERNO">Externo</option>
+        </select>
+      </div>
     </div>
     <div class="grupo-filtro crecer">
-      <input type="text" placeholder="Buscar trabajo..." [(ngModel)]="filtros.titulo" (keyup)="aplicarFiltros()" class="input-filtro">
+      <input type="text" placeholder="Buscar trabajo..." [(ngModel)]="filtros.titulo" (keyup)="aplicarFiltros()"
+        class="input-filtro">
     </div>
     <div class="grupo-filtro compacto">
       <div class="contenedor-select-filtro">
         <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
-            <option value="">Estado: Todos</option>
-            @for (est of estadosPosibles; track est) {
-            <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-            }
+          <option value="">Estado: Todos</option>
+          @for (est of estadosPosibles; track est) {
+          <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+          }
         </select>
       </div>
     </div>
@@ -41,294 +46,368 @@
       <input type="date" [(ngModel)]="filtros.hasta" (change)="aplicarFiltros()" class="fecha-filtro" title="Hasta">
     </div>
     <button class="btn-icono-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18"></path>
+        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+      </svg>
     </button>
     <div class="divisor-vertical"></div>
     <div class="alternador-vista">
-      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar" title="Cuadrícula">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar"
+        title="Cuadrícula">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
       </button>
-      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar" title="Lista">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar"
+        title="Lista">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
       </button>
     </div>
   </div>
 
   @if (estaCargando()) {
-    <div class="contenedor-cargando">
-      <div class="cargador"></div>
-      <p>Cargando trabajos...</p>
-    </div>
+  <div class="contenedor-cargando">
+    <div class="cargador"></div>
+    <p>Cargando trabajos...</p>
+  </div>
   } @else {
-    @if (modoVista === 'tarjetas') {
-      <div class="contenedor-cuadricula">
-        @for (trabajo of trabajosVisibles(); track trabajo.id) {
-          <div class="tarjeta-trabajo">
-            <div class="fila-encabezado-tarjeta">
-              <div class="contenedor-insignia-estado">
-                  <select
-                    class="select-estado insignia"
-                    [ngClass]="obtenerClaseEstado(trabajo.estado)"
-                    [ngModel]="trabajo.estado"
-                    (change)="cambiarEstadoRapido(trabajo, $event)">
-                    @for (est of obtenerEstadosPermitidos(trabajo.estado); track est) {
-                        <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-                    }
-                  </select>
-                  <div class="flecha-insignia">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </div>
+
+  @if (trabajosVisibles().length === 0) {
+  <div class="estado-vacio">
+    <div class="icono-vacio">
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#d1d5db"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+      </svg>
+    </div>
+    <h3>No tienes trabajos registrados</h3>
+    <p>Comienza agregando un trabajo externo o espera a recibir solicitudes de la app.</p>
+    <button class="btn-vacio" (click)="agregarTrabajoExterno()">Agregar Trabajo Externo</button>
+  </div>
+  } @else {
+
+  @if (modoVista === 'tarjetas') {
+  <div class="contenedor-cuadricula">
+    @for (trabajo of trabajosVisibles(); track $any(trabajo).id + '_' + $any(trabajo).origen) {
+    <div class="tarjeta-trabajo">
+      <div class="fila-encabezado-tarjeta">
+        <div class="contenedor-insignia-estado">
+          <select class="select-estado insignia" [ngClass]="obtenerClaseEstado(trabajo.estado)"
+            [ngModel]="trabajo.estado" (change)="cambiarEstadoRapido(trabajo, $event)">
+            @for (est of obtenerEstadosPermitidos(trabajo.estado); track est) {
+            <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+            }
+          </select>
+          <div class="flecha-insignia">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="fila-icono-tarjeta flex-entre">
+        <div class="icono-tarjeta">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+            </path>
+          </svg>
+        </div>
+        <span class="etiqueta-origen" [class.app]="$any(trabajo).origen === 'APP'">
+          {{ $any(trabajo).origen === 'APP' ? 'APP' : 'EXTERNO' }}
+        </span>
+      </div>
+      <h3 class="titulo-tarjeta">{{ trabajo.titulo }}</h3>
+      <p class="cliente-tarjeta">Cliente: {{ trabajo.nombreCliente }}</p>
+      <div class="fechas-tarjeta">
+        <span>📅 Inicio: {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="pie-tarjeta">
+        <span class="precio">{{ trabajo.presupuesto | currency }}</span>
+        <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
+      </div>
+    </div>
+    }
+  </div>
+  }
+  @else {
+  <div class="contenedor-tabla">
+    <table class="tabla-trabajos">
+      <thead>
+        <tr>
+          <th>Trabajo / Cliente</th>
+          <th>Estado</th>
+          <th>Fechas</th>
+          <th>Precio</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (trabajo of trabajosVisibles(); track $any(trabajo).id + '_' + $any(trabajo).origen) {
+        <tr>
+          <td>
+            <div class="fila-titulo-tabla">
+              <span class="titulo-tabla">{{ trabajo.titulo }}</span>
+              <span class="insignia-origen-tabla" [class.app]="$any(trabajo).origen === 'APP'">
+                {{ $any(trabajo).origen === 'APP' ? 'APP' : 'EXT' }}
+              </span>
+            </div>
+            <div class="subtitulo-tabla">{{ trabajo.nombreCliente }}</div>
+          </td>
+          <td>
+            <div class="contenedor-insignia-estado modo-tabla">
+              <select class="select-estado insignia" [ngClass]="obtenerClaseEstado(trabajo.estado)"
+                [ngModel]="trabajo.estado" (change)="cambiarEstadoRapido(trabajo, $event)">
+                @for (est of obtenerEstadosPermitidos(trabajo.estado); track est) {
+                <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+                }
+              </select>
+              <div class="flecha-insignia">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
               </div>
             </div>
-            <div class="fila-icono-tarjeta flex-entre">
-                <div class="icono-tarjeta">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                </div>
-                <span class="etiqueta-origen" [class.app]="$any(trabajo).origen === 'APP'">
-                    {{ $any(trabajo).origen === 'APP' ? 'APP' : 'EXTERNO' }}
-                </span>
+          </td>
+          <td>
+            <div class="col-fecha">
+              <span class="fecha-inicio">Inicio: {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}</span>
+              @if(trabajo.fechaFin) {
+              <span class="fecha-fin">Fin: {{ trabajo.fechaFin | date:'dd/MM/yyyy' }}</span>
+              }
             </div>
-            <h3 class="titulo-tarjeta">{{ trabajo.titulo }}</h3>
-            <p class="cliente-tarjeta">Cliente: {{ trabajo.nombreCliente }}</p>
-            <div class="fechas-tarjeta">
-                <span>📅 Inicio: {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}</span>
-            </div>
-            <div class="pie-tarjeta">
-              <span class="precio">{{ trabajo.presupuesto | currency }}</span>
-              <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
-            </div>
-          </div>
+          </td>
+          <td>
+            <div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div>
+          </td>
+          <td class="text-right">
+            <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver toda la información">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </td>
+        </tr>
         }
-      </div>
-    }
-    @else {
-      <div class="contenedor-tabla">
-        <table class="tabla-trabajos">
-          <thead>
-            <tr>
-              <th>Trabajo / Cliente</th>
-              <th>Estado</th>
-              <th>Fechas</th>
-              <th>Precio</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (trabajo of trabajosVisibles(); track trabajo.id) {
-              <tr>
-                <td>
-                    <div class="fila-titulo-tabla">
-                        <span class="titulo-tabla">{{ trabajo.titulo }}</span>
-                        <span class="insignia-origen-tabla" [class.app]="$any(trabajo).origen === 'APP'">
-                            {{ $any(trabajo).origen === 'APP' ? 'APP' : 'EXT' }}
-                        </span>
-                    </div>
-                    <div class="subtitulo-tabla">{{ trabajo.nombreCliente }}</div>
-                </td>
-                <td>
-                    <div class="contenedor-insignia-estado modo-tabla">
-                        <select
-                          class="select-estado insignia"
-                          [ngClass]="obtenerClaseEstado(trabajo.estado)"
-                          [ngModel]="trabajo.estado"
-                          (change)="cambiarEstadoRapido(trabajo, $event)">
-                          @for (est of obtenerEstadosPermitidos(trabajo.estado); track est) {
-                            <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-                          }
-                        </select>
-                        <div class="flecha-insignia">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="col-fecha">
-                        <span class="fecha-inicio">Inicio: {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}</span>
-                        @if(trabajo.fechaFin) {
-                            <span class="fecha-fin">Fin: {{ trabajo.fechaFin | date:'dd/MM/yyyy' }}</span>
-                        }
-                    </div>
-                </td>
-                <td><div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div></td>
-                <td class="text-right">
-                   <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver toda la información">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                   </button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  }
   }
 </div>
 
 @if(trabajoSeleccionado()) {
-    <div class="superposicion-modal" (click)="cerrarModal()">
-        <div class="contenido-modal" (click)="$event.stopPropagation()">
-            <div class="encabezado-modal">
-              <div class="info-encabezado-modal">
-                  <h2>Detalle del Trabajo</h2>
-                  <div class="fila-insignias-modal">
-                      <span class="insignia-origen-modal" [class.app]="$any(trabajoSeleccionado()).origen === 'APP'">
-                        {{ $any(trabajoSeleccionado()).origen === 'APP' ? 'APP' : 'EXTERNO' }}
-                      </span>
-                  </div>
-              </div>
-              <button class="btn-cerrar" (click)="cerrarModal()">×</button>
-            </div>
-            <div class="cuerpo-modal">
-                <div class="grupo-editable ancho-completo">
-                    <label>Título del Trabajo</label>
-                    <div class="fila-visualizacion">
-                        <h3 class="valor-info-principal">{{ trabajoSeleccionado()?.titulo }}</h3>
-                    </div>
-                </div>
-                <div class="grilla-info-en-linea">
-                    <div class="grupo-editable">
-                        <label>Cliente</label>
-                        <div class="fila-visualizacion">
-                            <p class="valor-info">{{ trabajoSeleccionado()?.nombreCliente }}</p>
-                        </div>
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Estado Actual</label>
-                        @if (!modoEdicion.estado) {
-                            <div class="fila-visualizacion">
-                                <span class="capsula-estado" [class]="obtenerClaseEstado(trabajoSeleccionado()?.estado || '')">
-                                    {{ formatearTextoEstado(trabajoSeleccionado()?.estado || '') }}
-                                </span>
-                                <button class="btn-icono-editar" (click)="activarEdicionCampo('estado')" title="Cambiar estado">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                </button>
-                            </div>
-                        } @else {
-                            <div class="contenedor-select-personalizado">
-                                <select [(ngModel)]="datosEdicion.estado" class="select-modal-estilizado" [ngClass]="obtenerClaseEstado(datosEdicion.estado)">
-                                    @for (est of obtenerEstadosPermitidos(trabajoSeleccionado()?.estado || ''); track est) {
-                                        <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-                                    }
-                                </select>
-                                <div class="flecha-select">▼</div>
-                            </div>
-                        }
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Fecha de Inicio</label>
-                        <div class="fila-visualizacion">
-                            <p class="valor-info">{{ trabajoSeleccionado()?.fechaInicio | date:'dd/MM/yyyy' }}</p>
-                        </div>
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Fecha de Fin</label>
-                        @if (!modoEdicion.fechaFin) {
-                            <div class="fila-visualizacion">
-                                <p class="valor-info">{{ (trabajoSeleccionado()?.fechaFin | date:'dd/MM/yyyy') || 'Pendiente' }}</p>
-                                @if (datosEdicion.estado === 'FINALIZADO') {
-                                    <button class="btn-icono-editar" (click)="activarEdicionCampo('fechaFin')" title="Modificar fecha">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                    </button>
-                                }
-                            </div>
-                        } @else {
-                            <input type="date" [(ngModel)]="datosEdicion.fechaFin" class="input-en-linea input-fecha">
-                        }
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Presupuesto</label>
-                        @if (!modoEdicion.presupuesto) {
-                            <div class="fila-visualizacion">
-                                <p class="valor-info texto-precio">{{ trabajoSeleccionado()?.presupuesto | currency }}</p>
-                                <button class="btn-icono-editar" (click)="activarEdicionCampo('presupuesto')" title="Editar presupuesto">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                </button>
-                            </div>
-                        } @else {
-                            <input type="number" [(ngModel)]="datosEdicion.presupuesto" class="input-en-linea">
-                        }
-                    </div>
-                </div>
-                <div class="grupo-editable ancho-completo">
-                    <label>Descripción</label>
-                    @if (!modoEdicion.descripcion) {
-                        <div class="fila-visualizacion alinear-arriba">
-                            <p class="valor-info texto-descripcion">{{ trabajoSeleccionado()?.descripcion }}</p>
-                            <button class="btn-icono-editar" (click)="activarEdicionCampo('descripcion')" title="Editar descripción">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                            </button>
-                        </div>
-                    } @else {
-                        <textarea [(ngModel)]="datosEdicion.descripcion" rows="4" class="textarea-en-linea"></textarea>
-                    }
-                </div>
-                <div class="acciones-modal-unificadas">
-                    <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-                    <button type="button" class="btn-guardar" (click)="guardarEdicionModal()">Guardar Todo</button>
-                </div>
-            </div>
+<div class="superposicion-modal" (click)="cerrarModal()">
+  <div class="contenido-modal" (click)="$event.stopPropagation()">
+    <div class="encabezado-modal">
+      <div class="info-encabezado-modal">
+        <h2>Detalle del Trabajo</h2>
+        <div class="fila-insignias-modal">
+          <span class="insignia-origen-modal" [class.app]="$any(trabajoSeleccionado()).origen === 'APP'">
+            {{ $any(trabajoSeleccionado()).origen === 'APP' ? 'APP' : 'EXTERNO' }}
+          </span>
         </div>
+      </div>
+      <button class="btn-cerrar" (click)="cerrarModal()">×</button>
     </div>
+    <div class="cuerpo-modal">
+      <div class="grupo-editable ancho-completo">
+        <label>Título del Trabajo</label>
+        <div class="fila-visualizacion">
+          <h3 class="valor-info-principal">{{ trabajoSeleccionado()?.titulo }}</h3>
+        </div>
+      </div>
+      <div class="grilla-info-en-linea">
+        <div class="grupo-editable">
+          <label>Cliente</label>
+          <div class="fila-visualizacion">
+            <p class="valor-info">{{ trabajoSeleccionado()?.nombreCliente }}</p>
+          </div>
+        </div>
+        <div class="grupo-editable">
+          <label>Estado Actual</label>
+          @if (!modoEdicion.estado) {
+          <div class="fila-visualizacion">
+            <span class="capsula-estado" [class]="obtenerClaseEstado(trabajoSeleccionado()?.estado || '')">
+              {{ formatearTextoEstado(trabajoSeleccionado()?.estado || '') }}
+            </span>
+            <button class="btn-icono-editar" (click)="activarEdicionCampo('estado')" title="Cambiar estado">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+              </svg>
+            </button>
+          </div>
+          } @else {
+          <div class="contenedor-select-personalizado">
+            <select [(ngModel)]="datosEdicion.estado" class="select-modal-estilizado"
+              [ngClass]="obtenerClaseEstado(datosEdicion.estado)">
+              @for (est of obtenerEstadosPermitidos(trabajoSeleccionado()?.estado || ''); track est) {
+              <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+              }
+            </select>
+            <div class="flecha-select">▼</div>
+          </div>
+          }
+        </div>
+        <div class="grupo-editable">
+          <label>Fecha de Inicio</label>
+          <div class="fila-visualizacion">
+            <p class="valor-info">{{ trabajoSeleccionado()?.fechaInicio | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+        <div class="grupo-editable">
+          <label>Fecha de Fin</label>
+          @if (!modoEdicion.fechaFin) {
+          <div class="fila-visualizacion">
+            <p class="valor-info">{{ (trabajoSeleccionado()?.fechaFin | date:'dd/MM/yyyy') || 'Pendiente' }}</p>
+            @if (datosEdicion.estado === 'FINALIZADO') {
+            <button class="btn-icono-editar" (click)="activarEdicionCampo('fechaFin')" title="Modificar fecha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+              </svg>
+            </button>
+            }
+          </div>
+          } @else {
+          <input type="date" [(ngModel)]="datosEdicion.fechaFin" class="input-en-linea input-fecha">
+          }
+        </div>
+        <div class="grupo-editable">
+          <label>Presupuesto</label>
+          @if (!modoEdicion.presupuesto) {
+          <div class="fila-visualizacion">
+            <p class="valor-info texto-precio">{{ trabajoSeleccionado()?.presupuesto | currency }}</p>
+            <button class="btn-icono-editar" (click)="activarEdicionCampo('presupuesto')" title="Editar presupuesto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+              </svg>
+            </button>
+          </div>
+          } @else {
+          <input type="number" [(ngModel)]="datosEdicion.presupuesto" class="input-en-linea">
+          }
+        </div>
+      </div>
+      <div class="grupo-editable ancho-completo">
+        <label>Descripción</label>
+        @if (!modoEdicion.descripcion) {
+        <div class="fila-visualizacion alinear-arriba">
+          <p class="valor-info texto-descripcion">{{ trabajoSeleccionado()?.descripcion }}</p>
+          <button class="btn-icono-editar" (click)="activarEdicionCampo('descripcion')" title="Editar descripción">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </button>
+        </div>
+        } @else {
+        <textarea [(ngModel)]="datosEdicion.descripcion" rows="4" class="textarea-en-linea"></textarea>
+        }
+      </div>
+      <div class="acciones-modal-unificadas">
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn-guardar" (click)="guardarEdicionModal()">Guardar Todo</button>
+      </div>
+    </div>
+  </div>
+</div>
 }
 
 @if(modalCreacionVisible()) {
-    <div class="superposicion-modal" (click)="cerrarModalCreacion()">
-        <div class="contenido-modal" (click)="$event.stopPropagation()">
-            <div class="encabezado-modal">
-              <div class="info-encabezado-modal">
-                  <h2>Nuevo Trabajo Externo</h2>
-                  <p style="font-size: 0.85rem; color: #6b7280; margin: 0;">Registra un trabajo realizado fuera de la plataforma.</p>
-              </div>
-              <button class="btn-cerrar" (click)="cerrarModalCreacion()">×</button>
-            </div>
-            <div class="cuerpo-modal">
-                <div class="grupo-editable ancho-completo">
-                    <label>Título del Trabajo *</label>
-                    <input type="text" [(ngModel)]="nuevoTrabajo.titulo" class="input-en-linea" placeholder="Ej. Reparación de cañería">
-                </div>
-
-                <div class="grilla-info-en-linea">
-                    <div class="grupo-editable">
-                        <label>Nombre del Cliente *</label>
-                        <input type="text" [(ngModel)]="nuevoTrabajo.nombreCliente" class="input-en-linea" placeholder="Ej. Juan Pérez">
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Fecha Inicio</label>
-                        <input type="date" [(ngModel)]="nuevoTrabajo.fechaInicio" class="input-en-linea">
-                    </div>
-                    <div class="grupo-editable">
-                        <label>Presupuesto ($)</label>
-                        <input type="number" [(ngModel)]="nuevoTrabajo.presupuesto" class="input-en-linea" placeholder="0">
-                    </div>
-                </div>
-
-                <div class="grupo-editable ancho-completo">
-                    <label>Descripción</label>
-                    <textarea [(ngModel)]="nuevoTrabajo.descripcion" rows="3" class="textarea-en-linea" placeholder="Detalles del trabajo..."></textarea>
-                </div>
-
-                <div class="acciones-modal-unificadas">
-                    <button type="button" class="btn-cancelar" (click)="cerrarModalCreacion()">Cancelar</button>
-                    <button type="button" class="btn-guardar" (click)="guardarNuevoTrabajo()">Crear Trabajo</button>
-                </div>
-            </div>
-        </div>
+<div class="superposicion-modal" (click)="cerrarModalCreacion()">
+  <div class="contenido-modal" (click)="$event.stopPropagation()">
+    <div class="encabezado-modal">
+      <div class="info-encabezado-modal">
+        <h2>Nuevo Trabajo Externo</h2>
+        <p style="font-size: 0.85rem; color: #6b7280; margin: 0;">Registra un trabajo realizado fuera de la plataforma.
+        </p>
+      </div>
+      <button class="btn-cerrar" (click)="cerrarModalCreacion()">×</button>
     </div>
+    <div class="cuerpo-modal">
+      <div class="grupo-editable ancho-completo">
+        <label>Título del Trabajo *</label>
+        <input type="text" [(ngModel)]="nuevoTrabajo.titulo" class="input-en-linea"
+          placeholder="Ej. Reparación de cañería">
+      </div>
+
+      <div class="grilla-info-en-linea">
+        <div class="grupo-editable">
+          <label>Nombre del Cliente *</label>
+          <input type="text" [(ngModel)]="nuevoTrabajo.nombreCliente" class="input-en-linea"
+            placeholder="Ej. Juan Pérez">
+        </div>
+        <div class="grupo-editable">
+          <label>Fecha Inicio</label>
+          <input type="date" [(ngModel)]="nuevoTrabajo.fechaInicio" class="input-en-linea">
+        </div>
+        <div class="grupo-editable">
+          <label>Presupuesto ($)</label>
+          <input type="number" [(ngModel)]="nuevoTrabajo.presupuesto" class="input-en-linea" placeholder="0">
+        </div>
+      </div>
+
+      <div class="grupo-editable ancho-completo">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="nuevoTrabajo.descripcion" rows="3" class="textarea-en-linea"
+          placeholder="Detalles del trabajo..."></textarea>
+      </div>
+
+      <div class="acciones-modal-unificadas">
+        <button type="button" class="btn-cancelar" (click)="cerrarModalCreacion()">Cancelar</button>
+        <button type="button" class="btn-guardar" (click)="guardarNuevoTrabajo()">Crear Trabajo</button>
+      </div>
+    </div>
+  </div>
+</div>
 }
 
 @if (alertaVisible()) {
-  <div class="superposicion-alerta" (click)="cerrarAlerta()">
-    <div class="contenido-alerta-modal" (click)="$event.stopPropagation()">
-      <div class="contenedor-icono-alerta" [class.error]="tipoAlerta() === 'error'">
-         @if(tipoAlerta() === 'success') {
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-         } @else {
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-         }
-      </div>
-      <h3 class="titulo-alerta">{{ tipoAlerta() === 'success' ? '¡Éxito!' : 'Atención' }}</h3>
-      <p class="mensaje-alerta">{{ mensajeAlerta() }}</p>
-      <button class="btn-alerta-ok" (click)="cerrarAlerta()">Entendido</button>
+<div class="superposicion-alerta" (click)="cerrarAlerta()">
+  <div class="contenido-alerta-modal" (click)="$event.stopPropagation()">
+    <div class="contenedor-icono-alerta" [class.error]="tipoAlerta() === 'error'">
+      @if(tipoAlerta() === 'success') {
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      } @else {
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      }
     </div>
+    <h3 class="titulo-alerta">{{ tipoAlerta() === 'success' ? '¡Éxito!' : 'Atención' }}</h3>
+    <p class="mensaje-alerta">{{ mensajeAlerta() }}</p>
+    <button class="btn-alerta-ok" (click)="cerrarAlerta()">Entendido</button>
   </div>
+</div>
 }
