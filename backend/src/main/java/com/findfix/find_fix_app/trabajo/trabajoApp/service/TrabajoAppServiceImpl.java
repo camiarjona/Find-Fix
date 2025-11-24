@@ -72,12 +72,11 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     public List<TrabajoApp> obtenerTrabajosEspecialista() throws UsuarioNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
 
-        if (trabajosAceptados.isEmpty()) {
-            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
-        }
-        return trabajosAceptados;
+//        if (trabajosAceptados.isEmpty()) {
+//            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
+//        }
+        return trabajoAppRepository.findByEspecialista(especialista);
     }
 
     ///  BUSCA UN TRABAJO POR TITULO

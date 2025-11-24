@@ -50,6 +50,12 @@ export class TrabajoAppService {
     return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/actualizar-estado/${titulo}/${nuevoEstado}`, {}, { withCredentials: true });
   }
 
-  /// FALTARIA FILTRADOO
+  filtrarTrabajosEspecialista(filtro: BuscarTrabajoApp): Observable<ApiResponse<VisualizarTrabajoAppEspecialista[]>> {
+    return this.http.post<ApiResponse<VisualizarTrabajoAppEspecialista[]>>(
+      `${this.apiUrl}/especialista/filtrar`,
+      filtro,
+      { withCredentials: true }
+    );
+  }
 
 }
