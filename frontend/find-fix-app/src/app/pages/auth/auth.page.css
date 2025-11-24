@@ -9,7 +9,7 @@
       rgba(0, 0, 0, 0) 40%,
       rgba(0, 0, 0, 0.5) 90%),
     url('/images/fondo.png');
-    background-size: cover;
+  background-size: cover;
 }
 
 .container {
@@ -168,12 +168,15 @@
 
   :host {
     background-image:
-    radial-gradient(
-      rgba(0, 0, 0, 5) 40%,
-      rgba(0, 0, 0, 0.5) 90%),
-    url('/images/fondo.png');
+      linear-gradient(rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.5)),
+      url('/images/fondo.png');
+
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
+
   .container {
     width: 90%;
     min-height: 500px;
@@ -217,4 +220,3 @@
     z-index: 5;
   }
 }
-
