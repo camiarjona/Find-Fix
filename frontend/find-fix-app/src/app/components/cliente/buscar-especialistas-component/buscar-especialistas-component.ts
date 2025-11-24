@@ -7,12 +7,12 @@ import { PerfilEspecialista } from '../../../models/especialista/especialista.mo
 
 @Component({
   selector: 'app-buscar-especialistas-component',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './buscar-especialistas-component.html',
   styleUrl: './buscar-especialistas-component.css',
 })
 export class BuscarEspecialistasComponent {
-private clienteService = inject(BuscarEspecialistaService);
+  private clienteService = inject(BuscarEspecialistaService);
 
   // Datos desde el servicio
   public especialistas = this.clienteService.especialistas;
@@ -27,8 +27,8 @@ private clienteService = inject(BuscarEspecialistaService);
   };
   public showModalContratar = signal(false);
   public showModalDetalle = signal(false);
-  public especialistaSeleccionado: EspecialistaDTO | any ;
-  public especialistaSeleccionaCompleto=  signal<PerfilEspecialista | any>(null);
+  public especialistaSeleccionado: EspecialistaDTO | any;
+  public especialistaSeleccionaCompleto = signal<PerfilEspecialista | any>(null);
   public descripcionTrabajo = '';
   public isSubmitting = signal(false);
   public isLoadingDetalle = signal(false);
@@ -45,7 +45,7 @@ private clienteService = inject(BuscarEspecialistaService);
     if (this.filtros.ciudad) filtrosEnviar.ciudad = this.filtros.ciudad;
     if (this.filtros.oficio) filtrosEnviar.oficio = this.filtros.oficio;
     if (this.filtros.minCalificacion && this.filtros.minCalificacion > 0) {
-       filtrosEnviar.minCalificacion = this.filtros.minCalificacion;
+      filtrosEnviar.minCalificacion = this.filtros.minCalificacion;
     }
 
 
@@ -94,7 +94,7 @@ private clienteService = inject(BuscarEspecialistaService);
     });
   }
 
- abrirModalDetalle(espListado: EspecialistaDTO) {
+  abrirModalDetalle(espListado: EspecialistaDTO) {
     // 2. Resetea el estado ANTES de abrir
     this.especialistaSeleccionaCompleto.set(null);
     this.isLoadingDetalle.set(true);
@@ -117,7 +117,7 @@ private clienteService = inject(BuscarEspecialistaService);
         alert("No se pudo cargar el detalle.");
       }
     });
-}
+  }
 
   cerrarModalDetalle() {
     this.showModalDetalle.set(false);
