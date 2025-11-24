@@ -56,7 +56,6 @@ export interface ActualizarOficios{
   eliminar: string[];
 }
 
-
 export interface PerfilEspecialista {
   nombre: string;
   apellido: string;

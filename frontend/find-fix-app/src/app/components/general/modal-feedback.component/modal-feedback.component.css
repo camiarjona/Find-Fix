@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,26 +22,44 @@
 
 .modal-content {
   position: relative;
-  z-index: 1001;
+  z-index: 10000;
   background-color: #ffffff;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 90%;
   max-width: 400px;
-  margin: 1rem;
+  text-align: center;
+  animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .modal-icon {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background-color: #dcfce7;
-  color: #166534;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem auto;
 }
 
 .modal-icon svg {
@@ -49,60 +67,48 @@
   height: 32px;
 }
 
-h2 {
-  color: var(--text-dark, #1a1a1a);
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem 0;
+.modal-icon.success {
+  color: #166534;
+}
+.modal-icon.error {
+  color: #991b1b;
 }
 
-p {
-  color: var(--text-light, #555);
+h2 {
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal-body p {
+  color: #4b5563;
   font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
 }
 
 .modal-actions {
   display: flex;
-  gap: 1rem;
+  justify-content: center;
 }
 
-
 .btn {
-  flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2rem;
   font-size: 1rem;
   font-weight: 600;
   border-radius: 8px;
-  border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
 .btn-primary {
-  background-color: var(--primary-color, #F58634);
+  background-color: #F58634;
   color: #ffffff;
 }
+
 .btn-primary:hover {
   background-color: #e07024;
+  transform: translateY(-1px);
 }
-
-.btn-secondary {
-  background-color: #e9ecef;
-  color: var(--text-dark, #1a1a1a);
-}
-.btn-secondary:hover {
-  background-color: #d1d5db;
-}
-
-.icon-success {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.icon-question {
-  background-color: #ffedd5; 
-  color: #c2410c;
-}
-

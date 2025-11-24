@@ -41,16 +41,13 @@ public class SecurityConfig {
                                         "/usuario/filtrar")
                                 .hasRole("ADMIN")
 
-                                //... (El resto de tus reglas .requestMatchers(...) siguen igual)
-                                //... (las he omitido aquí para que sea más corto)
-                                //...
+                                //OFICIOS ESPECIALISTA/CLIENTE
+                                .requestMatchers("/oficios/disponibles").hasAnyRole("ESPECIALISTA", "CLIENTE")
 
-                                //OFICIOS CLIENTE
-                                .requestMatchers("/oficios/disponibles").hasRole("CLIENTE")
+                                .requestMatchers("/oficios").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
 
                                 // DELETE | OFICIOS | ROLES
                                 .requestMatchers("/admin/**",
-                                        "/oficios",
                                         "/oficios/buscar/{id}",
                                         "/oficios/agregar",
                                         "/oficios/actualizar/{id}",

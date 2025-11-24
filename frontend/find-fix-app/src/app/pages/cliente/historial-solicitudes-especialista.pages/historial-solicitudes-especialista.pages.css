@@ -18,7 +18,7 @@ h2 {
   border-bottom: 1px solid #e5e7eb;
 }
 
-/* Mensajes */
+
 .exito,
 .error {
   padding: 1rem;
@@ -39,8 +39,7 @@ h2 {
   border: 1px solid #f5c2c7;
 }
 
-/* --- TRANSFORMACIÓN A TARJETAS (MÓVIL) ---
-*/
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -50,7 +49,7 @@ thead {
   display: none;
 }
 
-/*  cada FILA en una TARJETA */
+
 tbody tr {
   display: block;
   background-color: #fff;
@@ -85,7 +84,7 @@ td::before {
   text-align: left;
 }
 
-/* Estilos específicos para la respuesta en móvil */
+
 td.respuesta {
   flex-direction: column;
   align-items: flex-start;
@@ -93,7 +92,7 @@ td.respuesta {
   text-align: left;
 }
 
-/* Botones */
+
 .botones-wrapper {
   display: flex;
   gap: 0.5rem;
@@ -152,10 +151,7 @@ td.respuesta {
 }
 
 
-/*
-  ESTILOS ESCRITORIO (TABLA NORMAL)
 
-*/
 @media (min-width: 900px) {
   :host {
     max-width: 1200px;
@@ -224,7 +220,7 @@ td.respuesta {
   }
 }
 
-/* ---FILTROS --- */
+
 .filter-container {
   background-color: white;
   padding: 1.5rem;
@@ -237,7 +233,7 @@ td.respuesta {
   gap: 1rem;
 }
 
-/* --- FILA SUPERIOR (INPUTS) --- */
+
 .filter-controls {
   display: flex;
   gap: 1rem;
@@ -245,7 +241,7 @@ td.respuesta {
   align-items: center;
 }
 
-/* Buscador */
+
 .search-box {
   display: flex;
   align-items: center;
@@ -289,7 +285,7 @@ td.respuesta {
   height: 20px;
 }
 
-/* Select y Date */
+
 .filter-select,
 .filter-date {
   padding: 0.6rem 1rem;
@@ -307,7 +303,7 @@ td.respuesta {
   border-color: #9ca3af;
 }
 
-/* --- FILA INFERIOR (CHIPS) --- */
+
 .active-filters-area {
   display: flex;
   align-items: center;
@@ -330,16 +326,16 @@ td.respuesta {
   align-items: center;
 }
 
-/* DISEÑO DEL CHIP */
+
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background-color: #eff6ff;
-  /* Azul muy clarito */
+  
   border: 1px solid #dbeafe;
   color: #1e40af;
-  /* Azul texto */
+  
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -351,7 +347,7 @@ td.respuesta {
   background-color: #dbeafe;
 }
 
-/* Botón X del chip */
+
 .chip-close {
   background: none;
   border: none;
@@ -368,12 +364,12 @@ td.respuesta {
   opacity: 1;
 }
 
-/* Botón Borrar Todos */
+
 .clear-all-btn {
   background: none;
   border: none;
   color: #ef4444;
-  /* Rojo */
+  
   font-size: 0.85rem;
   cursor: pointer;
   text-decoration: underline;
@@ -384,7 +380,7 @@ td.respuesta {
   color: #dc2626;
 }
 
-/* Contenedor para las dos fechas */
+
 .date-range-wrapper {
   display: flex;
   align-items: center;
@@ -392,18 +388,18 @@ td.respuesta {
   background-color: white;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  padding: 0 0.5rem; /* Un poco de padding general */
+  padding: 0 0.5rem; 
 }
 
-/* Quitamos el borde individual a los inputs para que parezca un solo control */
+
 .filter-date {
   border: none;
   outline: none;
-  padding: 0.6rem 0.2rem; /* Ajustamos padding */
+  padding: 0.6rem 0.2rem; 
   font-size: 0.9rem;
   color: #4b5563;
   background: transparent;
-  max-width: 130px; /* Para que no sean muy anchos */
+  max-width: 130px; 
 }
 
 .separator {
@@ -411,8 +407,9 @@ td.respuesta {
   font-weight: bold;
 }
 
-/* Efecto de foco en todo el grupo */
+
 .date-range-wrapper:focus-within {
   border-color: #F58634;
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
+

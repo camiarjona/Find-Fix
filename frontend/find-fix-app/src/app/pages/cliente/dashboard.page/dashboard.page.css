@@ -2,7 +2,7 @@
   display: block;
 }
 
-/* Encabezado  */
+
 .dash-header {
   margin-bottom: 2rem;
 }
@@ -20,7 +20,7 @@
   margin: 0;
 }
 
-/* Botón de Acción Principal */
+
 .cta-container {
   margin-bottom: 2rem;
 }
@@ -57,7 +57,7 @@
 }
 
 
-/* 3. Tarjetas de Estado */
+
 .tarjetas-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -119,7 +119,7 @@
 }
 
 
-/* Banner "Ser Especialista */
+
 
 .promo-banner-container {
   display: flex;
@@ -169,7 +169,7 @@
   height: auto;
 }
 
-/* Botón secundario */
+
 .cta-button.secondary {
   background-color: #fdfaf7;
   color: var(--primary-color);
@@ -184,7 +184,7 @@
   box-shadow: none;
 }
 
-/* el banner se apile en pantallas chicas */
+
 @media (max-width: 900px) {
   .promo-banner-container {
     flex-direction: column-reverse;
@@ -195,3 +195,4 @@
     margin-bottom: 1rem;
   }
 }
+

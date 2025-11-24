@@ -46,7 +46,7 @@
   display: none;
 }
 
-/* --- Contenedores --- */
+
 .header-contenedor {
   width: 100%;
   max-width: 700px;
@@ -204,3 +204,4 @@ h1 {
     width: 350px;
   }
 }
+

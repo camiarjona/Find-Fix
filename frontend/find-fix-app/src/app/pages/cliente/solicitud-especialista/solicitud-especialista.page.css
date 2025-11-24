@@ -4,7 +4,7 @@
   margin: 0 auto;
 }
 
-/* Estilo de Tarjeta */
+
 .content-card {
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
@@ -27,7 +27,7 @@ p {
   line-height: 1.6;
 }
 
-/* Estilos del Formulario */
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -58,13 +58,13 @@ form textarea:focus {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 
-/* Validación del formulario*/
+
 .form-error[role="alert"] {
   color: #d93025;
   font-size: 0.875rem;
 }
 
-/* Botón de Enviar*/
+
 .cta-button {
   margin-top: 1rem;
   width: 100%;
@@ -80,7 +80,7 @@ form textarea:focus {
 }
 
 
-/* Mensajes de Éxito y Error */
+
 .exito, .error {
   padding: 1rem;
   border-radius: 8px;
@@ -101,7 +101,7 @@ form textarea:focus {
 }
 
 
-/* Estilos de la Tabla (Historial)*/
+
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -144,7 +144,7 @@ tbody tr:hover {
   background-color: #fcfcfc;
 }
 
-/* Estilos para los Estados */
+
 .status {
   padding: 0.25rem 0.6rem;
   border-radius: 1rem;
@@ -165,7 +165,7 @@ tbody tr:hover {
 }
 
 
-/* Botón "Eliminar" */
+
 .btn-eliminar {
   padding: 0.4rem 0.8rem;
   font-size: 0.875rem;
@@ -184,3 +184,4 @@ tbody tr:hover {
   color: #fff;
 }
 }
+

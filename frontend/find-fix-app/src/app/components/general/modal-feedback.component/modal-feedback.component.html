@@ -1,0 +1,38 @@
+<div class="modal-overlay" (click)="cerrar.emit()"></div>
+
+<div class="modal-content">
+
+  <div class="modal-header">
+
+    @if (tipo === 'success') {
+    <div class="modal-icon success">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    </div>
+    }
+
+    @if (tipo === 'error') {
+    <div class="modal-icon error">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15.75h.007v.008H12v-.008Z" />
+      </svg>
+    </div>
+    }
+
+    <h2>{{ titulo }}</h2>
+  </div>
+
+  <div class="modal-body">
+    <p>{{ mensaje }}</p>
+  </div>
+
+  <div class="modal-actions">
+    <button class="btn btn-primary" (click)="cerrar.emit()">
+      Aceptar
+    </button>
+  </div>
+
+</div>

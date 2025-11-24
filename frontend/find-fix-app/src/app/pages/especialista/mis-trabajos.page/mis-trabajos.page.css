@@ -1,4 +1,4 @@
-/* DISEÑO GENERAL */
+
 :host {
   display: block;
   background-color: #f8f9fa;
@@ -13,7 +13,7 @@
   padding: 2rem 1rem;
 }
 
-/* ENCABEZADO */
+
 .encabezado-pagina {
   display: flex;
   justify-content: space-between;
@@ -52,7 +52,7 @@
 .btn-agregar-trabajo:hover { background-color: #e07528; }
 .btn-agregar-trabajo:active { transform: translateY(1px); }
 
-/* BARRA DE FILTROS */
+
 .barra-filtros {
   display: flex;
   align-items: center;
@@ -128,7 +128,7 @@
 
 .divisor-vertical { width: 1px; height: 30px; background: #e5e7eb; margin: 0 5px; }
 
-/* ALTERNADOR DE VISTA */
+
 .alternador-vista { display: flex; background: #f3f4f6; padding: 3px; border-radius: 8px; margin-left: auto; }
 .btn-alternar {
   background: transparent; border: none; padding: 6px; border-radius: 6px;
@@ -137,20 +137,20 @@
 .btn-alternar svg { width: 20px; height: 20px; }
 .btn-alternar.activo { background: white; color: #F58634; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
-/* CARGA */
+
 .contenedor-cargando { text-align: center; padding: 3rem; color: #6b7280; }
 .cargador {
   border: 3px solid #f3f3f3; border-top: 3px solid #F58634; border-radius: 50%;
   width: 30px; height: 30px; animation: girar 1s linear infinite; margin: 0 auto 1rem;
 }
 
-/* ESTADOS */
+
 .creado { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
 .en_proceso { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
 .finalizado { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
 .cancelado { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
 
-/* INSIGNIAS DE ESTADO */
+
 .contenedor-insignia-estado {
   position: relative; display: inline-flex; align-items: center; width: fit-content;
 }
@@ -175,7 +175,7 @@
 .contenedor-insignia-estado:has(.finalizado) .flecha-insignia { color: #15803d; }
 .contenedor-insignia-estado:has(.cancelado) .flecha-insignia { color: #b91c1c; }
 
-/* ETIQUETAS ORIGEN */
+
 .etiqueta-origen, .insignia-origen-tabla, .insignia-origen-modal {
     font-size: 0.65rem; font-weight: 700; color: #6b7280;
     background: #f3f4f6; padding: 2px 6px; border-radius: 4px;
@@ -185,7 +185,7 @@
     background: #e0e7ff; color: #4338ca;
 }
 
-/* VISTA TARJETAS */
+
 .contenedor-cuadricula {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
 }
@@ -223,7 +223,7 @@
 }
 .btn-ver:hover { border-color: #F58634; color: #F58634; background-color: #fff7ed; }
 
-/* VISTA LISTA */
+
 .contenedor-tabla {
   background: white; border-radius: 16px; border: 1px solid #e5e7eb;
   overflow-x: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
@@ -257,7 +257,7 @@
 }
 .btn-icono:hover { border-color: #F58634; color: #F58634; background-color: #fff7ed; }
 
-/* MODAL */
+
 .superposicion-modal {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
@@ -335,7 +335,7 @@
 .btn-guardar { background: #F58634; border: none; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 .btn-guardar:hover { background: #e07528; }
 
-/* ALERTAS  */
+
 .superposicion-alerta {
   position: fixed;
   top: 0;
@@ -374,3 +374,4 @@
 @keyframes deslizarArriba { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes aparecerPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes girar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+

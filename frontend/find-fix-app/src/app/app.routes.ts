@@ -24,6 +24,7 @@ import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
 import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
 import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
+import { MiPerfilEspecialista } from './pages/especialista/mi-perfil/mi-perfil';
 
 export const routes: Routes = [
   {
@@ -107,7 +108,7 @@ export const routes: Routes = [
   // Rutas Privadas del Especialista
 {
     path: 'especialista',
-    component: EspecialistaLayout, 
+    component: EspecialistaLayout,
     children: [
       {
         path: 'dashboard',
@@ -126,7 +127,10 @@ export const routes: Routes = [
         path: 'mis-resenas',
         component: MisResenasPage
       },
-
+      {
+        path: 'mi-perfil',
+        component: MiPerfilEspecialista
+      },
       {
         path: '',
         redirectTo: 'dashboard',

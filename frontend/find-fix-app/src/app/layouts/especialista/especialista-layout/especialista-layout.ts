@@ -13,7 +13,6 @@ export class EspecialistaLayout {
 
   // Estados de la Barra Lateral
   isSidebarOpen = signal(true);
-  isPerfilMenuOpen = signal(false);
   isMobileMenuOpen = signal(false);
 
   // ESTADOS PARA LOS CONTROLES DEL HEADER
@@ -26,17 +25,6 @@ export class EspecialistaLayout {
   // --- Funciones de la Barra Lateral ---
   toggleSidebar() {
     this.isSidebarOpen.update(isOpen => !isOpen);
-    if (!this.isSidebarOpen()) {
-      this.isPerfilMenuOpen.set(false);
-    }
-  }
-
-  togglePerfilMenu(event: MouseEvent) {
-    event.preventDefault();
-    if (!this.isSidebarOpen()) {
-      this.isSidebarOpen.set(true);
-    }
-    this.isPerfilMenuOpen.update(isOpen => !isOpen);
   }
 
   toggleMobileMenu() {

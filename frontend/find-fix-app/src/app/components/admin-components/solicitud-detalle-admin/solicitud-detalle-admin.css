@@ -5,51 +5,51 @@
     font-family: Arial, sans-serif;
 }
 
-/* 1. ESTILO MEJORADO PARA EL BOTÓN VOLVER */
+
 .btn-volver {
     background: none;
-    border: 2px solid #007bff; /* Borde azul */
+    border: 2px solid #007bff; 
     color: #007bff;
     cursor: pointer;
-    font-size: 1.05em; /* Ligeramente más grande */
+    font-size: 1.05em; 
     font-weight: 600;
     margin-bottom: 25px;
-    padding: 8px 15px; /* Más padding */
+    padding: 8px 15px; 
     border-radius: 6px;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .btn-volver:hover {
-    background-color: #007bff; /* Fondo azul al pasar el ratón */
-    color: white; /* Texto blanco al pasar el ratón */
+    background-color: #007bff; 
+    color: white; 
 }
 
-/* 2. ESTILO MEJORADO PARA LOS MENSAJES DE ESTADO Y CARGA */
+
 .loading-state, .error-state {
-    font-size: 1.3em; /* Más grande y más notorio */
+    font-size: 1.3em; 
     font-weight: 700;
     padding: 25px;
     border-radius: 8px;
     text-align: center;
     margin-top: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para que destaque */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
 
 .loading-state {
-    /* Color para "Cargando detalles..." */
+    
     background-color: #e6f0ff;
     color: #004085;
-    border-left: 7px solid #007bff; /* Barra de color más gruesa */
+    border-left: 7px solid #007bff; 
 }
 
 .error-state {
-    /* Color para "No se pudo cargar la solicitud." */
+    
     background-color: #f8d7da;
     color: #721c24;
-    border-left: 7px solid #dc3545; /* Barra de color más gruesa */
+    border-left: 7px solid #dc3545; 
 }
 
-/* EL RESTO DEL CSS PARA LA FICHA COMPLETA SE MANTIENE ABAJO */
+
 
 .ficha-card {
     background-color: #ffffff;
@@ -185,3 +185,4 @@ hr {
     margin-top: 5px;
     font-weight: 500;
 }
+

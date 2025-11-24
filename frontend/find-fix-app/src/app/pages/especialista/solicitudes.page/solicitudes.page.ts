@@ -12,11 +12,9 @@ import { ModalConfirmacionComponent } from "../../../components/cliente/modal-co
   styleUrl: './solicitudes.page.css',
 })
 export class SolicitudesPage {
-private especialistaService = inject(EspecialistaService);
+  private especialistaService = inject(EspecialistaService);
 
   solicitudes = signal<SolicitudRecibida[]>([]);
-
- 
 
   // --- Lógica del Modal ---
   mostrarModal = signal(false);

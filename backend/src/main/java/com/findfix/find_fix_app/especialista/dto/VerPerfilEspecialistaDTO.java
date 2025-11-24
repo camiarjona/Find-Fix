@@ -2,7 +2,10 @@ package com.findfix.find_fix_app.especialista.dto;
 
 import com.findfix.find_fix_app.especialista.interfaz.DatosEspecialista;
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.oficio.model.Oficio;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 public class VerPerfilEspecialistaDTO implements DatosEspecialista {
@@ -13,7 +16,7 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
     private String ciudad;
     private String telefono;
     private String descripcion;
-    private String oficios;
+    private Set<Oficio> oficios;
     private Double calificacionPromedio;
     private Long dni;
 
@@ -32,7 +35,7 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
         this.descripcion = validarYObtenerString(especialista.getDescripcion());
 
         // Verificar oficios
-        this.oficios = obtenerOficiosString(especialista);
+        this.oficios = especialista.getOficios();
 
         // Calcular calificación promedio
         this.calificacionPromedio = calcularPromedioCalificacion(especialista);
