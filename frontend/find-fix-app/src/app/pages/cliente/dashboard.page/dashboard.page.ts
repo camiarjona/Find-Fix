@@ -1,8 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
-
+// import { SolicitudService } from '../../../services/solicitud/solicitud.service';
+// import { FavoritoService } from '../../../services/favorito/favorito.service';
+// import { ResenaService } from '../../../services/resena/resena.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
+import { TrabajoExternoService } from '../../../services/trabajoExterno-services/trabajo-externo-service';
 @Component({
   selector: 'app-dashboard.page',
   standalone: true,
@@ -10,21 +15,77 @@ import { AuthService } from '../../../services/auth/auth.service';
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.css',
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit{
   private router = inject(Router);
   private authService = inject(AuthService);
+  private trabajoAppService = inject(TrabajoAppService);
+  private trabajoExternoService = inject(TrabajoExternoService);
+
+  // private solicitudService = inject(SolicitudService);
+  // private favoritoService = inject(FavoritoService);
+  // private resenaService = inject(ResenaService);
+
+  solicitudesPendientes = signal(2);
+  favoritosGuardados = signal(3);
 
   nombreUsuario = computed(() => {
     return this.authService.currentUser()?.nombre || 'Cliente';
   });
 
-  // (Estos podés dejarlos falsos por ahora, o cargarlos desde sus servicios)
-  solicitudesPendientes = signal(2);
-  trabajosEnProceso = signal(1);
-  favoritosGuardados = signal(4);
+  // solicitudesPendientes = computed(
+  //   () => this.solicitudService.solicitudesCliente().filter((s) => s.estado === 'PENDIENTE').length
+  // );
+
+  // señal que guarda el conteo combinado de trabajos en proceso
+  trabajosEnProcesoCount = signal<number>(0);
+  trabajosEnProceso = computed(() => this.trabajosEnProcesoCount());
+
+  ngOnInit(): void {
+    this.cargarTrabajosEnProceso();
+  }
+
+  private cargarTrabajosEnProceso() {
+    this.trabajosEnProcesoCount.set(0);
+    this.trabajoAppService.obtenerTrabajosCliente().subscribe({
+      next: (respApp) => {
+        const listaApp = (respApp?.data || []) as any[];
+        const countApp = listaApp.filter(t => (t?.estado || '').toString() === 'EN_PROCESO').length;
+
+        this.trabajoExternoService.obtenerMisTrabajos().subscribe({
+          next: (respExt) => {
+            const listaExt = (respExt?.data || []) as any[];
+            const countExt = listaExt.filter(t => (t?.estado || '').toString() === 'EN_PROCESO').length;
+            this.trabajosEnProcesoCount.set(countApp + countExt);
+          },
+          error: (errExt) => {
+            console.error('Error cargando trabajos externos para contador', errExt);
+            this.trabajosEnProcesoCount.set(countApp);
+          }
+        });
+      },
+      error: (errApp) => {
+        console.error('Error cargando trabajos APP para contador', errApp);
+        this.trabajoExternoService.obtenerMisTrabajos().subscribe({
+          next: (respExt) => {
+            const listaExt = (respExt?.data || []) as any[];
+            const countExt = listaExt.filter(t => (t?.estado || '').toString() === 'EN_PROCESO').length;
+            this.trabajosEnProcesoCount.set(countExt);
+          },
+          error: (errExt) => {
+            console.error('Error cargando trabajos externos para contador (fallback)', errExt);
+            this.trabajosEnProcesoCount.set(0);
+          }
+        });
+      }
+    });
+  }
+  // favoritosGuardados = computed(() => this.favoritoService.favoritos().length);
+
+  // resenasPendientes = computed(
+  //   () => this.resenaService.resenasPendientesCliente().length
+  // );
 
   // funciones para navegar
-
   irABuscarEspecialistas() {
     this.router.navigate(['/cliente/buscar-especialistas']);
   }
@@ -43,5 +104,9 @@ export class DashboardPage {
 
   irASerEspecialista() {
     this.router.navigate(['/cliente/solicitar-especialista/nueva']);
+  }
+
+  irAResenas() {
+    this.router.navigate(['/cliente/mis-resenas']);
   }
 }
