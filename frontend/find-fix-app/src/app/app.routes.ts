@@ -27,6 +27,7 @@ import { PerfilPage } from './pages/cliente/perfil/perfil.page';
 import { MiPerfilEspecialista } from './pages/especialista/mi-perfil/mi-perfil';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
+import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page';
 
 export const routes: Routes = [
   {
@@ -47,9 +48,12 @@ export const routes: Routes = [
     component: AdminDahboardComponent
   },
   {
+    path: 'acceso-denegado', component: AccessDeniedPage
+  },
+  {
     path: 'admin',
     component: AdminLayout,
-    canActivate: [authGuard,roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { role: 'ADMIN' },
     children: [
       {
@@ -77,7 +81,7 @@ export const routes: Routes = [
   {
     path: 'cliente',
     component: ClienteLayout,
-    canActivate: [authGuard,roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { role: 'CLIENTE' },
     children: [
       {
@@ -112,10 +116,10 @@ export const routes: Routes = [
     ]
   },
   // Rutas Privadas del Especialista
-{
+  {
     path: 'especialista',
     component: EspecialistaLayout,
-    canActivate: [authGuard,roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { role: 'ESPECIALISTA' },
     children: [
       {
