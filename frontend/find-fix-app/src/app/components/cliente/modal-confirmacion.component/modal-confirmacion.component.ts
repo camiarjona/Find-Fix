@@ -9,18 +9,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './modal-confirmacion.component.css',
 })
 export class ModalConfirmacionComponent {
-
-// Datos para mostrar
-  @Input() titulo: string = '';
+@Input() titulo: string = '';
   @Input() mensaje: string = '';
-
-  // Configuración de botones (con valores por defecto)
   @Input() textoCancelar: string = 'Cancelar';
   @Input() textoConfirmar: string = 'Confirmar';
-  
   @Input() tipo: 'pregunta' | 'exito' = 'pregunta';
 
-  // Eventos
+  @Input() mostrarBotonCancelar: boolean = false;
+
   @Output() cancelar = new EventEmitter<void>();
   @Output() confirmar = new EventEmitter<void>();
 }

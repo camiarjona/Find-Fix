@@ -93,7 +93,6 @@
 }
 
 
-
 h2 {
   color: var(--text-dark, #1a1a1a);
   font-weight: 700;
@@ -192,7 +191,7 @@ form textarea:focus {
 
 
 @media (max-width: 900px) {
-  
+
   .content-card {
     grid-template-columns: 1fr;
     gap: 0;
