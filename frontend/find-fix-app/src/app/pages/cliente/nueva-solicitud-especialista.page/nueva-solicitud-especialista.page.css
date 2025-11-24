@@ -97,7 +97,6 @@
 }
 
 
-/* Tipografía */
 h2 {
   color: var(--text-dark, #1a1a1a);
   font-weight: 700;
@@ -198,7 +197,6 @@ form textarea:focus {
  ESTILOS RESPONSIVE
 */
 @media (max-width: 900px) {
-  /* En pantallas chicas, se apilan las columnas */
   .content-card {
     grid-template-columns: 1fr;
     gap: 0;

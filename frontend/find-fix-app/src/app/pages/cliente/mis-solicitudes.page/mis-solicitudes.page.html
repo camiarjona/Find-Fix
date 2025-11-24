@@ -1,8 +1,106 @@
-<div class="content-card">
-  <h2>Mis Solicitudes de Trabajo</h2>
-  <p>Aquí aparecerá el historial de trabajos que has solicitado a los especialistas de la plataforma.</p>
+<div class="contenedor-pagina">
 
-  <div class="placeholder-tabla">
-    <p><em>(Próximamente: Tabla de solicitudes de trabajo)</em></p>
+  <div class="encabezado-pagina">
+    <div class="titulo-encabezado">
+      <h1>Mis Solicitudes</h1>
+      <p>Historial de trabajos solicitados a especialistas</p>
+    </div>
   </div>
+
+  <div class="barra-control">
+    <div class="contenedor-tabs">
+      <button class="tab-btn" [class.activo]="filtroEstado === 'PENDIENTE'" (click)="cambiarFiltroEstado('PENDIENTE')">
+        Pendientes
+      </button>
+      <button class="tab-btn" [class.activo]="filtroEstado === 'FINALIZADA'" (click)="cambiarFiltroEstado('FINALIZADA')">
+        Finalizadas
+      </button>
+      <button class="tab-btn" [class.activo]="filtroEstado === 'TODAS'" (click)="cambiarFiltroEstado('TODAS')">
+        Todas
+      </button>
+    </div>
+
+    <div class="buscador-wrapper">
+      <input type="text" placeholder="Buscar especialista o servicio..." [(ngModel)]="filtroTexto" (keyup)="aplicarFiltros()" class="input-buscador">
+      <svg class="icono-lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </div>
+  </div>
+
+  @if (estaCargando()) {
+    <div class="contenedor-cargando">
+      <div class="cargador"></div>
+      <p>Consultando tus solicitudes...</p>
+    </div>
+  } @else {
+
+    @if (solicitudesVisibles().length === 0) {
+      <div class="estado-vacio">
+        <div class="icono-vacio">📤</div>
+        <h3>No tienes solicitudes aquí</h3>
+        <p>No se encontraron solicitudes enviadas con los filtros actuales.</p>
+      </div>
+    } @else {
+
+      <div class="contenedor-grid">
+        @for (solicitud of solicitudesVisibles(); track solicitud.id) {
+          <div class="tarjeta-solicitud">
+
+            <div class="header-card">
+              <div class="fecha-badge">
+                📅 {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
+              </div>
+              <span class="estado-badge" [ngClass]="obtenerClaseEstado(solicitud.estado)">
+                {{ formatearEstado(solicitud.estado) }}
+              </span>
+            </div>
+
+            <div class="body-card">
+              <h3 class="titulo-solicitud">{{ solicitud.titulo || 'Solicitud de Servicio' }}</h3>
+
+              <div class="info-especialista">
+                <div class="avatar-placeholder">{{ solicitud.especialista?.charAt(0) || 'E' }}</div>
+                <div>
+                  <p class="etiqueta-rol">Especialista</p>
+                  <p class="nombre-especialista">{{ solicitud.especialista || 'Desconocido' }}</p>
+                </div>
+              </div>
+
+              <div class="caja-descripcion">
+                <p class="texto-descripcion">"{{ solicitud.descripcion }}"</p>
+              </div>
+            </div>
+
+            <div class="footer-actions">
+              @if (solicitud.estado === 'PENDIENTE') {
+                <button class="btn-accion cancelar" (click)="prepararEliminacion(solicitud)">
+                  🗑️ Cancelar Solicitud
+                </button>
+              } @else {
+                <div class="footer-info">
+                    @if(solicitud.estado === 'ACEPTADO') {
+                        <span class="texto-exito">¡El especialista aceptó! Revisa "Mis Trabajos"</span>
+                    } @else {
+                        <span class="texto-error">Solicitud rechazada</span>
+                    }
+                </div>
+              }
+            </div>
+
+          </div>
+        }
+      </div>
+
+    }
+  }
 </div>
+
+@if (alertaVisible()) {
+  <app-modal-confirmacion
+    [titulo]="tipoAlerta() === 'pregunta' ? '¿Cancelar Solicitud?' : (tipoAlerta() === 'error' ? '¡Ups!' : '¡Listo!')"
+    [mensaje]="mensajeAlerta()"
+    [textoConfirmar]="tipoAlerta() === 'pregunta' ? 'Sí, cancelar' : 'Entendido'"
+    [mostrarBotonCancelar]="tipoAlerta() === 'pregunta'"
+    (confirmar)="confirmarAccion()"
+    (cancelar)="cerrarAlerta()">
+  </app-modal-confirmacion>
+}

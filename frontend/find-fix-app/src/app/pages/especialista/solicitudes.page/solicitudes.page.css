@@ -1,165 +1,157 @@
-/* Contenedor principal */
-.page-container {
-  padding: 1.5rem;
-  max-width: 1200px;
+:host {
+  display: block;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding-bottom: 4rem;
+}
+
+.contenedor-pagina {
+  max-width: 1100px;
   margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-.page-header {
-  margin-bottom: 2rem;
+/* Encabezado */
+.titulo-encabezado h1 {
+  font-size: 1.8rem; color: #111827; margin: 0; font-weight: 700;
+}
+.titulo-encabezado p {
+  color: #6b7280; margin: 0.5rem 0 0 0;
 }
 
-.page-header h1 {
-  font-size: 1.8rem;
-  color: #2d3748;
-  margin: 0;
-  font-weight: 800;
+.barra-control {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  justify-content: space-between; align-items: center;
+  margin-top: 1.5rem; margin-bottom: 2rem;
 }
 
-.page-header p {
-  color: #718096;
-  margin-top: 0.5rem;
+.contenedor-tabs {
+  display: flex; gap: 5px; background: #e5e7eb;
+  padding: 4px; border-radius: 10px;
 }
 
-/* Grilla */
-.solicitudes-grid {
-  display: grid;
-  gap: 1.5rem; /* Reduje un poco el espacio entre tarjetas */
-
-  /* CAMBIO CLAVE: Bajé a 300px.
-     Esto permite que las tarjetas sean más angostas si la pantalla lo pide,
-     o que entren más tarjetas en una misma fila. */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.tab-btn {
+  border: none; background: transparent; padding: 8px 16px;
+  border-radius: 8px; color: #6b7280; font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.tab-btn.activo {
+  background: white; color: #F58634; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* Tarjeta */
-.solicitud-card {
-  background: white;
-  border-radius: 12px; /* Un poco menos redondeado para que se vea más compacto */
-  padding: 1.5rem;    /* Volví a un padding estándar (antes 2rem) */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-  border: 1px solid #edf2f7;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s;
-
-  /* Esto asegura que la tarjeta no se estire infinitamente si hay poco contenido,
-     pero llenará el ancho de su columna en la grilla */
-  height: 100%;
+.buscador-wrapper {
+  position: relative; flex-grow: 1; max-width: 300px;
+}
+.input-buscador {
+  width: 100%; padding: 10px 10px 10px 35px; border: 1px solid #d1d5db;
+  border-radius: 8px; font-size: 0.9rem; outline: none;
+  background: white; box-sizing: border-box;
+}
+.input-buscador:focus { border-color: #F58634; }
+.icono-lupa {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af;
 }
 
-.solicitud-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+/* Grid de Tarjetas */
+.contenedor-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-  color: #718096;
+.tarjeta-solicitud {
+  background: white; border-radius: 16px; border: 1px solid #e5e7eb;
+  padding: 1.5rem; display: flex; flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tarjeta-solicitud:hover {
+  transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-color: #fed7aa;
 }
 
-.badge-pendiente {
-  background: #fffaf0;
-  color: #dd6b20;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 0.75rem;
+/* Partes de la Tarjeta */
+.header-card { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+.fecha-badge {
+  font-size: 0.75rem; color: #6b7280; font-weight: 600; background: #f3f4f6;
+  padding: 4px 8px; border-radius: 6px;
 }
 
-.cliente-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 1rem;
+.estado-badge {
+  font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 20px; text-transform: uppercase;
+}
+.estado-badge.pendiente { background: #fff7ed; color: #c2410c; }
+.estado-badge.aceptado { background: #f0fdf4; color: #15803d; }
+.estado-badge.rechazado { background: #fef2f2; color: #b91c1c; }
+
+.titulo-solicitud {
+  font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 1rem 0;
 }
 
-.avatar-circle {
-  width: 36px; /* Tamaño intermedio */
-  height: 36px;
-  background: #ebf8ff;
-  color: #3182ce;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
+.info-cliente { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.avatar-placeholder {
+  width: 40px; height: 40px; background: #F58634; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.1rem;
+}
+.nombre-cliente { font-weight: 600; color: #374151; margin: 0; font-size: 0.95rem; }
+.ubicacion-cliente { color: #6b7280; font-size: 0.8rem; margin: 0; }
+
+.descripcion-solicitud {
+  font-size: 0.9rem; color: #4b5563; background: #f9fafb;
+  padding: 10px; border-radius: 8px; margin: 0 0 1.5rem 0;
+  font-style: italic; line-height: 1.5;
 }
 
-.cliente-name {
-  font-weight: 600;
-  color: #4a5568;
-  font-size: 1rem;
+/* Botones de Acción */
+.footer-actions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto;
+}
+.btn-accion {
+  border: none; padding: 10px; border-radius: 8px; font-weight: 600;
+  cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+}
+.btn-accion.rechazar {
+  background: white; border: 1px solid #fee2e2; color: #b91c1c;
+}
+.btn-accion.rechazar:hover { background: #fef2f2; }
+
+.btn-accion.aceptar {
+  background: #F58634; color: white;
+}
+.btn-accion.aceptar:hover { background: #e07528; transform: translateY(-1px); }
+
+.footer-info { text-align: center; margin-top: auto; padding-top: 10px; border-top: 1px solid #f3f4f6; }
+.texto-exito { color: #15803d; font-weight: 600; font-size: 0.9rem; }
+.texto-error { color: #b91c1c; font-weight: 600; font-size: 0.9rem; }
+
+.estado-vacio { text-align: center; padding: 4rem 1rem; color: #6b7280; }
+.icono-vacio { font-size: 3rem; margin-bottom: 1rem; }
+
+.contenedor-cargando { text-align: center; padding: 3rem; color: #6b7280; }
+.cargador {
+  border: 3px solid #f3f3f3; border-top: 3px solid #F58634; border-radius: 50%;
+  width: 30px; height: 30px; animation: girar 1s linear infinite; margin: 0 auto 1rem;
 }
 
-/* Descripción */
-.descripcion {
-  background: #f7fafc;
-  padding: 1rem; /* Padding más compacto */
-  border-radius: 8px;
-  color: #4a5568;
-  font-style: italic;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-  font-size: 0.95rem; /* Fuente un poco más chica */
-
-  /* Mantenemos esto para que el texto largo no rompa la tarjeta */
-  overflow-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
+.superposicion-alerta {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+  z-index: 3000; backdrop-filter: blur(2px);
+}
+.contenido-alerta-modal {
+  background: white; width: 90%; max-width: 380px; border-radius: 20px; padding: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); text-align: center;
+  animation: aparecerPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.contenedor-icono-alerta {
+  width: 70px; height: 70px; border-radius: 50%; background-color: #dcfce7; color: #16a34a;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem auto;
+}
+.contenedor-icono-alerta.error { background-color: #fee2e2; color: #dc2626; }
+.titulo-alerta { font-size: 1.4rem; color: #111827; margin: 0 0 0.5rem 0; font-weight: 700; }
+.mensaje-alerta { color: #4b5563; margin: 0 0 1.5rem 0; }
+.btn-alerta-ok {
+  background-color: #111827; color: white; border: none; padding: 12px 30px; width: 100%;
+  border-radius: 10px; font-weight: 600; cursor: pointer;
 }
 
-.card-actions {
-  display: flex;
-  gap: 0.75rem; /* Botones un poco más juntos */
-  margin-top: auto;
-  padding-top: 0.5rem;
-}
-
-button {
-  flex: 1;
-  padding: 10px; /* Botón estándar */
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-  font-size: 0.9rem;
-}
-
-.btn-aceptar {
-  background: #38a169;
-  color: white;
-}
-
-.btn-aceptar:hover {
-  background: #2f855a;
-}
-
-.btn-rechazar {
-  background: white;
-  border: 1px solid #e53e3e;
-  color: #e53e3e;
-}
-
-.btn-rechazar:hover {
-  background: #fff5f5;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 3rem;
-  color: #718096;
-  background: white;
-  border-radius: 16px;
-  border: 2px dashed #edf2f7;
-}
-
-.empty-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
+@keyframes girar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes aparecerPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
