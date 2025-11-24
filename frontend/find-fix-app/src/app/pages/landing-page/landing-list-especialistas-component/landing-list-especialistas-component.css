@@ -1,10 +1,44 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
+.page-container {
+  flex: 1;
+  /* Aquí puedes mantener tus paddings o márgenes actuales si los tienes */
+  padding-bottom: 2rem;
+  margin: 0 auto;
+  padding: 20px 15px;
+}
+
+/* Header específico de esta página pública */
+.public-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.public-header h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+.public-header p {
+  color: #666;
+}
+.public-header a {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Mobile First */
 .page-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px; /* Padding lateral para móvil */
 }
 
+/* --- FILTROS --- */
 .filters-section {
     background: white;
     padding: 20px;
@@ -20,7 +54,7 @@ h2 {
 
 .filters-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 1 col en movil */
     gap: 15px;
     margin-top: 15px;
 }
@@ -49,14 +83,14 @@ h2 {
     flex: 1;
 }
 
-
+/* --- GRID ESPECIALISTAS --- */
 .especialistas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
 }
 
-
+/* TARJETA */
 .esp-card {
     background: white;
     border-radius: 12px;
@@ -112,10 +146,13 @@ h2 {
     border-radius: 10px;
 }
 
+
+/* Botón Ojito (Ver Detalle) */
+
 .header-actions {
-    margin-left: auto;
+    margin-left: auto; /* Empuja todo el bloque a la derecha */
     display: flex;
-    gap: 8px;
+    gap: 8px; /* Espacio entre el corazón y el ojo */
 }
 
 .icon-action-btn {
@@ -173,7 +210,7 @@ h2 {
     font-weight: 500;
 }
 
-
+/* --- BOTONES --- */
 .cta-button {
     background: var(--primary-color);
     color: white;
@@ -200,7 +237,7 @@ h2 {
 
 .full-width { width: 100%; }
 
-
+/* Empty State */
 .empty-state {
     grid-column: 1 / -1;
     text-align: center;
@@ -211,7 +248,7 @@ h2 {
     border: 1px dashed #ccc;
 }
 
-
+/* --- MODALES GENERALES --- */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -251,10 +288,11 @@ textarea {
     gap: 10px;
 }
 
+/* --- ESTILOS ESPECÍFICOS MODAL PERFIL --- */
 .profile-modal {
     max-width: 400px;
     text-align: center;
-    padding: 0;
+    padding: 0; /* Reset padding para manejarlo internamente */
     overflow: hidden;
 }
 
@@ -378,3 +416,4 @@ textarea {
     }
     .filter-actions { margin-top: 0; }
 }
+

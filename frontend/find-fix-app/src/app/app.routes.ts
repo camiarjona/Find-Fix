@@ -25,6 +25,7 @@ import { SolicitudDetalleAdminComponent } from './components/admin-components/so
 import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
 import { MiPerfilEspecialista } from './pages/especialista/mi-perfil/mi-perfil';
+import { LandingListEspecialistasComponent } from './pages/landing-page/landing-list-especialistas-component/landing-list-especialistas-component';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,10 @@ export const routes: Routes = [
   {
     path: 'admin/dashboard',
     component: AdminDahboardComponent
+  },
+  {
+    path: 'buscar-especialistas',
+    component: LandingListEspecialistasComponent
   },
   {
     path: 'admin',
