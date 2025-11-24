@@ -1,8 +1,9 @@
+import { Router } from '@angular/router';
 import { HttpClient} from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { LoginCredentials, RegisterCredentials, UserProfile } from '../../models/user/user.model';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 type ActiveRole = 'cliente' | 'especialista' | 'admin';
 @Injectable({
@@ -13,6 +14,7 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080'
 
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   public activeRole = signal<ActiveRole | null>(null);
   public currentUser = signal<UserProfile | null>(null);
@@ -37,14 +39,27 @@ export class AuthService {
       );
   }
 
-  logout() {
-    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/usuario/logout`, {})
-      .pipe(
-        tap(() => {
-          this.currentUser.set(null);
-          this.activeRole.set(null);
-        })
-      );
+  logout(): void {
+    console.log('🚪 Iniciando proceso de logout...');
+
+    this.http.post(`${this.apiUrl}/usuario/logout`, {}, { responseType: 'text' })
+      .subscribe({
+        next: () => {
+          console.log('✅ Backend confirmó logout. Cookie eliminada.');
+          this.finalizarSesionLocal();
+        },
+        error: (err) => {
+          console.warn('⚠️ El backend no respondió OK, pero cerramos sesión igual.', err);
+          // Forzamos el cierre local aunque el backend falle o dé error de red
+          this.finalizarSesionLocal();
+        }
+      });
+  }
+
+  private finalizarSesionLocal() {
+    this.currentUser.set(null);
+    this.activeRole.set(null);
+    this.router.navigate(['/auth']); // O al home
   }
 
   register(register: RegisterCredentials): Observable<ApiResponse<UserProfile>> {

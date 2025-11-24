@@ -1,0 +1,41 @@
+<app-nav-bar-landing></app-nav-bar-landing>
+
+<div class="page-container">
+
+  <div class="public-header">
+    <h2>Nuestros Profesionales</h2>
+    <p>Explora la lista de expertos listos para ayudarte. <a routerLink="/auth">Inicia sesión</a> para contratar.</p>
+  </div>
+
+
+  <div class="especialistas-grid">
+    @for (esp of especialistas(); track esp.email) {
+      <article class="esp-card">
+        <div class="card-header">
+            <div class="avatar">{{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}</div>
+            <div class="header-info">
+                <h3>{{ esp.nombre }} {{ esp.apellido }}</h3>
+                <span class="city-badge">{{ esp.ciudad }}</span>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="rating">⭐ {{ esp.calificacionPromedio }}</div>
+            <div class="oficios-list">
+                @for (oficio of esp.oficios; track $index) {
+                    <span class="oficio-tag">{{ oficio }}</span>
+                }
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button class="cta-button full-width" (click)="irALogin()">
+                Contactar
+            </button>
+        </div>
+      </article>
+    }
+  </div>
+</div>
+
+<app-landing-footer-component></app-landing-footer-component>
