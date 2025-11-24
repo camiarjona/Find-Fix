@@ -65,18 +65,18 @@ export class EspecialistaService {
 
   /** Obtiene el perfil completo del especialista*/
   getMiPerfil(): Observable<PerfilEspecialista> {
-    return this.http.get<ApiResponse<PerfilEspecialista>>(`${this.apiURL}/especialistas/ver-perfil`, { withCredentials: true })
+    return this.http.get<ApiResponse<PerfilEspecialista>>(`${this.apiURL}/ver-perfil`, { withCredentials: true })
       .pipe(map(res => res.data));
   }
 
   /** Actualizar los datos básicos del especialista*/
   actualizarDatos(datos: Partial<PerfilEspecialista>): Observable<any> {
-    return this.http.patch(`${this.apiURL}/especialistas/actualizar/mis-datos`, datos, { withCredentials: true });
+    return this.http.patch(`${this.apiURL}/actualizar/mis-datos`, datos, { withCredentials: true });
   }
 
   /** Actualizar la lista de oficios y precios */
   actualizarOficios(oficios: ActualizarOficios): Observable<any> {
-    return this.http.patch(`${this.apiURL}/especialistas/actualizar/mis-oficios`, oficios, { withCredentials: true });
+    return this.http.patch(`${this.apiURL}/actualizar/mis-oficios`, oficios, { withCredentials: true });
   }
 
   /** Responder a una solicitud (Aceptar o Rechazar) */

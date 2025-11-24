@@ -9,7 +9,7 @@ import { MisSolicitudesPage } from './pages/cliente/mis-solicitudes.page/mis-sol
 import { BuscarEspecialistas } from './pages/cliente/buscar-especialistas.page/buscar-especialistas.page';
 import { MisResenas } from './pages/cliente/mis-resenas/mis-resenas';
 import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page';
-import { MisFavoritos } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
+import { MisFavoritosPage } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
 import { HistorialSolicitudesEspecialistaPages } from './pages/cliente/historial-solicitudes-especialista.pages/historial-solicitudes-especialista.pages';
 import { EspecialistaLayout } from './layouts/especialista/especialista-layout/especialista-layout';
@@ -24,6 +24,11 @@ import { GestionUsers } from './pages/admin-pages/gestion-users/gestion-users';
 import { SolicitudDetalleAdminComponent } from './components/admin-components/solicitud-detalle-admin/solicitud-detalle-admin';
 import { SolicitudesEspecialistaAdminComponent } from './components/admin-components/solicitudes-especialista-admin-component/solicitudes-especialista-admin-component';
 import { PerfilPage } from './pages/cliente/perfil/perfil.page';
+import { MiPerfilEspecialista } from './pages/especialista/mi-perfil/mi-perfil';
+import { LandingListEspecialistasComponent } from './pages/landing-page/landing-list-especialistas-component/landing-list-especialistas-component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page';
 
 export const routes: Routes = [
   {
@@ -32,19 +37,29 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    component: AuthPage
+    component: AuthPage,
   },
   {
     path: 'seleccionar-rol',
-    component: SeleccionarRolPage
+    component: SeleccionarRolPage,
+    canActivate: [authGuard]
   },
   {
     path: 'admin/dashboard',
     component: AdminDahboardComponent
   },
   {
+    path: 'acceso-denegado', component: AccessDeniedPage
+  },
+  {
+    path: 'buscar-especialistas',
+    component: LandingListEspecialistasComponent
+  },
+  {
     path: 'admin',
     component: AdminLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ADMIN' },
     children: [
       {
         path: 'oficios',
@@ -71,7 +86,8 @@ export const routes: Routes = [
   {
     path: 'cliente',
     component: ClienteLayout,
-
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'CLIENTE' },
     children: [
       {
         path: 'dashboard',
@@ -84,7 +100,7 @@ export const routes: Routes = [
       { path: 'buscar-especialistas', component: BuscarEspecialistas },
       { path: 'mis-resenas', component: MisResenas },
       { path: 'mis-trabajos', component: MisTrabajos },
-      { path: 'mis-favoritos', component: MisFavoritos },
+      { path: 'mis-favoritos', component: MisFavoritosPage },
       {
         path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
@@ -105,9 +121,11 @@ export const routes: Routes = [
     ]
   },
   // Rutas Privadas del Especialista
-{
+  {
     path: 'especialista',
-    component: EspecialistaLayout, 
+    component: EspecialistaLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ESPECIALISTA' },
     children: [
       {
         path: 'dashboard',
@@ -126,7 +144,10 @@ export const routes: Routes = [
         path: 'mis-resenas',
         component: MisResenasPage
       },
-
+      {
+        path: 'mi-perfil',
+        component: MiPerfilEspecialista
+      },
       {
         path: '',
         redirectTo: 'dashboard',

@@ -30,7 +30,7 @@
   font-size: 0.9rem;
 }
 
-/* --- TABLA --- */
+
 .tabla-general {
   overflow-x: auto;
   background: white;
@@ -180,3 +180,4 @@
     font-size: 1rem;
   }
 }
+

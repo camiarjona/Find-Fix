@@ -16,13 +16,7 @@ export class AdminDahboardComponent {
 
 
   logout() {
-    this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/auth']),
-      error: (err) => {
-        console.error('Error al cerrar sesión', err);
-        this.router.navigate(['/auth']);
-      }
-    });
+    this.authService.logout();
   }
   public adminPanels = [
     {

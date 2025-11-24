@@ -58,7 +58,7 @@ export class ClienteLayout {
     console.log("Cerrar sesión");
     this.authService.logout();
     this.handleLinkClick();
-    this.router.navigateByUrl('/auth');
+
   }
 
   toggleTheme() {

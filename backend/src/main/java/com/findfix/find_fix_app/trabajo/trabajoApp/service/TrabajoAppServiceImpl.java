@@ -55,31 +55,28 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     ///  METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS CLIENTES
     @Override
     @Transactional(readOnly = true)
-    public List<TrabajoApp> obtenerTrabajosClientes() throws UsuarioNotFoundException, TrabajoAppException {
+    public List<TrabajoApp> obtenerTrabajosClientes() throws UsuarioNotFoundException {
 
         Usuario usuario = authService.obtenerUsuarioAutenticado();
 
-        List<TrabajoApp> trabajosSolicitados = trabajoAppRepository.findByUsuario(usuario);
+        //        if (trabajosSolicitados.isEmpty()) {
+//            throw new TrabajoAppException("Usted no tiene trabajos aceptados.");
+//        }
 
-        if (trabajosSolicitados.isEmpty()) {
-            throw new TrabajoAppException("Usted no tiene trabajos aceptados.");
-        }
-
-        return trabajosSolicitados;
+        return trabajoAppRepository.findByUsuario(usuario);
     }
 
     /// METODO PARA OBTENER LOS TRABAJOS DESDE LA PERSPECTIVA DE LOS ESPECIALISTAS
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public List<TrabajoApp> obtenerTrabajosEspecialista() throws UsuarioNotFoundException, TrabajoAppException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<TrabajoApp> trabajosAceptados = trabajoAppRepository.findByEspecialista(especialista);
 
-        if (trabajosAceptados.isEmpty()) {
-            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
-        }
-        return trabajosAceptados;
+//        if (trabajosAceptados.isEmpty()) {
+//            throw new TrabajoAppException("Usted no tiene trabajos en su lista.");
+//        }
+        return trabajoAppRepository.findByEspecialista(especialista);
     }
 
     ///  BUSCA UN TRABAJO POR TITULO
@@ -191,7 +188,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     @Override
     @Transactional(readOnly = true)
-    public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UsuarioNotFoundException, TrabajoAppException, TrabajoAppNotFoundException {
+    public TrabajoApp obtenerFichaDeTrabajoParaCliente(Long id) throws UsuarioNotFoundException, TrabajoAppNotFoundException {
         List<TrabajoApp> trabajoAppDelCliente = obtenerTrabajosClientes();
         Optional<TrabajoApp> trabajoBuscado = trabajoAppDelCliente.stream().filter(trabajoApp -> Objects.equals(trabajoApp.getTrabajoAppId(), id)).findFirst();
         if (trabajoBuscado.isEmpty()) {

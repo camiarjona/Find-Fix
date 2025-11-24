@@ -26,5 +26,5 @@ public interface EspecialistaService {
     Especialista actualizarOficioDeEspecialistaAdmin(String email, ActualizarOficioEspDTO dto) throws EspecialistaNotFoundException, EspecialistaExcepcion;
     Optional<Especialista> buscarPorEmail(String email);
     VerPerfilEspecialistaDTO verPerfilEspecialista() throws UsuarioNotFoundException, EspecialistaNotFoundException;
-    List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion;
+    List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion, UsuarioNotFoundException;
 }

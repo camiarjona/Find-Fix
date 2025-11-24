@@ -84,7 +84,7 @@
   margin: 0;
 }
 
-/* ---- Animaciones ---- */
+
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -101,3 +101,51 @@
     transform: scale(1);
   }
 }
+
+/* Mobile adjustments: stack options, reduce padding and sizes */
+@media (max-width: 767px) {
+  .selection-card {
+    padding: 20px;
+    max-width: 92%;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    margin: 2rem;
+  }
+
+  .selection-card h1 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .selection-card > p {
+    font-size: 0.95rem;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .role-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .role-box {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+
+  .role-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .role-box h2 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .role-box p {
+    font-size: 0.85rem;
+  }
+}
+

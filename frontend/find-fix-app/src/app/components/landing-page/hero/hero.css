@@ -62,7 +62,7 @@
   }
 }
 
-/* ---- Responsive para Celulares ---- */
+
 @media (max-width: 900px) {
   .hero-container {
     flex-direction: column;
@@ -79,3 +79,4 @@
     margin-bottom: 30px;
   }
 }
+

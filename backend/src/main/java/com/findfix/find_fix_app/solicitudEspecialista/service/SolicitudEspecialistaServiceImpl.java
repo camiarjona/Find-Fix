@@ -49,7 +49,6 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     }
 
     /// Metodo para controlar y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
-
     private Long contarSolicitudesPorUsuarioYEstado(Usuario usuario, EstadosSolicitudes estado) {
         return solicitudEspecialistaRepository.findAll().stream()
                 .filter(s -> s.getUsuario().equals(usuario) && s.getEstado().equals(estado))
@@ -132,7 +131,6 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     }
 
     /// Metodo que actualiza llamando al de actualizar los datos
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, RolNotFoundException, SolicitudEspecialistaException {

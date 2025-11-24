@@ -4,10 +4,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import jakarta.servlet.http.Cookie;
+
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -27,8 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
 
-                                .requestMatchers("/usuario/registrar", "/usuario/login", "/usuario/logout").permitAll()
-
+                                .requestMatchers("/usuario/registrar", "/usuario/login", "/usuario/logout","/especialistas/publico").permitAll()
+                                
                                 .requestMatchers(
                                         "/usuario/modificar-datos",
                                         "/usuario/modificar-password",
@@ -41,16 +44,13 @@ public class SecurityConfig {
                                         "/usuario/filtrar")
                                 .hasRole("ADMIN")
 
-                                //... (El resto de tus reglas .requestMatchers(...) siguen igual)
-                                //... (las he omitido aquí para que sea más corto)
-                                //...
+                                //OFICIOS ESPECIALISTA/CLIENTE
+                                .requestMatchers("/oficios/disponibles").hasAnyRole("ESPECIALISTA", "CLIENTE")
 
-                                //OFICIOS CLIENTE
-                                .requestMatchers("/oficios/disponibles").hasRole("CLIENTE")
+                                .requestMatchers("/oficios").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
 
                                 // DELETE | OFICIOS | ROLES
                                 .requestMatchers("/admin/**",
-                                        "/oficios",
                                         "/oficios/buscar/{id}",
                                         "/oficios/agregar",
                                         "/oficios/actualizar/{id}",
@@ -97,7 +97,8 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/solicitud-especialista/mis-solicitudes",
                                         "/solicitud-especialista/enviar",
-                                        "/solicitud-especialista/eliminar/{id}")
+                                        "/solicitud-especialista/eliminar/{id}",
+                                        "/especialistas/detalle")
                                 .hasRole("CLIENTE")
 
                                 .requestMatchers("/solicitud-especialista/filtrar").hasAnyRole("CLIENTE", "ADMIN")
@@ -124,7 +125,6 @@ public class SecurityConfig {
                                         "/especialistas/actualizar/oficios/{email}",
                                         "/especialistas/eliminar/{email}")
                                 .hasRole("ADMIN")
-
                                 //RESEÑA
                                 .requestMatchers(
                                         "/resenas/registrar",
@@ -140,6 +140,24 @@ public class SecurityConfig {
                                 .hasRole("ESPECIALISTA")
 
                                 .anyRequest().authenticated()
+                )
+                 .logout(logout -> logout
+                        .logoutUrl("/usuario/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .addLogoutHandler((request, response, authentication) -> {
+                            // FUERZA BRUTA: Sobrescribir cookie manualmente
+                            // Esto arregla problemas de 'Path' que a veces ocurren
+                            Cookie cookie = new Cookie("JSESSIONID", null);
+                            cookie.setPath("/"); // Importante: Asegura que borre la cookie global
+                            cookie.setHttpOnly(true);
+                            cookie.setMaxAge(0); // 0 segundos de vida = borrar inmediatamente
+                            response.addCookie(cookie);
+                            System.out.println(">>> LOGOUT: Cookie JSESSIONID borrada manualmente.");
+                        })
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpStatus.OK.value());
+                        })
                 )
                 .exceptionHandling(exception -> exception
                         // Tu exceptionHandling personalizado está perfecto, no lo toques.

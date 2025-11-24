@@ -25,6 +25,13 @@ export class SolicitudesPage implements OnInit {
   tipoAlerta = signal<'success' | 'error'>('success');
 
   esModalNavegacion = signal(false);
+  mostrarModal = signal(false);
+  datosModal = signal({
+    titulo: '',
+    mensaje: '',
+    tipo: 'pregunta' as 'pregunta' | 'exito',
+    textoConfirmar: 'Confirmar'
+  });
 
   filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
   filtroTexto = '';

@@ -4,9 +4,7 @@
   margin: 0 auto;
 }
 
-/*
- ESTILOS DE GRID
-*/
+
 .content-card {
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
@@ -20,9 +18,7 @@
   padding: 2rem;
 }
 
-/*
-  ESTILOS DE LA COLUMNA DE INFO
-*/
+
 .info-columna {
   background-color: #f8f9fa;
   padding: 2rem;
@@ -113,7 +109,7 @@ p {
   margin-bottom: 1.5rem;
 }
 
-/* Estilos del Formulario */
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -148,7 +144,7 @@ form textarea:focus {
   font-size: 0.875rem;
 }
 
-/* Estilos de Botón */
+
 .cta-button {
   background-color: var(--primary-color, #F58634);
   color: white;
@@ -182,7 +178,7 @@ form textarea:focus {
 }
 
 
-/* Mensajes de Éxito y Error */
+
 .exito, .error {
   padding: 1rem;
   border-radius: 8px;
@@ -193,10 +189,9 @@ form textarea:focus {
 .error { color: #842029; background-color: #f8d7da; border: 1px solid #f5c2c7; }
 
 
-/*
- ESTILOS RESPONSIVE
-*/
+
 @media (max-width: 900px) {
+
   .content-card {
     grid-template-columns: 1fr;
     gap: 0;
@@ -214,3 +209,4 @@ form textarea:focus {
     border-radius: 0 0 12px 12px;
   }
 }
+

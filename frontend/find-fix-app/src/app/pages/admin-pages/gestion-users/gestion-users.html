@@ -8,12 +8,6 @@
   <div class="filters-bar">
 
     <div class="filter-group">
-      <label>Email:</label>
-      <input type="text" [(ngModel)]="filtros.email" (keyup.enter)="aplicarFiltros()" placeholder="Buscar por email..."
-        class="filter-input">
-    </div>
-
-    <div class="filter-group">
       <label>Rol:</label>
       <select [(ngModel)]="filtros.rol" class="filter-select" (change)="aplicarFiltros()">
         <option value="">Todos</option>
@@ -30,7 +24,7 @@
         </svg> Buscar
       </button>
 
-      @if (filtros.email || filtros.rol) {
+      @if (filtros.rol) {
       <button class="btn-filter clear" (click)="limpiarFiltros()">
         ✕ Limpiar
       </button>
