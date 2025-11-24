@@ -1,8 +1,238 @@
-<div class="content-card">
-  <h2>Mis Trabajos</h2>
-  <p>Esta sección muestra todos los trabajos que han sido aceptados por un especialista y están en proceso o ya fueron finalizados.</p>
+<div class="contenedor-pagina">
 
-  <div class="placeholder-contenido">
-    <p><em>(Próximamente: Lista de trabajos en proceso y completados)</em></p>
+  <div class="encabezado-pagina">
+    <div class="titulo-encabezado">
+      <h1>Mis Trabajos</h1>
+      <p>Monitorea el avance de tus servicios contratados</p>
+    </div>
+  </div>
+
+  <div class="barra-filtros">
+
+    <div class="grupo-filtro crecer">
+      <input type="text" placeholder="Buscar por especialista o descripción..." [(ngModel)]="filtros.titulo"
+        (keyup)="aplicarFiltros()" class="input-filtro">
+    </div>
+
+    <div class="grupo-filtro compacto">
+      <div class="contenedor-select-filtro">
+        <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
+          <option value="">Estado: Todos</option>
+          @for (est of estadosPosibles; track est) {
+            <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-icono-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18"></path>
+        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+      </svg>
+    </button>
+
+    <div class="divisor-vertical"></div>
+
+    <div class="alternador-vista">
+      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar"
+        title="Cuadrícula">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </button>
+      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar"
+        title="Lista">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (estaCargando()) {
+    <div class="contenedor-cargando">
+      <div class="cargador"></div>
+      <p>Cargando trabajos...</p>
+    </div>
+  } @else {
+
+    @if (trabajosVisibles().length === 0) {
+      <div class="empty-state">
+        <div class="icon-box">📂</div>
+        <h3>No se encontraron trabajos</h3>
+        <p>No tienes trabajos con el estado seleccionado o aún no has contratado a nadie.</p>
+      </div>
+    }
+
+    @else {
+
+      @if (modoVista === 'tarjetas') {
+        <div class="contenedor-cuadricula">
+          @for (trabajo of trabajosVisibles(); track trabajo.id) {
+          <div class="tarjeta-trabajo">
+
+            <div class="fila-encabezado-tarjeta">
+              <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
+                {{ formatearTextoEstado(trabajo.estado) }}
+              </span>
+            </div>
+
+            <div class="fila-icono-tarjeta">
+              <div class="icono-tarjeta">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+              </div>
+            </div>
+
+            <h3 class="titulo-tarjeta">Trabajo #{{ trabajo.id }}</h3>
+            <p class="cliente-tarjeta">Especialista: <strong>{{ trabajo.nombreEspecialista }}</strong></p>
+
+            <div class="fechas-tarjeta">
+              <span>📅 Inicio: {{ trabajo.fechaInicio }}</span>
+            </div>
+
+            <div class="pie-tarjeta">
+              <span class="precio">{{ trabajo.presupuesto | currency }}</span>
+              <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
+            </div>
+
+          </div>
+          }
+        </div>
+      }
+
+      @else {
+        <div class="contenedor-tabla">
+          <table class="tabla-trabajos">
+            <thead>
+              <tr>
+                <th>Trabajo / Especialista</th>
+                <th>Estado</th>
+                <th>Fechas</th>
+                <th>Precio</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (trabajo of trabajosVisibles(); track trabajo.id) {
+              <tr>
+                <td>
+                  <div class="fila-titulo-tabla">
+                    <span class="titulo-tabla">Trabajo #{{ trabajo.id }}</span>
+                  </div>
+                  <div class="subtitulo-tabla">Esp: {{ trabajo.nombreEspecialista }}</div>
+                </td>
+                <td>
+                  <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
+                    {{ formatearTextoEstado(trabajo.estado) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="col-fecha">
+                    <span class="fecha-inicio">Inicio: {{ trabajo.fechaInicio }}</span>
+                    @if(trabajo.fechaFin) {
+                    <span class="fecha-fin">Fin: {{ trabajo.fechaFin }}</span>
+                    }
+                  </div>
+                </td>
+                <td>
+                  <div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div>
+                </td>
+                <td class="text-right">
+                  <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver detalle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  }
+</div>
+
+@if(trabajoSeleccionado()) {
+<div class="superposicion-modal" (click)="cerrarModal()">
+  <div class="contenido-modal" (click)="$event.stopPropagation()">
+
+    <div class="encabezado-modal">
+      <div class="info-encabezado-modal">
+        <h2>Detalle del Trabajo</h2>
+      </div>
+      <button class="btn-cerrar" (click)="cerrarModal()">×</button>
+    </div>
+
+    <div class="cuerpo-modal">
+
+      <div class="grupo-editable ancho-completo">
+        <label>Especialista</label>
+        <div class="fila-visualizacion">
+          <h3 class="valor-info-principal">{{ trabajoSeleccionado()?.nombreEspecialista }}</h3>
+        </div>
+      </div>
+
+      <div class="grilla-info-en-linea">
+        <div class="grupo-editable">
+          <label>Estado Actual</label>
+          <div class="fila-visualizacion">
+            <span class="capsula-estado" [class]="obtenerClaseEstado(trabajoSeleccionado()?.estado || '')">
+              {{ formatearTextoEstado(trabajoSeleccionado()?.estado || '') }}
+            </span>
+          </div>
+        </div>
+        <div class="grupo-editable">
+          <label>Presupuesto</label>
+          <div class="fila-visualizacion">
+            <p class="valor-info texto-precio">{{ trabajoSeleccionado()?.presupuesto | currency }}</p>
+          </div>
+        </div>
+        <div class="grupo-editable">
+          <label>Fecha Inicio</label>
+          <div class="fila-visualizacion">
+            <p class="valor-info">{{ trabajoSeleccionado()?.fechaInicio }}</p>
+          </div>
+        </div>
+        <div class="grupo-editable">
+          <label>Fecha Fin</label>
+          <div class="fila-visualizacion">
+            <p class="valor-info">{{ trabajoSeleccionado()?.fechaFin || 'Pendiente' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grupo-editable ancho-completo">
+        <label>Descripción</label>
+        <div class="fila-visualizacion alinear-arriba">
+          <p class="valor-info texto-descripcion">{{ trabajoSeleccionado()?.descripcion }}</p>
+        </div>
+      </div>
+
+      <div class="acciones-modal-unificadas">
+        <button type="button" class="btn-guardar" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>
+}

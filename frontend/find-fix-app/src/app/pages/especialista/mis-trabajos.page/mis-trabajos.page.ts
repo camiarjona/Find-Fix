@@ -13,7 +13,7 @@ import { VisualizarTrabajoAppEspecialista } from '../../../models/trabajoApp-mod
   styleUrl: './mis-trabajos.page.css',
 })
 export class MisTrabajosPage implements OnInit {
-// Inyeccion de servicios
+  // Inyeccion de servicios
   private servicioTrabajoApp = inject(TrabajoAppService);
   // private servicioTrabajoExterno = inject(TrabajoExternoService);
   // private servicioEspecialista = inject(EspecialistaService); // Para obtener el ID del usuario actual
@@ -137,16 +137,16 @@ export class MisTrabajosPage implements OnInit {
           nombreCliente: 'Dibu Martínez',
         } as any,
         {
-            id: 103,
-            titulo: 'Pintura Completa Living',
-            estado: 'FINALIZADO',
-            origen: 'APP',
-            descripcion: 'Pintura látex lavable blanco.',
-            presupuesto: 85000,
-            fechaInicio: new Date('2023-10-01'),
-            fechaFin: new Date('2023-10-05'),
-            nombreCliente: 'Angel Di Maria',
-          } as any,
+          id: 103,
+          titulo: 'Pintura Completa Living',
+          estado: 'FINALIZADO',
+          origen: 'APP',
+          descripcion: 'Pintura látex lavable blanco.',
+          presupuesto: 85000,
+          fechaInicio: new Date('2023-10-01'),
+          fechaFin: new Date('2023-10-05'),
+          nombreCliente: 'Angel Di Maria',
+        } as any,
       ];
       this.aplicarFiltros();
       this.estaCargando.set(false);
@@ -188,7 +188,7 @@ export class MisTrabajosPage implements OnInit {
     let resultado = this.todosLosTrabajos;
 
     if (this.filtros.origen) {
-        resultado = resultado.filter(t => (t as any).origen === this.filtros.origen);
+      resultado = resultado.filter(t => (t as any).origen === this.filtros.origen);
     }
     if (this.filtros.titulo) {
       resultado = resultado.filter(t => t.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()));
@@ -197,7 +197,7 @@ export class MisTrabajosPage implements OnInit {
       resultado = resultado.filter(t => t.estado === this.filtros.estado);
     }
     if (this.filtros.desde) {
-      const d = new Date(this.filtros.desde); d.setHours(0,0,0,0);
+      const d = new Date(this.filtros.desde); d.setHours(0, 0, 0, 0);
       resultado = resultado.filter(t => new Date(t.fechaInicio) >= d);
     }
     if (this.filtros.hasta) {
@@ -218,7 +218,7 @@ export class MisTrabajosPage implements OnInit {
   cambiarEstadoRapido(trabajo: VisualizarTrabajoAppEspecialista, event: Event) {
     event.stopPropagation();
     const nuevoEstado = (event.target as HTMLSelectElement).value;
-    if(nuevoEstado === trabajo.estado) return;
+    if (nuevoEstado === trabajo.estado) return;
 
     // Logica local (Visual inmediata)
     const estadoAnterior = trabajo.estado;
@@ -274,7 +274,7 @@ export class MisTrabajosPage implements OnInit {
 
   guardarEdicionModal() {
     const trabajo = this.trabajoSeleccionado();
-    if(trabajo) {
+    if (trabajo) {
       trabajo.titulo = this.datosEdicion.titulo;
       trabajo.estado = this.datosEdicion.estado;
       trabajo.presupuesto = this.datosEdicion.presupuesto;
