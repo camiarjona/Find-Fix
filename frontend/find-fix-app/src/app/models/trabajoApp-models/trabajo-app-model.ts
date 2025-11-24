@@ -9,6 +9,7 @@ export interface VisualizarTrabajoAppCliente {
 }
 
 export interface VisualizarTrabajoAppEspecialista {
+  id: number;
   nombreCliente: string;
   titulo: string;
   descripcion: string;
