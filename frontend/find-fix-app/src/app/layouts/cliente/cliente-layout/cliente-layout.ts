@@ -14,27 +14,22 @@ import { UI_ICONS } from '../../../models/general/ui-icons';
   styleUrl: './cliente-layout.css',
 })
 export class ClienteLayout {
-
-  //Estados de la Barra Lateral
   isSidebarOpen = signal(true);
   isEspecialistaMenuOpen = signal(false);
   isMobileMenuOpen = signal(false);
 
+  isInvitationModalOpen = signal(false);
+
   public icons = UI_ICONS;
 
-  //ESTADOS PARA LOS CONTROLES DEL HEADER
-
-  /** Controla el modo de color (true = oscuro, false = claro) */
-  isDarkMode = signal(true); // 'true' para que la luna se muestre por defecto
-
-  /** Controla el modo de vista (false = cliente, true = especialista) */
-  isEspecialistaMode = signal(false); // 'false' para que el cliente esté activo por defecto
+  isDarkMode = signal(true);
+  isEspecialistaMode = signal(false);
 
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
 
-  // --- Funciones de la Barra Lateral ---
+
   toggleSidebar() {
     this.isSidebarOpen.update(isOpen => !isOpen);
     if (!this.isSidebarOpen()) {
@@ -66,16 +61,33 @@ export class ClienteLayout {
     this.router.navigateByUrl('/auth');
   }
 
-  /** Cambia el tema de oscuro a claro y viceversa */
   toggleTheme() {
     this.isDarkMode.update(prev => !prev);
-    // lógica para cambiar
     console.log("Modo oscuro:", this.isDarkMode());
   }
 
-  /** Cambia el rol de cliente a especialista y viceversa */
-  toggleRole() {
-    this.isEspecialistaMode.set(true);
-    this.router.navigateByUrl('/especialista/dashboard');
+ /** Cambia el rol de cliente a especialista y viceversa */
+  toggleRole(event: Event) {
+    const user = this.authService.currentUser();
+    const input = event.target as HTMLInputElement;
+
+    if (user?.roles?.includes('ESPECIALISTA') || user?.roles?.includes('ADMIN')) {
+        this.isEspecialistaMode.set(true);
+        this.router.navigateByUrl('/especialista/dashboard');
+    } else {
+        input.checked = false;
+        this.isEspecialistaMode.set(false);
+        this.isInvitationModalOpen.set(true);
+    }
+  }
+
+
+  irASolicitud() {
+    this.isInvitationModalOpen.set(false);
+    this.router.navigateByUrl('/cliente/solicitar-especialista/nueva');
+  }
+
+  cerrarModalInvitacion() {
+    this.isInvitationModalOpen.set(false);
   }
 }
