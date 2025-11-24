@@ -16,6 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/especialistas")
@@ -100,5 +103,14 @@ public class EspecialistaController {
 
         return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", especialistasFiltrados));
     }
+
+    @GetMapping("/detalle")
+    @PreAuthorize("hasAnyRole('CLIENTE')")
+   public ResponseEntity<ApiResponse<VerPerfilEspecialistaDTO>> verDetalle(@RequestParam String email) throws UsuarioNotFoundException, EspecialistaNotFoundException {
+        Especialista especialista = especialistaService.buscarPorEmail(email).orElseThrow (() -> new EspecialistaNotFoundException("Especialista no encontrado"));
+       VerPerfilEspecialistaDTO especialistaDTO = new VerPerfilEspecialistaDTO(especialista);
+        return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));
+    }
+    
 
 }

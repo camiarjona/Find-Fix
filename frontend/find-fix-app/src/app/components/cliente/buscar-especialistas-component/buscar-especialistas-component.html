@@ -1,0 +1,182 @@
+<div class="page-container">
+
+  <!-- HEADER Y FILTROS -->
+  <div class="filters-section">
+    <h2>Encuentra a tu experto</h2>
+
+    <div class="filters-grid">
+      <!-- Filtro Oficio -->
+      <div class="filter-group">
+        <label>Oficio</label>
+        <select [(ngModel)]="filtros.oficio">
+          <option value="">Todos</option>
+          @for (oficio of oficiosDisponibles(); track $index) {
+            <option [value]="oficio">{{oficio}}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Filtro Ciudad -->
+      <div class="filter-group">
+        <label>Ciudad</label>
+        <select [(ngModel)]="filtros.ciudad">
+          <option value="">Todas</option>
+          @for (ciudad of ciudades(); track $index) {
+            <option [value]="ciudad">{{ciudad}}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Filtro Calificación -->
+      <div class="filter-group">
+        <label>Calificación Mínima</label>
+        <select [(ngModel)]="filtros.minCalificacion">
+          <option [value]="0">Cualquiera</option>
+          <option [value]="3">3+ Estrellas</option>
+          <option [value]="4">4+ Estrellas</option>
+          <option [value]="5">5 Estrellas</option>
+        </select>
+      </div>
+
+      <!-- Botones Filtros -->
+      <div class="filter-actions">
+        <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
+        <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="especialistas-grid">
+    @for (esp of especialistas(); track esp.email) {
+      <article class="esp-card">
+        <div class="card-header">
+            <!-- Avatar -->
+            <div class="avatar">{{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}</div>
+
+            <div class="header-info">
+                <h3>{{ esp.nombre }} {{ esp.apellido }}</h3>
+                <span class="city-badge">{{ esp.ciudad }}</span>
+            </div>
+
+
+            <button class="icon-action-btn fav" (click)="toggleFavorito(esp)" title="Agregar a Favoritos">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
+        </button>
+
+        <button class="icon-action-btn" (click)="abrirModalDetalle(esp)" title="Ver Perfil Completo">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+        </button>
+        </div>
+
+        <div class="card-body">
+            <div class="rating">
+                ⭐ {{ esp.calificacionPromedio }} <span class="rating-label">Promedio</span>
+            </div>
+            <div class="oficios-list">
+                @for (oficio of esp.oficios; track $index) {
+                    <span class="oficio-tag">{{ oficio }}</span>
+                }
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button class="cta-button full-width" (click)="abrirModalContratar(esp)">
+                Contratar
+            </button>
+        </div>
+      </article>
+    } @empty {
+        <div class="empty-state">
+            <p>No se encontraron especialistas con esos filtros.</p>
+        </div>
+    }
+  </div>
+
+</div>
+
+@if (showModalDetalle()) {
+<div class="modal-overlay" (click)="cerrarModalDetalle()">
+    <div class="modal-card profile-modal" (click)="$event.stopPropagation()">
+
+        @if (isLoadingDetalle() || !especialistaSeleccionaCompleto()) {
+            <div class="loading-state">
+                <p>Cargando perfil...</p>
+            </div>
+        } @else {
+            <div class="profile-header-modal">
+                <div class="avatar-large">
+                    {{ especialistaSeleccionaCompleto()?.nombre.charAt(0) }}{{ especialistaSeleccionaCompleto()?.apellido.charAt(0) }}
+                </div>
+                <h2>{{ especialistaSeleccionaCompleto()?.nombre }} {{ especialistaSeleccionaCompleto()?.apellido }}</h2>
+                <p class="profile-city">📍 {{ especialistaSeleccionaCompleto()?.ciudad }}</p>
+                <div class="rating-large">
+                    ⭐ {{ especialistaSeleccionaCompleto()?.calificacionPromedio }} <span class="rating-count">/ 5.0</span>
+                </div>
+            </div>
+
+            <div class="profile-body-modal">
+                <div class="about-section">
+                    <h4>Sobre mí</h4>
+                    <p class="desc-text">{{ especialistaSeleccionaCompleto()?.descripcion || 'Sin descripción.' }}</p>
+                </div>
+
+                <h4>Oficios</h4>
+                <div class="oficios-tags-large">
+                    @for (oficio of especialistaSeleccionaCompleto()?.oficios; track $index) {
+                        <span class="tag-large">{{ oficio }}</span>
+                    }
+                </div>
+
+                <div class="contact-info">
+                    <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
+                    </div>
+            </div>
+
+            <div class="profile-actions-modal">
+                <button class="btn-secondary-icon" (click)="toggleFavorito(especialistaSeleccionado)" title="Favoritos">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                </button>
+
+                <button class="cta-button flex-grow" (click)="abrirModalContratar(especialistaSeleccionado)">
+                    Contratar Ahora
+                </button>
+            </div>
+        }
+
+        <button class="close-corner-btn" (click)="cerrarModalDetalle()">✕</button>
+    </div>
+</div>
+}
+@if (showModalContratar()) {
+<div class="modal-overlay" (click)="cerrarModalContratar()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Solicitar Servicio</h3>
+        <p class="modal-desc">Para: <strong>{{ especialistaSeleccionado?.nombre }}</strong></p>
+
+        <div class="form-group">
+            <label>Describe el problema o trabajo a realizar:</label>
+            <textarea
+                [(ngModel)]="descripcionTrabajo"
+                rows="4"
+                placeholder="Ej: Necesito reparar una fuga de agua en la cocina..."
+            ></textarea>
+        </div>
+
+        <div class="modal-actions">
+            <button class="cta-button-outline" (click)="cerrarModalContratar()">Cancelar</button>
+            <button class="cta-button" (click)="enviarSolicitud()" [disabled]="!descripcionTrabajo || isSubmitting()">
+                {{ isSubmitting() ? 'Enviando...' : 'Enviar Solicitud' }}
+            </button>
+        </div>
+    </div>
+</div>
+}
