@@ -4,14 +4,12 @@
   width: 100%;
   overflow: hidden;
   background-color: #f8f9fa;
-  /* Fondo de puntos*/
+  
   background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23e0e0e0'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
 
-/*
- * ESTILOS MÓVIL (Por defecto)
-*/
+
 
 .mobile-header {
   display: flex;
@@ -54,7 +52,7 @@
 }
 
 
-/* --- Barra Lateral (Oculta en móvil) --- */
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -150,7 +148,7 @@
   visibility: visible;
 }
 
-/* --- Área de Contenido (Móvil) --- */
+
 .content-area {
   padding: 1.5rem;
   height: 100vh;
@@ -159,9 +157,7 @@
   padding-top: calc(60px + 1.5rem);
 }
 
-/*
- * ESTILOS HAMBURGUESA GENERAL
-*/
+
 .sidebar .hamburger-btn {
   padding: 0.5rem;
   background: transparent;
@@ -196,9 +192,7 @@
 }
 
 
-/*
- * ESTILOS DE MENÚ (Comunes)
-*/
+
 
 .nav-menu {
   list-style: none;
@@ -253,7 +247,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* Hovers */
+
 .nav-menu li a:hover {
   background-color: transparent;
   color: var(--primary-color, #F58634);
@@ -263,7 +257,7 @@
   background-color: #fdfaf7;
 }
 
-/* Estado Activo */
+
 .nav-menu li a.active {
   background-color: var(--primary-color, #F58634);
   color: #ffffff;
@@ -276,7 +270,7 @@
   box-shadow: none;
 }
 
-/* Dropdown Activo */
+
 .nav-menu li.dropdown-active > a {
   background-color: var(--primary-color, #F58634);
   color: #ffffff;
@@ -290,7 +284,7 @@
   border-color: #ffffff;
 }
 
-/* Flecha Dropdown */
+
 .nav-item-dropdown .arrow {
   border: solid var(--text-light, #555);
   border-width: 0 2px 2px 0;
@@ -305,7 +299,7 @@
   transform: rotate(-135deg);
 }
 
-/* Submenú */
+
 .submenu {
   list-style: none;
   padding-left: calc(32px + 0.75rem + 0.5rem);
@@ -334,7 +328,7 @@
   background-color: transparent;
 }
 
-/* Footer (Cerrar Sesión) */
+
 .sidebar-footer a {
   display: flex;
   align-items: center;
@@ -355,16 +349,14 @@
   color: #b91c1c;
 }
 
-/* Separador */
+
 .nav-separator {
   height: 1px;
   background-color: #e5e7eb;
   margin: 0.75rem 0.5rem;
 }
 
-/*
- * Controles del Header Principal
-*/
+
 .main-header {
   display: flex;
   justify-content: flex-end;
@@ -383,7 +375,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* --- Estilo del Botón de Tema (Sol/Luna) --- */
+
 .theme-toggle {
   background-color: #f0f0f0;
   border: none;
@@ -405,9 +397,9 @@
   width: 20px;
   height: 20px;
 }
-/* .icon-sun { display: none; } */ /* (Para lógica futura) */
+ 
 
-/* --- Separador --- */
+
 .header-divider {
   width: 1px;
   height: 24px;
@@ -415,7 +407,7 @@
   margin: 0 0.25rem;
 }
 
-/* --- Estilo del Toggle de Rol (Cliente/Especialista) --- */
+
 .role-toggle {
   position: relative;
   display: flex;
@@ -460,7 +452,7 @@
   transform: scale(1.15);
 }
 
-/* El círculo que se desliza */
+
 .toggle-slider {
   position: absolute;
   top: 4px;
@@ -473,29 +465,27 @@
   transition: transform 0.3s ease;
 }
 
-/* --- Lógica Visual (para cuando se active) --- */
 
-/* Cuando está chequeado (modo Especialista) */
+
+
 .toggle-checkbox:checked + .toggle-icons .icon-cliente svg {
-  color: #6c757d; /* Cliente se vuelve inactivo */
+  color: #6c757d; 
 
   transform: scale(0.9);
 }
 .toggle-checkbox:checked + .toggle-icons .icon-especialista svg {
-  color: var(--primary-color, #F58634); /* Especialista se activa */
+  color: var(--primary-color, #F58634); 
   transform: scale(1.50);
 }
 .toggle-checkbox:checked ~ .toggle-slider {
-  transform: translateX(32px); /* Mueve el slider */
+  transform: translateX(32px); 
 }
 
 
-/*
- * ESTILOS ESCRITORIO (Pantallas grandes)
-*/
+
 @media (min-width: 900px) {
 
-  /* Ocultamos las cosas de móvil */
+  
   .mobile-header,
   .sidebar-overlay {
     display: none;
@@ -521,12 +511,12 @@
     justify-content: space-between;
   }
 
-  /* Mostramos el botón de toggle de ESCRITORIO */
+  
   .sidebar .desktop-toggle {
     display: flex;
   }
 
-  /* Ocultamos el botón de CERRAR de MÓVIL */
+  
   .sidebar .mobile-close {
     display: none;
   }
@@ -548,7 +538,7 @@
     margin-bottom: 1.5rem;
   }
 
-  /* --- ESTILOS DE "COLAPSADO" --- */
+  
   .cliente-dashboard.sidebar-collapsed .sidebar {
     width: 96px;
     padding: 1.5rem 1rem;
@@ -602,3 +592,4 @@
     display: none;
   }
 }
+

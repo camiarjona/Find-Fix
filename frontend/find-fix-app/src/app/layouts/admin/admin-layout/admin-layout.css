@@ -4,12 +4,12 @@
   width: 100%;
   overflow: hidden;
   background-color: #f8f9fa;
-  /* Fondo de puntos sutil */
+  
   background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23e0e0e0'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
 
-/* --- ESTILOS MÓVIL --- */
+
 
 .mobile-header {
   display: flex;
@@ -56,7 +56,7 @@
   transition: all 0.3s ease;
 }
 
-/* --- Sidebar --- */
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -78,7 +78,7 @@
   transform: translateX(0);
 }
 
-/* Botón cerrar móvil */
+
 .sidebar .mobile-close {
   display: flex;
   padding: 0.5rem;
@@ -134,7 +134,7 @@
   visibility: visible;
 }
 
-/* Hamburguesa Desktop */
+
 .sidebar .hamburger-btn {
   padding: 0.5rem;
   background: transparent;
@@ -160,7 +160,7 @@
 
 .sidebar .desktop-toggle { display: none; }
 
-/* --- Menú --- */
+
 .nav-menu {
   list-style: none;
   padding: 0;
@@ -209,7 +209,7 @@
   background-color: #fdfaf7;
 }
 
-/* Footer Sidebar */
+
 .sidebar-footer a {
   display: flex;
   align-items: center;
@@ -230,7 +230,7 @@
   color: #b91c1c;
 }
 
-/* --- Contenido Principal --- */
+
 .content-area {
   display: flex;
   flex-direction: column;
@@ -279,7 +279,7 @@
 }
 .theme-toggle svg { width: 20px; height: 20px; }
 
-/* --- ESTILOS ESCRITORIO --- */
+
 @media (min-width: 900px) {
   .mobile-header, .sidebar-overlay { display: none; }
 
@@ -309,7 +309,7 @@
 
   .main-header { margin-bottom: 1.5rem; }
 
-  /* Colapsado */
+  
   .admin-dashboard.sidebar-collapsed .sidebar {
     width: 96px;
     padding: 1.5rem 1rem;
@@ -326,3 +326,4 @@
   .admin-dashboard.sidebar-collapsed .nav-icon svg { width: 22px; height: 22px; }
   .admin-dashboard.sidebar-collapsed .sidebar-footer a { justify-content: center; gap: 0; }
 }
+
