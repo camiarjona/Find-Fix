@@ -1,0 +1,203 @@
+/* Mobile First */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- FILTROS --- */
+.filters-section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 col en movil */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-actions button {
+    flex: 1;
+}
+
+/* --- GRID ESPECIALISTAS --- */
+.especialistas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* TARJETA */
+.esp-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.esp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.header-info {
+    flex-grow: 1;
+}
+
+.header-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.city-badge {
+    font-size: 0.8rem;
+    color: #666;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc; /* Gris por defecto */
+    transition: color 0.2s;
+}
+.fav-btn:hover {
+    color: #e74c3c; /* Rojo al hover */
+}
+.fav-btn svg { width: 24px; height: 24px; }
+
+.card-body {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.rating {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.oficio-tag {
+    display: inline-block;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* --- BOTONES --- */
+.cta-button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.cta-button-outline {
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.full-width { width: 100%; }
+
+/* --- MODAL --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0 20px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .filters-grid {
+        grid-template-columns: repeat(4, 1fr); /* Filtros en fila */
+        align-items: end;
+    }
+    .filter-actions { margin-top: 0; }
+}

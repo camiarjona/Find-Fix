@@ -1,0 +1,109 @@
+<div class="page-container">
+
+  <div class="filters-section">
+    <h2>Encuentra a tu experto</h2>
+
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Oficio</label>
+        <select [(ngModel)]="filtros.oficio">
+          <option value="">Todos</option>
+          @for (oficio of oficiosDisponibles(); track $index) {
+            <option [value]="oficio">{{oficio}}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Ciudad</label>
+        <select [(ngModel)]="filtros.ciudad">
+          <option value="">Todas</option>
+          @for (ciudad of ciudades(); track $index) {
+            <option [value]="ciudad">{{ciudad}}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Calificación Mínima</label>
+        <select [(ngModel)]="filtros.minCalificacion">
+          <option [value]="0">Cualquiera</option>
+          <option [value]="3">3+ Estrellas</option>
+          <option [value]="4">4+ Estrellas</option>
+          <option [value]="5">5 Estrellas</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
+        <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="especialistas-grid">
+    @for (esp of especialistas(); track esp.email) {
+      <article class="esp-card">
+        <div class="card-header">
+            <div class="avatar">{{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}</div>
+            <div class="header-info">
+                <h3>{{ esp.nombre }} {{ esp.apellido }}</h3>
+                <span class="city-badge">{{ esp.ciudad }}</span>
+            </div>
+
+            <button class="fav-btn" (click)="toggleFavorito(esp)" title="Agregar a favoritos">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="card-body">
+            <div class="rating">
+                ⭐ {{ esp.calificacionPromedio }} <span class="rating-label">Promedio</span>
+            </div>
+            <div class="oficios-list">
+                @for (oficio of esp.oficios; track $index) {
+                    <span class="oficio-tag">{{ oficio }}</span>
+                }
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button class="cta-button full-width" (click)="abrirModalContratar(esp)">
+                Contratar
+            </button>
+        </div>
+      </article>
+    } @empty {
+        <div class="empty-state">
+            <p>No se encontraron especialistas con esos filtros.</p>
+        </div>
+    }
+  </div>
+
+</div>
+
+@if (showModalContratar()) {
+<div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Solicitar Servicio</h3>
+        <p>Estás contactando a <strong>{{ especialistaSeleccionado?.nombre }}</strong></p>
+
+        <div class="form-group">
+            <label>Describe el problema o trabajo a realizar:</label>
+            <textarea
+                [(ngModel)]="descripcionTrabajo"
+                rows="4"
+                placeholder="Ej: Necesito reparar una fuga de agua en la cocina..."
+            ></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="cta-button-outline" (click)="cerrarModal()">Cancelar</button>
+            <button class="cta-button" (click)="enviarSolicitud()" [disabled]="!descripcionTrabajo || isSubmitting()">
+                {{ isSubmitting() ? 'Enviando...' : 'Enviar Solicitud' }}
+            </button>
+        </div>
+    </div>
+</div>
+}
