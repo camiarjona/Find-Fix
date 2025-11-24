@@ -37,7 +37,6 @@ export class EspecialistaLayout {
 
   logout() {
     this.authService.logout();
-    this.router.navigateByUrl('/auth');
   }
 
   toggleTheme() {

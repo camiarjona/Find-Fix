@@ -16,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -111,6 +109,12 @@ public class EspecialistaController {
        VerPerfilEspecialistaDTO especialistaDTO = new VerPerfilEspecialistaDTO(especialista);
         return ResponseEntity.ok(new ApiResponse<>("Perfil:", especialistaDTO));
     }
-    
+
+    @GetMapping("/publico")
+    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerEspecialistasPublico() throws EspecialistaNotFoundException, UsuarioNotFoundException {
+        // Reutilizamos el servicio existente
+        List<Especialista> especialistas = especialistaService.obtenerEspecialistasDisponibles();
+        return ResponseEntity.ok(new ApiResponse<>("Lista pública encontrada☑️", especialistas.stream().map(EspecialistaListadoDTO::new)));
+    }
 
 }

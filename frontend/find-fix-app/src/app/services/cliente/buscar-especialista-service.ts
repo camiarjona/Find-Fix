@@ -59,4 +59,9 @@ export class BuscarEspecialistaService {
     const params = new HttpParams().set('email', email);
     return this.http.get<ApiResponse<PerfilEspecialista>>(`${this.apiUrl}/especialistas/detalle`, { params });
   }
+
+
+ obtenerDisponiblesPublico(): Observable<ApiResponse<EspecialistaDTO[]>> {
+    return this.http.get<ApiResponse<EspecialistaDTO[]>>(`${this.apiUrl}/especialistas/publico`);
+  }
 }

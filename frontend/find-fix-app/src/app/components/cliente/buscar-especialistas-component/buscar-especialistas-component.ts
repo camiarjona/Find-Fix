@@ -122,9 +122,7 @@ export class BuscarEspecialistasComponent {
   cerrarModalDetalle() {
     this.showModalDetalle.set(false);
   }
-
-
-  toggleFavorito(esp: EspecialistaDTO) {
+  toggleFavorito(esp: EspecialistaDTO | PerfilEspecialista ) {
     alert('La funcionalidad de Favoritos estará disponible próximamente.');
   }
 }
