@@ -97,9 +97,6 @@ public class ResenaServiceImpl implements ResenaService {
 
         List<Resena> resenas = repository.findAllByTrabajoApp_Usuario(usuario);
 
-        if(resenas.isEmpty()) {
-            throw new ResenaException("Usted no ha dejado ninguna reseña.");
-        }
         return resenas;
     }
 
