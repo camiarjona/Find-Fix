@@ -1,10 +1,15 @@
-.general-html {
-  width: 95%;
-  margin: 20px auto;
-  padding: 0;
-  background-color: transparent;
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  padding-bottom: 4rem;
 }
 
+.admin-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
 
 .header-contenedor {
   width: 100%;
@@ -21,8 +26,28 @@
 
 .rol-titulo {
   color: var(--text-main);
+  /* --- Header Section --- */
+}
+
+.header-section {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-content h1 {
   font-size: 1.8rem;
-  margin: 0 0 10px 0;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
 }
 
 .rol-subtitulo {
@@ -30,6 +55,27 @@
   font-size: 0.9rem;
 }
 
+.header-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* --- Botones Principales --- */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(245, 134, 52, 0.2);
+}
 
 .tabla-general {
   overflow-x: auto;
@@ -89,10 +135,63 @@
   width: 100px;
 }
 
-.acciones-opciones {
+.btn-primary:hover {
+  background-color: #e07528;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px rgba(245, 134, 52, 0.3);
+}
+
+/* --- Form Area Animation --- */
+.form-area {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+  opacity: 0;
+  margin-bottom: 0;
+}
+
+.form-area.visible {
+  max-height: 500px;
+  opacity: 1;
+  margin-bottom: 30px;
+}
+
+/* --- Grid de Oficios (NUEVO DISEÑO) --- */
+.oficios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.oficio-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 20px;
   display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.oficio-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  border-color: #fed7aa;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #fff7ed;
+  color: var(--primary-color);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 10px;
+  flex-shrink: 0;
 }
 
 .icon-btn {
@@ -106,27 +205,99 @@
   color: var(--text-secondary);
 }
 
-.icon-btn:hover {
-  background-color: #fee2e2;
+.card-icon svg {
+  width: 24px;
+  height: 24px;
 }
 
-
-.button-form-contenedor {
+.card-info {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+}
+
+.oficio-name {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 1.1rem;
+}
+
+.oficio-id {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  display: flex;
   align-items: center;
-  margin-top: 20px;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
 }
 
-.oficio-list-footer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.action-btn:hover {
+  background-color: var(--bg-app);
+  color: var(--text-main);
 }
 
+.action-btn.delete:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-color: #fee2e2;
+}
 
-.alert-message {
-  background-color: var(--primary-color);
+.action-btn.edit:hover {
+  background-color: #eff6ff;
+  color: #3b82f6;
+  border-color: #dbeafe;
+}
+
+/* --- Estados --- */
+.loading-state,
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border-radius: 16px;
+  border: 1px dashed var(--border-color);
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Toast Notification --- */
+.toast-message {
   position: fixed;
   top: 20px;
   left: 50%;
@@ -140,7 +311,18 @@
   text-align: center;
   box-shadow: 0 4px 15px var(--shadow-color);
   font-size: 0.9rem;
+  right: 20px;
+  background: var(--bg-card);
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
   align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-left: 5px solid;
+  font-weight: 500;
 }
 
 .alert-message.success {
@@ -149,35 +331,36 @@
   border-color: var(--primary-color);
 }
 
+.toast-message.success {
+  border-color: #10b981;
+  color: #065f46;
+}
 
-@media (min-width: 768px) {
-  .general-html {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
+.toast-message.error {
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
 
-  .header-contenedor {
-    margin: 0 auto 50px;
-    padding: 20px 30px;
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-section {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
   }
 
-  .rol-titulo {
-    font-size: 2.2rem;
-  }
-
-  .roles-tabla th {
-    padding: 18px 25px;
-    font-size: 0.85rem;
-  }
-
-  .roles-tabla td {
-    padding: 20px 25px;
-  }
-
-  .alert-message {
-    top: 50px;
-    max-width: 500px;
-    font-size: 1rem;
+  .btn-primary {
+    justify-content: center;
   }
 }

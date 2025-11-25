@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { LoginCredentials, RegisterCredentials } from '../../models/user/user.model';
 import { RegisterForm } from "../../components/auth/register-form/register-form";
 import { LoginForm } from "../../components/auth/login-form/login-form";
+import { ModalFeedbackComponent } from "../../components/general/modal-feedback.component/modal-feedback.component";
 
 @Component({
   selector: 'app-auth-page',
@@ -12,7 +13,8 @@ import { LoginForm } from "../../components/auth/login-form/login-form";
   imports: [
     CommonModule,
     RegisterForm,
-    LoginForm
+    LoginForm,
+    ModalFeedbackComponent
 ],
   templateUrl: './auth.page.html',
   styleUrl: './auth.page.css'
@@ -22,6 +24,17 @@ export class AuthPage implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
+  // Feedback modal state
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+
+  mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+  }
+
+  cerrarFeedback() {
+    this.feedbackData = { ...this.feedbackData, visible: false };
+  }
 
   public isLoginView = signal<boolean>(true);
   public authError = signal<string | null>(null);
@@ -76,7 +89,7 @@ export class AuthPage implements OnInit {
     this.authError.set(null);
     this.authService.register(credentials).subscribe();
     console.log('Datos de registro:', credentials);
-    alert('¡Registro exitoso!. Ahora inicia sesión.');
+    this.mostrarFeedback('Registro exitoso', 'Inicia sesión para continuar')
     this.showLoginView();
   }
 

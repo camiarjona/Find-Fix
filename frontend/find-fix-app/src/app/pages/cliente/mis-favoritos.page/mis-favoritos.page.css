@@ -1,169 +1,504 @@
 /* Contenedor principal de la página */
 .favoritos-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-    background: var(--bg-card);
-    border-radius: 12px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
 }
 
 .page-title {
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 5px;
-    font-size: 2.2rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 2.2rem;
 }
 
 .subtitle {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: 40px;
-    font-size: 1.1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  font-size: 1.1rem;
 }
 
-/* Estilos de la lista (Grid) */
-.favoritos-list {
-    display: grid;
-    gap: 25px;
-    /* Crea columnas responsivas que midan al menos 300px */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 15px;
+}
+
+.header-section {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+}
+
+/* --- GRID DE TARJETAS --- */
+.especialistas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 /* Estilos de la Tarjeta (Card) individual */
 .favorito-card {
-    background: var(--bg-app);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    transition: transform 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
 }
 
 .favorito-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 20px var(--shadow-color);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 .card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
 }
 
 .initials {
-    width: 50px;
-    height: 50px;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-right: 15px;
-    flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-right: 15px;
+  flex-shrink: 0;
 }
 
 .info h2 {
-    font-size: 1.3rem;
-    margin: 0 0 3px;
-    color: var(--text-main);
+  font-size: 1.3rem;
+  margin: 0 0 3px;
+  color: var(--text-main);
 }
 
 .info .email {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 .oficio {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin: 5px 0 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 5px 0 0;
+}
+
+.esp-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+}
+
+.esp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px var(--shadow-color);
+  border-color: var(--primary-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.header-info {
+  flex-grow: 1;
+}
+
+.header-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.city-badge {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: var(--bg-app);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.icon-action-btn {
+  background: var(--bg-app);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  margin-left: 5px;
+}
+
+.icon-action-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+/* Estilo especial para el botón de favorito activo (para quitarlo) */
+.icon-action-btn.fav-active {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.icon-action-btn.fav-active:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.icon-action-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .card-body {
-    flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  flex-grow: 1;
+  margin-bottom: 20px;
 }
 
 .card-body .meta {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-top: 5px;
-    margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+  margin-bottom: 20px;
 }
 
-.actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: auto; /* Empuja las acciones al final */
+.oficios-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-/* Estilos de botones (adaptar a tu librería si usas Bootstrap/Material) */
-.btn {
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    border: none;
-    transition: background-color 0.2s, opacity 0.2s;
-    flex-grow: 1;
+.oficio-tag {
+  display: inline-block;
+  background-color: #e0f2fe;
+  color: #0284c7;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* --- BOTONES GENERALES --- */
+.cta-button {
+  background: var(--primary-color);
+  color: var(--text-inverse);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    color: var(--text-inverse);
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
 }
+
 .btn-secondary {
-    background-color: var(--bg-app);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
+
 .btn-danger {
-    background-color: #dc3545;
-    color: var(--text-inverse);
+  background-color: #dc3545;
+  color: var(--text-inverse);
 }
+
 .btn:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
+
+.cta-button:hover {
+  background-color: #e07024;
+}
+
 .btn-secondary:hover {
   background-color: var(--border-color);
 }
 
+.cta-button:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+}
 
-/* Estado Vacío y Mensajes de Estado */
+.cta-button-outline {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button-outline:hover {
+  background-color: var(--bg-app);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* --- ESTADOS VACIO / CARGA --- */
 .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    border: 2px dashed var(--border-color);
-    border-radius: 10px;
-    margin-top: 30px;
-    background: var(--bg-card);
+  text-align: center;
+  padding: 60px 20px;
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  margin-top: 30px;
+  background: var(--bg-card);
 }
+
 .empty-state p {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin-bottom: 25px;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 25px;
 }
-.loading-message, .error-message {
-    text-align: center;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    font-weight: 500;
-}
+
+.loading-message,
 .error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  background: var(--bg-app);
+  border-radius: 8px;
+  border: 1px dashed var(--border-color);
+}
+
+.error-message {
+  color: #b91c1c;
+}
+
+/* --- MODALES (Copiados de referencia) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px var(--shadow-color);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.profile-modal {
+  max-width: 400px;
+  text-align: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.profile-header-modal {
+  background-color: var(--bg-app);
+  padding: 30px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-large {
+  width: 80px;
+  height: 80px;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(245, 134, 52, 0.3);
+}
+
+.profile-header-modal h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.profile-city {
+  color: var(--text-secondary);
+  margin: 5px 0 10px;
+}
+
+.rating-large {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.rating-count {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.rating {
+  margin-bottom: 1rem;
+}
+
+.profile-body-modal {
+  padding: 20px;
+}
+
+.about-section {
+  margin-bottom: 20px;
+}
+
+.desc-text {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.oficios-tags-large {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 8px;
+}
+
+.tag-large {
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.contact-info {
+  background: var(--bg-app);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.profile-actions-modal {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+}
+
+.flex-grow {
+  flex: 1;
+}
+
+.close-corner-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.close-corner-btn:hover {
+  color: var(--text-main);
+  background-color: var(--shadow-color);
+  border-radius: 50%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: inherit;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background-color: var(--bg-input);
+  color: var(--text-main);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }

@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrl: './solicitudes.page.css',
 })
 export class SolicitudesPage implements OnInit {
-   private servicioEspecialista = inject(EspecialistaService);
+  private servicioEspecialista = inject(EspecialistaService);
   private router = inject(Router);
 
   solicitudesVisibles = signal<any[]>([]);
@@ -37,8 +37,7 @@ export class SolicitudesPage implements OnInit {
   filtroTexto = '';
 
   ngOnInit() {
-    // this.cargarDatosReales();
-    this.cargarDatosFalsos();
+    this.cargarDatosReales();
   }
 
   formatearEstado(estado: string): string {
@@ -66,48 +65,6 @@ export class SolicitudesPage implements OnInit {
     this.esModalNavegacion.set(false);
   }
 
-  // (Datos Falsos)
-  cargarDatosFalsos() {
-    this.estaCargando.set(true);
-    setTimeout(() => {
-      this.todasLasSolicitudes = [
-        {
-          id: 1,
-          cliente: 'María Rodriguez',
-          descripcion: 'Tengo una fuga debajo de la bacha de la cocina, necesito urgente cambiar el flexible.',
-          fechaSolicitud: new Date('2023-11-24'),
-          estado: 'PENDIENTE'
-        },
-        {
-          id: 2,
-          cliente: 'Pedro Pascal',
-          descripcion: 'Necesito instalar dos ventiladores de techo en las habitaciones.',
-          fechaSolicitud: new Date('2023-11-22'),
-          estado: 'PENDIENTE'
-        },
-        {
-          id: 3,
-          cliente: 'Lionel Messi',
-          descripcion: 'Se trabó la persiana del living y no baja.',
-          fechaSolicitud: new Date('2023-11-20'),
-          estado: 'ACEPTADO'
-        },
-        {
-          id: 4,
-          titulo: 'Pintura habitación',
-          cliente: 'Dibu Martinez',
-          descripcion: 'Pintar una habitación de 3x3 color blanco.',
-          fechaSolicitud: new Date('2023-11-15'),
-          estado: 'RECHAZADO'
-        }
-      ];
-      this.aplicarFiltros();
-      this.estaCargando.set(false);
-    }, 800);
-  }
-
-  /*
-  // --- BACKEND REAL (Para el futuro) ---
   cargarDatosReales() {
     this.estaCargando.set(true);
     this.servicioEspecialista.getSolicitudesRecibidas().subscribe({
@@ -123,7 +80,6 @@ export class SolicitudesPage implements OnInit {
       }
     });
   }
-  */
 
   // Filtros
   aplicarFiltros() {
@@ -155,49 +111,26 @@ export class SolicitudesPage implements OnInit {
   }
 
   aceptarSolicitud(solicitud: any) {
-    // Lógica Local (Simulación)
-    solicitud.estado = 'ACEPTADO';
-    this.aplicarFiltros();
-
-    this.esModalNavegacion.set(true);
-
-    this.mostrarAlerta(
-      `Has aceptado el trabajo de ${solicitud.cliente}. \n\nAhora puedes visualizarlo en "Mis Trabajos".`,
-      'success'
-    );
-
-    /*
-    // --- BACKEND REAL ---
     this.servicioEspecialista.responderSolicitud(solicitud.id, 'ACEPTADO').subscribe({
       next: () => {
-         this.cargarDatosReales(); // Recargar datos del servidor
-         this.esModalNavegacion.set(true);
-         this.mostrarAlerta('Solicitud aceptada correctamente', 'success');
+        this.cargarDatosReales(); // Recargar datos del servidor
+        this.esModalNavegacion.set(true);
+        this.mostrarAlerta('Solicitud aceptada correctamente', 'success');
       },
       error: () => this.mostrarAlerta('Error al aceptar la solicitud', 'error')
     });
-    */
+
   }
 
   rechazarSolicitud(solicitud: any) {
-    // Lógica Local (Simulación)
-    solicitud.estado = 'RECHAZADO';
-    this.aplicarFiltros();
-
-    this.esModalNavegacion.set(false);
-    this.mostrarAlerta(`Has rechazado la solicitud de ${solicitud.cliente}.`, 'success');
-
-    /*
-    // --- BACKEND REAL ---
     this.servicioEspecialista.responderSolicitud(solicitud.id, 'RECHAZADO').subscribe({
       next: () => {
-         this.cargarDatosReales();
-         this.esModalNavegacion.set(false);
-         this.mostrarAlerta('Solicitud rechazada', 'success');
+        this.cargarDatosReales();
+        this.esModalNavegacion.set(false);
+        this.mostrarAlerta('Solicitud rechazada', 'success');
       },
       error: () => this.mostrarAlerta('Error al rechazar', 'error')
     });
-    */
   }
 
   irAMisTrabajos() {

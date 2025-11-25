@@ -16,7 +16,6 @@
   margin-bottom: 2rem;
 }
 
-
 .profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -29,7 +28,6 @@
     grid-template-columns: 1fr;
   }
 }
-
 
 .card {
   background: var(--bg-card);
@@ -70,6 +68,35 @@
   padding: 1.5rem;
 }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+/* --- AGREGADO: Estilos para el botón del "ojito" --- */
+.toggle-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.toggle-btn svg {
+  width: 20px;
+  height: 20px;
+}
+/* -------------------------------------------------- */
 
 .user-banner {
   display: flex;
@@ -108,7 +135,6 @@
   border-radius: 12px;
   margin-top: 4px;
 }
-
 
 .data-list {
   list-style: none;
@@ -150,7 +176,6 @@
 .value.locked {
   color: var(--text-secondary);
 }
-
 
 .edit-pencil {
   background: none;
@@ -203,7 +228,6 @@
 .action-btn:hover {
   background-color: var(--bg-app);
 }
-
 
 .security-form {
   display: flex;

@@ -12,7 +12,6 @@
   padding: 1rem;
 }
 
-
 .form-container {
   background: var(--bg-card);
   border-radius: 12px;
@@ -23,7 +22,6 @@
   overflow: hidden;
 }
 
-
 .form-container h2 {
   font-size: 1.3rem;
   color: var(--primary-color);
@@ -32,7 +30,6 @@
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 10px;
   text-align: center;
-
 }
 
 .form-container input[type="text"] {
@@ -47,30 +44,145 @@
   color: var(--text-main);
 }
 
-
-.form-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Eliminamos el position: fixed/overlay para que respete la animación del padre */
+:host {
+  display: block;
+  width: 100%;
 }
 
+.form-wrapper {
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  /* Borde sutil */
+  /* Sombra interna suave para dar sensación de "panel de control" */
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  padding: 30px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- Header --- */
+.form-header {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.form-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 4px 0;
+}
+
+.form-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- Input --- */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  /* Padding extra a la izq para el icono */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.modern-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.15);
+  /* Anillo naranja suave */
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.modern-input:focus+.input-icon {
+  color: var(--primary-color);
+}
+
+/* --- Mensaje Error --- */
+.error-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border: 1px solid #fca5a5;
+}
+
+/* --- Botones --- */
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border-color);
+}
 
 .cta-button {
   background: var(--primary-color);
   color: var(--text-inverse);
   padding: 12px 20px;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  transition: background-color 0.2s;
 }
 
-.cta-button:hover {
+.btn-cancel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: var(--bg-app);
+  border-color: var(--text-secondary);
+}
+
+.btn-submit {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit:hover:not(:disabled) {
   background-color: #e07024;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(245, 134, 52, 0.2);
 }
 
 .cta-button:disabled {
@@ -95,7 +207,6 @@
 .cta-button-cancel:hover {
   background-color: var(--bg-app);
 }
-
 
 .form-error-message {
   color: #dc3545;
@@ -129,13 +240,49 @@
     min-width: 120px;
   }
 
-  .cta-button-cancel {
-    background-color: var(--bg-card);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
+  .btn-submit:disabled {
+    background-color: #fed7aa;
+    cursor: not-allowed;
   }
 
-  .cta-button-cancel:hover {
-    background-color: var(--bg-app);
+  /* Spinner pequeño para el botón */
+  .spinner-mini {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--text-inverse);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .form-footer {
+      flex-direction: column-reverse;
+      /* Botón guardar arriba en móvil */
+    }
+
+    .btn-cancel,
+    .btn-submit {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .cta-button-cancel {
+      background-color: var(--bg-card);
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .cta-button-cancel:hover {
+      background-color: var(--bg-app);
+    }
   }
 }

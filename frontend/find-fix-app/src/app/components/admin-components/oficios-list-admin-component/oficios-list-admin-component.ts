@@ -1,10 +1,11 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OficiosService } from '../../../services/admin-services/oficios-service';
-import { messageConfirm, OficioToDelete } from '../../../models/admin-models/oficio-model';
 import { HttpErrorResponse } from '@angular/common/http';
+
 import { AdminDialogConfirm } from '../admin-dialog-confirm/admin-dialog-confirm';
 import { OficiosFormAdminComponent } from "../oficios-form-admin-component/oficios-form-admin-component";
+import { OficiosService } from '../../../services/admin-services/oficios-service';
+import { messageConfirm, OficioToDelete } from '../../../models/admin-models/oficio-model';
 
 @Component({
   selector: 'app-oficios-list-admin-component',
@@ -12,30 +13,14 @@ import { OficiosFormAdminComponent } from "../oficios-form-admin-component/ofici
   templateUrl: './oficios-list-admin-component.html',
   styleUrl: './oficios-list-admin-component.css',
 })
-export class OficiosListAdminComponent {
+export class OficiosListAdminComponent implements OnInit {
 
   private oficiosService = inject(OficiosService);
+
   public oficios = this.oficiosService.oficios;
   public formStatus = this.oficiosService.formStatus;
 
   public isLoading = signal(true);
-
-  ngOnInit(): void {
-  console.log("Iniciando carga de oficios...");
-
-  this.isLoading.set(true);
-  this.oficiosService.getOficios().subscribe({
-    next: () => {
-      this.isLoading.set(false);
-      console.log("Carga completa, loader apagado.");
-    },
-    error: (err) => {
-      this.isLoading.set(false);
-      this.displayPageMessage('Error al cargar los oficios', err);
-    }
-  });
-}
-
   public showConfirmDialog = signal(false);
   public currentOffcioToDelete: OficioToDelete = { id: null, nombre: null };
 
@@ -44,6 +29,29 @@ export class OficiosListAdminComponent {
     message: '',
     type: 'success',
   });
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.isLoading.set(true);
+    this.oficiosService.getOficios().subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        console.log("Carga de oficios completa.");
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.displayPageMessage('Error al cargar los oficios', 'error');
+      }
+    });
+  }
+
+  toggleForm(): void {
+    const current = this.formStatus();
+    this.oficiosService.formStatus.set(current === 'hidden' ? 'creating' : 'hidden');
+  }
 
   eliminarOficio(id: number, nombre: string): void {
     this.currentOffcioToDelete = { id, nombre };
@@ -59,7 +67,7 @@ export class OficiosListAdminComponent {
       this.oficiosService.deleteOficio(id).subscribe({
         next: (response) => {
           const successMessage = response.mensaje || `Oficio "${nombre}" eliminado correctamente.`;
-          this.displayPageMessage('Oficio eliminado con exito ✔️​', 'success');
+          this.displayPageMessage(successMessage, 'success');
         },
         error: (err: HttpErrorResponse) => {
           const errorMessage = err.error?.mensaje || 'Error desconocido al eliminar el oficio.';
@@ -70,28 +78,14 @@ export class OficiosListAdminComponent {
     this.currentOffcioToDelete = { id: null, nombre: null };
   }
 
+  mostrarAvisoEdicion(): void {
+    this.displayPageMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
+  }
+
   displayPageMessage(message: string, type: 'success' | 'error'): void {
     this.pageMessage.set({ visible: true, message, type });
     setTimeout(() => {
       this.pageMessage.set({ visible: false, message: '', type: 'success' });
     }, 3000);
   }
-
-
-  toggleForm(): void {
-    if (this.formStatus() === 'hidden') {
-      this.oficiosService.formStatus.set('creating');
-    } else {
-      this.oficiosService.formStatus.set('hidden');
-    }
-  }
-
-  mostrarAvisoEdicion(): void {
-    this.displayPageMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
-  }
-
-
-
-
-
 }

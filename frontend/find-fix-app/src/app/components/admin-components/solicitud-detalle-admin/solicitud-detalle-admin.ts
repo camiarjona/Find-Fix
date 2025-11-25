@@ -5,11 +5,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { SolicitudEspecialistaAdminService } from '../../../services/admin-services/solicitud-especialista-admin';
 import { FichaCompletaSolicitud, ActualizarSolicitudDTO } from '../../../models/cliente/solicitud-especialista.model';
 import { switchMap } from 'rxjs';
+import { ModalFeedbackComponent } from "../../general/modal-feedback.component/modal-feedback.component";
 
 @Component({
   selector: 'app-solicitud-detalle-admin',
   standalone: true,
-  imports: [CommonModule, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, ModalFeedbackComponent],
   templateUrl: './solicitud-detalle-admin.html',
   styleUrl: './solicitud-detalle-admin.css',
 })
@@ -19,6 +20,17 @@ export class SolicitudDetalleAdminComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private solicitudService = inject(SolicitudEspecialistaAdminService);
+
+  // Feedback modal state
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+
+  mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+  }
+
+  cerrarFeedback() {
+    this.feedbackData = { ...this.feedbackData, visible: false };
+  }
 
   // Estado para la solicitud completa
   public solicitud: WritableSignal<FichaCompletaSolicitud | null> = signal(null);
@@ -35,14 +47,14 @@ export class SolicitudDetalleAdminComponent implements OnInit {
   // Determina si se puede mostrar el formulario de resolución
   public get isPending() {
 
-  const solicitudActual = this.solicitud();
+    const solicitudActual = this.solicitud();
 
-  if (!solicitudActual) {
-    return false;
+    if (!solicitudActual) {
+      return false;
+    }
+    return solicitudActual.estado.toString() === 'PENDIENTE';
+
   }
-  return solicitudActual.estado.toString() === 'PENDIENTE';
-
-}
 
   ngOnInit(): void {
     this.loadSolicitud();
@@ -95,15 +107,14 @@ export class SolicitudDetalleAdminComponent implements OnInit {
     this.submissionError.set(null);
 
     const dto: ActualizarSolicitudDTO = {
-        estado: estado,
-        respuesta: this.resolutionForm.value.respuesta,
+      estado: estado,
+      respuesta: this.resolutionForm.value.respuesta,
     };
 
     this.solicitudService.actualizarEstado(id, dto).subscribe({
       next: (response) => {
-        alert(`Solicitud ${estado} con éxito.`);
+        this.mostrarFeedback('¡Actualizado!', `Solicitud ${estado} con éxito`);
         this.isResolving.set(false);
-        // Recargar la ficha con la nueva respuesta del backend
         this.loadSolicitud();
       },
       error: (err) => {

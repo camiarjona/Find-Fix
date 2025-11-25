@@ -1,13 +1,12 @@
-export interface AgregarFavoritoDTO {
-  especialistaEmail: string;
+export interface FavoritoModel {
+  nombre: string;
+  apellido: string;
+  ciudad: string;
+  oficios: string[];
+  calificacionPromedio: number;
+  email: string;
 }
 
-export interface FavoritoModel {
-  id: number;
-  clienteMail: String;
+export interface AgregarFavoritoDTO {
   especialistaEmail: string;
-  especialistaId: number;
-  fechaCreacion: Date;
-  especialistaNombre: string;
-  especialistaOficio: string;
 }
