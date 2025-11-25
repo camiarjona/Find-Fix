@@ -1,4 +1,5 @@
 <div class="page-container">
+
   <div class="header-box">
     <div>
       <h1>Opiniones de Clientes</h1>
@@ -6,29 +7,44 @@
     </div>
     <div class="score-box">
       <span class="score">{{ promedio() }}</span>
-      <span class="stars">⭐⭐⭐⭐⭐</span>
+      <div class="stars-general">
+        <span class="star-icon">⭐</span>
+      </div>
       <span class="count">{{ resenas().length }} valoraciones</span>
     </div>
   </div>
 
+  @if (isLoading()) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando opiniones...</p>
+  </div>
+  } @else {
   <div class="resenas-grid">
     @for (resena of resenas(); track resena.resenaId) {
-      <div class="resena-card">
-        <div class="top">
-          <div class="user">
-            <div class="avatar">{{ resena.nombreCliente.charAt(0) }}</div>
-            <strong>{{ resena.nombreCliente }}</strong>
+    <div class="resena-card">
+      <div class="top">
+        <div class="user">
+          <div class="avatar">
+            {{ resena.nombreCliente ? resena.nombreCliente.charAt(0).toUpperCase() : 'C' }}
           </div>
-          <div class="stars-display">
-            @for (s of getEstrellas(resena.puntuacion); track $index) {
-              <span [class.filled]="s === 1">★</span>
-            }
-          </div>
+          <strong>{{ resena.nombreCliente || 'Cliente' }}</strong>
         </div>
-        <p class="texto">"{{ resena.comentario }}"</p>
+
+        <div class="stars-display">
+          @for (s of getEstrellas(resena.puntuacion); track $index) {
+          <span [class.filled]="s === 1">★</span>
+          }
+        </div>
       </div>
+
+      <p class="texto">"{{ resena.comentario }}"</p>
+    </div>
     } @empty {
-      <div class="empty">Aún no tienes reseñas.</div>
+    <div class="empty-state">
+      <p>Aún no tienes reseñas recibidas.</p>
+    </div>
     }
   </div>
+  }
 </div>

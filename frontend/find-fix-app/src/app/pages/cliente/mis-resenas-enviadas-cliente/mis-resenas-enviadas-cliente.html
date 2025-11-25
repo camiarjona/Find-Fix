@@ -1,36 +1,53 @@
-<div class="resenas-container">
-  <h2>Mis Reseñas Enviadas</h2>
+<div class="page-container">
 
-  <div *ngIf="isLoading" class="loading-state">
-    <mat-spinner diameter="50"></mat-spinner>
-    <p>Cargando tus reseñas...</p>
-  </div>
-
-  <div *ngIf="error" class="error-state">
-    <p>{{ error }}</p>
-    <button (click)="cargarResenasEnviadas()">Reintentar</button>
-  </div>
-
-  <div *ngIf="!isLoading && !error && resenas.length > 0" class="resenas-list">
-    <mat-card *ngFor="let resena of resenas" class="resena-card">
-      <mat-card-header>
-        <mat-card-title>Para: **{{ resena.nombreEspecialista }}**</mat-card-title>
-        <mat-card-subtitle>Reseña #{{ resena.resenaId }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="puntuacion">
-          **Puntuación:** <span class="rating">{{ resena.puntuacion }}/5</span>
-          </div>
-        <div class="comentario">
-          <p>
-            **Comentario:** *{{ resena.comentario }}*
-          </p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div *ngIf="!isLoading && !error && resenas.length === 0" class="empty-state">
-    <p>Aún no has enviado ninguna reseña.</p>
+  <div class="header-box">
+    <div>
+      <h1>Mis Opiniones Enviadas</h1>
+      <p>Historial de valoraciones que has dejado a especialistas.</p>
     </div>
+    <div class="score-box">
+      <span class="score">{{ promedio() }}</span>
+      <div class="stars-general">
+        <span class="star-icon">⭐</span>
+      </div>
+      <span class="count">{{ resenas().length }} reseñas dadas</span>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando tus opiniones...</p>
+  </div>
+  } @else {
+  <div class="resenas-grid">
+    @for (resena of resenas(); track resena.resenaId) {
+    <div class="resena-card">
+      <div class="top">
+        <div class="user">
+          <div class="avatar">
+            {{ resena.nombreEspecialista ? resena.nombreEspecialista.charAt(0).toUpperCase() : 'E' }}
+          </div>
+          <div class="user-info">
+            <span class="role-label">Para:</span>
+            <strong>{{ resena.nombreEspecialista || 'Especialista' }}</strong>
+          </div>
+        </div>
+
+        <div class="stars-display">
+          @for (s of getEstrellas(resena.puntuacion); track $index) {
+          <span [class.filled]="s === 1">★</span>
+          }
+        </div>
+      </div>
+
+      <p class="texto">"{{ resena.comentario }}"</p>
+    </div>
+    } @empty {
+    <div class="empty-state">
+      <p>Aún no has enviado ninguna reseña.</p>
+    </div>
+    }
+  </div>
+  }
 </div>

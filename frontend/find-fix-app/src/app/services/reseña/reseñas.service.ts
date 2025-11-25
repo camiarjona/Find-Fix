@@ -8,7 +8,7 @@ import {
   MostrarResenaClienteDTO,
   MostrarResenaEspecialistaDTO,
   MostrarResenaDTO
-} from '../../models/reseña/reseña.model'; // Ajusta la ruta si es necesario
+} from '../../models/reseña/reseña.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,6 @@ export class ResenaService {
 
   private apiUrl = 'http://localhost:8080';
   private http = inject(HttpClient);
-  // Se usa /api/resenas, asumiendo que /api es el prefijo del gateway del backend
   private resenasUrl = `${this.apiUrl}/resenas`;
 
   crearResena(dto: CrearResenaDTO): Observable<ApiResponse<MostrarResenaClienteDTO>> {

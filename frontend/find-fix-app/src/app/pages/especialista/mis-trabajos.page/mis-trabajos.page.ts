@@ -84,9 +84,9 @@ export class MisTrabajosPage implements OnInit {
   obtenerEstadosPermitidos(estadoActual: string): string[] {
     const permitidos = [estadoActual];
     switch (estadoActual) {
-      case 'CREADO': permitidos.push('EN_PROCESO', 'CANCELADO'); break;
-      case 'EN_PROCESO': permitidos.push('FINALIZADO', 'CANCELADO'); break;
-      case 'FINALIZADO': case 'CANCELADO': break;
+      case 'CREADO': permitidos.push('EN_PROCESO'); break;
+      case 'EN_PROCESO': permitidos.push('FINALIZADO'); break;
+      case 'FINALIZADO': break;
       default: return this.estadosPosibles;
     }
     return [...new Set(permitidos)];
@@ -110,12 +110,10 @@ export class MisTrabajosPage implements OnInit {
       'En proceso': 'EN_PROCESO',
       'En revision': 'EN_REVISION',
       'Finalizado': 'FINALIZADO',
-      'Cancelado': 'CANCELADO',
       'CREADO': 'CREADO',
       'EN_PROCESO': 'EN_PROCESO',
       'EN_REVISION': 'EN_REVISION',
       'FINALIZADO': 'FINALIZADO',
-      'CANCELADO': 'CANCELADO'
     };
     return mapaEstados[estado] || estado.toUpperCase().replace(/\s+/g, '_');
   }
@@ -126,7 +124,6 @@ export class MisTrabajosPage implements OnInit {
       'EN_PROCESO': 'En proceso',
       'EN_REVISION': 'En revision',
       'FINALIZADO': 'Finalizado',
-      'CANCELADO': 'Cancelado'
     };
     return mapaBackend[estadoFrontend] || estadoFrontend;
   }
@@ -245,7 +242,7 @@ export class MisTrabajosPage implements OnInit {
   actualizarFechasLogica(trabajo: any, estado: string) {
     if (estado === 'EN_PROCESO' && !trabajo.fechaInicio) trabajo.fechaInicio = new Date();
     if (estado === 'FINALIZADO') trabajo.fechaFin = new Date();
-    if (estado !== 'FINALIZADO' && estado !== 'CANCELADO') trabajo.fechaFin = null;
+    if (estado !== 'FINALIZADO') trabajo.fechaFin = null;
   }
 
   // Normaliza valores de fecha que puedan venir en diferentes formatos

@@ -1,23 +1,178 @@
-.page-container { padding: 2rem; max-width: 900px; margin: 0 auto; }
-
-.header-box {
-  background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0;
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+:host {
+  display: block;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 }
-.header-box h1 { margin: 0; font-size: 1.5rem; color: #2d3748; }
 
-.score-box { text-align: center; display: flex; flex-direction: column; }
-.score { font-size: 2.5rem; font-weight: 800; color: #F58634; line-height: 1; }
-.count { font-size: 0.85rem; color: #718096; margin-top: 5px; }
+.page-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-.resenas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+/* --- HEADER --- */
+.header-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
 
-.resena-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #edf2f7; }
-.top { display: flex; justify-content: space-between; margin-bottom: 1rem; }
-.user { display: flex; align-items: center; gap: 10px; color: #4a5568; }
-.avatar { width: 30px; height: 30px; background: #fed7e2; color: #b83280; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; }
+.header-box h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.8rem;
+  color: #111827;
+}
 
-.stars-display { color: #cbd5e0; }
-.stars-display .filled { color: #ecc94b; }
-.texto { font-style: italic; color: #718096; line-height: 1.5; margin: 0; }
+.header-box p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.score-box {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff7ed;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  border: 1px solid #fed7aa;
+}
+
+.score {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #F58634;
+  line-height: 1;
+}
+
+.stars-general {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: #7c2d12;
+  font-weight: 600;
+}
+
+/* --- GRID --- */
+.resenas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.resena-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s;
+}
+
+.resena-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  border-color: #F58634;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #374151;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #F58634;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.stars-display {
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.stars-display .filled {
+  color: #fbbf24;
+}
+
+.texto {
+  font-style: italic;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* --- Loading & Empty States --- */
+.loading-container,
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #F58634;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header-box {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .resenas-grid {
+    grid-template-columns: 1fr;
+  }
+}

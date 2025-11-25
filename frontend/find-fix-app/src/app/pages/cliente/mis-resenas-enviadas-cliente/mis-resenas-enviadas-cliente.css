@@ -1,67 +1,194 @@
-.resenas-container {
+:host {
+  display: block;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.page-container {
+  padding: 2rem;
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
 }
 
-h2 {
-  color: var(--primary-color, #1a237e); /* Color primario, adaptalo a tu tema */
-  border-bottom: 2px solid var(--accent-color, #ffb300);
-  padding-bottom: 10px;
-  margin-bottom: 25px;
-  font-weight: 500;
+/* --- HEADER --- */
+.header-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.resenas-list {
+.header-box h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.8rem;
+  color: #111827;
+}
+
+.header-box p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.score-box {
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  background-color: #fff7ed;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  border: 1px solid #fed7aa;
+}
+
+.score {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #F58634;
+  line-height: 1;
+}
+
+.stars-general {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: #7c2d12;
+  font-weight: 600;
+}
+
+/* --- GRID --- */
+.resenas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .resena-card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   transition: transform 0.2s;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 .resena-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  border-color: #F58634;
 }
 
-.puntuacion {
-  margin: 10px 0;
-  font-size: 1.1em;
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #e5e7eb;
 }
 
-.rating {
-  font-weight: 600;
-  color: var(--accent-color, #ffb300);
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #374151;
 }
 
-.comentario {
-  margin-top: 5px;
-  border-left: 3px solid var(--accent-color, #ffb300);
-  padding-left: 10px;
-  color: #555;
-}
-
-/* Estilos para los estados de carga y vacío */
-.loading-state, .error-state, .empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: #666;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  margin-top: 20px;
-}
-
-.error-state p {
-  color: #d32f2f;
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #F58634;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
-/* Estilo simple para el spinner de Angular Material */
-mat-spinner {
-  margin: 0 auto 15px auto;
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.stars-display {
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  flex-shrink: 0;
+}
+
+.stars-display .filled {
+  color: #fbbf24;
+}
+
+.texto {
+  font-style: italic;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+/* --- Loading & Empty --- */
+.loading-container,
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #F58634;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .header-box {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .resenas-grid {
+    grid-template-columns: 1fr;
+  }
 }

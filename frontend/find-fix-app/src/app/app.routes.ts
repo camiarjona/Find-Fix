@@ -15,7 +15,6 @@ import { EspecialistaLayout } from './layouts/especialista/especialista-layout/e
 import { DashboardEspecialistaPage } from './pages/especialista/dashboard-especialista.page/dashboard-especialista.page';
 import { SolicitudesPage } from './pages/especialista/solicitudes.page/solicitudes.page';
 import { MisTrabajosPage } from './pages/especialista/mis-trabajos.page/mis-trabajos.page';
-import { MisResenasEspecialista } from './pages/especialista/mis-resenas-especialista/mis-resenas-especialista';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
@@ -28,7 +27,9 @@ import { LandingListEspecialistasComponent } from './pages/landing-page/landing-
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page';
+import { MisResenasPage } from './pages/especialista/mis-resenas-especialista/mis-resenas-especialista';
 import { MisResenasEnviadasCliente } from './pages/cliente/mis-resenas-enviadas-cliente/mis-resenas-enviadas-cliente';
+import { CrearResenaComponent } from './components/cliente/crear-resena/crear-resena';
 
 
 export const routes: Routes = [
@@ -48,9 +49,6 @@ export const routes: Routes = [
   {
     path: 'admin/dashboard',
     component: AdminDahboardComponent
-  },
-  {
-    path: 'acceso-denegado', component: AccessDeniedPage
   },
   {
     path: 'buscar-especialistas',
@@ -101,7 +99,7 @@ export const routes: Routes = [
       { path: 'buscar-especialistas', component: BuscarEspecialistas },
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritosPage },
-      { path: 'mis-resenas', component: MisResenasEnviadasCliente},
+      { path: 'mis-resenas', component: MisResenasEnviadasCliente },
       {
         path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
@@ -109,6 +107,10 @@ export const routes: Routes = [
       {
         path: 'solicitar-especialista/historial',
         component: HistorialSolicitudesEspecialistaPages
+      },
+      {
+        path: 'crear-resena',
+        component: CrearResenaComponent
       },
       {
         path: 'mi-perfil',
@@ -143,7 +145,7 @@ export const routes: Routes = [
       },
       {
         path: 'mis-resenas',
-        component: MisResenasEspecialista
+        component: MisResenasPage
       },
       {
         path: 'mi-perfil',
@@ -156,5 +158,7 @@ export const routes: Routes = [
       }
     ]
   },
-
+  {
+    path: 'acceso-denegado', component: AccessDeniedPage
+  }
 ];

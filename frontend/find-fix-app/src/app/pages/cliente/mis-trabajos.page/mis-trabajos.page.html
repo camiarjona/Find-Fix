@@ -19,7 +19,7 @@
         <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
           <option value="">Estado: Todos</option>
           @for (est of estadosPosibles; track est) {
-            <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+          <option [value]="est">{{ formatearTextoEstado(est) }}</option>
           }
         </select>
       </div>
@@ -63,113 +63,128 @@
   </div>
 
   @if (estaCargando()) {
-    <div class="contenedor-cargando">
-      <div class="cargador"></div>
-      <p>Cargando trabajos...</p>
-    </div>
+  <div class="contenedor-cargando">
+    <div class="cargador"></div>
+    <p>Cargando trabajos...</p>
+  </div>
   } @else {
 
-    @if (trabajosVisibles().length === 0) {
-      <div class="empty-state">
-        <div class="icon-box">📂</div>
-        <h3>No se encontraron trabajos</h3>
-        <p>No tienes trabajos con el estado seleccionado o aún no has contratado a nadie.</p>
+  @if (trabajosVisibles().length === 0) {
+  <div class="empty-state">
+    <div class="icon-box">📂</div>
+    <h3>No se encontraron trabajos</h3>
+    <p>No tienes trabajos con el estado seleccionado o aún no has contratado a nadie.</p>
+  </div>
+  }
+
+  @else {
+
+  @if (modoVista === 'tarjetas') {
+  <div class="contenedor-cuadricula">
+    @for (trabajo of trabajosVisibles(); track trabajo.id) {
+    <div class="tarjeta-trabajo">
+
+      <div class="fila-encabezado-tarjeta">
+        <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
+          {{ formatearTextoEstado(trabajo.estado) }}
+        </span>
       </div>
-    }
 
-    @else {
+      <div class="fila-icono-tarjeta">
+        <div class="icono-tarjeta">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+      </div>
 
-      @if (modoVista === 'tarjetas') {
-        <div class="contenedor-cuadricula">
-          @for (trabajo of trabajosVisibles(); track trabajo.id) {
-          <div class="tarjeta-trabajo">
+      <h3 class="titulo-tarjeta">Trabajo #{{ trabajo.id }}</h3>
+      <p class="cliente-tarjeta">Especialista: <strong>{{ trabajo.nombreEspecialista }}</strong></p>
 
-            <div class="fila-encabezado-tarjeta">
-              <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
-                {{ formatearTextoEstado(trabajo.estado) }}
-              </span>
-            </div>
+      <div class="fechas-tarjeta">
+        <span>📅 Inicio: {{ trabajo.fechaInicio }}</span>
+      </div>
 
-            <div class="fila-icono-tarjeta">
-              <div class="icono-tarjeta">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-              </div>
-            </div>
+      <div class="pie-tarjeta">
+        <span class="precio">{{ trabajo.presupuesto | currency }}</span>
 
-            <h3 class="titulo-tarjeta">Trabajo #{{ trabajo.id }}</h3>
-            <p class="cliente-tarjeta">Especialista: <strong>{{ trabajo.nombreEspecialista }}</strong></p>
-
-            <div class="fechas-tarjeta">
-              <span>📅 Inicio: {{ trabajo.fechaInicio }}</span>
-            </div>
-
-            <div class="pie-tarjeta">
-              <span class="precio">{{ trabajo.presupuesto | currency }}</span>
-              <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
-            </div>
-
-          </div>
+        <div class="acciones-tarjeta">
+          @if (trabajo.estado === 'Finalizado') {
+          <button class="btn-calificar" (click)="irADejarResena(trabajo.id, $event)" title="Calificar servicio">
+            ⭐ Calificar
+          </button>
           }
+          <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
         </div>
-      }
+      </div>
 
-      @else {
-        <div class="contenedor-tabla">
-          <table class="tabla-trabajos">
-            <thead>
-              <tr>
-                <th>Trabajo / Especialista</th>
-                <th>Estado</th>
-                <th>Fechas</th>
-                <th>Precio</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (trabajo of trabajosVisibles(); track trabajo.id) {
-              <tr>
-                <td>
-                  <div class="fila-titulo-tabla">
-                    <span class="titulo-tabla">Trabajo #{{ trabajo.id }}</span>
-                  </div>
-                  <div class="subtitulo-tabla">Esp: {{ trabajo.nombreEspecialista }}</div>
-                </td>
-                <td>
-                  <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
-                    {{ formatearTextoEstado(trabajo.estado) }}
-                  </span>
-                </td>
-                <td>
-                  <div class="col-fecha">
-                    <span class="fecha-inicio">Inicio: {{ trabajo.fechaInicio }}</span>
-                    @if(trabajo.fechaFin) {
-                    <span class="fecha-fin">Fin: {{ trabajo.fechaFin }}</span>
-                    }
-                  </div>
-                </td>
-                <td>
-                  <div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div>
-                </td>
-                <td class="text-right">
-                  <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver detalle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
+    </div>
     }
+  </div>
+  }
+
+  @else {
+  <div class="contenedor-tabla">
+    <table class="tabla-trabajos">
+      <thead>
+        <tr>
+          <th>Trabajo / Especialista</th>
+          <th>Estado</th>
+          <th>Fechas</th>
+          <th>Precio</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (trabajo of trabajosVisibles(); track trabajo.id) {
+        <tr>
+          <td>
+            <div class="fila-titulo-tabla">
+              <span class="titulo-tabla">Trabajo #{{ trabajo.id }}</span>
+            </div>
+            <div class="subtitulo-tabla">Esp: {{ trabajo.nombreEspecialista }}</div>
+          </td>
+          <td>
+            <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
+              {{ formatearTextoEstado(trabajo.estado) }}
+            </span>
+          </td>
+          <td>
+            <div class="col-fecha">
+              <span class="fecha-inicio">Inicio: {{ trabajo.fechaInicio }}</span>
+              @if(trabajo.fechaFin) {
+              <span class="fecha-fin">Fin: {{ trabajo.fechaFin }}</span>
+              }
+            </div>
+          </td>
+          <td>
+            <div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div>
+          </td>
+          <td class="text-right">
+            <div class="acciones-tabla">
+              @if (trabajo.estado === 'Finalizado') {
+              <button class="btn-icono-calificar" (click)="irADejarResena(trabajo.id, $event)" title="Dejar reseña">
+                ⭐
+              </button>
+              }
+              <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver detalle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+  }
   }
 </div>
 
@@ -230,6 +245,11 @@
       </div>
 
       <div class="acciones-modal-unificadas">
+        @if (trabajoSeleccionado()?.estado === 'Finalizado') {
+        <button type="button" class="btn-calificar" (click)="irADejarResena(trabajoSeleccionado()!.id, $event)">
+          Calificar
+        </button>
+        }
         <button type="button" class="btn-guardar" (click)="cerrarModal()">Cerrar</button>
       </div>
     </div>
