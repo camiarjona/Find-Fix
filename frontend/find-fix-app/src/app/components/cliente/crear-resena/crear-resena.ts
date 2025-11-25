@@ -76,7 +76,7 @@ export class CrearResenaComponent implements OnInit {
       next: () => {
         this.isLoading.set(false);
         alert('¡Gracias por tu opinión!');
-        this.router.navigate(['/cliente/mis-resenas-enviadas']);
+        this.router.navigate(['/cliente/mis-resenas']);
       },
       error: (err) => {
         this.isLoading.set(false);
