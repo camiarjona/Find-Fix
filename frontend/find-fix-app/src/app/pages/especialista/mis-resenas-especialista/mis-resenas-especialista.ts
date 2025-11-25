@@ -1,74 +1,54 @@
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { EspecialistaService } from '../../../services/especialista/especialista.service';
-import { ResenaEspecialista } from '../../../models/especialista/especialista.model';
+import { MostrarResenaEspecialistaDTO } from '../../../models/reseña/reseña.model';
+import { ResenaService } from '../../../services/reseña/reseñas.service';
 
 @Component({
-  selector: 'app-mis-resenas.page',
+  selector: 'app-mis-resenas',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './mis-resenas-especialista.html',
   styleUrl: './mis-resenas-especialista.css',
 })
-export class MisResenasEspecialista {
+export class MisResenasPage implements OnInit {
 
-   private especialistaService = inject(EspecialistaService);
-  resenas = signal<ResenaEspecialista[]>([]);
-  promedio = signal(0);
+  private resenaService = inject(ResenaService);
 
-  // Importante: Exponemos Math al HTML para poder usar Math.round() en las estrellas
-  protected readonly Math = Math;
+  // Estado
+  public resenas = signal<MostrarResenaEspecialistaDTO[]>([]);
+  public isLoading = signal(true);
+
+  public promedio = computed(() => {
+    const lista = this.resenas();
+    if (lista.length === 0) return 0;
+
+    const suma = lista.reduce((acc, curr) => acc + curr.puntuacion, 0);
+    return (suma / lista.length).toFixed(1);
+  });
 
   ngOnInit() {
-    // this.cargarResenasReales(); // <--- MANTENER COMENTADO HASTA TENER BACKEND
-    this.cargarDatosFalsos();      // <--- USAMOS ESTO AHORA
+    this.cargarResenas();
   }
 
-  cargarDatosFalsos() {
-    const dataMock: ResenaEspecialista[] = [
-      {
-        resenaId: 1,
-        puntuacion: 5,
-        nombreCliente: 'Julián Álvarez',
-        comentario: '¡Excelente servicio! Llegó súper puntual, fue muy amable y solucionó el problema del aire acondicionado en 20 minutos. Muy recomendable.'
+  cargarResenas() {
+    this.isLoading.set(true);
+    this.resenaService.obtenerResenasRecibidas().subscribe({
+      next: (response) => {
+        this.resenas.set(response.data || []);
+        this.isLoading.set(false);
       },
-      {
-        resenaId: 2,
-        puntuacion: 4,
-        nombreCliente: 'Enzo Fernández',
-        comentario: 'Buen trabajo en general. El precio me pareció un poco elevado para lo que era, pero la calidad es indiscutible y quedó todo funcionando perfecto.'
-      },
-      {
-        resenaId: 3,
-        puntuacion: 5,
-        nombreCliente: 'Lionel Messi',
-        comentario: 'Un genio total. Me salvó un domingo a la tarde con una urgencia eléctrica. Gracias por la buena onda.'
-      },
-      {
-        resenaId: 4,
-        puntuacion: 3,
-        nombreCliente: 'Lautaro Martínez',
-        comentario: 'El trabajo quedó bien, pero demoró más de lo pactado en llegar y no avisó.'
-      },
-      {
-        resenaId: 5,
-        puntuacion: 5,
-        nombreCliente: 'Paulo Dybala',
-        comentario: 'Impecable. Dejó todo limpio después de trabajar. Volveré a contratar sin dudarlo.'
+      error: (err) => {
+        console.error('Error cargando reseñas', err);
+        this.isLoading.set(false);
       }
-    ];
-
-    // Asignamos los datos falsos a la señal
-    this.resenas.set(dataMock);
-
-    // Calculamos el promedio automáticamente basado en los datos falsos
-    if(dataMock.length > 0) {
-      const suma = dataMock.reduce((acc, r) => acc + r.puntuacion, 0);
-      this.promedio.set(parseFloat((suma / dataMock.length).toFixed(1)));
-    }
+    });
   }
 
   getEstrellas(puntuacion: number): number[] {
-    return Array(5).fill(0).map((_, i) => i < puntuacion ? 1 : 0);
+    const estrellas = [];
+    for (let i = 1; i <= 5; i++) {
+      estrellas.push(i <= puntuacion ? 1 : 0);
+    }
+    return estrellas;
   }
 }

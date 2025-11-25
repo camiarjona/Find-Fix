@@ -39,14 +39,6 @@ export class DashboardEspecialistaPage {
 
   cargarDatosFalsos() {
     console.log('Cargando datos falsos para visualización...');
-
-    // 5. Calificación y Reseñas
-    this.totalResenas.set(28);
-    this.calificacionPromedio.set(4.8);
-
-    // Gráfico Estrellas: [5 estrellas, 4 estrellas, 3 o menos]
-    this.datosCalificacion.datasets[0].data = [24, 3, 1];
-
     // Lista de reseñas falsas
     this.ultimasResenas.set([
       {
@@ -84,7 +76,6 @@ export class DashboardEspecialistaPage {
     // 1. SOLICITUDES
     this.especialistaService.getSolicitudesRecibidas().subscribe({
       next: (solicitudes) => {
-        // Filtros (usando toUpperCase por seguridad)
         const pendientes = solicitudes.filter(s => s.estado?.toUpperCase() === 'PENDIENTE').length;
         const rechazadas = solicitudes.filter(s => s.estado?.toUpperCase() === 'RECHAZADO').length;
 
@@ -152,26 +143,42 @@ export class DashboardEspecialistaPage {
       error: (err) => console.error('Error trabajos', err)
     });
 
-    // 3. RESEÑAS (Descomenta cuando tengas el endpoint listo)
-    /*
+    // 3. RESEÑAS Y CALIFICACIÓN
     this.especialistaService.getMisResenas().subscribe({
-       next: (resenas) => {
-         this.totalResenas.set(resenas.length);
-         this.ultimasResenas.set(resenas.slice(0, 5));
+      next: (resenas) => {
+        this.totalResenas.set(resenas.length);
+        this.ultimasResenas.set(resenas.slice(0, 5));
 
-         // ... lógica de promedios ...
+        if (resenas.length > 0) {
+          const suma = resenas.reduce((acc, r) => acc + r.puntuacion, 0);
+          const promedio = suma / resenas.length;
+          this.calificacionPromedio.set(parseFloat(promedio.toFixed(1)));
 
-         // Actualizar Gráfico Reseñas
-         this.datosCalificacion = {
-             ...this.datosCalificacion,
-             datasets: [{
-                 ...this.datosCalificacion.datasets[0],
-                 data: [cincos, cuatros, tresos]
-             }]
-         };
-       }
+          const cincoEstrellas = resenas.filter(r => r.puntuacion >= 4.5).length;
+          const cuatroEstrellas = resenas.filter(r => r.puntuacion >= 3.5 && r.puntuacion < 4.5).length;
+          const tresOMenos = resenas.filter(r => r.puntuacion < 3.5).length;
+
+          this.datosCalificacion = {
+            ...this.datosCalificacion,
+            datasets: [{
+              ...this.datosCalificacion.datasets[0],
+              data: [cincoEstrellas, cuatroEstrellas, tresOMenos]
+            }]
+          };
+
+          const historialResenas = this.calcularHistorialMesesResenas(resenas);
+
+          this.datosResenas = {
+            ...this.datosResenas,
+            datasets: [{
+              ...this.datosResenas.datasets[0],
+              data: historialResenas
+            }]
+          };
+        }
+      },
+      error: (err) => console.error('Error al cargar reseñas', err)
     });
-    */
   }
 
   // Actualiza los datos de un gráfico
@@ -182,7 +189,7 @@ export class DashboardEspecialistaPage {
   private calcularHistorialMeses(trabajos: TrabajoEspecialista[]): number[] {
     const hoy = new Date();
     const mesActual = hoy.getMonth();
-    const conteo = [0, 0, 0]; // [Mes2, Mes1, MesActual]
+    const conteo = [0, 0, 0];
 
     trabajos.forEach(t => {
       if (t.fechaFin) {
@@ -192,6 +199,25 @@ export class DashboardEspecialistaPage {
         if (mesFin === mesActual) conteo[2]++;
         else if (mesFin === mesActual - 1) conteo[1]++;
         else if (mesFin === mesActual - 2) conteo[0]++;
+      }
+    });
+    return conteo;
+  }
+
+  // Método auxiliar para contar reseñas por mes (Últimos 3 meses)
+  private calcularHistorialMesesResenas(resenas: any[]): number[] {
+    const hoy = new Date();
+    const mesActual = hoy.getMonth();
+    const conteo = [0, 0, 0];
+
+    resenas.forEach(r => {
+      if (r.fecha) {
+        const fechaResena = new Date(r.fecha);
+        const mesResena = fechaResena.getMonth();
+
+        if (mesResena === mesActual) conteo[2]++;
+        else if (mesResena === mesActual - 1) conteo[1]++;
+        else if (mesResena === mesActual - 2) conteo[0]++;
       }
     });
     return conteo;
