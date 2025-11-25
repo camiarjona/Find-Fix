@@ -2,14 +2,14 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
   /* Fondo gris muy suave para toda la pagina */
 }
 
 /* --- HEADER --- */
 .dashboard-header {
-  background-color: white;
-  border-bottom: 1px solid #f3f4f6;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
   padding: 0 20px;
   height: 70px;
   display: flex;
@@ -38,13 +38,49 @@
   letter-spacing: -0.5px;
 }
 
+/* --- CONTROLES HEADER (Movidos fuera del Media Query para que se vean en PC) --- */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--bg-card);
+  padding: 6px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.theme-toggle {
+  background-color: var(--bg-app);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
 .logout-btn {
   display: flex;
   align-items: center;
   gap: 8px;
   background: transparent;
-  border: 1px solid #e5e7eb;
-  color: #4b5563;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 50px;
   /* Botón redondeado más moderno */
@@ -58,20 +94,6 @@
   background-color: #fee2e2;
   border-color: #ef4444;
   color: #ef4444;
-}
-
-
-.header-contenedor {
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto 30px;
-  padding: 20px;
-  background-color: var(--bg-card);
-  border-radius: 16px;
-  box-shadow: 0 8px 25px var(--shadow-color);
-  text-align: center;
-  border-top: 5px solid var(--primary-color);
-  box-sizing: border-box;
 }
 
 .logout-btn svg {
@@ -98,34 +120,30 @@
 
 /* --- BANNER DE BIENVENIDA --- */
 .header-contenedor {
-  background-color: #ffffff;
+  background-color: var(--bg-card); /* Corregido: Usa la variable */
   border-radius: 20px;
   padding: 40px;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
-  background-image: radial-gradient(#F58634 0.5px, transparent 0.5px);
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  background-image: radial-gradient(var(--primary-color) 0.5px, transparent 0.5px);
   /* Patrón de puntos sutil */
   background-size: 20px 20px;
-  background-color: #fffaf5;
-  /* Tinte muy suave naranja de fondo */
+  /* Eliminado background-color fijo que rompía el modo oscuro */
 }
 
 .admin-titulo {
   font-size: 2rem;
   font-weight: 800;
-  margin: 0 0 8px 0;
-  color: var(--text-main);
   margin: 0 0 10px 0;
-  color: #111827;
+  color: var(--text-main);
   letter-spacing: -0.025em;
 }
 
 .admin-subtitulo {
   font-size: 1.1rem;
-  color: #6b7280;
-  margin: 0;
   color: var(--text-secondary);
+  margin: 0;
 }
 
 h1 {
@@ -208,7 +226,7 @@ h1 {
 .card-content h2 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-main);
   margin: 0 0 8px 0;
   line-height: 1.2;
 }
@@ -230,6 +248,7 @@ h1 {
   margin-left: 20px;
   color: var(--text-secondary);
 }
+
 /* Flecha animada */
 .card-action {
   color: #d1d5db;
@@ -263,35 +282,4 @@ h1 {
     display: none;
     /* Ocultar texto logout en móvil */
   }
-
-  .header-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background-color: var(--bg-card);
-  padding: 6px;
-  border-radius: 99px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.theme-toggle {
-  background-color: var(--bg-app);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-}
-.theme-toggle:hover {
-  background-color: var(--border-color);
-  color: var(--text-main);
-}
-.theme-toggle svg { width: 20px; height: 20px; }
-
 }
