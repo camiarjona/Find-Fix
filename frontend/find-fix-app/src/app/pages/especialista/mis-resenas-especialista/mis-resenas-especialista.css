@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background-color: #f8f9fa;
+  background-color: var(--bg-app);
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
 }
@@ -13,26 +13,26 @@
 
 /* --- HEADER --- */
 .header-box {
-  background: white;
+  background: var(--bg-card);
   padding: 2rem;
   border-radius: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
 }
 
 .header-box h1 {
   margin: 0 0 0.5rem 0;
   font-size: 1.8rem;
-  color: #111827;
+  color: var(--text-main);
 }
 
 .header-box p {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .score-box {
@@ -49,7 +49,7 @@
 .score {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #F58634;
+  color: var(--primary-color);
   line-height: 1;
 }
 
@@ -72,18 +72,18 @@
 }
 
 .resena-card {
-  background: white;
+  background: var(--bg-card);
   padding: 1.5rem;
   border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
   transition: transform 0.2s;
 }
 
 .resena-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  border-color: #F58634;
+  box-shadow: 0 10px 15px -3px var(--shadow-color);
+  border-color: var(--primary-color);
 }
 
 .top {
@@ -92,21 +92,21 @@
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px dashed #e5e7eb;
+  border-bottom: 1px dashed var(--border-color);
 }
 
 .user {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #374151;
+  color: var(--text-main);
 }
 
 .avatar {
   width: 40px;
   height: 40px;
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -116,7 +116,7 @@
 }
 
 .stars-display {
-  color: #e5e7eb;
+  color: var(--border-color);
   font-size: 1.1rem;
   letter-spacing: 2px;
 }
@@ -127,7 +127,7 @@
 
 .texto {
   font-style: italic;
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
   font-size: 0.95rem;
@@ -138,15 +138,15 @@
 .empty-state {
   text-align: center;
   padding: 4rem;
-  color: #6b7280;
-  background: white;
+  color: var(--text-secondary);
+  background: var(--bg-card);
   border-radius: 16px;
-  border: 2px dashed #e5e7eb;
+  border: 2px dashed var(--border-color);
 }
 
 .spinner {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #F58634;
+  border-top: 3px solid var(--primary-color);
   border-radius: 50%;
   width: 30px;
   height: 30px;
