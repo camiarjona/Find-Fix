@@ -3,55 +3,70 @@
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--bg-app);
-  /* Fondo gris muy suave para toda la pagina */
 }
 
 /* --- HEADER --- */
 .dashboard-header {
   background-color: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
-  padding: 0 20px;
+  /* Quitamos padding lateral excesivo para que ocupe ancho completo visual */
+  width: 100%;
   height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Centrar el contenido interno */
+  /* Sombra suave para separar del contenido */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .container-header {
   width: 100%;
   max-width: 1000px;
-  /* Alineado con el contenido */
+  /* Mismo ancho que el contenido del dashboard */
+  padding: 0 20px;
+  /* Padding interno para que no toque los bordes en móvil */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: var(--bg-card);
-  box-shadow: 0 2px 10px var(--shadow-color);
-  margin-bottom: 20px;
+  height: 100%;
+  /* Quitamos estilos de tarjeta del contenedor interno para que parezca navbar */
+  background-color: transparent;
+  box-shadow: none;
+  margin-bottom: 0;
 }
 
 .brand-text {
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  /* Un pelín más grande */
   color: var(--primary-color);
   letter-spacing: -0.5px;
 }
 
-/* --- CONTROLES HEADER (Movidos fuera del Media Query para que se vean en PC) --- */
+/* --- NUEVO: Agrupador de acciones a la derecha --- */
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* --- CONTROLES HEADER --- */
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background-color: var(--bg-card);
-  padding: 6px;
-  border-radius: 99px;
+  justify-content: center;
+  background-color: var(--bg-app);
+  /* Fondo sutil para el toggle */
+  padding: 4px;
+  border-radius: 50%;
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .theme-toggle {
-  background-color: var(--bg-app);
+  background-color: transparent;
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -65,8 +80,9 @@
 }
 
 .theme-toggle:hover {
-  background-color: var(--border-color);
-  color: var(--text-main);
+  color: var(--primary-color);
+  transform: rotate(15deg);
+  /* Pequeña animación */
 }
 
 .theme-toggle svg {
@@ -83,7 +99,6 @@
   color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 50px;
-  /* Botón redondeado más moderno */
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
@@ -112,24 +127,23 @@
 .admin-dashboard-contenedor {
   width: 100%;
   max-width: 1000px;
-  /* Ancho máximo controlado para centrar todo */
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
 }
 
 /* --- BANNER DE BIENVENIDA --- */
 .header-contenedor {
-  background-color: var(--bg-card); /* Corregido: Usa la variable */
+  background-color: var(--bg-card);
   border-radius: 20px;
-  padding: 40px;
+  padding: 40px 30px;
   text-align: center;
   box-shadow: 0 4px 6px -1px var(--shadow-color);
   border: 1px solid var(--border-color);
+  /* Gradiente sutil */
   background-image: radial-gradient(var(--primary-color) 0.5px, transparent 0.5px);
-  /* Patrón de puntos sutil */
   background-size: 20px 20px;
-  /* Eliminado background-color fijo que rompía el modo oscuro */
+  opacity: 0.95;
 }
 
 .admin-titulo {
@@ -143,17 +157,8 @@
 .admin-subtitulo {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  margin: 0;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: var(--text-main);
-  user-select: none;
-  font-size: 1.5rem;
-  max-width: 600px;
   margin: 0 auto;
+  max-width: 600px;
   line-height: 1.5;
 }
 
@@ -161,74 +166,64 @@ h1 {
 .panel-grid {
   display: grid;
   gap: 24px;
-  /* Grid responsive automático, las tarjetas crecen */
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .panel-card {
   display: flex;
-  align-items: center;
-  background-color: var(--bg-card);
-  text-decoration: none;
-  color: var(--text-main);
-  border-left: 8px solid;
   align-items: flex-start;
+  /* Alineación superior */
+  background-color: var(--bg-card);
   padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
   border: 1px solid var(--border-color);
   text-decoration: none;
+  color: var(--text-main);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   height: 100%;
-  /* Misma altura todas */
   box-sizing: border-box;
 }
 
-/* Hover Effects */
 .panel-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 20px -5px var(--shadow-color);
   border-color: var(--accent-color);
-  /* Borde sutil del color de la tarjeta */
 }
 
 /* Icono */
 .card-icon-wrapper {
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20px;
+  margin-right: 16px;
   flex-shrink: 0;
 
-  /* Magia de colores: Fondo suave, icono fuerte */
-  background-color: #fff7ed;
-  /* Fallback */
+  /* Fondo dinámico basado en el color de la tarjeta */
+  background-color: color-mix(in srgb, var(--accent-color), transparent 85%);
   color: var(--accent-color);
-  /* Opacidad en el fondo usando el mismo color del icono */
-  background-color: color-mix(in srgb, var(--accent-color), white 90%);
 }
 
 .card-icon-wrapper svg {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
 }
 
-/* Contenido */
+/* Contenido Tarjeta */
 .card-content {
   flex-grow: 1;
 }
 
 .card-content h2 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-main);
-  margin: 0 0 8px 0;
-  line-height: 1.2;
+  margin: 0 0 6px 0;
 }
 
 .panel-card:hover .card-content h2 {
@@ -238,21 +233,15 @@ h1 {
 
 .card-content p {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
-.card-arrow {
-  font-size: 24px;
-  margin-left: 20px;
-  color: var(--text-secondary);
-}
-
-/* Flecha animada */
+/* Flecha */
 .card-action {
-  color: #d1d5db;
-  margin-left: 10px;
+  color: var(--border-color);
+  margin-left: 12px;
   display: flex;
   align-items: center;
   transition: transform 0.2s, color 0.2s;
@@ -260,7 +249,7 @@ h1 {
 
 .panel-card:hover .card-action {
   color: var(--accent-color);
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
 /* Responsive */
@@ -271,7 +260,6 @@ h1 {
 
   .panel-grid {
     grid-template-columns: 1fr;
-    /* Una columna en móvil */
   }
 
   .header-contenedor {
@@ -280,6 +268,6 @@ h1 {
 
   .btn-text {
     display: none;
-    /* Ocultar texto logout en móvil */
+    /* Icono solo en móvil */
   }
 }

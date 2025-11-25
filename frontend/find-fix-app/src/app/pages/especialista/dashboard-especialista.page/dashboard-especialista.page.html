@@ -9,7 +9,6 @@
   </header>
 
   <section class="stats-grid">
-
     <div class="flip-card" (click)="irASolicitudes()">
       <div class="flip-card-inner">
         <div class="flip-card-front card-blue">
@@ -153,55 +152,48 @@
         </div>
       </div>
     </div>
-
   </section>
 
   <section class="recent-activity">
     <div class="section-header">
       <h2>⭐ Opiniones Recientes</h2>
-      <button class="btn-link">Ver todas</button>
+      <button class="btn-link" routerLink="/especialista/mis-resenas">Ver todas</button>
     </div>
 
-    <div class="activity-table-container">
-      <table class="activity-table">
-        <thead>
-          <tr>
-            <th>Cliente</th>
-            <th>Trabajo</th>
-            <th>Calificación</th>
-            <th>Comentario</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (resena of ultimasResenas(); track $index) {
-          <div class="resena-item">
+    <div class="activity-grid">
+      @for (resena of ultimasResenas(); track $index) {
+      <div class="resena-card">
 
+        <div class="card-header">
+          <div class="user-info">
             <div class="avatar-circle">
-              {{ resena.nombreCliente ? resena.nombreCliente.charAt(0) : 'C' }}
+              {{ resena.nombreCliente ? resena.nombreCliente.charAt(0).toUpperCase() : 'C' }}
             </div>
-
-            <div class="resena-info">
-              <span class="user-name">{{ resena.nombreCliente }}</span>
-
-              <div class="rating-pill" [class.high-rating]="resena.puntuacion >= 4">
-                <span>★ {{ resena.puntuacion }}</span>
+            <div class="text-info">
+              <span class="user-name">{{ resena.nombreCliente || 'Cliente' }}</span>
+              <div class="rating-row">
+                <span class="star-icon">⭐</span>
+                <span class="rating-num">{{ resena.puntuacion }}</span>
               </div>
             </div>
-
-            <div class="comentario">
-              <p>"{{ resena.comentario }}"</p>
-            </div>
-
           </div>
-          } @empty {
-          <tr>
-            <td colspan="4" style="text-align: center; padding: 20px; color: #888;">
-              Aún no tienes reseñas.
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
+        </div>
+
+        <div class="card-body">
+          <p class="comentario">"{{ resena.comentario }}"</p>
+        </div>
+
+        <div class="card-footer">
+          <span class="fecha-resena">Reciente</span>
+        </div>
+
+      </div>
+      } @empty {
+      <div class="empty-card">
+        <div class="empty-icon">💬</div>
+        <p>Aún no tienes reseñas.</p>
+      </div>
+      }
     </div>
   </section>
 
