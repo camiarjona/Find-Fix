@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angular/router';
 import { FooterComponent } from "../../../components/general/footer-component/footer-component";
+import { ThemeService } from '../../../services/tema/theme.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -16,14 +17,13 @@ export class AdminLayout {
 
   //ESTADOS PARA LOS CONTROLES DEL HEADER
 
-  /** Controla el modo de color (true = oscuro, false = claro) */
-  isDarkMode = signal(true); // 'true' para que la luna se muestre por defecto
-
   /** Controla el modo de vista (false = cliente, true = especialista) */
   isEspecialistaMode = signal(false); // 'false' para que el cliente esté activo por defecto
 
   private authService = inject(AuthService);
   private router = inject(Router);
+    public themeService = inject(ThemeService);
+
 
   // --- Funciones de la Barra Lateral ---
   toggleSidebar() {
@@ -58,11 +58,10 @@ export class AdminLayout {
   }
 
   /** Cambia el tema de oscuro a claro y viceversa */
-  toggleTheme() {
-    this.isDarkMode.update(prev => !prev);
-    // lógica para cambiar
-    console.log("Modo oscuro:", this.isDarkMode());
+toggleTheme() {
+    this.themeService.toggleTheme();
   }
+
 
   /** Cambia el rol de cliente a especialista y viceversa */
   toggleRole() {

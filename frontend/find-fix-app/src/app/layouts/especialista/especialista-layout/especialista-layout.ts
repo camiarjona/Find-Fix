@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ThemeService } from '../../../services/tema/theme.service';
 
 @Component({
   selector: 'app-especialista-layout',
@@ -16,11 +17,12 @@ export class EspecialistaLayout {
   isMobileMenuOpen = signal(false);
 
   // ESTADOS PARA LOS CONTROLES DEL HEADER
-  isDarkMode = signal(true);
+
   isEspecialistaMode = signal(true);
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  public themeService = inject(ThemeService);
 
   // --- Funciones de la Barra Lateral ---
   toggleSidebar() {
@@ -39,9 +41,8 @@ export class EspecialistaLayout {
     this.authService.logout();
   }
 
-  toggleTheme() {
-    this.isDarkMode.update(prev => !prev);
-    // Aquí iría la lógica real del tema
+ toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   /** Cambia el rol de especialista a cliente */

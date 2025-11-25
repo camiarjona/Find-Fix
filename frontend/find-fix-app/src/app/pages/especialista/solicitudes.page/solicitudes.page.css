@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background-color: #f8f9fa;
+  background-color: var(--bg-app);
   min-height: 100vh;
   font-family: 'Segoe UI', system-ui, sans-serif;
   padding-bottom: 4rem;
@@ -20,13 +20,13 @@
 /* Encabezado */
 .titulo-encabezado h1 {
   font-size: 1.8rem;
-  color: #111827;
+  color: var(--text-main);
   margin: 0;
   font-weight: 700;
 }
 
 .titulo-encabezado p {
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 0.5rem 0 0 0;
 }
 
@@ -43,7 +43,7 @@
 .contenedor-tabs {
   display: flex;
   gap: 5px;
-  background: #e5e7eb;
+  background: var(--border-color);
   padding: 4px;
   border-radius: 10px;
 }
@@ -53,7 +53,7 @@
   background: transparent;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -61,9 +61,9 @@
 }
 
 .tab-btn.activo {
-  background: white;
-  color: #F58634;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  color: var(--primary-color);
+  box-shadow: 0 1px 2px var(--shadow-color);
 }
 
 .buscador-wrapper {
@@ -75,16 +75,16 @@
 .input-buscador {
   width: 100%;
   padding: 10px 10px 10px 35px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.9rem;
   outline: none;
-  background: white;
+  background: var(--bg-input);
   box-sizing: border-box;
 }
 
 .input-buscador:focus {
-  border-color: #F58634;
+  border-color: var(--primary-color);
 }
 
 .icono-lupa {
@@ -92,7 +92,7 @@
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .solicitudes-grid {
@@ -102,11 +102,11 @@
 }
 
 .solicitud-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-  border: 1px solid #edf2f7;
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s;
@@ -121,9 +121,9 @@
 }
 
 .tarjeta-solicitud {
-  background: white;
+  background: var(--bg-card);
   border-radius: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -132,7 +132,7 @@
 
 .tarjeta-solicitud:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px var(--shadow-color);
   border-color: #fed7aa;
 }
 
@@ -145,9 +145,9 @@
 
 .fecha-badge {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 600;
-  background: #f3f4f6;
+  background: var(--bg-app);
   padding: 4px 8px;
   border-radius: 6px;
 }
@@ -178,7 +178,7 @@
 .titulo-solicitud {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-main);
   margin: 0 0 1rem 0;
 }
 
@@ -192,8 +192,8 @@
 .avatar-placeholder {
   width: 40px;
   height: 40px;
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -204,21 +204,21 @@
 
 .nombre-cliente {
   font-weight: 600;
-  color: #374151;
+  color: var(--text-main);
   margin: 0;
   font-size: 0.95rem;
 }
 
 .ubicacion-cliente {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   margin: 0;
 }
 
 .descripcion-solicitud {
   font-size: 0.9rem;
-  color: #4b5563;
-  background: #f9fafb;
+  color: var(--text-secondary);
+  background: var(--bg-app);
   padding: 10px;
   border-radius: 8px;
   margin: 0 0 1.5rem 0;
@@ -258,7 +258,7 @@
 }
 
 .btn-accion.rechazar {
-  background: white;
+  background: var(--bg-card);
   border: 1px solid #fee2e2;
   color: #b91c1c;
 }
@@ -268,8 +268,8 @@
 }
 
 .btn-accion.aceptar {
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 .btn-accion.aceptar:hover {
@@ -281,7 +281,7 @@
   text-align: center;
   margin-top: auto;
   padding-top: 10px;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--border-color);
 }
 
 .texto-exito {
@@ -299,7 +299,7 @@
 .estado-vacio {
   text-align: center;
   padding: 4rem 1rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .icono-vacio {
@@ -310,12 +310,12 @@
 .contenedor-cargando {
   text-align: center;
   padding: 3rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .cargador {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #F58634;
+  border-top: 3px solid var(--primary-color);
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -338,7 +338,7 @@
 }
 
 .contenido-alerta-modal {
-  background: white;
+  background: var(--bg-card);
   width: 90%;
   max-width: 380px;
   border-radius: 20px;
@@ -367,19 +367,19 @@
 
 .titulo-alerta {
   font-size: 1.4rem;
-  color: #111827;
+  color: var(--text-main);
   margin: 0 0 0.5rem 0;
   font-weight: 700;
 }
 
 .mensaje-alerta {
-  color: #4b5563;
+  color: var(--text-secondary);
   margin: 0 0 1.5rem 0;
 }
 
 .btn-alerta-ok {
-  background-color: #111827;
-  color: white;
+  background-color: var(--text-main);
+  color: var(--text-inverse);
   border: none;
   padding: 12px 30px;
   width: 100%;
@@ -411,10 +411,10 @@
 }
 
 .descripcion {
-  background: #f7fafc;
+  background: var(--bg-app);
   padding: 1rem;
   border-radius: 8px;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-style: italic;
   margin-bottom: 1.5rem;
   line-height: 1.5;
@@ -444,7 +444,7 @@ button {
 
 .btn-aceptar {
   background: #38a169;
-  color: white;
+  color: var(--text-inverse);
 }
 
 .btn-aceptar:hover {
@@ -452,7 +452,7 @@ button {
 }
 
 .btn-rechazar {
-  background: white;
+  background: var(--bg-card);
   border: 1px solid #e53e3e;
   color: #e53e3e;
 }
@@ -464,10 +464,10 @@ button {
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #718096;
-  background: white;
+  color: var(--text-secondary);
+  background: var(--bg-card);
   border-radius: 16px;
-  border: 2px dashed #edf2f7;
+  border: 2px dashed var(--border-color);
 }
 
 .empty-icon {

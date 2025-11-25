@@ -12,21 +12,21 @@
 
 h2 {
   font-size: 1.5rem;
-  color: #1f2937;
+  color: var(--text-main);
   font-weight: 700;
   margin-top: 0;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 1.5rem;
 }
 
 .loading-message, .no-data {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
-  background: white;
+  color: var(--text-secondary);
+  background: var(--bg-card);
   border-radius: 12px;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-color);
 }
 
 .error-message {
@@ -53,12 +53,12 @@ thead { display: none; }
 
 
 tr {
-  background-color: white;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   margin-bottom: 1rem;
   padding: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 
@@ -67,7 +67,7 @@ td {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   text-align: right;
 }
 
@@ -77,7 +77,7 @@ td:last-child { border-bottom: none; }
 td::before {
   content: attr(data-label);
   font-weight: 600;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.75rem;
   text-transform: uppercase;
   text-align: left;
@@ -107,17 +107,17 @@ td::before {
   justify-content: center;
   padding: 0.5rem;
   border-radius: 50%;
-  border: 1px solid #e5e7eb;
-  background-color: #f3f4f6;
-  color: #4b5563;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-ver:hover {
-  background-color: #F58634;
-  color: white;
-  border-color: #F58634;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-color: var(--primary-color);
 }
 
 .btn-ver svg {
@@ -140,12 +140,12 @@ td::before {
   h2 { font-size: 1.8rem; margin-bottom: 2rem; }
 
   .table-container {
-    background: white;
+    background: var(--bg-card);
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px -1px var(--shadow-color);
     overflow: hidden;
     overflow-x: auto;
-    border: 1px solid #f3f4f6;
+    border: 1px solid var(--border-color);
   }
 
   table {
@@ -162,19 +162,19 @@ td::before {
     border: none;
     box-shadow: none;
     padding: 0;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
   }
 
 
   th {
     padding: 1rem;
     text-align: left;
-    color: #6b7280;
+    color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    background-color: var(--bg-app);
+    border-bottom: 1px solid var(--border-color);
   }
 
   th.acciones-header { text-align: right; }
@@ -184,7 +184,7 @@ td::before {
     padding: 1rem;
     border-bottom: none;
     vertical-align: middle;
-    color: #374151;
+    color: var(--text-main);
     font-size: 0.95rem;
     text-align: left;
   }
@@ -207,7 +207,7 @@ td::before {
   }
 
   tr:hover {
-    background-color: #fff7ed;
+    background-color: var(--bg-app);
   }
 }
 

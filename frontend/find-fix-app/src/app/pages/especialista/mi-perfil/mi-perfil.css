@@ -11,11 +11,11 @@
 
 .page-header h1 {
   font-size: 1.8rem;
-  color: #1f2937;
+  color: var(--text-main);
 }
 
 .page-header p {
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .profile-grid {
@@ -40,26 +40,26 @@
 }
 
 .card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
+  border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
 .card-header {
   padding: 1.5rem;
-  background-color: #fff7ed;
+  background-color: var(--bg-app);
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .header-icon {
   width: 40px;
   height: 40px;
-  background: white;
+  background: var(--bg-card);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -69,7 +69,7 @@
 
 .card-header h2 {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--text-main);
   margin: 0;
 }
 
@@ -87,8 +87,8 @@
 .avatar-circle {
   width: 64px;
   height: 64px;
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -98,14 +98,14 @@
 }
 
 .rating-badge {
-  background: #fffbeb;
-  color: #b45309;
+  background: var(--bg-input);
+  color: var(--text-main);
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.85rem;
   margin-top: 4px;
   display: inline-block;
-  border: 1px solid #fcd34d;
+  border: 1px solid var(--border-color);
 }
 
 .data-list {
@@ -116,7 +116,7 @@
 
 .data-item {
   padding: 1rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -135,17 +135,17 @@
 }
 
 .label {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .value {
-  color: #374151;
+  color: var(--text-main);
   font-weight: 500;
 }
 
 .value.locked {
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .edit-pencil {
@@ -154,11 +154,13 @@
   cursor: pointer;
   opacity: 0.5;
   transition: 0.2s;
+  color: var(--text-secondary);
 }
 
 .edit-pencil:hover {
   opacity: 1;
   transform: scale(1.1);
+  color: var(--text-main);
 }
 
 .value-container {
@@ -175,14 +177,16 @@
 
 .input-inline {
   padding: 6px 10px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 0.95rem;
+  background: var(--bg-input);
+  color: var(--text-main);
 }
 
 .input-inline:focus {
   outline: none;
-  border-color: #F58634;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
 
@@ -191,6 +195,9 @@
   resize: vertical;
   font-family: inherit;
   margin-bottom: 0.5rem;
+  background: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .actions-row {
@@ -204,10 +211,11 @@
   background: none;
   cursor: pointer;
   padding: 4px;
+  color: var(--text-main);
 }
 
 .action-btn:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-app);
   border-radius: 4px;
 }
 
@@ -219,9 +227,9 @@
 }
 
 .oficio-chip {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #dbeafe;
+  background: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -234,7 +242,7 @@
 .chip-remove {
   background: none;
   border: none;
-  color: #1d4ed8;
+  color: var(--text-secondary);
   cursor: pointer;
   font-size: 1.1rem;
   padding: 0;
@@ -249,9 +257,9 @@
 
 .add-btn {
   font-size: 0.8rem;
-  color: #F58634;
-  background: white;
-  border: 1px solid #F58634;
+  color: var(--primary-color);
+  background: var(--bg-card);
+  border: 1px solid var(--primary-color);
   padding: 2px 10px;
   border-radius: 4px;
   cursor: pointer;
@@ -259,15 +267,15 @@
 }
 
 .add-btn:hover {
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 .add-oficio-form {
   display: flex;
   gap: 5px;
   align-items: center;
-  background: #fff7ed;
+  background: var(--bg-app);
   padding: 10px;
   border-radius: 8px;
 }
@@ -283,7 +291,9 @@
   padding-right: 40px;
   padding: 0.75rem;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+  color: var(--text-main);
 }
 
 .toggle-btn {
@@ -292,7 +302,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .toggle-btn svg {
@@ -303,8 +313,8 @@
 .btn-full-width {
   width: 100%;
   margin-top: 1rem;
-  background: #1f2937;
-  color: white;
+  background: var(--text-main);
+  color: var(--bg-card);
   padding: 0.8rem;
   border: none;
   border-radius: 8px;
@@ -313,7 +323,7 @@
 }
 
 .btn-full-width:hover {
-  background: #111827;
+  background: #000;
 }
 
 @keyframes fadeIn {

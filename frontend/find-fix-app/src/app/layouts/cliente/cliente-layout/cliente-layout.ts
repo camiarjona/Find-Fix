@@ -5,6 +5,7 @@ import { UserService } from '../../../services/user/user.service';
 import { UserProfile } from '../../../models/user/user.model';
 import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 import { UI_ICONS } from '../../../models/general/ui-icons';
+import { ThemeService } from '../../../services/tema/theme.service';
 
 @Component({
   selector: 'app-cliente-layout',
@@ -22,12 +23,12 @@ export class ClienteLayout {
 
   public icons = UI_ICONS;
 
-  isDarkMode = signal(true);
   isEspecialistaMode = signal(false);
 
   private authService = inject(AuthService);
   private router = inject(Router);
   private userService = inject(UserService);
+  public themeService = inject(ThemeService);
 
 
   toggleSidebar() {
@@ -61,9 +62,8 @@ export class ClienteLayout {
 
   }
 
-  toggleTheme() {
-    this.isDarkMode.update(prev => !prev);
-    console.log("Modo oscuro:", this.isDarkMode());
+toggleTheme() {
+    this.themeService.toggleTheme(); 
   }
 
  /** Cambia el rol de cliente a especialista y viceversa */

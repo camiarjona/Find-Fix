@@ -4,6 +4,30 @@
       <span class="brand-text">FindFix Admin</span>
     </div>
 
+  <div class="header-controls">
+         <button class="theme-toggle" aria-label="Cambiar tema"
+  title="Cambiar a tema {{ themeService.isDarkMode() ? 'claro' : 'oscuro' }}"
+  (click)="toggleTheme()">
+
+  @if (themeService.isDarkMode()) {
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
+    </svg>
+  } @else {
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4.5" />
+      <path d="M12 2.5v2.5" />
+      <path d="M12 19v2.5" />
+      <path d="M4.5 12H2" />
+      <path d="M22 12h-2.5" />
+      <path d="M5.8 5.8l-1.8-1.8" />
+      <path d="M20 20l-1.8-1.8" />
+      <path d="M5.8 18.2l-1.8 1.8" />
+      <path d="M20 4l-1.8 1.8" />
+    </svg>
+  }
+</button>
+    </div>
     <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
       <span class="btn-text">Cerrar Sesión</span>
       <span class="btn-icon">

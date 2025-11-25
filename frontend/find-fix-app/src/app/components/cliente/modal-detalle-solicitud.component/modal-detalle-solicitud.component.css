@@ -23,10 +23,10 @@
 .modal-content {
   position: relative;
   z-index: 1001;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px var(--shadow-color);
   width: 90%;
   max-width: 500px;
   margin: 1rem;
@@ -37,14 +37,14 @@
   align-items: center;
   gap: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .modal-icon {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: #e0e7ff;
+  background-color: var(--bg-app);
   color: #3b82f6;
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@
 }
 
 h2 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
@@ -74,7 +74,7 @@ h2 {
 
 .detalle-lista li {
   padding: 0.6rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   display: grid;
   grid-template-columns: 150px 1fr;
   gap: 1rem;
@@ -86,21 +86,21 @@ h2 {
 
 .detalle-lista li strong {
   font-weight: 600;
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
 }
 
 .detalle-lista li span {
   font-weight: 500;
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
 }
 
 .detalle-texto {
   grid-column: 1 / -1;
   margin: 0.25rem 0 0 0;
   padding: 0.6rem 0.75rem;
-  background-color: #f9fafb;
+  background-color: var(--bg-input);
   border-radius: 6px;
-  color: var(--text-dark);
+  color: var(--text-main);
   font-size: 0.95rem;
   white-space: normal;
 }
@@ -125,8 +125,8 @@ h2 {
 }
 
 .btn-primary {
-  background-color: var(--primary-color, #F58634);
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 .btn-primary:hover {
@@ -146,8 +146,8 @@ h2 {
 }
 
 .status.aceptado {
-  color: #166534;
-  background-color: #dcfce7;
+  color: #14582e;
+  background-color: #ccf5da;
 }
 
 .status.rechazado {
@@ -156,7 +156,6 @@ h2 {
 }
 
 .texto-vacio {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-style: italic;
 }
-
