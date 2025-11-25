@@ -5,16 +5,16 @@
 }
 
 .filters-section {
-  background: white;
+  background: var(--bg-card);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px var(--shadow-color);
   margin-bottom: 30px;
 }
 
 h2 {
   margin-top: 0;
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
 }
 
 .filters-grid {
@@ -32,10 +32,11 @@ h2 {
 
 .filter-group select {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  background-color: white;
+  background-color: var(--bg-input);
+  color: var(--text-main);
 }
 
 .filter-actions {
@@ -55,20 +56,20 @@ h2 {
 }
 
 .esp-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px var(--shadow-color);
   transition: transform 0.2s;
   display: flex;
   flex-direction: column;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-color);
 }
 
 .esp-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-color, #F58634);
+  box-shadow: 0 10px 25px var(--shadow-color);
+  border-color: var(--primary-color);
 }
 
 .card-header {
@@ -81,8 +82,8 @@ h2 {
 .avatar {
   width: 50px;
   height: 50px;
-  background-color: var(--primary-color, #F58634);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -98,19 +99,25 @@ h2 {
 .header-info h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-main);
 }
 
 .city-badge {
   font-size: 0.85rem;
-  color: #666;
-  background: #f0f0f0;
+  color: var(--text-secondary);
+  background: var(--bg-app);
   padding: 2px 8px;
   border-radius: 10px;
 }
 
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
 .icon-action-btn {
-  background: #f3f4f6;
+  background: var(--bg-app);
   border: none;
   border-radius: 50%;
   width: 35px;
@@ -119,14 +126,14 @@ h2 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--text-secondary);
   transition: all 0.2s;
   margin-left: 5px;
 }
 
 .icon-action-btn:hover {
-  background: var(--primary-color, #F58634);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 /* --- NUEVO: Estilo Favorito Activo --- */
@@ -161,7 +168,7 @@ h2 {
 }
 
 .rating-label {
-  color: #999;
+  color: var(--text-secondary);
   font-weight: 400;
   font-size: 0.85rem;
 }
@@ -183,8 +190,8 @@ h2 {
 }
 
 .cta-button {
-  background: var(--primary-color, #F58634);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -198,14 +205,14 @@ h2 {
 }
 
 .cta-button:disabled {
-  background-color: #ccc;
+  background-color: var(--border-color);
   cursor: not-allowed;
 }
 
 .cta-button-outline {
   background: transparent;
-  color: var(--text-dark, #333);
-  border: 1px solid #ccc;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   padding: 10px 20px;
   border-radius: 8px;
   font-weight: 600;
@@ -213,7 +220,7 @@ h2 {
 }
 
 .cta-button-outline:hover {
-  background-color: #f9f9f9;
+  background-color: var(--bg-app);
 }
 
 .full-width {
@@ -224,10 +231,10 @@ h2 {
   grid-column: 1 / -1;
   text-align: center;
   padding: 40px;
-  color: #888;
-  background: #f9fafb;
+  color: var(--text-secondary);
+  background: var(--bg-app);
   border-radius: 8px;
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--border-color);
 }
 
 .modal-overlay {
@@ -245,12 +252,12 @@ h2 {
 }
 
 .modal-card {
-  background: white;
+  background: var(--bg-card);
   padding: 30px;
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px var(--shadow-color);
   box-sizing: border-box;
   position: relative;
 }
@@ -258,12 +265,14 @@ h2 {
 textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   margin: 10px 0 20px;
   font-family: inherit;
   box-sizing: border-box;
   font-size: 1rem;
+  background-color: var(--bg-input);
+  color: var(--text-main);
 }
 
 .modal-actions {
@@ -280,9 +289,9 @@ textarea {
 }
 
 .profile-header-modal {
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
   padding: 30px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -291,8 +300,8 @@ textarea {
 .avatar-large {
   width: 80px;
   height: 80px;
-  background-color: var(--primary-color, #F58634);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -306,11 +315,11 @@ textarea {
 .profile-header-modal h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #111;
+  color: var(--text-main);
 }
 
 .profile-city {
-  color: #666;
+  color: var(--text-secondary);
   margin: 5px 0 10px;
 }
 
@@ -322,7 +331,7 @@ textarea {
 
 .rating-count {
   font-size: 0.9rem;
-  color: #999;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
@@ -349,36 +358,35 @@ textarea {
 
 .contact-info {
   text-align: center;
-  background: #f9f9f9;
+  background: var(--bg-app);
   padding: 10px;
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .profile-actions-modal {
   padding: 20px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-color);
   display: flex;
   gap: 10px;
 }
 
 .btn-secondary-icon {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   width: 45px;
-  /* Cuadrado */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background 0.2s;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .btn-secondary-icon:hover {
-  background: #f3f4f6;
+  background: var(--bg-app);
 }
 
 .btn-secondary-icon svg {
@@ -397,7 +405,6 @@ textarea {
   color: white;
 }
 
-
 .flex-grow {
   flex: 1;
 }
@@ -409,7 +416,7 @@ textarea {
   background: none;
   border: none;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--text-secondary);
   cursor: pointer;
   width: 30px;
   height: 30px;
@@ -419,16 +426,14 @@ textarea {
 }
 
 .close-corner-btn:hover {
-  color: #333;
-  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+  background-color: var(--shadow-color);
   border-radius: 50%;
 }
 
-/* Desktop */
 @media (min-width: 768px) {
   .filters-grid {
     grid-template-columns: repeat(4, 1fr);
-    /* Filtros en fila */
     align-items: end;
   }
 

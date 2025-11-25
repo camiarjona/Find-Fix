@@ -10,21 +10,21 @@
 
 .page-header h1 {
   font-size: 1.8rem;
-  color: #1f2937;
+  color: var(--text-main);
 }
 
 .page-header p {
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 
 .table-container {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
   overflow: hidden;
   overflow-x: auto;
-  
+
 }
 
 .users-table {
@@ -34,31 +34,30 @@
 }
 
 .users-table th {
-  background-color: #f9fafb;
-  color: #6b7280;
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   text-align: left;
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .users-table td {
   padding: 1rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
-  color: #374151;
+  color: var(--text-main);
 }
 
 .users-table tr:hover {
-  background-color: #fff7ed;
-  
+  background-color: var(--bg-app);
 }
 
 
 .disabled-row {
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
   opacity: 0.7;
 }
 
@@ -72,8 +71,8 @@
 .avatar-placeholder {
   width: 40px;
   height: 40px;
-  background-color: #F58634;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -91,7 +90,7 @@
 }
 
 .text-muted {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -111,8 +110,8 @@
 
 
 .badge.role {
-  background-color: #e5e7eb;
-  color: #374151;
+  background-color: var(--bg-input);
+  color: var(--text-main);
   margin-right: 4px;
 }
 
@@ -146,10 +145,11 @@
   padding: 6px;
   border-radius: 6px;
   transition: background 0.2s;
+  color: var(--text-secondary);
 }
 
 .btn-icon:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-app);
 }
 
 .btn-icon.danger:hover {
@@ -181,7 +181,7 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  
+
   transition: .4s;
   border-radius: 34px;
 }
@@ -203,7 +203,7 @@
 
 input:checked+.slider {
   background-color: #16a34a;
-  
+
 }
 
 
@@ -218,17 +218,17 @@ input:focus+.slider {
 
 
 .filters-bar {
-  background-color: white;
+  background-color: var(--bg-card);
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px var(--shadow-color);
   margin-bottom: 1.5rem;
   display: flex;
   gap: 1.5rem;
   align-items: flex-end;
-  
+
   flex-wrap: wrap;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-color);
 }
 
 .filter-group {
@@ -240,23 +240,25 @@ input:focus+.slider {
 .filter-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .filter-input,
 .filter-select {
   padding: 0.6rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.95rem;
   min-width: 200px;
   outline: none;
   transition: border-color 0.2s;
+  background-color: var(--bg-input);
+  color: var(--text-main);
 }
 
 .filter-input:focus,
 .filter-select:focus {
-  border-color: #F58634;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
 
@@ -277,8 +279,8 @@ input:focus+.slider {
 }
 
 .btn-filter.search {
-  background-color: #F58634;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 .btn-filter.search:hover {
@@ -286,12 +288,13 @@ input:focus+.slider {
 }
 
 .btn-filter.clear {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 .btn-filter.clear:hover {
-  background-color: #e5e7eb;
+  background-color: var(--border-color);
 }
 
 
@@ -320,7 +323,7 @@ input:focus+.slider {
     display: block;
   }
 
-  
+
   .users-table thead {
     display: none;
   }
@@ -332,11 +335,11 @@ input:focus+.slider {
   .users-table tr {
     display: block;
     margin-bottom: 0.875rem;
-    background: #ffffff;
+    background: var(--bg-card);
     padding: 0.75rem;
     border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 3px var(--shadow-color);
+    border: 1px solid var(--border-color);
   }
 
   .users-table td {
@@ -345,10 +348,10 @@ input:focus+.slider {
     justify-content: space-between;
     padding: 0.4rem 0;
     border: none;
-    color: #374151;
+    color: var(--text-main);
   }
 
-    
+
     .users-table tr td:nth-child(1)::before { content: "Usuario"; }
     .users-table tr td:nth-child(2)::before { content: "Roles"; }
     .users-table tr td:nth-child(3)::before { content: "Estado"; }
@@ -357,12 +360,12 @@ input:focus+.slider {
   .users-table tr td::before {
     display: block;
     font-size: 0.75rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     font-weight: 600;
     margin-bottom: 0.35rem;
   }
 
-  
+
   .avatar-placeholder {
     width: 32px;
     height: 32px;
@@ -462,5 +465,3 @@ input:focus+.slider {
     padding: 3px;
   }
 }
-
-

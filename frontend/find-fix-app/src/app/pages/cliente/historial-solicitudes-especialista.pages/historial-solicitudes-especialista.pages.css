@@ -3,19 +3,19 @@
 }
 
 .content-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 h2 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-weight: 700;
   margin-top: 0;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 
@@ -52,12 +52,12 @@ thead {
 
 tbody tr {
   display: block;
-  background-color: #fff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   margin-bottom: 1rem;
   padding: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 
@@ -66,7 +66,7 @@ td {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   text-align: right;
 }
 
@@ -77,7 +77,7 @@ td:last-child {
 td::before {
   content: attr(data-label);
   font-weight: 600;
-  color: #6b7280;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-size: 0.75rem;
   margin-right: 1rem;
@@ -105,9 +105,9 @@ td.respuesta {
   justify-content: center;
   padding: 0.4rem;
   border-radius: 50%;
-  border: 1px solid #e5e7eb;
-  background-color: #f3f4f6;
-  color: #4b5563;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -172,7 +172,7 @@ td.respuesta {
   td {
     display: table-cell;
     padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     text-align: left;
   }
 
@@ -184,8 +184,8 @@ td.respuesta {
   th {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-    color: var(--text-light, #555);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -210,24 +210,24 @@ td.respuesta {
   }
 
   table {
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     overflow: hidden;
   }
 
   thead tr {
-    background-color: #f9fafb;
+    background-color: var(--bg-app);
   }
 }
 
 
 .filter-container {
-  background-color: white;
+  background-color: var(--bg-card);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px var(--shadow-color);
   margin-bottom: 2rem;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -245,17 +245,17 @@ td.respuesta {
 .search-box {
   display: flex;
   align-items: center;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.2rem 0.5rem 0.2rem 1rem;
-  background: white;
+  background: var(--bg-input);
   flex-grow: 1;
   max-width: 400px;
   transition: border-color 0.2s;
 }
 
 .search-box:focus-within {
-  border-color: #F58634;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
 
@@ -264,20 +264,21 @@ td.respuesta {
   outline: none;
   font-size: 0.95rem;
   width: 100%;
-  color: #374151;
+  color: var(--text-main);
+  background: transparent;
 }
 
 .btn-search {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
 .btn-search:hover {
-  color: #F58634;
+  color: var(--primary-color);
 }
 
 .btn-search svg {
@@ -289,18 +290,18 @@ td.respuesta {
 .filter-select,
 .filter-date {
   padding: 0.6rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #4b5563;
-  background-color: white;
+  color: var(--text-main);
+  background-color: var(--bg-input);
   cursor: pointer;
   outline: none;
 }
 
 .filter-select:hover,
 .filter-date:hover {
-  border-color: #9ca3af;
+  border-color: var(--text-secondary);
 }
 
 
@@ -309,13 +310,13 @@ td.respuesta {
   align-items: center;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--border-color);
   flex-wrap: wrap;
 }
 
 .filters-label {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -332,10 +333,10 @@ td.respuesta {
   align-items: center;
   gap: 8px;
   background-color: #eff6ff;
-  
+
   border: 1px solid #dbeafe;
   color: #1e40af;
-  
+
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -369,7 +370,7 @@ td.respuesta {
   background: none;
   border: none;
   color: #ef4444;
-  
+
   font-size: 0.85rem;
   cursor: pointer;
   text-decoration: underline;
@@ -385,31 +386,30 @@ td.respuesta {
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: white;
-  border: 1px solid #d1d5db;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 0 0.5rem; 
+  padding: 0 0.5rem;
 }
 
 
 .filter-date {
   border: none;
   outline: none;
-  padding: 0.6rem 0.2rem; 
+  padding: 0.6rem 0.2rem;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-main);
   background: transparent;
-  max-width: 130px; 
+  max-width: 130px;
 }
 
 .separator {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-weight: bold;
 }
 
 
 .date-range-wrapper:focus-within {
-  border-color: #F58634;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.1);
 }
-

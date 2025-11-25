@@ -6,11 +6,11 @@
 
 
 .content-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border-top: 4px solid var(--primary-color, #F58634);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-top: 4px solid var(--primary-color);
   overflow: hidden;
 }
 
@@ -20,9 +20,9 @@
 
 
 .info-columna {
-  background-color: #f8f9fa;
+  background-color: var(--bg-app);
   padding: 2rem;
-  border-left: 1px solid #e5e7eb;
+  border-left: 1px solid var(--border-color);
   border-radius: 0 12px 12px 0;
 }
 
@@ -39,18 +39,18 @@
 .info-icono svg {
   width: 28px;
   height: 28px;
-  color: var(--primary-color, #F58634);
+  color: var(--primary-color);
 }
 
 .info-columna h3 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
 .info-columna p {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -62,7 +62,7 @@
   margin-bottom: 1.5rem;
 }
 .pasos-lista li {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   display: flex;
   align-items: center;
@@ -75,35 +75,35 @@
   justify-content: center;
   width: 22px;
   height: 22px;
-  background-color: #fff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   font-weight: 600;
   font-size: 0.8rem;
-  color: var(--primary-color, #F58634);
+  color: var(--primary-color);
 }
 
 .info-footer {
   font-style: italic;
   font-size: 0.85rem;
-  color: #6c757d;
-  border-top: 1px solid #e5e7eb;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
   padding-top: 1rem;
   margin-bottom: 0;
 }
 
 
 h2 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-weight: 700;
   font-size: 1.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.75rem;
   margin-top: 0;
 }
 
 p {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -121,22 +121,23 @@ form label { display: none; }
 form textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   resize: vertical;
   min-height: 120px;
   box-sizing: border-box;
-  background-color: #fdfdfd;
+  background-color: var(--bg-input);
+  color: var(--text-main);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 form textarea:focus {
   outline: none;
-  border-color: var(--primary-color, #F58634);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 
 .form-error[role="alert"] {
@@ -146,8 +147,8 @@ form textarea:focus {
 
 
 .cta-button {
-  background-color: var(--primary-color, #F58634);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   padding: 16px 28px;
   border: none;
   border-radius: 8px;
@@ -170,8 +171,8 @@ form textarea:focus {
 
 .cta-button:disabled,
 .cta-button:disabled:hover {
-  background-color: #e9ecef;
-  color: #adb5bd;
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
@@ -205,8 +206,7 @@ form textarea:focus {
   .info-columna {
     padding: 1.5rem;
     border-left: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border-color);
     border-radius: 0 0 12px 12px;
   }
 }
-

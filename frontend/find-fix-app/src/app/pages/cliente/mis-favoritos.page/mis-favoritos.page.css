@@ -1,3 +1,26 @@
+/* Contenedor principal de la página */
+.favoritos-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
+}
+
+.page-title {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 2.2rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+}
+
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -11,12 +34,12 @@
 
 .page-title {
   font-size: 2rem;
-  color: #1a1a1a;
+  color: var(--text-main);
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 /* --- GRID DE TARJETAS --- */
@@ -26,22 +49,80 @@
   gap: 20px;
 }
 
+/* Estilos de la Tarjeta (Card) individual */
+.favorito-card {
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.favorito-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.initials {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.info h2 {
+  font-size: 1.3rem;
+  margin: 0 0 3px;
+  color: var(--text-main);
+}
+
+.info .email {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.oficio {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 5px 0 0;
+}
+
 .esp-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px var(--shadow-color);
   transition: transform 0.2s;
   display: flex;
   flex-direction: column;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-color);
 }
 
 .esp-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: #F58634;
-  /* var(--primary-color) */
+  box-shadow: 0 10px 25px var(--shadow-color);
+  border-color: var(--primary-color);
 }
 
 .card-header {
@@ -54,8 +135,8 @@
 .avatar {
   width: 50px;
   height: 50px;
-  background-color: #F58634;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -71,19 +152,19 @@
 .header-info h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-main);
 }
 
 .city-badge {
   font-size: 0.85rem;
-  color: #666;
-  background: #f0f0f0;
+  color: var(--text-secondary);
+  background: var(--bg-app);
   padding: 2px 8px;
   border-radius: 10px;
 }
 
 .icon-action-btn {
-  background: #f3f4f6;
+  background: var(--bg-app);
   border: none;
   border-radius: 50%;
   width: 35px;
@@ -92,14 +173,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--text-secondary);
   transition: all 0.2s;
   margin-left: 5px;
 }
 
 .icon-action-btn:hover {
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
 }
 
 /* Estilo especial para el botón de favorito activo (para quitarlo) */
@@ -124,6 +205,13 @@
   margin-bottom: 20px;
 }
 
+.card-body .meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
 .oficios-list {
   display: flex;
   flex-wrap: wrap;
@@ -142,8 +230,8 @@
 
 /* --- BOTONES GENERALES --- */
 .cta-button {
-  background: #F58634;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-inverse);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -152,19 +240,43 @@
   transition: background-color 0.2s;
 }
 
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+.btn-secondary {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: var(--text-inverse);
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
 .cta-button:hover {
   background-color: #e07024;
 }
 
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
 .cta-button:disabled {
-  background-color: #ccc;
+  background-color: var(--border-color);
   cursor: not-allowed;
 }
 
 .cta-button-outline {
   background: transparent;
-  color: #333;
-  border: 1px solid #ccc;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   padding: 10px 20px;
   border-radius: 8px;
   font-weight: 600;
@@ -174,7 +286,7 @@
 }
 
 .cta-button-outline:hover {
-  background-color: #f9f9f9;
+  background-color: var(--bg-app);
 }
 
 .full-width {
@@ -184,18 +296,27 @@
 /* --- ESTADOS VACIO / CARGA --- */
 .empty-state {
   text-align: center;
-  padding: 40px;
-  color: #888;
-  background: #f9fafb;
-  border-radius: 8px;
-  border: 1px dashed #ccc;
+  padding: 60px 20px;
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  margin-top: 30px;
+  background: var(--bg-card);
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 25px;
 }
 
 .loading-message,
 .error-message {
   text-align: center;
-  padding: 20px;
-  color: #666;
+  padding: 40px;
+  color: var(--text-secondary);
+  background: var(--bg-app);
+  border-radius: 8px;
+  border: 1px dashed var(--border-color);
 }
 
 .error-message {
@@ -218,12 +339,12 @@
 }
 
 .modal-card {
-  background: white;
+  background: var(--bg-card);
   padding: 30px;
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px var(--shadow-color);
   box-sizing: border-box;
   position: relative;
 }
@@ -236,9 +357,9 @@
 }
 
 .profile-header-modal {
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
   padding: 30px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -247,8 +368,8 @@
 .avatar-large {
   width: 80px;
   height: 80px;
-  background-color: #F58634;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -262,11 +383,11 @@
 .profile-header-modal h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #111;
+  color: var(--text-main);
 }
 
 .profile-city {
-  color: #666;
+  color: var(--text-secondary);
   margin: 5px 0 10px;
 }
 
@@ -278,7 +399,7 @@
 
 .rating-count {
   font-size: 0.9rem;
-  color: #999;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
@@ -295,7 +416,7 @@
 }
 
 .desc-text {
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -317,16 +438,16 @@
 }
 
 .contact-info {
-  background: #f9f9f9;
+  background: var(--bg-app);
   padding: 10px;
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--text-main);
 }
 
 .profile-actions-modal {
   padding: 20px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-color);
   display: flex;
   gap: 10px;
 }
@@ -342,15 +463,15 @@
   background: none;
   border: none;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--text-secondary);
   cursor: pointer;
   width: 30px;
   height: 30px;
 }
 
 .close-corner-btn:hover {
-  color: #333;
-  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+  background-color: var(--shadow-color);
   border-radius: 50%;
 }
 
@@ -367,11 +488,13 @@
 textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-family: inherit;
   box-sizing: border-box;
   font-size: 1rem;
+  background-color: var(--bg-input);
+  color: var(--text-main);
 }
 
 .modal-actions {
