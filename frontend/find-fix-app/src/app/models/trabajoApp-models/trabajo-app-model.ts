@@ -17,6 +17,7 @@ export interface VisualizarTrabajoAppEspecialista {
   presupuesto: number;
   fechaInicio: string;
   fechaFin: string;
+  origen?: string;
 }
 
 export interface ActualizarTrabajoApp {

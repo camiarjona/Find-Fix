@@ -1,57 +1,121 @@
-<div class="page-container">
+<div class="contenedor-pagina">
 
-  <header class="page-header">
-    <h1>Solicitudes de Trabajo</h1>
-    <p>Clientes que quieren contratarte.</p>
-  </header>
-
-  @if (mostrarModal()) {
-    <app-modal-confirmacion
-      [titulo]="datosModal().titulo"
-      [mensaje]="datosModal().mensaje"
-      [tipo]="datosModal().tipo"
-      [textoConfirmar]="datosModal().textoConfirmar"
-      (cancelar)="cerrarModal()"
-      (confirmar)="confirmarAccion()">
-    </app-modal-confirmacion>
-  }
-
-  <div class="solicitudes-grid">
-
-    @for (solicitud of solicitudes(); track solicitud.id) {
-
-      <div class="solicitud-card">
-        <div class="card-header">
-          <span class="fecha">{{ solicitud.fecha | date:'mediumDate' }}</span>
-          <span class="badge-pendiente">Pendiente</span>
-        </div>
-
-        <div class="card-body">
-          <div class="cliente-info">
-            <div class="avatar-circle">
-              {{ solicitud.nombreCliente.charAt(0) }}
-            </div>
-            <span class="cliente-name">{{ solicitud.nombreCliente }}</span>
-          </div>
-          <p class="descripcion">"{{ solicitud.descripcion }}"</p>
-        </div>
-
-        <div class="card-actions">
-          <button class="btn-rechazar" (click)="iniciarRespuesta(solicitud.id, 'RECHAZADA')">
-            Rechazar
-          </button>
-          <button class="btn-aceptar" (click)="iniciarRespuesta(solicitud.id, 'ACEPTADA')">
-            Aceptar Trabajo
-          </button>
-        </div>
-      </div>
-
-    } @empty {
-      <div class="empty-state">
-        <div class="empty-icon">📭</div>
-        <h3>No tienes solicitudes pendientes</h3>
-        <p>¡Mejora tu perfil para atraer más clientes!</p>
-      </div>
-    }
+  <div class="encabezado-pagina">
+    <div class="titulo-encabezado">
+      <h1>Solicitudes</h1>
+      <p>Gestiona las propuestas de nuevos clientes</p>
     </div>
+  </div>
+
+  <div class="barra-control">
+
+    <div class="contenedor-tabs">
+      <button class="tab-btn" [class.activo]="filtroEstado === 'PENDIENTE'" (click)="cambiarFiltroEstado('PENDIENTE')">
+        Pendientes
+      </button>
+      <button class="tab-btn" [class.activo]="filtroEstado === 'FINALIZADA'"
+        (click)="cambiarFiltroEstado('FINALIZADA')">
+        Historial
+      </button>
+      <button class="tab-btn" [class.activo]="filtroEstado === 'TODAS'" (click)="cambiarFiltroEstado('TODAS')">
+        Todas
+      </button>
+    </div>
+
+    <div class="buscador-wrapper">
+      <input type="text" placeholder="Buscar por cliente o título..." [(ngModel)]="filtroTexto"
+        (keyup)="aplicarFiltros()" class="input-buscador">
+      <svg class="icono-lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
+  </div>
+
+  @if (estaCargando()) {
+  <div class="contenedor-cargando">
+    <div class="cargador"></div>
+    <p>Cargando solicitudes...</p>
+  </div>
+  } @else {
+
+  @if (solicitudesVisibles().length === 0) {
+  <div class="estado-vacio">
+    <div class="icono-vacio">📭</div>
+    <h3>No hay solicitudes aquí</h3>
+    <p>No se encontraron solicitudes con los filtros actuales.</p>
+  </div>
+  } @else {
+
+  <div class="contenedor-grid">
+    @for (solicitud of solicitudesVisibles(); track solicitud.id) {
+    <div class="tarjeta-solicitud">
+
+      <div class="header-card">
+        <div class="fecha-badge">
+          📅 {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
+        </div>
+        <span class="estado-badge" [ngClass]="obtenerClaseEstado(solicitud.estado)">
+          {{ formatearEstado(solicitud.estado) }}
+        </span>
+      </div>
+
+      <div class="body-card">
+        <h3 class="titulo-solicitud">{{ solicitud.titulo }}</h3>
+
+        <div class="info-cliente">
+          <div class="avatar-placeholder">
+            {{ solicitud.cliente ? solicitud.cliente.charAt(0).toUpperCase() : 'C' }}
+          </div>
+          <div>
+            <p class="nombre-cliente">{{ solicitud.cliente || 'Cliente Anónimo' }}</p>
+          </div>
+        </div>
+
+        <p class="descripcion-solicitud">
+          "{{ solicitud.descripcion }}"
+        </p>
+      </div>
+
+      @if (solicitud.estado === 'PENDIENTE') {
+      <div class="footer-actions">
+        <button class="btn-accion rechazar" (click)="rechazarSolicitud(solicitud)">
+          Rechazar
+        </button>
+        <button class="btn-accion aceptar" (click)="aceptarSolicitud(solicitud)">
+          Aceptar Trabajo
+        </button>
+      </div>
+      } @else {
+      <div class="footer-info">
+        @if(solicitud.estado === 'ACEPTADO') {
+        <span class="texto-exito">✓ Trabajo aceptado</span>
+        } @else {
+        <span class="texto-error">✕ Solicitud rechazada</span>
+        }
+      </div>
+      }
+
+    </div>
+    }
+  </div>
+
+  }
+  }
 </div>
+
+@if (alertaVisible()) {
+@if (esModalNavegacion()) {
+<app-modal-confirmacion tipo="exito" titulo="¡Solicitud Aceptada!" [mensaje]="mensajeAlerta()"
+  textoConfirmar="Ir a Mis Trabajos" textoCancelar="Ir al Inicio" [mostrarBotonCancelar]="true"
+  (confirmar)="irAMisTrabajos()" (cancelar)="irAlInicio()">
+</app-modal-confirmacion>
+}
+@else {
+<app-modal-confirmacion [tipo]="tipoAlerta() === 'success' ? 'exito' : 'pregunta'"
+  [titulo]="tipoAlerta() === 'success' ? '¡Listo!' : 'Atención'" [mensaje]="mensajeAlerta()" textoConfirmar="Entendido"
+  (confirmar)="cerrarAlerta()" (cancelar)="cerrarAlerta()">
+</app-modal-confirmacion>
+}
+}

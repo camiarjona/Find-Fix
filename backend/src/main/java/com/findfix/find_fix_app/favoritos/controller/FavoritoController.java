@@ -26,7 +26,7 @@ public class FavoritoController {
 
     @GetMapping
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<ApiResponse<Stream<EspecialistaListadoDTO>>> obtenerFavoritos() throws UsuarioNotFoundException, FavoritoException {
+    public ResponseEntity<ApiResponse<List<EspecialistaListadoDTO>>> obtenerFavoritos() throws UsuarioNotFoundException, FavoritoException {
         List<Especialista> favoritos = favoritoService.obtenerFavoritos();
 
         String mensaje = favoritos.isEmpty() ?
@@ -34,7 +34,7 @@ public class FavoritoController {
                 "⭐Mis favoritos⭐";
 
         return ResponseEntity.ok(new ApiResponse<>(mensaje,
-                favoritos.stream().map(EspecialistaListadoDTO::new)));
+                favoritos.stream().map(EspecialistaListadoDTO::new).toList()));
     }
 
     @DeleteMapping("/eliminar/{emailEspecialista}")

@@ -13,8 +13,7 @@ import { ModalConfirmacionComponent } from "../../../components/cliente/modal-co
   styleUrl: './nueva-solicitud-especialista.page.css',
 })
 export class NuevaSolicitudEspecialistaPage {
-
-  private fb = inject(FormBuilder);
+private fb = inject(FormBuilder);
   private solicitudService = inject(SolicitudEspecialistaService);
   private router = inject(Router);
 
@@ -41,21 +40,17 @@ export class NuevaSolicitudEspecialistaPage {
       error: (err) => this.mensajeError.set(err.error.message || 'Error al enviar la solicitud')
     });
   }
-
-    //Funciones para manejar los eventos del modal
+  onModalIrHistorial() {
+    this.isModalOpen.set(false);
+    this.router.navigate(['/cliente/solicitar-especialista/historial']);
+  }
 
   onModalIrInicio() {
     this.isModalOpen.set(false);
     this.router.navigate(['/cliente/dashboard']);
   }
 
-  onModalIrHistorial() {
-    this.isModalOpen.set(false);
-    this.router.navigate(['/cliente/solicitar-especialista/historial']);
-  }
-
   onModalCerrar() {
     this.isModalOpen.set(false);
   }
-
 }

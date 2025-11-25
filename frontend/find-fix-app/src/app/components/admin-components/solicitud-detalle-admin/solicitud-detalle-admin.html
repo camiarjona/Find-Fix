@@ -1,95 +1,150 @@
 <div class="detalle-container">
-  <button (click)="goBack()" class="cta-button">← Volver al Listado</button>
+
+  <button (click)="goBack()" class="btn-back">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+    Volver al listado
+  </button>
 
   @if (loading()) {
-    <div class="loading-state">Cargando detalles de la solicitud...</div>
+  <div class="loading-state">
+    <p>Cargando información...</p>
+  </div>
   } @else if (solicitud()) {
-    <div class="ficha-card">
-      <h1>Detalle de Solicitud N° {{ solicitud()!.seId }}</h1>
-      <hr>
 
-      <section class="details-grid">
+  <div class="ficha-card">
+    <div class="card-header">
+      <div class="header-title">
+        <h1>Solicitud de Especialista</h1>
+        <span class="solicitud-id">ID #{{ solicitud()!.seId }}</span>
+      </div>
+      <span class="status-badge" [ngClass]="'status-' + (solicitud()!.estado | lowercase)">
+        {{ solicitud()!.estado }}
+      </span>
+    </div>
+
+    <div class="card-body">
+
+      <div class="details-grid">
         <div class="detail-item">
-          <strong>Email del Solicitante:</strong>
+          <label>Solicitante</label>
           <p>{{ solicitud()!.email }}</p>
         </div>
         <div class="detail-item">
-          <strong>Fecha de Solicitud:</strong>
-          <p>{{ solicitud()!.fechaSolicitud | date:'dd/MM/yyyy' }}</p>
+          <label>Fecha Solicitud</label>
+          <p>{{ solicitud()!.fechaSolicitud | date:'dd MMM yyyy' }}</p>
         </div>
-        <div class="detail-item">
-          <strong>Estado Actual:</strong>
-          <span class="status-badge status-{{ solicitud()!.estado | lowercase }}">{{ solicitud()!.estado }}</span>
-        </div>
-
         @if (solicitud()!.fechaResolucion) {
-          <div class="detail-item">
-            <strong>Fecha de Resolución:</strong>
-            <p>{{ solicitud()!.fechaResolucion | date:'dd/MM/yyyy' }}</p>
-          </div>
+        <div class="detail-item">
+          <label>Fecha Resolución</label>
+          <p>{{ solicitud()!.fechaResolucion | date:'dd MMM yyyy' }}</p>
+        </div>
         }
-      </section>
+      </div>
 
-      <section class="motivo-section">
-        <h3>Motivo del Solicitante</h3>
-        <p class="motivo-content">{{ solicitud()!.motivo }}</p>
-      </section>
+      <div class="text-section">
+        <div class="section-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3">
+            </path>
+          </svg>
+          Motivo del Cliente
+        </div>
+        <div class="content-box">
+          {{ solicitud()!.motivo }}
+        </div>
+      </div>
 
       @if (!isPending) {
-        <section class="respuesta-section">
-          <h3>Respuesta del Administrador</h3>
-          <p class="respuesta-content">{{ solicitud()!.respuesta }}</p>
-        </section>
+      <div class="text-section">
+        <div class="section-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Respuesta del Administrador
+        </div>
+        <div class="content-box admin-response-box">
+          {{ solicitud()!.respuesta }}
+        </div>
+      </div>
       }
 
       @if (isPending) {
-        <section class="resolucion-section">
-          <h3>Resolución de Solicitud</h3>
+      <div class="resolution-area">
+        <h3 class="section-title">Resolver Solicitud</h3>
 
-          @if (submissionError()) {
-            <div class="error-message">{{ submissionError() }}</div>
-          }
+        @if (submissionError()) {
+        <div class="error-state" style="margin-bottom: 20px;">{{ submissionError() }}</div>
+        }
 
-          <form [formGroup]="resolutionForm" class="resolution-form">
-            <div class="form-group">
-              <label for="respuesta">Respuesta/Observación para el Cliente:</label>
-              <textarea id="respuesta" formControlName="respuesta" rows="4"></textarea>
+        <form [formGroup]="resolutionForm">
+          <div class="form-group">
+            <label for="respuesta">Observación / Respuesta</label>
+            <textarea id="respuesta" formControlName="respuesta" class="custom-textarea"
+              placeholder="Escribe aquí el motivo de aprobación o rechazo..."></textarea>
 
-              @if (resolutionForm.get('respuesta')?.invalid && resolutionForm.get('respuesta')?.touched) {
-                <div class="validation-error">La respuesta es obligatoria.</div>
+            @if (resolutionForm.get('respuesta')?.invalid && resolutionForm.get('respuesta')?.touched) {
+            <div class="validation-error">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              La respuesta es obligatoria.
+            </div>
+            }
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" (click)="handleResolution('RECHAZADO')" [disabled]="isResolving()"
+              class="btn-action btn-reject">
+              @if (isResolving() && resolutionForm.value.estado === 'RECHAZADO') {
+              <span>Procesando...</span>
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Rechazar
               }
-            </div>
+            </button>
 
-            <div class="action-buttons">
-              <button
-                type="button"
-                (click)="handleResolution('RECHAZADO')"
-                [disabled]="isResolving()"
-                class="btn-rechazar">
-                @if (isResolving() && resolutionForm.value.estado === 'RECHAZADO') {
-                  Rechazando...
-                } @else {
-                  Rechazar Solicitud
-                }
-              </button>
-              <button
-                type="button"
-                (click)="handleResolution('ACEPTADO')"
-                [disabled]="isResolving()"
-                class="btn-aprobar">
-                @if (isResolving() && resolutionForm.value.estado === 'ACEPTADO') {
-                  Aprobando...
-                } @else {
-                  Aprobar Solicitud
-                }
-              </button>
-            </div>
-          </form>
-        </section>
+            <button type="button" (click)="handleResolution('ACEPTADO')" [disabled]="isResolving()"
+              class="btn-action btn-approve">
+              @if (isResolving() && resolutionForm.value.estado === 'ACEPTADO') {
+              <span>Procesando...</span>
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+              Aprobar Solicitud
+              }
+            </button>
+          </div>
+        </form>
+      </div>
       }
 
     </div>
+  </div>
+
   } @else {
-    <div class="error-state">No se pudo cargar la solicitud.</div>
+  <div class="error-state">
+    <p>No se pudo encontrar la solicitud solicitada.</p>
+    <button (click)="goBack()" class="btn-back" style="justify-content: center; margin-top: 10px;">Volver al
+      inicio</button>
+  </div>
   }
 </div>
+
+@if (feedbackData.visible) {
+<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
+  (cerrar)="cerrarFeedback()">
+</app-modal-feedback>
+}

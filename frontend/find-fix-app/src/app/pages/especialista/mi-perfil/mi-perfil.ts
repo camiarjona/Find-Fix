@@ -142,14 +142,12 @@ export class MiPerfilEspecialista implements OnInit {
   // --- MÉTODOS DE OFICIOS ---
   addOficio() {
     if (!this.selectedOficioToAdd) return;
-    // Validación local: evitar agregar si ya existe
     const perfil = this.perfil();
     if (perfil && perfil.oficios && perfil.oficios.some(o => o.nombre === this.selectedOficioToAdd)) {
       this.mostrarFeedback('Error', 'Ya tienes registrado ese oficio.', 'error');
       return;
     }
 
-    // Enviamos el nombre del oficio seleccionado
     const dto: ActualizarOficios = { agregar: [this.selectedOficioToAdd], eliminar: [] };
 
     this.especialistaService.actualizarOficios(dto).subscribe({
@@ -157,10 +155,9 @@ export class MiPerfilEspecialista implements OnInit {
         this.mostrarFeedback('¡Actualizado!', `Oficio agregado con éxito.`);
         this.isAddingOficio.set(false);
         this.selectedOficioToAdd = '';
-        this.reloadProfile(); // Recargamos para ver el cambio
+        this.reloadProfile();
       },
       error: (err) => {
-        // Mostrar mensaje específico si el backend responde con conflicto (409)
         if (err && err.status === 409) {
           const msg = err.error?.mensaje || 'Ya existe ese oficio en tu perfil.';
           this.mostrarFeedback('Error', msg, 'error');
@@ -171,7 +168,6 @@ export class MiPerfilEspecialista implements OnInit {
     });
   }
 
-  // Método que ejecuta la eliminación inmediata (legacy/directo)
   removeOficio(nombreOficio: string) {
     const dto: ActualizarOficios = { agregar: [], eliminar: [nombreOficio] };
 
@@ -186,17 +182,14 @@ export class MiPerfilEspecialista implements OnInit {
     });
   }
 
-  // Abre modal de confirmación (no ejecuta la eliminación todavía)
   promptRemoveOficio(nombreOficio: string) {
     this.oficioToRemove = nombreOficio;
   }
 
-  // Cancela la eliminación (cierra modal)
   cancelRemoveOficio() {
     this.oficioToRemove = null;
   }
 
-  // Ejecuta la eliminación confirmada
   confirmRemoveOficio() {
     if (!this.oficioToRemove) return;
 
@@ -241,12 +234,12 @@ export class MiPerfilEspecialista implements OnInit {
 
     this.userService.updatePassword(data).subscribe({
       next: () => {
-        alert('Contraseña actualizada');
+        this.mostrarFeedback('¡Actualizado!', 'Contraseña actualizada con éxito.');
         this.isPasswordLoading.set(false);
         this.passwordData = { passwordActual: '', passwordNuevo: '', confirmacion: '' };
       },
       error: (err) => {
-        alert(err.error?.mensaje || 'Error');
+        this.mostrarFeedback('Error', err.error?.mensaje || 'Error al cambiar contraseña', 'error');
         this.isPasswordLoading.set(false);
       }
     });

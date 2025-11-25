@@ -183,21 +183,17 @@
     <header class="main-header">
       <div class="header-controls">
 
-        <!-- Toggle de Rol (Cliente/Especialista) -->
         <label class="role-toggle" title="Cambiar a vista de {{ isEspecialistaMode() ? 'Cliente' : 'Especialista' }}">
 
-          <!-- Conectado al signal -->
-          <input type="checkbox" class="toggle-checkbox" [checked]="isEspecialistaMode()" (change)="toggleRole()">
+          <input type="checkbox" class="toggle-checkbox" [checked]="isEspecialistaMode()" (change)="toggleRole($event)">
 
           <span class="toggle-icons">
-            <!-- Icono Cliente -->
             <span class="icon-cliente">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
               </svg>
             </span>
-            <!-- Icono Especialista -->
             <span class="icon-especialista">
               <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
                 stroke="currentColor">
@@ -212,10 +208,8 @@
           <span class="toggle-slider"></span>
         </label>
 
-        <!-- Separador Visual -->
         <div class="header-divider"></div>
 
-        <!-- Botón de Tema (Sol/Luna) -->
         <button class="theme-toggle" aria-label="Cambiar tema"
           title="Cambiar a tema {{ isDarkMode() ? 'claro' : 'oscuro' }}" (click)="toggleTheme()">
           @if (isDarkMode()) {
@@ -227,19 +221,13 @@
           } @else {
           <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Círculo central -->
             <circle cx="12" cy="12" r="4.5" />
-
-            <!-- Rayos suaves estilo minimal -->
             <path d="M12 2.5v2.5" />
             <path d="M12 19v2.5" />
-
             <path d="M4.5 12H2" />
             <path d="M22 12h-2.5" />
-
             <path d="M5.8 5.8l-1.8-1.8" />
             <path d="M20 20l-1.8-1.8" />
-
             <path d="M5.8 18.2l-1.8 1.8" />
             <path d="M20 4l-1.8 1.8" />
           </svg>
@@ -253,3 +241,27 @@
 
   </main>
 </div>
+
+@if (isInvitationModalOpen()) {
+  <div class="modal-overlay-custom" (click)="cerrarModalInvitacion()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">
+        <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
+                <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
+              </svg>
+      </div>
+      <h2>¡Conviértete en Especialista!</h2>
+      <p>Parece que aún no tienes perfil de especialista. <br> ¿Te gustaría ofrecer tus servicios en FindFix?</p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cerrarModalInvitacion()">Ahora no</button>
+        <button class="btn-confirm" (click)="irASolicitud()">Sí, quiero unirme</button>
+      </div>
+    </div>
+  </div>
+}
