@@ -7,7 +7,6 @@ import { ClienteLayout } from './layouts/cliente/cliente-layout/cliente-layout';
 import { DashboardPage } from './pages/cliente/dashboard.page/dashboard.page';
 import { MisSolicitudesPage } from './pages/cliente/mis-solicitudes.page/mis-solicitudes.page';
 import { BuscarEspecialistas } from './pages/cliente/buscar-especialistas.page/buscar-especialistas.page';
-import { MisResenas } from './pages/cliente/mis-resenas/mis-resenas';
 import { MisTrabajos } from './pages/cliente/mis-trabajos.page/mis-trabajos.page';
 import { MisFavoritosPage } from './pages/cliente/mis-favoritos.page/mis-favoritos.page';
 import { NuevaSolicitudEspecialistaPage } from './pages/cliente/nueva-solicitud-especialista.page/nueva-solicitud-especialista.page';
@@ -16,7 +15,7 @@ import { EspecialistaLayout } from './layouts/especialista/especialista-layout/e
 import { DashboardEspecialistaPage } from './pages/especialista/dashboard-especialista.page/dashboard-especialista.page';
 import { SolicitudesPage } from './pages/especialista/solicitudes.page/solicitudes.page';
 import { MisTrabajosPage } from './pages/especialista/mis-trabajos.page/mis-trabajos.page';
-import { MisResenasPage } from './pages/especialista/mis-resenas.page/mis-resenas.page';
+import { MisResenasEspecialista } from './pages/especialista/mis-resenas-especialista/mis-resenas-especialista';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
 import { OficiosListPage } from './pages/admin-pages/oficios-list.page/oficios-list.page';
 import { RolesListPage } from './pages/admin-pages/roles-list.page/roles-list.page';
@@ -29,6 +28,7 @@ import { LandingListEspecialistasComponent } from './pages/landing-page/landing-
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page';
+
 
 export const routes: Routes = [
   {
@@ -98,7 +98,6 @@ export const routes: Routes = [
         component: MisSolicitudesPage
       },
       { path: 'buscar-especialistas', component: BuscarEspecialistas },
-      { path: 'mis-resenas', component: MisResenas },
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritosPage },
       {
@@ -142,7 +141,7 @@ export const routes: Routes = [
       },
       {
         path: 'mis-resenas',
-        component: MisResenasPage
+        component: MisResenasEspecialista
       },
       {
         path: 'mi-perfil',
