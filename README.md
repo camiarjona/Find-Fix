@@ -1,121 +1,131 @@
-# 🛠️ Find-Finx - Sistema de búsqueda y prestación de servicios.
+# 🛠️ Find-Fix - Sistema de búsqueda y prestación de servicios
 
-![Java](https://img.shields.io/badge/Java-21-blue?logo=java)
+![Java](https://img.shields.io/badge/Java-21-blue?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-brightgreen?logo=springboot)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-lightgrey?logo=mysql)
+![Angular](https://img.shields.io/badge/Angular-v19%2B-dd0031?logo=angular)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?logo=postgresql)
 ![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
-![Backend Only](https://img.shields.io/badge/Interfaz-Pendiente-lightblue)
 
 ---
 
 ## 📌 Descripción
 
-Este proyecto tiene como objetivo conectar **clientes** con **especialistas** a través de una plataforma centralizada. Los usuarios pueden buscar profesionales según su **oficio** o **ciudad**, enviar solicitudes de trabajo, y dejar **reseñas** al finalizar un servicio.
+**Find-Fix** es una plataforma integral full-stack diseñada para conectar **clientes** con **especialistas** de diversos oficios.
 
-Por otro lado, los especialistas pueden **gestionar solicitudes**, organizar sus **trabajos** (tanto dentro como fuera de la app) y mantener un historial de sus proyectos.
+La aplicación ofrece una experiencia completa donde los usuarios pueden buscar profesionales, contratar servicios y calificarlos. Los especialistas cuentan con un **Dashboard interactivo** para gestionar sus solicitudes, visualizar métricas de sus trabajos (ingresos, historial, calificaciones) mediante gráficos dinámicos y organizar su agenda tanto para trabajos dentro de la app como externos.
 
 ---
 
 ## ⚔️ Funcionalidades Principales
 
-- Registro e inicio de sesión de usuarios.
-- Solicitud para convertirse en especialista.
-- Búsqueda de especialistas según filtros.
-- Envío y gestión de solicitudes de trabajo.
-- Gestión de trabajos dentro de la app (**TrabajoApp**) y externos (**TrabajoExterno**).
-- Dejar reseñas tras finalizar un trabajo.
-- Gestión de usuarios con distintos **roles** (cliente, especialista, admin).
+### 👤 Usuarios (Clientes y Especialistas)
+- Registro e inicio de sesión seguro (JWT).
+- Gestión de perfiles de usuario.
+
+### 🔎 Clientes
+- Búsqueda de especialistas con filtros por **oficio**, **ciudad** y **calificación**.
+- Envío de solicitudes de trabajo detalladas.
+- Gestión de favoritos.
+- Sistema de reseñas y puntuación al finalizar un servicio.
+
+### 👷 Especialistas
+- **Dashboard interactivo** con métricas en tiempo real (Gráficos de ingresos, tasa de aceptación, etc.).
+- Gestión de solicitudes (Aceptar/Rechazar).
+- Organización de trabajos:
+    - **TrabajoApp:** Gestionados dentro del flujo de la plataforma.
+    - **TrabajoExterno:** Registro de trabajos particulares para control financiero.
+- Visualización de historial y reseñas recibidas.
+
+### 🛡️ Administrador
+- Gestión de usuarios, roles y oficios disponibles.
 
 ---
 
 ## 🧱 Tecnologías Utilizadas
 
+### 🔙 Backend
 - **Java 21**
-- **Spring Boot**
-- **Spring Security**
-- **JPA / Hibernate**
-- **SQL**
-- **Postman** (para pruebas)
+- **Spring Boot 3** (Spring Security, Web, Validation)
+- **JPA / Hibernate** (Persistencia de datos)
+- **Maven** (Gestión de dependencias)
 - **Lombok**
-- **Maven**
+
+### 🔜 Frontend
+- **Angular v19/20** (Framework SPA)
+- **TypeScript**
+- **Chart.js / ng2-charts** (Visualización de datos y gráficas)
+- **HTML5 / CSS3** (Diseño responsivo y moderno)
+
+### 🗄️ Base de Datos
+- **PostgreSQL** (Implementado en la nube con **Neon Tech**)
 
 ---
 
-## 🧪 Pruebas
+## ⚙️ Configuración del Proyecto
 
-- Los endpoints están testeados en **Postman**.
-- Se requiere autenticación para acceder a los recursos protegidos según el rol.
-- Soporta filtrado de datos con **Specifications** dinámicas (por fecha, estado, título, etc.).
+El proyecto está dividido en dos partes principales: `backend` y `frontend`. A continuación se detalla cómo ejecutar cada una.
 
----
-
-## ⚙️ Configuración del proyecto
-
-Este proyecto usa Spring Boot con precarga automática de datos al iniciar, y permite conexión con bases de datos relacionales como PostgreSQL (por ejemplo con Neon), MySQL, entre otras.
-
-### ✅ Requisitos previos
-
-- Java 17+
-
-- Base de datos relacional (PostgreSQL, MySQL, etc.)
-
-- Maven
-
-- IDE como IntelliJ o Eclipse
-
-
-## 🛠️ Configuración de la base de datos
-
-En el archivo application.properties o application.yml, completá los datos de tu base. A continuación hay un ejemplo con PostgreSQL (Neon):
-
-```properties
-spring.datasource.url=jdbc:postgresql://tu-host.neon.tech:5432/tu_basededatos
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-```
-
-También podés usar MySQL o cualquier base de datos compatible con JPA cambiando el url y el dialect correspondiente.
-
-**¡No te olvides de agregar el driver o la dependencia correspondiente!**
+### 📋 Requisitos previos
+- Java 17 o superior (Recomendado Java 21).
+- Node.js (v18 o superior) y npm.
+- Angular CLI (`npm install -g @angular/cli`).
+- Cuenta en Neon.tech (u otra instancia de PostgreSQL).
 
 ---
 
-## 📦 Precarga de datos
+### 🛠️ 1. Configuración del Backend
 
-Cuando se inicia la aplicación, se cargan automáticamente roles, ciudades y otros datos base necesarios para que el sistema funcione sin necesidad de ingresar datos manuales.
+1.  Navega a la carpeta del backend.
+2.  Configura las variables de entorno o edita el archivo `src/main/resources/application.properties` con las credenciales de tu base de datos **Neon PostgreSQL**:
 
+    ```properties
+    # Conexión a Neon PostgreSQL
+    spring.datasource.url=jdbc:postgresql://tu-host-de-neon.aws.neon.tech:5432/tu_base_de_datos?sslmode=require
+    spring.datasource.username=tu_usuario_neon
+    spring.datasource.password=tu_password_neon
+
+    # Configuración JPA
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+    ```
+
+3.  Ejecuta la aplicación:
+    - Desde tu IDE (IntelliJ/Eclipse) ejecutando `FindFixAppApplication.java`.
+    - O vía terminal: `./mvnw spring-boot:run`.
+
+> **Nota:** El sistema incluye un `DataInitializer` que precarga roles, oficios y ciudades automáticamente al iniciar si la base de datos está vacía.
 
 ---
 
-## 🚀 Cómo ejecutar
+### 💻 2. Configuración del Frontend
 
-1. Cloná el repositorio.
+1.  Navega a la carpeta del frontend:
+    `cd frontend/find-fix-app`
 
+2.  **Instalar dependencias (IMPORTANTE):**
+    Es crucial ejecutar este comando para descargar la carpeta `node_modules` con todas las librerías necesarias (Angular, Chart.js, etc.) que no se incluyen en el repositorio:
+    `npm install`
 
-2. Configurá tu archivo application.properties.
+3.  **Ejecutar el servidor de desarrollo:**
+    `ng serve`
 
-
-3. Ejecutá la clase FindFixAppApplication.java.
-
-
-4. Usá Postman (u otra herramienta) para probar las rutas.
+4.  Abre tu navegador en `http://localhost:4200/`.
 
 ---
 
-## 📚Documentación con endpoints disponibles
+## 🧪 Pruebas y Documentación
 
-[Find-Fix - Endpoints](https://docs.google.com/document/d/1lvLfzfLlXB_Eut2KI4ePRHm3PPPWE8_JrSTTgYvkI00/edit?usp=sharing)
+- **Postman:** Los endpoints del backend están probados y organizados.
+- [Find-Fix - Endpoints](https://docs.google.com/document/d/1lvLfzfLlXB_Eut2KI4ePRHm3PPPWE8_JrSTTgYvkI00/edit?usp=sharing)
 
 ---
 
 ## 📌 Estado del Proyecto
 
-- ✅ Backend funcional con endpoints listos.
-- 🛠️ En desarrollo la interfaz visual (frontend).
+- ✅ **Backend:** Completo, asegurado y conectado a la nube.
+- ✅ **Frontend:** Interfaz funcional, integración de gráficos y dashboard implementada.
+- 🔄 **En proceso:** Refinamiento de estilos y optimización de experiencia de usuario (UX).
 
 ---
 
@@ -124,4 +134,3 @@ Cuando se inicia la aplicación, se cargan automáticamente roles, ciudades y ot
 ### **Arjona Camila, Galeano Facundo, Figueroa Belén, Oliviero Marco**
 
 ---
-
