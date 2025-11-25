@@ -1,49 +1,62 @@
-<div class="resena-form-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Dejar Reseña</mat-card-title>
-      <mat-card-subtitle>Trabajo #{{ trabajoId }}</mat-card-subtitle>
-    </mat-card-header>
+<div class="review-container">
+  <div class="review-card">
 
-    <mat-card-content>
-      <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">
+    <div class="header">
+      <h1>Calificar Servicio</h1>
+      <p>Tu opinión ayuda a otros usuarios y mejora la calidad de los especialistas.</p>
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Puntuación (1 a 5)</mat-label>
-          <input matInput
-                 type="number"
-                 formControlName="puntuacion"
-                 min="1"
-                 max="5">
-          <mat-icon matSuffix>star</mat-icon>
-          <mat-error *ngIf="f['puntuacion'].errors?.['required']">La puntuación es obligatoria.</mat-error>
-          <mat-error *ngIf="f['puntuacion'].errors?.['min'] || f['puntuacion'].errors?.['max']">
-            La puntuación debe ser entre 1 y 5.
-          </mat-error>
-        </mat-form-field>
+    <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Comentario</mat-label>
-          <textarea matInput
-                    formControlName="comentario"
-                    rows="4"
-                    placeholder="Describe tu experiencia con el especialista."></textarea>
-          <mat-error *ngIf="f['comentario'].errors?.['required']">El comentario es obligatorio.</mat-error>
-          <mat-error *ngIf="f['comentario'].errors?.['maxlength']">El comentario no puede exceder los 500 caracteres.</mat-error>
-        </mat-form-field>
-
-        <div class="action-buttons">
-          <button mat-raised-button color="primary" type="submit" [disabled]="resenaForm.invalid || isLoading">
-            <span *ngIf="!isLoading">Enviar Reseña</span>
-            <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
-          </button>
-
-          <button mat-button type="button" [routerLink]="['/cliente/mis-trabajos']">
-            Cancelar
-          </button>
+      <div class="stars-selector">
+        <p class="label">¿Qué tal fue el servicio?</p>
+        <div class="stars-row">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+          <span class="star" [class.active]="star <= puntuacionSeleccionada()" (click)="setEstrellas(star)">
+            ★
+          </span>
+          }
         </div>
+        <span class="rating-text">
+          {{ puntuacionSeleccionada() }}/5 -
+          @switch (puntuacionSeleccionada()) {
+          @case (1) { Mala experiencia 😞 }
+          @case (2) { Regular 😐 }
+          @case (3) { Bien 🙂 }
+          @case (4) { Muy bien 😀 }
+          @case (5) { ¡Excelente! 🤩 }
+          }
+        </span>
+      </div>
 
-      </form>
-    </mat-card-content>
-  </mat-card>
+      <div class="form-group">
+        <label for="comentario">Cuéntanos más detalles:</label>
+        <textarea id="comentario" formControlName="comentario" rows="5"
+          placeholder="¿Qué fue lo que más te gustó? ¿Hubo algún inconveniente?">
+        </textarea>
+
+        @if (resenaForm.get('comentario')?.touched && resenaForm.get('comentario')?.invalid) {
+        <div class="error-msg">
+          El comentario debe tener al menos 10 caracteres.
+        </div>
+        }
+      </div>
+
+      @if (errorMessage()) {
+      <div class="server-error">
+        ⚠️ {{ errorMessage() }}
+      </div>
+      }
+
+      <div class="actions">
+        <button type="button" class="btn-cancel" (click)="cancelar()" [disabled]="isLoading()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="resenaForm.invalid || isLoading()">
+          {{ isLoading() ? 'Enviando...' : 'Publicar Reseña' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
 </div>

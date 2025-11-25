@@ -215,30 +215,41 @@
 }
 
 
+/* --- Colores de Estado (Actualizados para coincidir) --- */
+.status-creado,
 .creado {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #dbeafe;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
 }
 
+.status-en-proceso,
 .en_proceso {
-  background: #fff7ed;
+  background-color: #fff7ed;
   color: #c2410c;
   border: 1px solid #ffedd5;
 }
 
-.finalizado {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #dcfce7;
+.status-en-revision,
+.en_revision {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
 }
 
+.status-finalizado,
+.finalizado {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.status-cancelado,
 .cancelado {
   background: #fef2f2;
   color: #b91c1c;
   border: 1px solid #fee2e2;
 }
-
 
 .contenedor-insignia-estado {
   position: relative;
@@ -282,22 +293,6 @@
   align-items: center;
   color: inherit;
   opacity: 0.6;
-}
-
-.contenedor-insignia-estado:has(.creado) .flecha-insignia {
-  color: #1d4ed8;
-}
-
-.contenedor-insignia-estado:has(.en_proceso) .flecha-insignia {
-  color: #c2410c;
-}
-
-.contenedor-insignia-estado:has(.finalizado) .flecha-insignia {
-  color: #15803d;
-}
-
-.contenedor-insignia-estado:has(.cancelado) .flecha-insignia {
-  color: #b91c1c;
 }
 
 
@@ -931,31 +926,54 @@
   font-size: 1.2rem;
 }
 
-/* --- Colores de Estado --- */
-/* Creado (Azul) */
-.status-creado {
-  background-color: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
+/* --- ESTILOS NUEVOS: Botones de Acción de Reseña --- */
+.acciones-tarjeta {
+  display: flex;
+  gap: 8px;
 }
 
-/* En Proceso (Naranja) */
-.status-en-proceso {
-  background-color: #fff7ed;
-  color: #c2410c;
-  border: 1px solid #ffedd5;
+.btn-calificar {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* En Revisión (Violeta) */
-.status-en-revision {
-  background-color: #f3e8ff;
-  color: #7e22ce;
-  border: 1px solid #e9d5ff;
+.btn-calificar:hover {
+  background-color: #fcd34d;
+  color: #78350f;
 }
 
-/* Finalizado (Verde) */
-.status-finalizado {
-  background-color: #dcfce7;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
+/* Para la tabla */
+.acciones-tabla {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-icono-calificar {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  color: #b45309;
+}
+
+.btn-icono-calificar:hover {
+  background: #fcd34d;
+  transform: scale(1.1);
+  color: #78350f;
 }

@@ -3,6 +3,7 @@ import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { BuscarTrabajoApp, VisualizarTrabajoAppCliente } from '../../../models/trabajoApp-models/trabajo-app-model';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mis-trabajos.page',
@@ -18,6 +19,7 @@ export class MisTrabajos implements OnInit {
   public trabajos = signal<VisualizarTrabajoAppCliente[]>([]);
   public trabajosVisibles = signal<VisualizarTrabajoAppCliente[]>([]);
   public estaCargando = signal(true);
+  private router = inject(Router);
 
   // Filtros y Vistas
   public filtros: BuscarTrabajoApp = { titulo: '', estado: '', desde: '', hasta: '' };
@@ -26,6 +28,11 @@ export class MisTrabajos implements OnInit {
 
   // Modal Detalle
   public trabajoSeleccionado: WritableSignal<VisualizarTrabajoAppCliente | null> = signal(null);
+
+  irADejarResena(idTrabajo: number, event: Event) {
+    event.stopPropagation();
+    this.router.navigate(['/cliente/crear-resena', idTrabajo]);
+  }
 
   ngOnInit() {
     this.cargarTrabajos();
