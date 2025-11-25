@@ -1,0 +1,73 @@
+.resena-card {
+  width: 100%;
+  border-left: 5px solid var(--primary-color, #1a237e);
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s;
+}
+
+.resena-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #333;
+}
+
+mat-card-header mat-icon {
+  margin-right: 8px;
+  color: var(--primary-color, #1a237e);
+}
+
+.puntuacion-detalle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.stars-display mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  /* El color 'accent' será amarillo/naranja en Angular Material */
+}
+
+.rating-value {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-left: 10px;
+  color: var(--accent-color, #ffb300);
+}
+
+.comentario-detalle {
+  margin-top: 10px;
+}
+
+.comentario-text {
+  font-style: italic;
+  color: #555;
+  padding: 0 0 5px 5px;
+  border-left: 3px solid var(--accent-color, #ffb300);
+  line-height: 1.5;
+}
+
+.quote-icon {
+  font-size: 16px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+mat-card-footer {
+  text-align: right;
+  padding: 8px 16px;
+  border-top: 1px solid #eee;
+  color: #999;
+}

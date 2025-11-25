@@ -1,0 +1,31 @@
+<mat-card *ngIf="resena" class="resena-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon color="primary">person_pin</mat-icon>
+      Para: **{{ resena.nombreEspecialista }}**
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="puntuacion-detalle">
+      <div class="stars-display">
+        <mat-icon *ngFor="let starStatus of getStars(resena.puntuacion); let i = index"
+                  [color]="starStatus === 1 ? 'accent' : 'disabled'">
+          {{ starStatus === 1 ? 'star' : 'star_border' }}
+        </mat-icon>
+      </div>
+      <span class="rating-value">{{ resena.puntuacion }}/5</span>
+    </div>
+
+    <div class="comentario-detalle">
+      <p class="comentario-text">
+        <mat-icon class="quote-icon">format_quote</mat-icon>
+        {{ resena.comentario }}
+      </p>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <small>Reseña ID: {{ resena.resenaId }}</small>
+  </mat-card-footer>
+</mat-card>
