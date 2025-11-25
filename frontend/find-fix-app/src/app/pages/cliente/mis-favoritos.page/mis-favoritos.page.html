@@ -1,49 +1,172 @@
-<div class="favoritos-container">
-  <h1 class="page-title">🌟 Mis Especialistas Favoritos</h1>
-  <p class="subtitle">Aquí puedes ver a todos los profesionales que guardaste.</p>
+<div class="page-container">
 
-  <div *ngIf="isLoading" class="loading-message">
-    Cargando lista de favoritos...
-  </div>
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
+  <div class="header-section">
+    <h1 class="page-title">⭐Mis Especialistas Favoritos⭐</h1>
+    <p class="subtitle">Gestiona a los profesionales que has guardado.</p>
   </div>
 
-  <div *ngIf="!isLoading && favoritos.length === 0" class="empty-state">
-    <img src="assets/images/no-favorites.png" alt="Sin favoritos" class="empty-img">
+  @if (isLoading()) {
+  <div class="loading-message">Cargando favoritos...</div>
+  }
+  @if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+  }
+
+  @if (!isLoading() && favoritos().length === 0) {
+  <div class="empty-state">
     <p>Aún no tienes especialistas guardados.</p>
-    <a routerLink="/cliente/buscar-especialistas" class="btn btn-primary">Buscar especialistas ahora</a>
+    <a routerLink="/cliente/buscar-especialistas" class="cta-button-outline">Buscar especialistas</a>
   </div>
+  }
 
-  <div *ngIf="favoritos.length > 0" class="favoritos-list">
-
-    <div *ngFor="let fav of favoritos" class="favorito-card">
+  <div class="especialistas-grid">
+    @for (fav of favoritos(); track $index) {
+    <article class="esp-card">
       <div class="card-header">
-        <span class="initials">{{ fav.especialistaNombre ? fav.especialistaNombre[0] : 'E' }}</span>
-        <div class="info">
-          <h2>{{ fav.especialistaNombre }}</h2>
-          <p class="email">{{ fav.especialistaEmail }}</p> <p class="oficio">{{ fav.especialistaOficio }}</p>
+        <div class="avatar">
+          {{ fav.nombre.charAt(0) }}{{ fav.apellido.charAt(0)}}
         </div>
+
+        <div class="header-info">
+          <h3>{{ fav.nombre || 'Desconocido' }} {{ fav.apellido || '' }}</h3>
+          <span class="city-badge">{{ fav.ciudad || 'Sin ciudad' }}</span>
+        </div>
+
+        @if (fav.email) {
+        <button class="icon-action-btn fav-active" (click)="eliminarDeFavoritos(fav.email, $event)"
+          title="Quitar de Favoritos">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+          </svg>
+        </button>
+        }
+
+        @if (fav.email) {
+        <button class="icon-action-btn" (click)="abrirModalDetalle(fav.email)" title="Ver Perfil Completo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          </svg>
+        </button>
+        }
       </div>
 
       <div class="card-body">
-        <p class="meta">Agregado el: {{ fav.fechaCreacion | date:'dd/MM/yyyy' }}</p>
-
-        <div class="actions">
-          <button
-            class="btn btn-secondary"
-            (click)="verPerfilEspecialista(fav.especialistaEmail)">
-            Ver Perfil
-          </button>
-
-          <button
-            class="btn btn-danger"
-            (click)="eliminarDeFavoritos(fav.especialistaEmail)">
-            <i class="fas fa-trash"></i> Eliminar
-          </button>
+        <div class="rating">
+          ⭐ {{ fav.calificacionPromedio || '0.0' }}
         </div>
+        <div class="oficios-list">
+          @for (oficio of fav.oficios; track $index) {
+          <span class="oficio-tag">{{ oficio }}</span>
+          }
+          @if (!fav.oficios || fav.oficios.length === 0) {
+          <span class="oficio-tag">Sin oficios</span>
+          }
+        </div>
+      </div>
+
+      <div class="card-footer">
+        @if (fav.email) {
+        <button class="cta-button full-width" (click)="abrirModalDetalle(fav.email)">
+          Ver Perfil
+        </button>
+        } @else {
+        <button class="cta-button full-width" disabled style="background-color: #ccc; cursor: not-allowed;">
+          Datos no disponibles
+        </button>
+        }
+      </div>
+    </article>
+    }
+  </div>
+</div>
+
+@if (showModalDetalle()) {
+<div class="modal-overlay" (click)="cerrarModalDetalle()">
+  <div class="modal-card profile-modal" (click)="$event.stopPropagation()">
+
+    @if (isLoadingDetalle() || !especialistaSeleccionaCompleto()) {
+    <div class="loading-state">
+      <p>Cargando perfil completo...</p>
+    </div>
+    } @else {
+    <div class="profile-header-modal">
+      <div class="avatar-large">
+        {{ especialistaSeleccionaCompleto()?.nombre ? especialistaSeleccionaCompleto()?.nombre?.charAt(0) : 'E' }}
+        {{ especialistaSeleccionaCompleto()?.apellido ? especialistaSeleccionaCompleto()?.apellido?.charAt(0) : '' }}
+      </div>
+      <h2>{{ especialistaSeleccionaCompleto()?.nombre }} {{ especialistaSeleccionaCompleto()?.apellido }}</h2>
+      <p class="profile-city">📍 {{ especialistaSeleccionaCompleto()?.ciudad || 'Sin ciudad' }}</p>
+      <div class="rating-large">
+        ⭐ {{ especialistaSeleccionaCompleto()?.calificacionPromedio || '0.0' }} <span class="rating-count">/ 5.0</span>
       </div>
     </div>
 
+    <div class="profile-body-modal">
+      <div class="about-section">
+        <h4>Sobre mí</h4>
+        <p class="desc-text">{{ especialistaSeleccionaCompleto()?.descripcion || 'Sin descripción.' }}</p>
+      </div>
+
+      <h4>Oficios</h4>
+      <div class="oficios-tags-large">
+        @for (oficio of especialistaSeleccionaCompleto()?.oficios; track $index) {
+        <span class="tag-large">{{ oficio.nombre }}</span>
+        }
+      </div>
+
+      <div class="contact-info">
+        <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
+        <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
+      </div>
+    </div>
+
+    <div class="profile-actions-modal">
+      <button class="cta-button flex-grow" (click)="abrirModalContratar(especialistaSeleccionaCompleto())">
+        Contratar Ahora
+      </button>
+    </div>
+    }
+
+    <button class="close-corner-btn" (click)="cerrarModalDetalle()">✕</button>
   </div>
 </div>
+}
+
+@if (showModalContratar()) {
+<div class="modal-overlay" (click)="cerrarModalContratar()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Solicitar Servicio</h3>
+    <p class="modal-desc">Para: <strong>{{ especialistaParaContratar?.nombre }}</strong></p>
+
+    <div class="form-group">
+      <label>Describe el problema o trabajo a realizar:</label>
+      <textarea [(ngModel)]="descripcionTrabajo" rows="4"
+        placeholder="Ej: Necesito reparar una fuga de agua en la cocina..."></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="cta-button-outline" (click)="cerrarModalContratar()">Cancelar</button>
+      <button class="cta-button" (click)="enviarSolicitud()" [disabled]="!descripcionTrabajo || isSubmitting()">
+        {{ isSubmitting() ? 'Enviando...' : 'Enviar Solicitud' }}
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+@if (showModalConfirmacion()) {
+<app-modal-confirmacion titulo="Quitar de Favoritos"
+  mensaje="¿Estás seguro de que quieres eliminar a este especialista de tu lista?" textoConfirmar="Sí, eliminar"
+  textoCancelar="Cancelar" tipo="pregunta" (confirmar)="confirmarEliminacion()" (cancelar)="cerrarModalConfirmacion()">
+</app-modal-confirmacion>
+}
+
+@if (feedbackData.visible) {
+<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
+  (cerrar)="cerrarFeedback()">
+</app-modal-feedback>
+}

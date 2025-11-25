@@ -7,7 +7,6 @@ export interface MostrarSolicitudTrabajoDTO {
   descripcion: string;
 }
 
-
 export interface BuscarSolicitudDTO {
   desde?: string; // Formato 'YYYY-MM-DD'
   hasta?: string;

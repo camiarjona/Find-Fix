@@ -25,3 +25,15 @@ p {
   font-size: 1rem;
   line-height: 1.6;
 }
+
+/* Estilo para cuando es favorito */
+.icon-action-btn.fav-active {
+    color: #ef4444;
+    background-color: #fee2e2;
+    border-color: #ef4444;
+}
+
+.icon-action-btn.fav-active:hover {
+    background-color: #ef4444;
+    color: white;
+}

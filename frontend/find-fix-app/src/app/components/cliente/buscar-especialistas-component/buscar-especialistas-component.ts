@@ -4,10 +4,13 @@ import { BuscarEspecialistaService } from '../../../services/cliente/buscar-espe
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PerfilEspecialista } from '../../../models/especialista/especialista.model';
+import { FavoritoService } from '../../../services/favoritos/lista-favs.service';
+import { AgregarFavoritoDTO } from '../../../models/favoritos/lista-favs.model';
+import { ModalFeedbackComponent } from "../../general/modal-feedback.component/modal-feedback.component";
 
 @Component({
   selector: 'app-buscar-especialistas-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent],
   templateUrl: './buscar-especialistas-component.html',
   styleUrl: './buscar-especialistas-component.css',
 })
@@ -19,12 +22,30 @@ export class BuscarEspecialistasComponent {
   public ciudades = this.clienteService.ciudades;
   public oficiosDisponibles = this.clienteService.oficios;
 
+  private favoritosService = inject(FavoritoService);
+
+  public favoritosSet = signal<Set<string>>(new Set());
+
   // Estado de Filtros
   public filtros: FiltroEspecialistasDTO = {
     ciudad: '',
     oficio: '',
     minCalificacion: 0
   };
+
+    public showConfirmPass = signal(false);
+
+  // Feedback modal state
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+
+  mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+  }
+
+  cerrarFeedback() {
+    this.feedbackData = { ...this.feedbackData, visible: false };
+  }
+
   public showModalContratar = signal(false);
   public showModalDetalle = signal(false);
   public especialistaSeleccionado: EspecialistaDTO | any;
@@ -36,11 +57,26 @@ export class BuscarEspecialistasComponent {
   ngOnInit() {
     this.clienteService.obtenerEspecialistas();
     this.clienteService.cargarDatosFiltros();
+    this.cargarFavoritosDelUsuario();
   }
 
+  cargarFavoritosDelUsuario() {
+    this.favoritosService.obtenerFavoritosPorCliente().subscribe({
+      next: (resp) => {
+        const lista = resp.data || [];
+        // Creamos un Set con los emails de los favoritos
+        const emailsFavoritos = new Set(lista.map(fav => fav.email));
+        this.favoritosSet.set(emailsFavoritos);
+      },
+      error: (err) => console.error('Error cargando favoritos iniciales', err)
+    });
+  }
+
+  esFavorito(email: string): boolean {
+    return this.favoritosSet().has(email);
+  }
 
   aplicarFiltros() {
-
     const filtrosEnviar: FiltroEspecialistasDTO = {};
     if (this.filtros.ciudad) filtrosEnviar.ciudad = this.filtros.ciudad;
     if (this.filtros.oficio) filtrosEnviar.oficio = this.filtros.oficio;
@@ -83,12 +119,12 @@ export class BuscarEspecialistasComponent {
       descripcion: this.descripcionTrabajo
     }).subscribe({
       next: () => {
-        alert('Solicitud enviada con éxito!');
+        this.mostrarFeedback('Enhorabuena', 'Solicitud enviada con éxito');
         this.isSubmitting.set(false);
         this.cerrarModalContratar();
       },
       error: (err) => {
-        alert('Error al enviar solicitud: ' + (err.error?.mensaje || 'Intente nuevamente'));
+        this.mostrarFeedback('Error al enviar la solicitud', 'Intente nuevamente');
         this.isSubmitting.set(false);
       }
     });
@@ -122,8 +158,41 @@ export class BuscarEspecialistasComponent {
   cerrarModalDetalle() {
     this.showModalDetalle.set(false);
   }
-  toggleFavorito(esp: EspecialistaDTO | PerfilEspecialista ) {
-    alert('La funcionalidad de Favoritos estará disponible próximamente.');
+
+  toggleFavorito(esp: EspecialistaDTO | PerfilEspecialista, event?: Event) {
+    if(event) event.stopPropagation();
+
+    const email = esp.email;
+    const yaEsFavorito = this.esFavorito(email);
+
+    if (yaEsFavorito) {
+      // --- ELIMINAR ---
+      this.favoritosService.eliminarFavorito(email).subscribe({
+        next: () => {
+          this.favoritosSet.update(set => {
+            const nuevoSet = new Set(set);
+            nuevoSet.delete(email);
+            return nuevoSet;
+          });
+        },
+        error: (err) => alert('Error al quitar de favoritos')
+      });
+
+    } else {
+      // --- AGREGAR ---
+      const nuevoFavorito: AgregarFavoritoDTO = { especialistaEmail: email };
+
+      this.favoritosService.agregarFavorito(nuevoFavorito).subscribe({
+        next: () => {
+          this.favoritosSet.update(set => {
+            const nuevoSet = new Set(set);
+            nuevoSet.add(email);
+            return nuevoSet;
+          });
+        },
+        error: (err) => alert('Error al agregar a favoritos')
+      });
+    }
   }
 }
 

@@ -10,20 +10,19 @@ import { ApiResponse } from '../../models/api-response/apiResponse.model';
 export class EspecialistaService {
 
   private apiURL = 'http://localhost:8080/especialistas';
+  private solicitudUrl = 'http://localhost:8080/solicitud-trabajo';
 
   constructor(private http: HttpClient){ }
 
   /*Obtiene todas las solicitudes de trabajo del especialista*/
-
   getSolicitudesRecibidas(): Observable<SolicitudRecibida[]> {
-    return this.http.get<ApiResponse<SolicitudRecibida[]>>(`${this.apiURL}/solicitud-trabajo/recibidas/mis-solicitudes`, { withCredentials: true })
+    return this.http.get<ApiResponse<SolicitudRecibida[]>>(`${this.solicitudUrl}/recibidas/mis-solicitudes`, { withCredentials: true })
       .pipe(map(response => response.data));
   }
 
   /*Obtiene todos los trabajos del especialista, trabajos de la app y externos en una sola lista*/
-
   getMisTrabajos(): Observable<TrabajoEspecialista[]> {
-    return this.http.get<ApiResponse<{ [key: string]: any[] }>>(`${this.apiURL}/trabajos`, { withCredentials: true })
+    return this.http.get<ApiResponse<{ [key: string]: any[] }>>(`http://localhost:8080/trabajos`, { withCredentials: true })
       .pipe(map(response => {
         const listaApp: TrabajoApp[] = response.data['Trabajos de la app'] || [];
         const listaExternos: TrabajoExterno[] = response.data['Trabajos externos'] || [];
@@ -56,7 +55,6 @@ export class EspecialistaService {
       }));
   }
 
-
   /*Obtiene todas las reseñas recibidas del especialista */
   getMisResenas(): Observable<ResenaEspecialista[]> {
     return this.http.get<ApiResponse<ResenaEspecialista[]>>(`${this.apiURL}/resenas/recibidas`, { withCredentials: true })
@@ -80,7 +78,7 @@ export class EspecialistaService {
   }
 
   /** Responder a una solicitud (Aceptar o Rechazar) */
-  responderSolicitud(id: number, estado: 'ACEPTADA' | 'RECHAZADA'): Observable<any> {
-    return this.http.patch(`${this.apiURL}/solicitud-trabajo/actualizar-estado/${id}`, { estado }, { withCredentials: true });
+  responderSolicitud(id: number, estado: 'ACEPTADO' | 'RECHAZADO'): Observable<any> {
+    return this.http.patch(`${this.solicitudUrl}/actualizar-estado/${id}`, { estado }, { withCredentials: true });
   }
 }

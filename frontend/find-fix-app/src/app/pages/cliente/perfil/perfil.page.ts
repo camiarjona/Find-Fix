@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { ModalFeedbackComponent } from '../../../components/general/modal-feedback.component/modal-feedback.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
@@ -8,7 +9,7 @@ import { UI_ICONS } from '../../../models/general/ui-icons';
 @Component({
   selector: 'app-mi-perfil-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent],
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.css']
 })
@@ -34,6 +35,22 @@ export class PerfilPage implements OnInit {
     confirmacion: ''
   };
   public isPasswordLoading = signal(false);
+
+    // Visibilidad Password
+  public showCurrentPass = signal(false);
+  public showNewPass = signal(false);
+  public showConfirmPass = signal(false);
+
+  // Feedback modal state
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+
+  mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+  }
+
+  cerrarFeedback() {
+    this.feedbackData = { ...this.feedbackData, visible: false };
+  }
 
   ngOnInit() {
     this.loadData();
@@ -81,33 +98,37 @@ export class PerfilPage implements OnInit {
           this.usuario.set({ ...currentUser }); // Forzamos refresco de señal
         }
         this.editingField.set(null);
-        alert('Dato actualizado correctamente');
+        this.mostrarFeedback('¡Actualizado!', 'Dato actualizado correctamente');
       },
-      error: (err) => alert(err.error?.mensaje || 'Error al actualizar')
+      error: (err) => this.mostrarFeedback('Error', err.error?.mensaje || 'Error al actualizar', 'error')
     });
   }
 
   // --- MÉTODOS DE SEGURIDAD ---
+    togglePass(field: 'curr' | 'new' | 'conf') {
+    if (field === 'curr') this.showCurrentPass.update(v => !v);
+    if (field === 'new') this.showNewPass.update(v => !v);
+    if (field === 'conf') this.showConfirmPass.update(v => !v);
+  }
+
   changePassword() {
     if (this.passwordData.passwordNuevo !== this.passwordData.confirmacion) {
-      alert('Las nuevas contraseñas no coinciden.');
+      this.mostrarFeedback('Error', 'Las nuevas contraseñas no coinciden.', 'error');
       return;
     }
 
     this.isPasswordLoading.set(true);
 
-    // Extraemos solo lo que el backend necesita
     const { confirmacion, ...requestData } = this.passwordData;
 
     this.userService.updatePassword(requestData).subscribe({
       next: (res) => {
-        alert('Contraseña actualizada con éxito.');
+        this.mostrarFeedback('¡Actualizado!', 'Contraseña actualizada con éxito.');
         this.isPasswordLoading.set(false);
-        // Limpiamos el formulario
         this.passwordData = { passwordActual: '', passwordNuevo: '', confirmacion: '' };
       },
       error: (err) => {
-        alert(err.error?.mensaje || 'Error al cambiar contraseña');
+        this.mostrarFeedback('Error', err.error?.mensaje || 'Error al cambiar contraseña', 'error');
         this.isPasswordLoading.set(false);
       }
     });

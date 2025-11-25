@@ -173,7 +173,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (resena of ultimasResenas(); track resena.resenaId) {
+          @for (resena of ultimasResenas(); track $index) {
           <div class="resena-item">
 
             <div class="avatar-circle">

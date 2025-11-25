@@ -15,7 +15,6 @@ import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-tra
 })
 export class MisSolicitudesPage implements OnInit {
 
-  private solicitudService = inject(SolicitudEspecialistaService);
   private router = inject(Router);
   private solicitudTrabajoService = inject(SolicitudTrabajoService);
 
@@ -37,8 +36,7 @@ export class MisSolicitudesPage implements OnInit {
   filtroTexto = '';
 
   ngOnInit() {
-    // this.cargarDatosReales();
-    this.cargarDatosFalsos();
+    this.cargarDatosReales();
   }
 
   // --- Helpers de Formato ---
@@ -76,55 +74,18 @@ export class MisSolicitudesPage implements OnInit {
     }
   }
 
-  // --- Carga de Datos (Simulación) ---
-  cargarDatosFalsos() {
-    this.estaCargando.set(true);
-    setTimeout(() => {
-      this.todasLasSolicitudes = [
-        {
-          especialista: 'Juan Perez (Plomero)',
-          titulo: 'Arreglo de cañería',
-          descripcion: 'Hola Juan, tengo una urgencia con un caño roto en la cocina.',
-          fechaSolicitud: new Date('2023-11-25'),
-          estado: 'PENDIENTE'
-        },
-        {
-          especialista: 'Electricidad Total S.A.',
-          titulo: 'Instalación Aire Acondicionado',
-          descripcion: 'Necesito presupuesto para instalar un split de 3000 frigorías.',
-          fechaSolicitud: new Date('2023-11-20'),
-          estado: 'ACEPTADO'
-        },
-        {
-          especialista: 'Carpintería El Roble',
-          titulo: 'Mesa a medida',
-          descripcion: 'Quiero una mesa de comedor de 2x1 metros en madera maciza.',
-          fechaSolicitud: new Date('2023-11-15'),
-          estado: 'RECHAZADO'
-         },
-        {
-          especialista: 'Servicio Técnico PC',
-          titulo: 'Formateo Notebook',
-          descripcion: 'Mi laptop anda muy lenta, necesito limpieza y formateo.',
-          fechaSolicitud: new Date('2023-11-24'),
-          estado: 'PENDIENTE'
-        }
-      ];
-      this.aplicarFiltros();
-      this.estaCargando.set(false);
-    }, 800);
-  }
-
-  /* //  INTEGRACIÓN CON BACKEND
-cargarDatosReales() {
+  //  INTEGRACIÓN CON BACKEND
+  cargarDatosReales() {
     this.estaCargando.set(true);
     this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
       next: (response) => {
+        // CORRECCIÓN: Agregar 'id' al mapeo
         this.todasLasSolicitudes = response.data.map(s => ({
-            especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
-            descripcion: s.descripcion,
-            fechaSolicitud: s.fechaCreacion,
-            estado: s.estado,
+          id: s.id, // Asegúrate de que en tu DTO de respuesta se llame 'id'
+          especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
+          descripcion: s.descripcion,
+          fechaSolicitud: s.fechaCreacion,
+          estado: s.estado,
         }));
         this.aplicarFiltros();
         this.estaCargando.set(false);
@@ -136,7 +97,6 @@ cargarDatosReales() {
       }
     });
   }
-    */
 
   // Filtros
   aplicarFiltros() {
@@ -177,25 +137,25 @@ cargarDatosReales() {
   }
 
   procesarEliminacion(solicitud: any) {
-    // Simulación Local
-    this.todasLasSolicitudes = this.todasLasSolicitudes.filter(s => s.id !== solicitud.id);
-    this.aplicarFiltros();
+    if (!solicitud.id) {
+        console.error("Error: Intentando eliminar solicitud sin ID");
+        this.cerrarAlerta();
+        this.mostrarAlerta("Error interno: No se encontró el ID de la solicitud", "error");
+        return;
+    }
 
-    this.cerrarAlerta();
-    this.mostrarAlerta('Solicitud cancelada correctamente.', 'success');
-
-    /* // BACKEND REAL
-    this.solicitudService.eliminarSolicitud(solicitud.id).subscribe({
+    this.solicitudTrabajoService.eliminarSolicitud(solicitud.id).subscribe({
       next: () => {
-         this.cargarDatosReales();
-         this.cerrarAlerta();
-         this.mostrarAlerta('Solicitud eliminada', 'success');
+        this.cargarDatosReales();
+        this.cerrarAlerta();
+        this.mostrarAlerta('Solicitud eliminada', 'success');
       },
-      error: () => {
-         this.cerrarAlerta();
-         this.mostrarAlerta('No se pudo eliminar la solicitud.', 'error');
+      error: (err) => {
+        console.error(err);
+        this.cerrarAlerta();
+        this.mostrarAlerta('No se pudo eliminar la solicitud.', 'error');
       }
     });
-    */
+
   }
 }
