@@ -102,12 +102,8 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     @Transactional(readOnly = true)
     public List<SolicitudTrabajo> obtenerSolicitudesDelEspecialista() throws UsuarioNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
-        List<SolicitudTrabajo> solicitudesRecibidas = solicitudTrabajoRepository.findByEspecialista(especialista);
 
-        if (solicitudesRecibidas.isEmpty()) {
-            throw new SolicitudTrabajoException("Usted no tiene solicitudes registradas.");
-        }
-        return solicitudesRecibidas;
+        return solicitudTrabajoRepository.findByEspecialista(especialista);
     }
 
     // metodo para eliminar una solicitud de trabajo si aún está pendiente (cancelar trabajo desde cliente)

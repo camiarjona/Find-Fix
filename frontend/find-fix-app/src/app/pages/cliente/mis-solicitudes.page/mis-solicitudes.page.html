@@ -42,7 +42,7 @@
     } @else {
 
       <div class="contenedor-grid">
-        @for (solicitud of solicitudesVisibles(); track solicitud.id) {
+        @for (solicitud of solicitudesVisibles(); track $index) {
           <div class="tarjeta-solicitud">
 
             <div class="header-card">

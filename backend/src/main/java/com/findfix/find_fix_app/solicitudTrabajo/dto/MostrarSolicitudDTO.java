@@ -8,18 +8,25 @@ import java.time.LocalDate;
 @Data
 public class MostrarSolicitudDTO {
     Long id;
-    LocalDate fechaCreacion;
+    LocalDate fechaSolicitud; // CAMBIO: Renombrado de 'fechaCreacion' a 'fechaSolicitud' para coincidir con el HTML
     String estado;
-    String nombreCliente;
-    String apellidoCliente;
+    String cliente;           // CAMBIO: Campo unificado que espera el frontend
+    String titulo;            // CAMBIO: Agregado porque el HTML lo usa
     String descripcion;
 
     public MostrarSolicitudDTO(SolicitudTrabajo solicitudTrabajo) {
         this.id = solicitudTrabajo.getSolicitudTrabajoId();
-        this.fechaCreacion = solicitudTrabajo.getFechaCreacion();
+        this.fechaSolicitud = solicitudTrabajo.getFechaCreacion(); // Asignamos la fecha de creación aquí
         this.estado = solicitudTrabajo.getEstado().toString();
-        this.nombreCliente = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getNombre() : "Usuario desvinculado";
-        this.apellidoCliente = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getApellido() : "Usuario desvinculado";
+
+        // Lógica para armar el nombre completo del cliente
+        String nombre = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getNombre() : "Usuario";
+        String apellido = solicitudTrabajo.getUsuario() != null ? solicitudTrabajo.getUsuario().getApellido() : "Desvinculado";
+        this.cliente = nombre + " " + apellido;
+
+        // Asignamos un título por defecto o derivado
+        this.titulo = "Solicitud de Servicio";
+
         this.descripcion = solicitudTrabajo.getDescripcion();
     }
 }

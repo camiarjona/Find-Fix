@@ -13,7 +13,8 @@
       <button class="tab-btn" [class.activo]="filtroEstado === 'PENDIENTE'" (click)="cambiarFiltroEstado('PENDIENTE')">
         Pendientes
       </button>
-      <button class="tab-btn" [class.activo]="filtroEstado === 'FINALIZADA'" (click)="cambiarFiltroEstado('FINALIZADA')">
+      <button class="tab-btn" [class.activo]="filtroEstado === 'FINALIZADA'"
+        (click)="cambiarFiltroEstado('FINALIZADA')">
         Historial
       </button>
       <button class="tab-btn" [class.activo]="filtroEstado === 'TODAS'" (click)="cambiarFiltroEstado('TODAS')">
@@ -22,102 +23,99 @@
     </div>
 
     <div class="buscador-wrapper">
-      <input type="text" placeholder="Buscar por cliente o título..." [(ngModel)]="filtroTexto" (keyup)="aplicarFiltros()" class="input-buscador">
-      <svg class="icono-lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" placeholder="Buscar por cliente o título..." [(ngModel)]="filtroTexto"
+        (keyup)="aplicarFiltros()" class="input-buscador">
+      <svg class="icono-lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
     </div>
   </div>
 
   @if (estaCargando()) {
-    <div class="contenedor-cargando">
-      <div class="cargador"></div>
-      <p>Cargando solicitudes...</p>
-    </div>
+  <div class="contenedor-cargando">
+    <div class="cargador"></div>
+    <p>Cargando solicitudes...</p>
+  </div>
   } @else {
 
-    @if (solicitudesVisibles().length === 0) {
-      <div class="estado-vacio">
-        <div class="icono-vacio">📭</div>
-        <h3>No hay solicitudes aquí</h3>
-        <p>No se encontraron solicitudes con los filtros actuales.</p>
+  @if (solicitudesVisibles().length === 0) {
+  <div class="estado-vacio">
+    <div class="icono-vacio">📭</div>
+    <h3>No hay solicitudes aquí</h3>
+    <p>No se encontraron solicitudes con los filtros actuales.</p>
+  </div>
+  } @else {
+
+  <div class="contenedor-grid">
+    @for (solicitud of solicitudesVisibles(); track solicitud.id) {
+    <div class="tarjeta-solicitud">
+
+      <div class="header-card">
+        <div class="fecha-badge">
+          📅 {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
+        </div>
+        <span class="estado-badge" [ngClass]="obtenerClaseEstado(solicitud.estado)">
+          {{ formatearEstado(solicitud.estado) }}
+        </span>
       </div>
-    } @else {
 
-      <div class="contenedor-grid">
-        @for (solicitud of solicitudesVisibles(); track solicitud.id) {
-          <div class="tarjeta-solicitud">
+      <div class="body-card">
+        <h3 class="titulo-solicitud">{{ solicitud.titulo }}</h3>
 
-            <div class="header-card">
-              <div class="fecha-badge">
-                📅 {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
-              </div>
-              <span class="estado-badge" [ngClass]="obtenerClaseEstado(solicitud.estado)">
-                {{ formatearEstado(solicitud.estado) }}
-              </span>
-            </div>
-
-            <div class="body-card">
-              <h3 class="titulo-solicitud">{{ solicitud.titulo }}</h3>
-
-              <div class="info-cliente">
-                <div class="avatar-placeholder">{{ solicitud.cliente.charAt(0) }}</div>
-                <div>
-                  <p class="nombre-cliente">{{ solicitud.cliente }}</p>
-                </div>
-              </div>
-
-              <p class="descripcion-solicitud">
-                "{{ solicitud.descripcion }}"
-              </p>
-            </div>
-
-            @if (solicitud.estado === 'PENDIENTE') {
-              <div class="footer-actions">
-                <button class="btn-accion rechazar" (click)="rechazarSolicitud(solicitud)">
-                  Rechazar
-                </button>
-                <button class="btn-accion aceptar" (click)="aceptarSolicitud(solicitud)">
-                  Aceptar Trabajo
-                </button>
-              </div>
-            } @else {
-              <div class="footer-info">
-                @if(solicitud.estado === 'ACEPTADO') {
-                  <span class="texto-exito">✓ Trabajo aceptado</span>
-                } @else {
-                  <span class="texto-error">✕ Solicitud rechazada</span>
-                }
-              </div>
-            }
-
+        <div class="info-cliente">
+          <div class="avatar-placeholder">
+            {{ solicitud.cliente ? solicitud.cliente.charAt(0).toUpperCase() : 'C' }}
           </div>
+          <div>
+            <p class="nombre-cliente">{{ solicitud.cliente || 'Cliente Anónimo' }}</p>
+          </div>
+        </div>
+
+        <p class="descripcion-solicitud">
+          "{{ solicitud.descripcion }}"
+        </p>
+      </div>
+
+      @if (solicitud.estado === 'PENDIENTE') {
+      <div class="footer-actions">
+        <button class="btn-accion rechazar" (click)="rechazarSolicitud(solicitud)">
+          Rechazar
+        </button>
+        <button class="btn-accion aceptar" (click)="aceptarSolicitud(solicitud)">
+          Aceptar Trabajo
+        </button>
+      </div>
+      } @else {
+      <div class="footer-info">
+        @if(solicitud.estado === 'ACEPTADO') {
+        <span class="texto-exito">✓ Trabajo aceptado</span>
+        } @else {
+        <span class="texto-error">✕ Solicitud rechazada</span>
         }
       </div>
+      }
 
+    </div>
     }
+  </div>
+
+  }
   }
 </div>
 
 @if (alertaVisible()) {
-  @if (esModalNavegacion()) {
-    <app-modal-confirmacion
-      tipo="exito"
-      titulo="¡Solicitud Aceptada!"
-      [mensaje]="mensajeAlerta()"
-      textoConfirmar="Ir a Mis Trabajos"
-      textoCancelar="Ir al Inicio"
-      [mostrarBotonCancelar]="true"
-      (confirmar)="irAMisTrabajos()"
-      (cancelar)="irAlInicio()">
-    </app-modal-confirmacion>
-  }
-  @else {
-    <app-modal-confirmacion
-      [tipo]="tipoAlerta() === 'success' ? 'exito' : 'pregunta'"
-      [titulo]="tipoAlerta() === 'success' ? '¡Listo!' : 'Atención'"
-      [mensaje]="mensajeAlerta()"
-      textoConfirmar="Entendido"
-      (confirmar)="cerrarAlerta()"
-      (cancelar)="cerrarAlerta()">
-    </app-modal-confirmacion>
-  }
+@if (esModalNavegacion()) {
+<app-modal-confirmacion tipo="exito" titulo="¡Solicitud Aceptada!" [mensaje]="mensajeAlerta()"
+  textoConfirmar="Ir a Mis Trabajos" textoCancelar="Ir al Inicio" [mostrarBotonCancelar]="true"
+  (confirmar)="irAMisTrabajos()" (cancelar)="irAlInicio()">
+</app-modal-confirmacion>
+}
+@else {
+<app-modal-confirmacion [tipo]="tipoAlerta() === 'success' ? 'exito' : 'pregunta'"
+  [titulo]="tipoAlerta() === 'success' ? '¡Listo!' : 'Atención'" [mensaje]="mensajeAlerta()" textoConfirmar="Entendido"
+  (confirmar)="cerrarAlerta()" (cancelar)="cerrarAlerta()">
+</app-modal-confirmacion>
+}
 }
