@@ -109,7 +109,7 @@ export const routes: Routes = [
         component: HistorialSolicitudesEspecialistaPages
       },
       {
-        path: 'crear-resena',
+        path: 'crear-resena/:trabajoId',
         component: CrearResenaComponent
       },
       {
