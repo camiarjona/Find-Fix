@@ -1,8 +1,14 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
-import { CrearResenaDTO, MostrarResenaDTO } from '../../models/reseña/reseña.model';
+
+import {
+  CrearResenaDTO,
+  MostrarResenaClienteDTO,
+  MostrarResenaEspecialistaDTO,
+  MostrarResenaDTO
+} from '../../models/reseña/reseña.model'; // Ajusta la ruta si es necesario
 
 @Injectable({
   providedIn: 'root',
@@ -11,33 +17,31 @@ export class ResenaService {
 
   private apiUrl = 'http://localhost:8080';
   private http = inject(HttpClient);
-  private resenasUrl = `${this.apiUrl}/api/resenas`;
+  // Se usa /api/resenas, asumiendo que /api es el prefijo del gateway del backend
+  private resenasUrl = `${this.apiUrl}/resenas`;
 
-  crearResena(resena: CrearResenaDTO): Observable<ApiResponse<MostrarResenaDTO>> {
-    return this.http.post<ApiResponse<MostrarResenaDTO>>(this.resenasUrl, resena);
+  crearResena(dto: CrearResenaDTO): Observable<ApiResponse<MostrarResenaClienteDTO>> {
+    return this.http.post<ApiResponse<MostrarResenaClienteDTO>>(`${this.resenasUrl}/registrar`, dto);
   }
 
-  /**
-   * Obtiene todas las reseñas de un especialista (GET /api/resenas/especialista/{id}).
-   */
-  obtenerResenasPorEspecialista(especialistaId: number): Observable<ApiResponse<MostrarResenaDTO[]>> {
-    const url = `${this.resenasUrl}/especialista/${especialistaId}`;
-    return this.http.get<ApiResponse<MostrarResenaDTO[]>>(url);
+  buscarResenaPorId(id: number): Observable<ApiResponse<MostrarResenaClienteDTO>> {
+    return this.http.get<ApiResponse<MostrarResenaClienteDTO>>(`${this.resenasUrl}/buscar/${id}`);
   }
 
-  /**
-   * Obtiene todas las reseñas escritas por un cliente (GET /api/resenas/cliente/{id}).
-   */
-  obtenerResenasPorCliente(clienteId: number): Observable<ApiResponse<MostrarResenaDTO[]>> {
-    const url = `${this.resenasUrl}/cliente/${clienteId}`;
-    return this.http.get<ApiResponse<MostrarResenaDTO[]>>(url);
+  buscarResenaPorTituloTrabajo(titulo: string): Observable<ApiResponse<MostrarResenaDTO>> {
+    return this.http.get<ApiResponse<MostrarResenaDTO>>(`${this.resenasUrl}/trabajo/${titulo}`);
   }
 
-  /**
-   * Elimina una reseña por su ID (DELETE /api/resenas/{id}).
-   */
-  eliminarResena(resenaId: number): Observable<ApiResponse<void>> {
-    const url = `${this.resenasUrl}/${resenaId}`;
-    return this.http.delete<ApiResponse<void>>(url);
+  obtenerResenasRecibidas(): Observable<ApiResponse<MostrarResenaEspecialistaDTO[]>> {
+    return this.http.get<ApiResponse<MostrarResenaEspecialistaDTO[]>>(`${this.resenasUrl}/recibidas`);
+  }
+
+  obtenerResenasEnviadas(): Observable<ApiResponse<MostrarResenaClienteDTO[]>> {
+    return this.http.get<ApiResponse<MostrarResenaClienteDTO[]>>(`${this.resenasUrl}/enviadas`);
+  }
+
+  eliminarResena(id: number): Observable<ApiResponse<string>> {
+    // El backend devuelve ApiResponse<String>, por lo que usamos string como tipo de dato en ApiResponse
+    return this.http.delete<ApiResponse<string>>(`${this.resenasUrl}/eliminar/${id}`);
   }
 }

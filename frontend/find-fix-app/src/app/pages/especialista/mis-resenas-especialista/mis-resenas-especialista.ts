@@ -7,10 +7,10 @@ import { ResenaEspecialista } from '../../../models/especialista/especialista.mo
   selector: 'app-mis-resenas.page',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './mis-resenas.page.html',
-  styleUrl: './mis-resenas.page.css',
+  templateUrl: './mis-resenas-especialista.html',
+  styleUrl: './mis-resenas-especialista.css',
 })
-export class MisResenasPage {
+export class MisResenasEspecialista {
 
    private especialistaService = inject(EspecialistaService);
   resenas = signal<ResenaEspecialista[]>([]);
