@@ -57,7 +57,7 @@ export class EspecialistaService {
 
   /*Obtiene todas las reseñas recibidas del especialista */
   getMisResenas(): Observable<ResenaEspecialista[]> {
-    return this.http.get<ApiResponse<ResenaEspecialista[]>>(`${this.apiURL}/resenas/recibidas`, { withCredentials: true })
+    return this.http.get<ApiResponse<ResenaEspecialista[]>>(`http://localhost:8080/resenas/recibidas`, { withCredentials: true })
       .pipe(map(res => res.data));
   }
 

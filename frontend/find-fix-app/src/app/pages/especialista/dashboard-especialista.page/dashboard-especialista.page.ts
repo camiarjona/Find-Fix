@@ -211,13 +211,18 @@ export class DashboardEspecialistaPage {
     const conteo = [0, 0, 0];
 
     resenas.forEach(r => {
-      if (r.fecha) {
-        const fechaResena = new Date(r.fecha);
+
+      const fechaStr = r.fecha || r.fechaResena;
+
+      if (fechaStr) {
+        const fechaResena = new Date(fechaStr);
         const mesResena = fechaResena.getMonth();
 
-        if (mesResena === mesActual) conteo[2]++;
-        else if (mesResena === mesActual - 1) conteo[1]++;
-        else if (mesResena === mesActual - 2) conteo[0]++;
+        if (fechaResena.getFullYear() === hoy.getFullYear()) {
+          if (mesResena === mesActual) conteo[2]++;
+          else if (mesResena === mesActual - 1) conteo[1]++;
+          else if (mesResena === mesActual - 2) conteo[0]++;
+        }
       }
     });
     return conteo;
