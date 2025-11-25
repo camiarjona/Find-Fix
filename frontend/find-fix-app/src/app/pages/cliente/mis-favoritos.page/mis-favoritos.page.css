@@ -3,12 +3,12 @@
     max-width: 1000px;
     margin: 40px auto;
     padding: 20px;
-    background: #ffffff;
+    background: var(--bg-card);
     border-radius: 12px;
 }
 
 .page-title {
-    color: #007bff;
+    color: var(--primary-color);
     text-align: center;
     margin-bottom: 5px;
     font-size: 2.2rem;
@@ -16,7 +16,7 @@
 
 .subtitle {
     text-align: center;
-    color: #6c757d;
+    color: var(--text-secondary);
     margin-bottom: 40px;
     font-size: 1.1rem;
 }
@@ -31,11 +31,11 @@
 
 /* Estilos de la Tarjeta (Card) individual */
 .favorito-card {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background: var(--bg-app);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px var(--shadow-color);
     transition: transform 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -43,21 +43,21 @@
 
 .favorito-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 .card-header {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 15px;
 }
 
 .initials {
     width: 50px;
     height: 50px;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -72,18 +72,18 @@
 .info h2 {
     font-size: 1.3rem;
     margin: 0 0 3px;
-    color: #343a40;
+    color: var(--text-main);
 }
 
 .info .email {
     font-size: 0.9rem;
-    color: #999;
+    color: var(--text-secondary);
     margin: 0;
 }
 
 .oficio {
     font-size: 1rem;
-    color: #495057;
+    color: var(--text-secondary);
     font-weight: 500;
     margin: 5px 0 0;
 }
@@ -97,7 +97,7 @@
 
 .card-body .meta {
     font-size: 0.85rem;
-    color: #adb5bd;
+    color: var(--text-secondary);
     margin-top: 5px;
     margin-bottom: 20px;
 }
@@ -121,33 +121,38 @@
 }
 
 .btn-primary {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-inverse);
 }
 .btn-secondary {
-    background-color: #6c757d;
-    color: white;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
 }
 .btn-danger {
     background-color: #dc3545;
-    color: white;
+    color: var(--text-inverse);
 }
 .btn:hover {
     opacity: 0.9;
 }
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
 
 /* Estado Vacío y Mensajes de Estado */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    border: 2px dashed #ced4da;
+    border: 2px dashed var(--border-color);
     border-radius: 10px;
     margin-top: 30px;
-    background: #fff;
+    background: var(--bg-card);
 }
 .empty-state p {
     font-size: 1.2rem;
-    color: #555;
+    color: var(--text-secondary);
     margin-bottom: 25px;
 }
 .loading-message, .error-message {

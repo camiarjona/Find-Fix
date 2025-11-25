@@ -11,31 +11,31 @@
   max-width: 100%;
   margin: 0 auto 30px;
   padding: 20px 15px;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px var(--shadow-color);
   text-align: center;
   border-top: 5px solid var(--primary-color);
   box-sizing: border-box;
 }
 
 .rol-titulo {
-  color: var(--text-dark);
+  color: var(--text-main);
   font-size: 1.8rem;
   margin: 0 0 10px 0;
 }
 
 .rol-subtitulo {
-  color: var(--text-light);
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 
 .tabla-general {
   overflow-x: auto;
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px var(--shadow-color);
   margin-top: 20px;
 }
 
@@ -48,7 +48,7 @@
 
 .roles-tabla th {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--text-inverse);
   text-align: left;
   padding: 12px 15px;
   font-weight: 600;
@@ -59,8 +59,8 @@
 
 .roles-tabla td {
   padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-  color: var(--text-dark);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
   vertical-align: middle;
   font-size: 0.9rem;
 }
@@ -70,16 +70,16 @@
 }
 
 .roles-tabla tr:hover {
-  background-color: #fffaf5;
+  background-color: var(--bg-app);
 }
 
 
 .rol-nombre {
-  background-color: #f3f4f6;
+  background-color: var(--bg-input);
   padding: 4px 10px;
   border-radius: 20px;
-  color: #374151;
-  border: 1px solid #e5e7eb;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   font-size: 0.85rem;
   white-space: nowrap;
 }
@@ -103,6 +103,7 @@
   padding: 8px;
   border-radius: 50%;
   transition: background 0.2s;
+  color: var(--text-secondary);
 }
 
 .icon-btn:hover {
@@ -137,15 +138,15 @@
   border-radius: 8px;
   font-weight: 600;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px var(--shadow-color);
   font-size: 0.9rem;
   align-items: center;
 }
 
 .alert-message.success {
-  background-color: #F58634;
-  color: #ffffff;
-  border-color: #F58634;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  border-color: var(--primary-color);
 }
 
 
@@ -180,4 +181,3 @@
     font-size: 1rem;
   }
 }
-

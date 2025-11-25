@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../../services/tema/theme.service';
 
 @Component({
   selector: 'app-admin-dahboard-component',
@@ -13,6 +14,8 @@ export class AdminDahboardComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  public themeService = inject(ThemeService);
+
 
 
   logout() {
@@ -48,4 +51,8 @@ export class AdminDahboardComponent {
       color: '#F58634'
     },
   ];
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
 }

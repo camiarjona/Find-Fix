@@ -3,10 +3,8 @@
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  background-color: #f8f9fa;
-  
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23e0e0e0'/%3E%3C/svg%3E");
-  background-repeat: repeat;
+  background-color: var(--bg-app);
+
 }
 
 
@@ -16,8 +14,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
   position: fixed;
   top: 0;
   left: 0;
@@ -29,7 +27,7 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
 }
 
 .mobile-header .sidebar-title a {
@@ -51,7 +49,7 @@
   display: block;
   width: 22px;
   height: 2px;
-  background-color: var(--text-dark, #1a1a1a);
+  background-color: var(--text-main);
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -63,12 +61,12 @@
   left: 0;
   bottom: 0;
   width: 280px;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px var(--shadow-color);
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, padding 0.3s ease-in-out;
   height: 100vh;
@@ -93,7 +91,7 @@
   display: block;
   width: 22px;
   height: 2px;
-  background-color: var(--text-dark, #1a1a1a);
+  background-color: var(--text-main);
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -106,13 +104,13 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   margin: 0 0.5rem;
 }
 .sidebar .sidebar-header .sidebar-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   margin: 0;
   white-space: nowrap;
 }
@@ -150,7 +148,7 @@
   display: block;
   width: 22px;
   height: 2px;
-  background-color: var(--text-dark, #1a1a1a);
+  background-color: var(--text-main);
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -173,7 +171,7 @@
   justify-content: space-between;
   padding: 0.5rem 0.5rem;
   text-decoration: none;
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-weight: 500;
   border-radius: 8px;
   transition: all 0.2s ease-in-out;
@@ -195,18 +193,18 @@
   flex-shrink: 0;
   border-radius: 6px;
   transition: all 0.2s ease;
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
 }
 .nav-icon svg { width: 20px; height: 20px; }
 .nav-text { opacity: 1; transition: opacity 0.2s ease; }
 
 .nav-menu li a:hover {
   background-color: transparent;
-  color: var(--primary-color, #F58634);
+  color: var(--primary-color);
 }
 .nav-menu li a:hover .nav-icon {
-  color: var(--primary-color, #F58634);
-  background-color: #fdfaf7;
+  color: var(--primary-color);
+  background-color: var(--bg-app);
 }
 
 
@@ -253,15 +251,15 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   padding: 6px;
   border-radius: 99px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .theme-toggle {
-  background-color: #f0f0f0;
+  background-color: var(--bg-app);
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -270,12 +268,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #555;
+  color: var(--text-secondary);
   transition: all 0.2s ease;
 }
 .theme-toggle:hover {
-  background-color: #e0e0e0;
-  color: #111;
+  background-color: var(--border-color);
+  color: var(--text-main);
 }
 .theme-toggle svg { width: 20px; height: 20px; }
 
@@ -309,7 +307,7 @@
 
   .main-header { margin-bottom: 1.5rem; }
 
-  
+
   .admin-dashboard.sidebar-collapsed .sidebar {
     width: 96px;
     padding: 1.5rem 1rem;
@@ -326,4 +324,3 @@
   .admin-dashboard.sidebar-collapsed .nav-icon svg { width: 22px; height: 22px; }
   .admin-dashboard.sidebar-collapsed .sidebar-footer a { justify-content: center; gap: 0; }
 }
-

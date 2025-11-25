@@ -6,23 +6,24 @@
 
 
 .content-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 h2 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-weight: 700;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.75rem;
   margin-top: 0;
+}
 
 p {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -37,24 +38,26 @@ p {
 
 form label {
   font-weight: 600;
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
 }
 
 form textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   resize: vertical;
   min-height: 100px;
   box-sizing: border-box;
+  background-color: var(--bg-input);
+  color: var(--text-main);
 }
 
 form textarea:focus {
   outline: none;
-  border-color: var(--primary-color, #F58634);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 
@@ -71,12 +74,12 @@ form textarea:focus {
 }
 
 .cta-button:disabled {
-  background-color: #ccc;
+  background-color: var(--border-color);
   cursor: not-allowed;
   box-shadow: none;
 }
 .cta-button:disabled:hover {
-  background-color: #ccc;
+  background-color: var(--border-color);
 }
 
 
@@ -111,25 +114,26 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
 }
 
 thead tr {
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
 }
 
 th, td {
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
   white-space: nowrap;
+  color: var(--text-main);
 }
 
 th {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -141,7 +145,7 @@ tbody tr:last-child td {
 }
 
 tbody tr:hover {
-  background-color: #fcfcfc;
+  background-color: var(--bg-app);
 }
 
 
@@ -183,5 +187,3 @@ tbody tr:hover {
   background-color: #d93025;
   color: #fff;
 }
-}
-

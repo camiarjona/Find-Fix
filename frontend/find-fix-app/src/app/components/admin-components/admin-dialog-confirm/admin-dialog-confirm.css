@@ -15,12 +15,13 @@
 
 
 .dialog-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px var(--shadow-color);
   overflow: hidden;
+  color: var(--text-main);
 }
 
 
@@ -29,7 +30,7 @@
   flex-direction: column;
   align-items: center;
   padding: 15px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .dialog-header h3 {
@@ -50,7 +51,7 @@
   display: flex;
   flex-direction: column;
   padding: 15px 20px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-color);
   gap: 10px;
 }
 
@@ -58,7 +59,7 @@
 .delete-confirm-button,
 .cta-button-cancel {
   background: var(--primary-color);
-  color: white;
+  color: var(--text-inverse);
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -111,12 +112,12 @@
 
 
   .cta-button-cancel {
-    background-color: white;
+    background-color: var(--bg-card);
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
   }
 
   .cta-button-cancel:hover {
-     background-color: #fffaf5;
+     background-color: var(--bg-app);
   }
 }

@@ -1,7 +1,7 @@
 :host {
   display: block;
   padding: 1.5rem;
-  background-color: #f8f9fa;
+  background-color: var(--bg-app);
   min-height: 100vh;
 }
 
@@ -21,22 +21,22 @@
 .dash-header h1 {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #2d3748;
+  color: var(--text-main);
   margin: 0;
 }
 
 .dash-header .subtitle {
-  color: #718096;
+  color: var(--text-secondary);
   margin: 0.5rem 0 0 0;
 }
 
 .date-badge {
-  background: white;
+  background: var(--bg-card);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #718096;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  color: var(--text-secondary);
+  box-shadow: 0 2px 5px var(--shadow-color);
   font-weight: 500;
 }
 
@@ -69,12 +69,12 @@
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px var(--shadow-color);
 }
 
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 30px var(--shadow-color);
 }
 
 .flip-card-front, .flip-card-back {
@@ -87,9 +87,9 @@
   padding: 1.5rem;
   display: flex;
   align-items: center;
-  background: white;
+  background: var(--bg-card);
   box-sizing: border-box;
-  border: 1px solid #edf2f7;
+  border: 1px solid var(--border-color);
 }
 
 .flip-card-front {
@@ -134,8 +134,8 @@
 .card-pink .icon-container { background: #fdf2f8; color: #db2777; }
 
 .stat-info { display: flex; flex-direction: column; text-align: left; }
-.stat-value { font-size: 1.8rem; font-weight: 800; color: #2d3748; line-height: 1.1; }
-.stat-label { font-size: 0.9rem; color: #718096; font-weight: 500; margin-top: 4px; }
+.stat-value { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1.1; }
+.stat-label { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; margin-top: 4px; }
 
 .icon-container {
   width: 50px; height: 50px; border-radius: 12px;
@@ -147,12 +147,12 @@
   transform: rotateY(180deg);
   flex-direction: column;
   justify-content: center;
-  border-color: #edf2f7;
+  border-color: var(--border-color);
 }
 
 .mini-label {
   font-size: 0.8rem;
-  color: #718096;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
@@ -170,11 +170,11 @@
 
 
 .recent-activity {
-  background: white;
+  background: var(--bg-card);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  border: 1px solid var(--border-color);
 }
 
 .section-header {
@@ -184,8 +184,8 @@
   margin-bottom: 1.5rem;
 }
 
-.section-header h2 { font-size: 1.25rem; color: #2d3748; margin: 0; font-weight: 700; }
-.btn-link { background: none; border: none; color: #F58634; font-weight: 600; cursor: pointer; }
+.section-header h2 { font-size: 1.25rem; color: var(--text-main); margin: 0; font-weight: 700; }
+.btn-link { background: none; border: none; color: var(--primary-color); font-weight: 600; cursor: pointer; }
 
 .activity-table-container { overflow-x: auto; }
 .activity-table { width: 100%; border-collapse: collapse; min-width: 600px; }
@@ -193,17 +193,17 @@
 .activity-table th {
   text-align: left;
   padding: 12px;
-  color: #718096;
+  color: var(--text-secondary);
   font-weight: 600;
   font-size: 0.85rem;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .activity-table td {
   padding: 16px 12px;
-  border-bottom: 1px solid #f7fafc;
+  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
-  color: #4a5568;
+  color: var(--text-main);
 }
 
 .user-cell { display: flex; align-items: center; gap: 10px; }
@@ -214,16 +214,16 @@
   display: flex; align-items: center; justify-content: center;
   font-weight: bold; font-size: 0.8rem;
 }
-.user-name { font-weight: 600; color: #2d3748; }
+.user-name { font-weight: 600; color: var(--text-main); }
 
 .rating-pill {
-  background: #edf2f7; padding: 4px 10px; border-radius: 12px;
-  font-size: 0.85rem; font-weight: 700; color: #718096; display: inline-block;
+  background: var(--bg-app); padding: 4px 10px; border-radius: 12px;
+  font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: inline-block;
 }
 .rating-pill.high-rating { background: #f0fff4; color: #38a169; }
 
 .comment-cell {
-  font-style: italic; color: #718096; font-size: 0.9rem;
+  font-style: italic; color: var(--text-secondary); font-size: 0.9rem;
   max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -234,4 +234,3 @@
   .stats-grid { grid-template-columns: 1fr; }
   .flip-card { height: 150px; }
 }
-

@@ -5,23 +5,23 @@
 .placeholder-contenido {
   padding: 2rem;
   text-align: center;
-  background-color: #f9fafb;
+  background-color: var(--bg-app);
   border-radius: 8px;
   margin-top: 1.5rem;
-  border: 1px dashed #d1d5db;
-  color: var(--text-light);
+  border: 1px dashed var(--border-color);
+  color: var(--text-secondary);
 }
 
 h2 {
-  color: var(--text-dark, #1a1a1a);
+  color: var(--text-main);
   font-weight: 700;
   margin-top: 0;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 p {
-  color: var(--text-light, #555);
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
 }
