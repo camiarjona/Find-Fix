@@ -1,0 +1,36 @@
+<div class="resenas-container">
+  <h2>Mis Reseñas Enviadas</h2>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando tus reseñas...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <p>{{ error }}</p>
+    <button (click)="cargarResenasEnviadas()">Reintentar</button>
+  </div>
+
+  <div *ngIf="!isLoading && !error && resenas.length > 0" class="resenas-list">
+    <mat-card *ngFor="let resena of resenas" class="resena-card">
+      <mat-card-header>
+        <mat-card-title>Para: **{{ resena.nombreEspecialista }}**</mat-card-title>
+        <mat-card-subtitle>Reseña #{{ resena.resenaId }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="puntuacion">
+          **Puntuación:** <span class="rating">{{ resena.puntuacion }}/5</span>
+          </div>
+        <div class="comentario">
+          <p>
+            **Comentario:** *{{ resena.comentario }}*
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!isLoading && !error && resenas.length === 0" class="empty-state">
+    <p>Aún no has enviado ninguna reseña.</p>
+    </div>
+</div>

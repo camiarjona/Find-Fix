@@ -1,0 +1,49 @@
+<div class="resena-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Dejar Reseña</mat-card-title>
+      <mat-card-subtitle>Trabajo #{{ trabajoId }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Puntuación (1 a 5)</mat-label>
+          <input matInput
+                 type="number"
+                 formControlName="puntuacion"
+                 min="1"
+                 max="5">
+          <mat-icon matSuffix>star</mat-icon>
+          <mat-error *ngIf="f['puntuacion'].errors?.['required']">La puntuación es obligatoria.</mat-error>
+          <mat-error *ngIf="f['puntuacion'].errors?.['min'] || f['puntuacion'].errors?.['max']">
+            La puntuación debe ser entre 1 y 5.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Comentario</mat-label>
+          <textarea matInput
+                    formControlName="comentario"
+                    rows="4"
+                    placeholder="Describe tu experiencia con el especialista."></textarea>
+          <mat-error *ngIf="f['comentario'].errors?.['required']">El comentario es obligatorio.</mat-error>
+          <mat-error *ngIf="f['comentario'].errors?.['maxlength']">El comentario no puede exceder los 500 caracteres.</mat-error>
+        </mat-form-field>
+
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" type="submit" [disabled]="resenaForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Enviar Reseña</span>
+            <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          </button>
+
+          <button mat-button type="button" [routerLink]="['/cliente/mis-trabajos']">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
