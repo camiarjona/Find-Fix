@@ -2,7 +2,7 @@
 
 ![Java](https://img.shields.io/badge/Java-21-blue?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-brightgreen?logo=springboot)
-![Angular](https://img.shields.io/badge/Angular-v19%2B-dd0031?logo=angular)
+![Angular](https://img.shields.io/badge/Angular-v20%2B-dd0031?logo=angular)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?logo=postgresql)
 ![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
 
