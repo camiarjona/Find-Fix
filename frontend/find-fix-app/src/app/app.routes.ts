@@ -28,6 +28,7 @@ import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page';
 import { MisResenasPage } from './pages/especialista/mis-resenas-especialista/mis-resenas-especialista';
+import { MisResenasEnviadasCliente } from './pages/cliente/mis-resenas-enviadas-cliente/mis-resenas-enviadas-cliente';
 
 
 export const routes: Routes = [
@@ -97,6 +98,7 @@ export const routes: Routes = [
       { path: 'buscar-especialistas', component: BuscarEspecialistas },
       { path: 'mis-trabajos', component: MisTrabajos },
       { path: 'mis-favoritos', component: MisFavoritosPage },
+      { path: 'mis-resenas', component: MisResenasEnviadasCliente},
       {
         path: 'solicitar-especialista/nueva',
         component: NuevaSolicitudEspecialistaPage
