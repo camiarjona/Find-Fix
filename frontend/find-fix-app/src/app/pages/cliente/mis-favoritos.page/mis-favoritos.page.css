@@ -282,6 +282,10 @@
   font-weight: 400;
 }
 
+.rating {
+  margin-bottom: 1rem;
+}
+
 .profile-body-modal {
   padding: 20px;
 }

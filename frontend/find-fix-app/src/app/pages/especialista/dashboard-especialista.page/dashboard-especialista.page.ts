@@ -15,7 +15,7 @@ import { ResenaEspecialista, TrabajoEspecialista } from '../../../models/especia
   styleUrl: './dashboard-especialista.page.css',
 })
 export class DashboardEspecialistaPage {
-private router = inject(Router);
+  private router = inject(Router);
   private authService = inject(AuthService);
   private especialistaService = inject(EspecialistaService);
 
@@ -33,33 +33,12 @@ private router = inject(Router);
   ultimasResenas = signal<ResenaEspecialista[]>([]);
 
   ngOnInit() {
-    // this.cargarDatosReales(); // Comentado para usar datos falsos
+    this.cargarDatosReales();
     this.cargarDatosFalsos();
   }
 
-  //MÉTODO NUEVO PARA DATOS FALSOS
   cargarDatosFalsos() {
     console.log('Cargando datos falsos para visualización...');
-
-    // 1. Solicitudes
-    this.solicitudesPendientes.set(5);
-    // Gráfico: [Pendientes, Rechazadas]
-    this.datosSolicitudes.datasets[0].data = [5, 2];
-
-    // 2. Trabajos en Curso
-    this.trabajosEnCurso.set(3);
-    // Gráfico: [En Curso, Pendientes]
-    this.datosEnCurso.datasets[0].data = [3, 5];
-
-    // 3. Trabajos Completados (Historial)
-    this.trabajosCompletados.set(12);
-    // Gráfico: [Hace 2 meses, Hace 1 mes, Este mes]
-    this.datosCompletados.datasets[0].data = [8, 15, 12];
-
-    // 4. Ingresos
-    this.ingresosMes.set(450000);
-    // Gráfico: [Semana 1, S2, S3, S4] - Simula una curva de ingresos
-    this.datosIngresos.datasets[0].data = [50000, 120000, 80000, 200000];
 
     // 5. Calificación y Reseñas
     this.totalResenas.set(28);
@@ -69,7 +48,6 @@ private router = inject(Router);
     this.datosCalificacion.datasets[0].data = [24, 3, 1];
 
     // Lista de reseñas falsas
-    // Nota: Uso 'as any' para evitar errores si tu interfaz difiere un poco
     this.ultimasResenas.set([
       {
         id: 1,
@@ -103,69 +81,97 @@ private router = inject(Router);
   }
 
   cargarDatosReales() {
+    // 1. SOLICITUDES
     this.especialistaService.getSolicitudesRecibidas().subscribe({
       next: (solicitudes) => {
-        const pendientes = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
-        const rechazadas = solicitudes.filter(s => s.estado === 'RECHAZADO').length;
+        // Filtros (usando toUpperCase por seguridad)
+        const pendientes = solicitudes.filter(s => s.estado?.toUpperCase() === 'PENDIENTE').length;
+        const rechazadas = solicitudes.filter(s => s.estado?.toUpperCase() === 'RECHAZADO').length;
 
         this.solicitudesPendientes.set(pendientes);
-        this.actualizarGrafico(this.datosSolicitudes, [pendientes, rechazadas]);
+
+        this.datosSolicitudes = {
+          ...this.datosSolicitudes,
+          datasets: [{
+            ...this.datosSolicitudes.datasets[0],
+            data: [pendientes, rechazadas]
+          }]
+        };
       },
       error: (err) => console.error('Error solicitudes', err)
     });
 
-
+    // 2. TRABAJOS E INGRESOS
     this.especialistaService.getMisTrabajos().subscribe({
       next: (trabajos) => {
-        console.log('Trabajos recibidos:', trabajos);
-
-        //grafico trabajos en curso
-        const enCurso = trabajos.filter(t => t.estado === 'EN_PROCESO').length;
+        // Trabajos en curso
+        const enCurso = trabajos.filter(t => t.estado?.toString() === 'En proceso').length;
         this.trabajosEnCurso.set(enCurso);
-        this.actualizarGrafico(this.datosEnCurso, [enCurso, this.solicitudesPendientes()]);
 
-        const finalizados = trabajos.filter(t => t.estado === 'FINALIZADO');
+        // Actualizar Gráfico Dona En Curso
+        this.datosEnCurso = {
+          ...this.datosEnCurso,
+          datasets: [{
+            ...this.datosEnCurso.datasets[0],
+            data: [enCurso, this.solicitudesPendientes()]
+          }]
+        };
+
+        // Trabajos Finalizados
+        const finalizados = trabajos.filter(t => t.estado?.toUpperCase() === 'FINALIZADO');
         this.trabajosCompletados.set(finalizados.length);
 
-        //grafico historial
+        // Actualizar Gráfico Barras Historial
         const historial = this.calcularHistorialMeses(finalizados);
-        this.actualizarGrafico(this.datosCompletados, historial);
+        this.datosCompletados = {
+          ...this.datosCompletados,
+          datasets: [{
+            ...this.datosCompletados.datasets[0],
+            data: historial
+          }]
+        };
 
-        //grafico ingresos
+        // Ingresos
         const totalIngresos = finalizados.reduce((sum, t) => sum + (t.presupuesto || 0), 0);
         this.ingresosMes.set(totalIngresos);
 
-        this.datosIngresos.datasets[0].data = [
-           totalIngresos * 0.1,
-           totalIngresos * 0.4,
-           totalIngresos * 0.2,
-           totalIngresos * 0.3
-        ];
+        // Actualizar Gráfico Ingresos (Lineas)
+        this.datosIngresos = {
+          ...this.datosIngresos,
+          datasets: [{
+            ...this.datosIngresos.datasets[0],
+            data: [
+              totalIngresos * 0.1,
+              totalIngresos * 0.4,
+              totalIngresos * 0.2,
+              totalIngresos * 0.3
+            ]
+          }]
+        };
       },
       error: (err) => console.error('Error trabajos', err)
     });
 
-    //RESEÑAS
+    // 3. RESEÑAS (Descomenta cuando tengas el endpoint listo)
+    /*
     this.especialistaService.getMisResenas().subscribe({
-      next: (resenas) => {
-        this.totalResenas.set(resenas.length);
-        this.ultimasResenas.set(resenas.slice(0, 5));
+       next: (resenas) => {
+         this.totalResenas.set(resenas.length);
+         this.ultimasResenas.set(resenas.slice(0, 5));
 
-        // Calcular Promedio
-        if (resenas.length > 0) {
-          const suma = resenas.reduce((acc, r) => acc + r.puntuacion, 0);
-          const promedio = suma / resenas.length;
-          this.calificacionPromedio.set(parseFloat(promedio.toFixed(1)));
+         // ... lógica de promedios ...
 
-          // Calcular Distribución Estrellas
-          const cincos = resenas.filter(r => r.puntuacion >= 4.5).length;
-          const cuatros = resenas.filter(r => r.puntuacion >= 3.5 && r.puntuacion < 4.5).length;
-          const tresos = resenas.filter(r => r.puntuacion < 3.5).length;
-
-          this.actualizarGrafico(this.datosCalificacion, [cincos, cuatros, tresos]);
-        }
-      }
+         // Actualizar Gráfico Reseñas
+         this.datosCalificacion = {
+             ...this.datosCalificacion,
+             datasets: [{
+                 ...this.datosCalificacion.datasets[0],
+                 data: [cincos, cuatros, tresos]
+             }]
+         };
+       }
     });
+    */
   }
 
   // Actualiza los datos de un gráfico
@@ -179,21 +185,19 @@ private router = inject(Router);
     const conteo = [0, 0, 0]; // [Mes2, Mes1, MesActual]
 
     trabajos.forEach(t => {
-        if(t.fechaFin) {
-            const fechaFin = new Date(t.fechaFin);
-            const mesFin = fechaFin.getMonth();
+      if (t.fechaFin) {
+        const fechaFin = new Date(t.fechaFin);
+        const mesFin = fechaFin.getMonth();
 
-            if(mesFin === mesActual) conteo[2]++;
-            else if(mesFin === mesActual - 1) conteo[1]++;
-            else if(mesFin === mesActual - 2) conteo[0]++;
-        }
+        if (mesFin === mesActual) conteo[2]++;
+        else if (mesFin === mesActual - 1) conteo[1]++;
+        else if (mesFin === mesActual - 2) conteo[0]++;
+      }
     });
     return conteo;
   }
 
-
   //CONFIGURACIÓN GRÁFICOS
-
   opcionesComunes: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,

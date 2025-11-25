@@ -42,7 +42,6 @@
 /* --- Botones Principales --- */
 .btn-primary {
   background-color: #F58634;
-  /* Tu color primario */
   color: white;
   border: none;
   padding: 12px 24px;
@@ -73,12 +72,11 @@
 
 .form-area.visible {
   max-height: 500px;
-  /* Altura suficiente para el form */
   opacity: 1;
   margin-bottom: 30px;
 }
 
-/* --- Grid de Oficios --- */
+/* --- Grid de Oficios (NUEVO DISEÑO) --- */
 .oficios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -102,10 +100,8 @@
   transform: translateY(-3px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
   border-color: #fed7aa;
-  /* Borde naranja muy suave al hover */
 }
 
-/* Icono lateral de la tarjeta */
 .card-icon {
   width: 48px;
   height: 48px;
@@ -123,7 +119,6 @@
   height: 24px;
 }
 
-/* Info Central */
 .card-info {
   flex-grow: 1;
   display: flex;
@@ -143,7 +138,6 @@
   margin-top: 2px;
 }
 
-/* Acciones */
 .card-actions {
   display: flex;
   gap: 8px;
@@ -251,7 +245,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .header-section {
     flex-direction: column;
@@ -261,9 +254,5 @@
 
   .btn-primary {
     justify-content: center;
-  }
-
-  .oficio-card {
-    padding: 16px;
   }
 }

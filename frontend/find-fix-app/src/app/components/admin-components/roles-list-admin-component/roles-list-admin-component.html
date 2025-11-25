@@ -1,71 +1,87 @@
-<div class="general-html">
-
+<div class="admin-container">
 
   @if (showConfirmDialog()) {
   <app-admin-dialog-confirm [itemName]="currentRolToDelete.nombre!" (confirm)="handleDelete($event)">
   </app-admin-dialog-confirm>
   }
 
-  <div class="header-contenedor">
-    <h1 class="rol-titulo">Gestion Roles</h1>
-    <p class="rol-subtitulo">
-      Bienvenido a la seccion de roles, la lista que ve a continuacion contiene todos los roles registrados en el
-      sistema actualmente.
-    </p>
-  </div>
-
   @if (pageMessage().visible) {
-  <div class="alert-message" [class]="pageMessage().type">
-    {{ pageMessage().message }}
+  <div class="toast-message" [class]="pageMessage().type">
+    <div class="toast-icon">
+      {{ pageMessage().type === 'success' ? '✅' : '⚠️' }}
+    </div>
+    <span>{{ pageMessage().message }}</span>
   </div>
   }
-  <div class="tabla-general">
-    <table class="roles-tabla">
-      <thead>
-        <tr>
-          <th>Nombre del Rol</th>
-          <th class="acciones-col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if (isLoading()) {
-        <td>Cargando roles...</td>
-        } @else {
-        @for (rol of roles(); track $index) {
-        <tr>
-          <td class="nombre-contenedor">
-            <span class="rol-nombre">{{ rol.nombre }}</span>
-          </td>
-          <td class="acciones-opciones">
-            <button class="icon-btn" (click)="mostrarAvisoEdicion()" title="Eliminar">
-              🗑️
-            </button>
-            <button class="icon-btn" (click)="mostrarAvisoEdicion()" title="Modificar">
-              📋
-            </button>
-          </td>
-        </tr>
-        } @empty {
-        <tr>
-          <td colspan="3" class="empty-cell">No hay roles registrados.</td>
-        </tr>
-        }
-        }
-      </tbody>
-    </table>
+
+  <div class="header-section">
+    <div class="header-content">
+      <h1>Gestión de Roles</h1>
+      <p>Administra los permisos y niveles de acceso del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="toggleForm()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      {{ formStatus() === 'creating' ? 'Cerrar Formulario' : 'Nuevo Rol' }}
+    </button>
   </div>
 
-</div>
-<div class="button-form-contenedor">
-  <button class="cta-button" (click)="toggleForm()">
-    {{ formStatus() === 'creating' ? 'Cerrar' : 'Nuevo Rol' }}
-  </button>
-</div>
-<div class="oficio-list-footer">
-  @if (formStatus() === 'creating') {
-  <div class="form-contenedor">
-    <input type="text" [(ngModel)]="nuevoRolNombre" placeholder="Nombre del Rol (ej: SUPERVISOR)" class="role-input">
-    <button class="cta-button" (click)="submitRol()">Guardar</button>
+  <div class="form-area" [class.visible]="formStatus() === 'creating'">
+    @if (formStatus() === 'creating') {
+    <app-rol-form-admin-component></app-rol-form-admin-component>
+    }
+  </div>
+
+  @if (isLoading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando roles...</p>
+  </div>
+  } @else {
+  <div class="roles-grid">
+    @for (rol of roles(); track $index) {
+    <div class="rol-card">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+
+      <div class="card-info">
+        <span class="rol-name">{{ rol.nombre }}</span>
+        <span class="rol-badge">Activo</span>
+      </div>
+
+      <div class="card-actions">
+        <button class="action-btn edit" (click)="mostrarAvisoEdicion()" title="Editar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
+        <button class="action-btn delete" (click)="confirmarEliminacion(rol.nombre)" title="Eliminar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    } @empty {
+    <div class="empty-state">
+      <p>No hay roles registrados en el sistema.</p>
+    </div>
+    }
   </div>
   }
 </div>

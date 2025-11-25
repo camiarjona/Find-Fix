@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { PerfilEspecialista } from '../../../models/especialista/especialista.model';
 import { FavoritoService } from '../../../services/favoritos/lista-favs.service';
 import { AgregarFavoritoDTO } from '../../../models/favoritos/lista-favs.model';
+import { ModalFeedbackComponent } from "../../general/modal-feedback.component/modal-feedback.component";
 
 @Component({
   selector: 'app-buscar-especialistas-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent],
   templateUrl: './buscar-especialistas-component.html',
   styleUrl: './buscar-especialistas-component.css',
 })
@@ -31,6 +32,19 @@ export class BuscarEspecialistasComponent {
     oficio: '',
     minCalificacion: 0
   };
+
+    public showConfirmPass = signal(false);
+
+  // Feedback modal state
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+
+  mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+  }
+
+  cerrarFeedback() {
+    this.feedbackData = { ...this.feedbackData, visible: false };
+  }
 
   public showModalContratar = signal(false);
   public showModalDetalle = signal(false);
@@ -105,12 +119,12 @@ export class BuscarEspecialistasComponent {
       descripcion: this.descripcionTrabajo
     }).subscribe({
       next: () => {
-        alert('Solicitud enviada con éxito!');
+        this.mostrarFeedback('Enhorabuena', 'Solicitud enviada con éxito');
         this.isSubmitting.set(false);
         this.cerrarModalContratar();
       },
       error: (err) => {
-        alert('Error al enviar solicitud: ' + (err.error?.mensaje || 'Intente nuevamente'));
+        this.mostrarFeedback('Error al enviar la solicitud', 'Intente nuevamente');
         this.isSubmitting.set(false);
       }
     });

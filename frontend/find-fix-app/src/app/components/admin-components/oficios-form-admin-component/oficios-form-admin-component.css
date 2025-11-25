@@ -1,130 +1,169 @@
+/* Eliminamos el position: fixed/overlay para que respete la animación del padre */
+:host {
+  display: block;
+  width: 100%;
+}
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+.form-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  /* Borde sutil */
+  /* Sombra interna suave para dar sensación de "panel de control" */
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  padding: 30px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- Header --- */
+.form-header {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.form-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.form-header p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- Input --- */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  /* Padding extra a la izq para el icono */
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1f2937;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.modern-input:focus {
+  border-color: #F58634;
+  box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.15);
+  /* Anillo naranja suave */
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.modern-input:focus+.input-icon {
+  color: #F58634;
+}
+
+/* --- Mensaje Error --- */
+.error-badge {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 900;
-  padding: 1rem;
-}
-
-
-.form-container {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-}
-
-
-.form-container h2 {
-  font-size: 1.3rem;
-  color: var(--primary-color);
-  margin-top: 0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  text-align: center;
-
-}
-
-.form-container input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
+  gap: 8px;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 10px 16px;
   border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border: 1px solid #fca5a5;
 }
 
-
-.form-actions {
+/* --- Botones --- */
+.form-footer {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px dashed #e5e7eb;
 }
 
-
-.cta-button {
-  background: var(--primary-color);
-  color: white;
-  padding: 12px 20px;
-  border: none;
+.btn-cancel {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  width: 100%;
-  text-align: center;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
-.cta-button:hover {
+.btn-cancel:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-submit {
+  background-color: #F58634;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit:hover:not(:disabled) {
   background-color: #e07024;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(245, 134, 52, 0.2);
 }
 
-.cta-button:disabled {
-  background-color: #ccc;
+.btn-submit:disabled {
+  background-color: #fed7aa;
   cursor: not-allowed;
 }
 
-.cta-button-cancel {
-  background-color: #F58634;
-  color: white;
-  border: 1px solid #ccc;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  transition: background-color 0.2s;
+/* Spinner pequeño para el botón */
+.spinner-mini {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
 }
 
-.cta-button-cancel:hover {
-  background-color: #f1f1f1;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-
-.form-error-message {
-  color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: 500;
-}
-
-@media (min-width: 600px) {
-
-  .form-container {
-    padding: 20px 30px;
+/* Responsive */
+@media (max-width: 500px) {
+  .form-footer {
+    flex-direction: column-reverse;
+    /* Botón guardar arriba en móvil */
   }
 
-  .form-container h2 {
-    font-size: 1.5rem;
-  }
-
-  .form-actions {
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-
-  .cta-button,
-  .cta-button-cancel {
-    width: auto;
-    min-width: 120px;
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
   }
 }

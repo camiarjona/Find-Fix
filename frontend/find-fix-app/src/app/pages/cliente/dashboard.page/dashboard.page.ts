@@ -1,14 +1,14 @@
+import { EstadoSolicitud } from './../../../models/enums/enums.model';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
-// import { SolicitudService } from '../../../services/solicitud/solicitud.service';
-// import { FavoritoService } from '../../../services/favorito/favorito.service';
 // import { ResenaService } from '../../../services/resena/resena.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { TrabajoExternoService } from '../../../services/trabajoExterno-services/trabajo-externo-service';
 import { FavoritoService } from '../../../services/favoritos/lista-favs.service';
+import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-trabajo.service';
 @Component({
   selector: 'app-dashboard.page',
   standalone: true,
@@ -22,20 +22,15 @@ export class DashboardPage implements OnInit {
   private trabajoAppService = inject(TrabajoAppService);
   private trabajoExternoService = inject(TrabajoExternoService);
 
-  // private solicitudService = inject(SolicitudService);
+  private solicitudTrabajoService = inject(SolicitudTrabajoService);
   private favoritoService = inject(FavoritoService);
   // private resenaService = inject(ResenaService);
-
-  solicitudesPendientes = signal(2);
 
   nombreUsuario = computed(() => {
     return this.authService.currentUser()?.nombre || 'Cliente';
   });
 
-  // solicitudesPendientes = computed(
-  //   () => this.solicitudService.solicitudesCliente().filter((s) => s.estado === 'PENDIENTE').length
-  // );
-
+  solicitudesPendientes = signal<number>(0);
   favoritosGuardados = signal<number>(0);
 
   // señal que guarda el conteo combinado de trabajos en proceso
@@ -45,6 +40,7 @@ export class DashboardPage implements OnInit {
   ngOnInit(): void {
     this.cargarTrabajosEnProceso();
     this.cargarFavoritos();
+    this.cargarSolicitudesPendientes();
   }
 
   private cargarTrabajosEnProceso() {
@@ -52,12 +48,12 @@ export class DashboardPage implements OnInit {
     this.trabajoAppService.obtenerTrabajosCliente().subscribe({
       next: (respApp) => {
         const listaApp = (respApp?.data || []) as any[];
-        const countApp = listaApp.filter(t => (t?.estado || '').toString() === 'EN_PROCESO').length;
+        const countApp = listaApp.filter(t => (t?.estado || '').toString() === 'En proceso').length;
 
         this.trabajoExternoService.obtenerMisTrabajos().subscribe({
           next: (respExt) => {
             const listaExt = (respExt?.data || []) as any[];
-            const countExt = listaExt.filter(t => (t?.estado || '').toString() === 'EN_PROCESO').length;
+            const countExt = listaExt.filter(t => (t?.estado || '').toString() === 'En proceso').length;
             this.trabajosEnProcesoCount.set(countApp + countExt);
           },
           error: (errExt) => {
@@ -93,6 +89,20 @@ export class DashboardPage implements OnInit {
       },
       error: (err) => {
         console.error('Error cargando favoritos');
+      }
+    })
+  }
+
+  private cargarSolicitudesPendientes() {
+    this.solicitudesPendientes.set(0);
+    this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
+      next: (resp) => {
+        const listaSolis = (resp?.data || []) as any[];
+        const countPend = listaSolis.filter(s => (s?.estado || '').toString() === 'PENDIENTE').length;
+        this.solicitudesPendientes.set(countPend);
+      },
+      error: (err) => {
+        console.log('Error cargando solicitudes');
       }
     })
   }

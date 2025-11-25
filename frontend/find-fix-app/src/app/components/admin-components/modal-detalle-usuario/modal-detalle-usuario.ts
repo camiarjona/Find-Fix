@@ -3,6 +3,7 @@ import { UserService } from '../../../services/user/user.service';
 import { UpdateUserRequest, UserProfile } from '../../../models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-modal-detalle-usuario',
@@ -17,6 +18,8 @@ export class ModalDetalleUsuario {
   @Input({ required: true }) usuario!: UserProfile;
   @Output() cerrar = new EventEmitter<void>();
   @Output() usuarioActualizado = new EventEmitter<void>(); // Para avisar a la tabla
+
+  public icons = UI_ICONS;
 
   // --- LÓGICA DE EDICIÓN ---
   public editingField = signal<string | null>(null);
