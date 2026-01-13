@@ -31,7 +31,7 @@ export class AuthService {
 
 
   login(credentials: LoginCredentials) {
-    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/login`, credentials)
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => {
           this.currentUser.set(response.data);
@@ -42,7 +42,7 @@ export class AuthService {
   logout(): void {
     console.log('🚪 Iniciando proceso de logout...');
 
-    this.http.post(`${this.apiUrl}/usuario/logout`, {}, { responseType: 'text' })
+    this.http.post(`${this.apiUrl}/auth/logout`, {}, { responseType: 'text' })
       .subscribe({
         next: () => {
           console.log('✅ Backend confirmó logout. Cookie eliminada.');
@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   register(register: RegisterCredentials): Observable<ApiResponse<UserProfile>> {
-    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/registrar`, register);
+    return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/auth/registrar`, register);
   }
 
   public setInitialRole(role: ActiveRole) {

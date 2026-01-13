@@ -1,10 +1,7 @@
 package com.findfix.find_fix_app.usuario.dto;
 
-import com.findfix.find_fix_app.rol.model.Rol;
+import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
 import lombok.Data;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 public class MostrarRegistroDTO {

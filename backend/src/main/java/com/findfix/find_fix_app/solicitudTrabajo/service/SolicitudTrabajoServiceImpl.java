@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.solicitudTrabajo.service;
 
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
@@ -33,7 +33,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     private final SolicitudTrabajoRepository solicitudTrabajoRepository;
     private final EspecialistaService especialistaService;
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final TrabajoAppService trabajoAppService;
 
     //metodo para registrar una nueva solicitud de trabajo
@@ -47,7 +47,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
         solicitudTrabajo.setDescripcion(solicitarTrabajoDTO.descripcion());
         solicitudTrabajo.setEstado(EstadosSolicitudes.PENDIENTE);
-        solicitudTrabajo.setUsuario(authService.obtenerUsuarioAutenticado());
+        solicitudTrabajo.setUsuario(authServiceImpl.obtenerUsuarioAutenticado());
         solicitudTrabajo.setFechaCreacion(LocalDate.now());
         solicitudTrabajo.setEspecialista(especialista);
         return solicitudTrabajoRepository.save(solicitudTrabajo);
@@ -86,7 +86,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     @Override
     @Transactional(readOnly = true)
     public List<SolicitudTrabajo> obtenerSolicitudesDelCliente() throws UsuarioNotFoundException, SolicitudTrabajoException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         List<SolicitudTrabajo> solicitudesEnviadas = solicitudTrabajoRepository.findByUsuario(usuario);
 
@@ -113,7 +113,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
         SolicitudTrabajo solicitudTrabajo = solicitudTrabajoRepository.findById(idSolicitud)
                 .orElseThrow(() -> new SolicitudTrabajoNotFoundException("Solicitud de trabajo no encontrada"));
 
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         if (estaPendiente(solicitudTrabajo)) {
             validarCliente(solicitudTrabajo, usuario);
@@ -158,7 +158,7 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     @Transactional(readOnly = true)
     public List<SolicitudTrabajo> filtrarSolicitudesEnviadas(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UsuarioNotFoundException {
 
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         Specification<SolicitudTrabajo> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 

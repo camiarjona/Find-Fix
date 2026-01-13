@@ -2,7 +2,7 @@ package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class TrabajoAppServiceImpl implements TrabajoAppService {
 
     private final TrabajoAppRepository trabajoAppRepository;
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final EspecialistaService especialistaService;
 
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
@@ -57,7 +57,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     @Transactional(readOnly = true)
     public List<TrabajoApp> obtenerTrabajosClientes() throws UsuarioNotFoundException {
 
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         //        if (trabajosSolicitados.isEmpty()) {
 //            throw new TrabajoAppException("Usted no tiene trabajos aceptados.");

@@ -5,7 +5,7 @@ import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.favoritos.model.Favorito;
 import com.findfix.find_fix_app.favoritos.repository.FavoritoRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.FavoritoException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
@@ -20,12 +20,12 @@ import java.util.List;
 public class FavoritoServiceImpl implements FavoritoService {
     private final FavoritoRepository favoritoRepository;
     private final EspecialistaService especialistaService;
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void agregarAFavoritos(String emailEspecialista) throws UsuarioNotFoundException, EspecialistaNotFoundException, FavoritoException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         Especialista especialista = especialistaService.buscarPorEmail(emailEspecialista)
                 .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado."));
@@ -38,7 +38,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void eliminarDeFavoritos(String emailEspecialista) throws UsuarioNotFoundException, EspecialistaNotFoundException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         Especialista especialista = especialistaService.buscarPorEmail(emailEspecialista)
                 .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado."));
@@ -49,7 +49,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     @Override
     @Transactional(readOnly = true)
     public List<Especialista> obtenerFavoritos() throws UsuarioNotFoundException, FavoritoException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         return favoritoRepository.findAllByUsuario(usuario)
                 .stream()
