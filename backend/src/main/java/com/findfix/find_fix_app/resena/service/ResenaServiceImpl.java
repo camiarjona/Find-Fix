@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.resena.service;
 
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class ResenaServiceImpl implements ResenaService {
 
     private final ResenaRepository repository;
-    private final AuthService autorizacion;
+    private final AuthServiceImpl autorizacion;
     private final EspecialistaService especialistaService;
     private final TrabajoAppService trabajoService;
 

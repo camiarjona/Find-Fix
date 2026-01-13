@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
 
-                                .requestMatchers("/usuario/registrar", "/usuario/login", "/usuario/logout","/especialistas/publico").permitAll()
+                                .requestMatchers("/auth/login", "/auth/registrar", "/usuario/logout", "/especialistas/publico").permitAll()
                                 
                                 .requestMatchers(
                                         "/usuario/modificar-datos",
@@ -142,16 +142,14 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                  .logout(logout -> logout
-                        .logoutUrl("/usuario/logout")
+                        .logoutUrl("/auth/logout")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .addLogoutHandler((request, response, authentication) -> {
-                            // FUERZA BRUTA: Sobrescribir cookie manualmente
-                            // Esto arregla problemas de 'Path' que a veces ocurren
                             Cookie cookie = new Cookie("JSESSIONID", null);
-                            cookie.setPath("/"); // Importante: Asegura que borre la cookie global
+                            cookie.setPath("/");
                             cookie.setHttpOnly(true);
-                            cookie.setMaxAge(0); // 0 segundos de vida = borrar inmediatamente
+                            cookie.setMaxAge(0);
                             response.addCookie(cookie);
                             System.out.println(">>> LOGOUT: Cookie JSESSIONID borrada manualmente.");
                         })
@@ -160,8 +158,6 @@ public class SecurityConfig {
                         })
                 )
                 .exceptionHandling(exception -> exception
-                        // Tu exceptionHandling personalizado está perfecto, no lo toques.
-                        // Ahora respetará la configuración de CORS.
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
                             response.setContentType("application/json");

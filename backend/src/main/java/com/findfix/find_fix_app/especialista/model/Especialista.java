@@ -6,9 +6,8 @@ import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +33,8 @@ public class Especialista {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
     @NotNull(message = "El usuario no puede ser nulo")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Usuario usuario;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -46,9 +47,13 @@ public class Especialista {
 
 
     @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<TrabajoApp> trabajos = new ArrayList<>();
 
     @OneToMany(mappedBy = "especialista", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<TrabajoExterno> trabajoExternos = new ArrayList<>();
 
     @Transient

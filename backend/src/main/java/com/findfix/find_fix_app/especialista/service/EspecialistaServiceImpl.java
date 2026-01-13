@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.especialista.service;
 
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.especialista.Specifications.EspecialistaSpecifications;
 import com.findfix.find_fix_app.especialista.dto.*;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     private final EspecialistaRepository especialistaRepository;
     private final OficioRepository oficioRepository;
     private final UsuarioService usuarioService;
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final EspecialistaDesvinculacionService especialistaDesvinculacionService;
 
     /// Metodo para guardar un usuario como especialista
@@ -45,7 +44,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     /// Metodo para traerme el especialista segun el usuario registrado
     public Especialista obtenerEspecialistaAutenticado()
             throws UsuarioNotFoundException, EspecialistaNotFoundException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
         return especialistaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new EspecialistaNotFoundException(
                         "⚠️Especialista no encontrado para el usuario autenticado"));
@@ -131,7 +130,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
                 .findAll(EspecialistaSpecifications.tieneDatosCompletos());
 
         try {
-            Usuario usuario = authService.obtenerUsuarioAutenticado();
+            Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
             List<Especialista> especialistasDisponibles = especialistas.stream()
                     .filter(e -> !usuario.equals(e.getUsuario())).toList();
             if (especialistasDisponibles.isEmpty()) {
@@ -305,7 +304,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         List<Especialista> especialistas = especialistaRepository.findAll(finalSpec);
 
         try {
-            Usuario usuarioLogueado = authService.obtenerUsuarioAutenticado();
+            Usuario usuarioLogueado = authServiceImpl.obtenerUsuarioAutenticado();
 
             especialistas = especialistas.stream()
                     .filter(e -> !e.getUsuario().equals(usuarioLogueado))

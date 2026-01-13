@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.usuario.dto;
+package com.findfix.find_fix_app.utils.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

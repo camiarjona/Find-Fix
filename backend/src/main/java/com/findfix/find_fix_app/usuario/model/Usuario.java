@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -54,9 +56,13 @@ public class Usuario {
     private Set<Rol> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<SolicitudEspecialista> solicitudesParaEspecialista;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<SolicitudTrabajo> solicitudesEnviadas;
 
 }

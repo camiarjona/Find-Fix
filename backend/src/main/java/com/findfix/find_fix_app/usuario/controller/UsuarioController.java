@@ -1,6 +1,8 @@
 package com.findfix.find_fix_app.usuario.controller;
 
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
+import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
+import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
@@ -31,21 +33,6 @@ import java.util.List;
 public class UsuarioController {
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
-
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> login(@Valid @RequestBody UsuarioLoginDTO loginDTO, HttpServletRequest request) throws UsuarioNotFoundException {
-        Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
-        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
-        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
-
-        HttpSession session = request.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-
-        VerPerfilUsuarioDTO perfil = usuarioService.verPerfilUsuario();
-
-        return ResponseEntity.ok(new ApiResponse<>("Login exitoso, bienvenido!", perfil));
-    }
-
     
     //metodo para ver la lista de usuarios registrados
     @GetMapping
@@ -55,15 +42,6 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse<>(
                 "Lista de usuarios☑️",
                 usuarios.stream().map(VerPerfilUsuarioDTO::new).toList()));
-    }
-
-    //metodo para que un usuario se registre en el sistema
-    @PostMapping("/registrar") //CHEQUEADO
-    public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> registrarUsuario(@Valid @RequestBody RegistroDTO registro) throws UsuarioException, RolException {
-        Usuario user = usuarioService.registrarNuevoUsuario(registro);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
-                "Usuario registrado con éxito✅",
-                new VerPerfilUsuarioDTO(user)));
     }
 
     //metodo para que el usuario pueda modificar sus datos

@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.usuario.service;
 
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.rol.model.Rol;
@@ -11,24 +12,16 @@ import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
+public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -86,37 +79,6 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     @Transactional(readOnly = true)
     public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
-    }
-
-    //metodo para registrar un usuario nuevo
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Usuario registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException {
-
-        if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
-            throw new UsuarioException("❗Ya existe un usuario registrado con ese email.");
-        }
-
-        Usuario usuario = new Usuario();
-
-        usuario.setEmail(registroDTO.email());
-        usuario.setPassword(passwordEncoder.encode(registroDTO.password()));
-        usuario.setNombre(registroDTO.nombre());
-        usuario.setApellido(registroDTO.apellido());
-        usuario.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
-        usuario.setTelefono("No especificado.");
-
-        Rol rol;
-
-        //Se registra con rol cliente por default
-        rol = rolRepository.findByNombre("CLIENTE")
-                .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
-
-        usuario.getRoles().add(rol);
-
-        usuarioRepository.save(usuario);
-
-        return usuario;
     }
 
     // metodo para actualizar la contraseña de un usuario
@@ -242,29 +204,5 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         usuario.setActivo(true); // <--- Lo volvemos a TRUE
         usuarioRepository.save(usuario);
     }
-
-    // Metodo para buscar un usuario por su email para autenticacion
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> userOptional = usuarioRepository.findByEmail(username);
-        Usuario usuario = userOptional.orElseThrow(() -> new UsernameNotFoundException("❌Usuario no encontrado❌"));
-
-        // retorna un user de spring security
-        return new org.springframework.security.core.userdetails.User(
-                usuario.getEmail(),
-                usuario.getPassword(),
-                getAuthorities(usuario.getRoles())
-        );
-    }
-
-    // Metodo que convierte los roles del usuario en autoridades para spring security
-    private Collection<? extends GrantedAuthority> getAuthorities(Set<Rol> roles) {
-        // Prefijo "ROLE_" es requerido por Spring Security para roles
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getNombre()))
-                .collect(Collectors.toList());
-    }
-
 
 }

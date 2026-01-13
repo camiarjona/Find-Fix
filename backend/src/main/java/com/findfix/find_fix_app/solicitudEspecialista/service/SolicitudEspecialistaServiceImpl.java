@@ -1,7 +1,7 @@
 package com.findfix.find_fix_app.solicitudEspecialista.service;
 
 import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
-import com.findfix.find_fix_app.utils.auth.AuthService;
+import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaService {
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final SolicitudEspecialistaRepository solicitudEspecialistaRepository;
     private final EspecialistaService especialistaService;
     private final UsuarioService usuarioService;
@@ -36,7 +36,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     public void mandarSolicitud(MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
         SolicitudEspecialista solicitudEspecialista = new SolicitudEspecialista();
 
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         verificarUsuario(usuario);
 
@@ -97,7 +97,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     @Override
     @Transactional(readOnly = true)
     public List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, UsuarioNotFoundException {
-        Usuario usuario = authService.obtenerUsuarioAutenticado();
+        Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
         List<SolicitudEspecialista> solicitudEspecialistas = solicitudEspecialistaRepository.findByUsuarioEmail(usuario.getEmail());
         if (solicitudEspecialistas.isEmpty()) {
             throw new SolicitudEspecialistaException("⚠️No se encontraron solicitudes para el usuario con email: " + usuario.getEmail());
@@ -147,7 +147,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException {
-        String email = authService.obtenerEmailUsuarioAutenticado();
+        String email = authServiceImpl.obtenerEmailUsuarioAutenticado();
 
         if (solicitudEspecialistaRepository.findById(id).isEmpty()) {
             throw new SolicitudEspecialistaNotFoundException("⚠️Solicitud no encontrada");
@@ -168,7 +168,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     @Transactional(readOnly = true)
     public List<FichaCompletaSolicitudEspecialistaDTO> filtrarSolicitudes(BuscarSolicitudEspecialistaDTO filtro) throws SolicitudEspecialistaException, UsuarioNotFoundException {
 
-        Usuario usuarioAuth = authService.obtenerUsuarioAutenticado();
+        Usuario usuarioAuth = authServiceImpl.obtenerUsuarioAutenticado();
 
         boolean esAdmin = usuarioAuth.getRoles().stream()
                 .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
@@ -225,7 +225,7 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         SolicitudEspecialista solicitud = solicitudEspecialistaRepository.findById(id)
                 .orElseThrow(() -> new SolicitudEspecialistaNotFoundException("No se encontró una solicitud con el ID: " + id));
 
-        Usuario usuarioAutenticado = authService.obtenerUsuarioAutenticado();
+        Usuario usuarioAutenticado = authServiceImpl.obtenerUsuarioAutenticado();
 
         boolean esAdmin = usuarioAutenticado.getRoles().stream()
                 .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
