@@ -30,18 +30,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
 
-                                .requestMatchers("/auth/login", "/auth/registrar", "/usuario/logout", "/especialistas/publico").permitAll()
-                                
-                                .requestMatchers(
-                                        "/usuario/modificar-datos",
-                                        "/usuario/modificar-password",
-                                        "/usuario/ver-perfil",
-                                        "/usuario/ver-ciudades-disponibles")
-                                .hasAnyRole("ADMIN", "CLIENTE", "ESPECIALISTA")
+                                .requestMatchers("/auth/login", "/auth/registrar", "/especialistas/publico").permitAll()
 
-                                .requestMatchers("/usuario",
-                                        "/usuario/modificar/{email}",
-                                        "/usuario/filtrar")
+                                //rutas usuario comun
+                                .requestMatchers(
+                                        "/usuario/**")
+                                .hasAnyRole("CLIENTE", "ESPECIALISTA")
+
+                                //admin usuario controller
+                                .requestMatchers("/admin/usuarios/**")
                                 .hasRole("ADMIN")
 
                                 //OFICIOS ESPECIALISTA/CLIENTE

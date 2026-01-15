@@ -1,7 +1,7 @@
 package com.findfix.find_fix_app.usuario.service;
 
+import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.utils.auth.service.AuthService;
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.rol.model.Rol;
@@ -11,6 +11,8 @@ import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
     private final AuthService authService;
+
+    //Inyectamos con autowired para eliminar la dependencia circular
+    @Autowired
+    @Lazy
+    private EspecialistaService especialistaService;
+
     private final UsuarioDesvinculacionService usuarioDesvinculacionService;
 
     //metodo para guardar un usuario basico
@@ -203,6 +211,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setActivo(true); // <--- Lo volvemos a TRUE
         usuarioRepository.save(usuario);
+    }
+
+    //metodo para eliminar un usuario
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void eliminarCuentaPorEmail(String email) throws UsuarioNotFoundException, EspecialistaNotFoundException, RolNotFoundException {
+        Usuario usuario = obtenerUsuarioPorEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado."));
+
+        if (tieneRol(usuario,"ESPECIALISTA")) {
+            especialistaService.eliminarPorEmail(email);
+        }
+        eliminarPorEmail(email);
     }
 
 }

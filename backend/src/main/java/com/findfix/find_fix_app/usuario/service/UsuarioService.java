@@ -25,7 +25,6 @@ public interface UsuarioService {
     void actualizarUsuarioEspecialista(Usuario usuario);
     List<String> ciudadesDisponibles();
     void desactivarUsuario(String email) throws UsuarioNotFoundException;
-
-    @Transactional(rollbackFor = Exception.class)
     void activarUsuario(String email) throws UsuarioNotFoundException;
+    void eliminarCuentaPorEmail(String email) throws UsuarioNotFoundException, EspecialistaNotFoundException, RolNotFoundException;
 }

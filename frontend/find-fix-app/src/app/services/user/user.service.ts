@@ -9,7 +9,8 @@ import { ApiResponse } from '../../models/api-response/apiResponse.model';
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrlUser = 'http://localhost:8080/usuario';
+  private apiUrlAdmin = 'http://localhost:8080/admin/usuarios';
 
   private http = inject(HttpClient);
 
@@ -19,12 +20,13 @@ export class UserService {
 
   constructor() { }
 
+  // ADMIN METHODS
   getUsers(forceReload: boolean = false): Observable<ApiResponse<UserProfile[]> | UserProfile[]> {
     if (!forceReload && this.userState().length > 0) {
       return of(this.userState());
     }
 
-    return this.http.get<ApiResponse<UserProfile[]>>(`${this.apiUrl}/usuario`).pipe(
+    return this.http.get<ApiResponse<UserProfile[]>>(`${this.apiUrlAdmin}`).pipe(
       tap({
         next: (response) => {
           this.userState.set(response.data);
@@ -38,44 +40,21 @@ export class UserService {
   }
 
   desactivarUsuario(email: string): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/usuario/desactivar/${email}`, {},
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrlAdmin}/desactivar/${email}`, {},
       { withCredentials: true });
   }
 
   activarUsuario(email: string): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(
-      `${this.apiUrl}/usuario/activar/${email}`,
+      `${this.apiUrlAdmin}/activar/${email}`,
       {},
       { withCredentials: true }
     );
   }
 
-  updateProfile(data: UpdateUserRequest): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/usuario/modificar-datos`, data).pipe(
-      tap(() => {
-        console.log('Perfil actualizado correctamente');
-      })
-    );
-  }
-
-  updatePassword(data: UpdatePasswordRequest): Observable<ApiResponse<string>> {
-    return this.http.patch<ApiResponse<string>>(`${this.apiUrl}/usuario/modificar-password`, data);
-  }
-
-  getProfile(): Observable<ApiResponse<UserProfile>> {
-    return this.http.get<ApiResponse<UserProfile>>(`${this.apiUrl}/usuario/ver-perfil`);
-  }
-
-  getCities(): Observable<ApiResponse<string[]>> {
-    return this.http.get<ApiResponse<string[]>>(
-      `${this.apiUrl}/usuario/ciudades-disponibles`,
-      { withCredentials: true }
-    );
-  }
-
-  updateUserByAdmin(email: string, data: UpdateUserRequest): Observable<ApiResponse<string>> {
+    updateUserByAdmin(email: string, data: UpdateUserRequest): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(
-      `${this.apiUrl}/usuario/modificar/${email}`,
+      `${this.apiUrlAdmin}/modificar/${email}`,
       data,
       { withCredentials: true }
     );
@@ -83,8 +62,32 @@ export class UserService {
 
   filterUsers(filters: UserSearchFilters): Observable<ApiResponse<UserProfile[]>> {
     return this.http.post<ApiResponse<UserProfile[]>>(
-      `${this.apiUrl}/usuario/filtrar`,
+      `${this.apiUrlAdmin}/filtrar`,
       filters,
+      { withCredentials: true }
+    );
+  }
+  
+  // USER METHODS
+  updateProfile(data: UpdateUserRequest): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrlUser}/modificar-datos`, data).pipe(
+      tap(() => {
+        console.log('Perfil actualizado correctamente');
+      })
+    );
+  }
+
+  updatePassword(data: UpdatePasswordRequest): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.apiUrlUser}/modificar-password`, data);
+  }
+
+  getProfile(): Observable<ApiResponse<UserProfile>> {
+    return this.http.get<ApiResponse<UserProfile>>(`${this.apiUrlUser}/ver-perfil`);
+  }
+
+  getCities(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.apiUrlUser}/ciudades-disponibles`,
       { withCredentials: true }
     );
   }
