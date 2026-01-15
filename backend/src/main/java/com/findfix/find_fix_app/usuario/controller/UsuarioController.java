@@ -1,26 +1,14 @@
 package com.findfix.find_fix_app.usuario.controller;
 
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
-import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
-import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
-import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
-import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.usuario.dto.*;
-import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,38 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class UsuarioController {
+
     private final UsuarioService usuarioService;
-    private final AuthenticationManager authenticationManager;
-    
-    //metodo para ver la lista de usuarios registrados
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<VerPerfilUsuarioDTO>>> obtenerUsuarios() {
-        List<Usuario> usuarios = usuarioService.obtenerUsuarios();
-        return ResponseEntity.ok(new ApiResponse<>(
-                "Lista de usuarios☑️",
-                usuarios.stream().map(VerPerfilUsuarioDTO::new).toList()));
-    }
 
     //metodo para que el usuario pueda modificar sus datos
     @PatchMapping("/modificar-datos") //CHEQUEADO
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
+    @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<String>> actualizarUsuario(@Valid @RequestBody ActualizarUsuarioDTO usuarioDTO) throws UsuarioNotFoundException {
         usuarioService.actualizarUsuario(usuarioDTO);
         return ResponseEntity.ok(new ApiResponse<>(
                 "Modificaciones realizadas con éxito☑️", "Consulte su perfil para corroborar los cambios."));
     }
 
-    //metodo para modificar un usuario (desde admin)
-    @PatchMapping("/modificar/{email}") //CHEQUEADO
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> actualizarUsuarioAdmin(@Valid @RequestBody ActualizarUsuarioDTO usuario, @PathVariable String email) throws UsuarioNotFoundException {
-        usuarioService.actualizarUsuarioAdmin(usuario, email);
-        return ResponseEntity.ok(new ApiResponse<>("Modificaciones realizadas con éxito☑️", "Consulte la lista de usuarios para corroborar los cambios."));
-    }
-
     @PatchMapping("/modificar-password")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")//CHEQUEADO
+    @PreAuthorize("hasAnyRole('CLIENTE', 'ESPECIALISTA')")//CHEQUEADO
     public ResponseEntity<ApiResponse<String>> modificarPassword(@Valid @RequestBody ActualizarPasswordDTO passwordDTO) throws UsuarioNotFoundException {
         usuarioService.actualizarPassword(passwordDTO);
         return ResponseEntity.ok(new ApiResponse<>(
@@ -70,7 +40,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/ver-perfil") //CHEQUEADO
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENTE', 'ESPECIALISTA')")
     public ResponseEntity<ApiResponse<VerPerfilUsuarioDTO>> verPerfilUsuario() throws UsuarioNotFoundException {
         VerPerfilUsuarioDTO usuarioDTO = usuarioService.verPerfilUsuario();
         return ResponseEntity.ok(new ApiResponse<>("\uD83D\uDC64Perfil\uD83D\uDC64", usuarioDTO));
@@ -81,26 +51,5 @@ public class UsuarioController {
     public ResponseEntity<ApiResponse<List<String>>> verCiudadesDisponibles() {
         List<String> ciudadesDisponibles = CiudadesDisponibles.ciudadesDisponibles();
         return ResponseEntity.ok(new ApiResponse<>("Ciudades disponibles", ciudadesDisponibles));
-    }
-
-    @PostMapping("/filtrar")
-    @PreAuthorize("hasRole('ADMIN')") //CHEQUEADO
-    public ResponseEntity<ApiResponse<List<VerPerfilUsuarioDTO>>> filtrarUsuarios(@RequestBody BuscarUsuarioDTO filtro) throws UsuarioNotFoundException, UsuarioException {
-        List<Usuario> usuariosFiltrados = usuarioService.filtrarUsuarios(filtro);
-        return ResponseEntity.ok(new ApiResponse<>("Coincidencias⬇️", usuariosFiltrados.stream().map(VerPerfilUsuarioDTO::new).toList()));
-    }
-
-    @PatchMapping("/desactivar/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> desactivarUsuario(@PathVariable String email) throws UsuarioNotFoundException {
-        usuarioService.desactivarUsuario(email);
-        return ResponseEntity.ok(new ApiResponse<>("Usuario desactivado", email));
-    }
-
-    @PatchMapping("/activar/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> activarUsuario(@PathVariable String email) throws UsuarioNotFoundException {
-        usuarioService.activarUsuario(email);
-        return ResponseEntity.ok(new ApiResponse<>("Usuario reactivado", email));
     }
 }
