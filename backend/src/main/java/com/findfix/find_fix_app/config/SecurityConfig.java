@@ -42,19 +42,13 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
 
                                 //OFICIOS ESPECIALISTA/CLIENTE
-                                .requestMatchers("/oficios/disponibles").hasAnyRole("ESPECIALISTA", "CLIENTE")
+                                .requestMatchers("/oficios/**").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
 
-                                .requestMatchers("/oficios").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
+                                // OFICIOS ADMIN
+                                .requestMatchers("/admin/oficios/**").hasAnyRole("ADMIN")
 
-                                // DELETE | OFICIOS | ROLES
-                                .requestMatchers("/admin/**",
-                                        "/oficios/buscar/{id}",
-                                        "/oficios/agregar",
-                                        "/oficios/actualizar/{id}",
-                                        "/oficios/eliminar/{id}",
-                                        "/oficios/nombre/{nombre}",
-                                        "/roles/**")
-                                .hasRole("ADMIN")
+                                // ROLES ADMIN
+                                .requestMatchers("/roles/**").hasRole("ADMIN")
 
                                 //TRABAJOS EXTERNOS (para especialistas)
                                 .requestMatchers("/trabajos-externos/**").hasRole("ESPECIALISTA")
