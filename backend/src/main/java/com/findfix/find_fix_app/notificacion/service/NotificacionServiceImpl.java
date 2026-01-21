@@ -226,7 +226,7 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     @Override
     public void notificarResolucionSolicitudRol(Usuario usuario, boolean aprobado) {
-        String msg = aprobado ? "¡Felicidades! Sos especialista." : "Tu solicitud fue rechazada por ahora.";
+        String msg = aprobado ? "¡Felicidades! Su solicitud para ser especialista fue aceptada. ‼️Atención: para aparecer en las búsquedas de clientes, debe completar su perfil de especialista (ciudad, teléfono y al menos un oficio)." : "Tu solicitud fue rechazada por ahora, verifique la informacion y vuelva a intentarlo mas tarde.";
         notificar(usuario, "Resolución Solicitud", msg);
     }
 
