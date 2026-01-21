@@ -1,7 +1,9 @@
 package com.findfix.find_fix_app.notificacion.service;
 
+import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.notificacion.model.Notificacion;
 import com.findfix.find_fix_app.notificacion.repository.NotificacionRepository;
+import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.exception.exceptions.NotificacionException;
 
@@ -169,7 +171,7 @@ public class NotificacionServiceImpl implements NotificacionService {
                     <div class="container">
                         <div class="header">
                             <div class="logo-wrapper">
-                                <img src="findfix-logo.png" alt="Logo FindFix" class="logo-img">
+                                <img src="https://i.postimg.cc/tgmgJPvC/findfix-logo.png"" alt="Logo FindFix" class="logo-img">
                             </div>
                             <h1>FindFix</h1>
                         </div>
@@ -179,7 +181,7 @@ public class NotificacionServiceImpl implements NotificacionService {
                             <p>{{MENSAJE}}</p>
 
                             <div>
-                                <a href="https://i.postimg.cc/tgmgJPvC/findfix-logo.png" class="btn">Ir a la App</a>
+                                <a href="" class="btn">Ir a la App</a>
                             </div>
                         </div>
 
@@ -205,7 +207,7 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     @Override
     public void notificarCambioContrasenaExitoso(Usuario usuario) {
-        notificar(usuario, "Contraseña Actualizada", "Tu contraseña ha sido modificada exitosamente.");
+        notificar(usuario, "Contraseña Actualizada", "Tu contraseña ha sido modificada exitosamente, si usted no fue el responsable de esta accion proceda a mandar un reporte a nuestro soporte.");
     }
 
     @Override
@@ -239,42 +241,47 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     @Override
     public void notificarConfirmacionSolicitudEnviada(Usuario cliente, String nombreEspecialista) {
-        notificar(cliente, "Solicitud Enviada", "Le enviamos tu pedido a " + nombreEspecialista);
+        notificar(cliente, "Solicitud Enviada", "Hola " + cliente.getNombre() + "," + " le enviamos tu pedido a " + nombreEspecialista + " se te notificara la resolucion de la solicitud por esta misma via.");
     }
 
     @Override
     public void notificarRespuestaSolicitudTrabajo(Usuario cliente, String nombreEspecialista, boolean aceptada) {
-        String msg = aceptada ? "¡Aceptaron tu trabajo!" : "El especialista rechazó la solicitud.";
+        String msg = aceptada ? "¡Aceptaron tu solicitud!, ya puedes visualizar el trabajo creado en tu seccion `Mis trabajos`, no  olvides que tienes la informacion necesaria para contactar a tu profesional a cargo." : "Lamentablemente el especialista" + nombreEspecialista + "rechazó tu solicitud enviada, vuelve a intentarlo con otro de nuestros especialistas registrados.";
         notificar(cliente, "Respuesta Solicitud", msg);
     }
 
     @Override
     public void notificarCambioEstadoTrabajo(Usuario cliente, String estado, String nombreEspecialista) {
-        notificar(cliente, "Trabajo Actualizado", "El estado es ahora: " + estado);
+        notificar(cliente, "Trabajo Actualizado", "El especialista " + nombreEspecialista + " a cargo de su trabajo, a realizado un cambio en su estado. " + "ESTADO: |" + estado + "| Ingrese a la app y su seccion Mis Trabajos para mas detalles.");
     }
 
     @Override
-    public void notificarConfirmacionResenaRealizada(Usuario cliente) {
-        notificar(cliente, "Reseña Publicada", "Gracias por tu opinión.");
+    public void notificarConfirmacionResenaRealizada(Usuario cliente, String nombreEspecialista) {
+        notificar(cliente, "Reseña Publicada", "La reseña realizada al especialista " + nombreEspecialista + " fue publicada. Gracias por tu opinión!.");
     }
 
     @Override
     public void notificarNuevaSolicitudTrabajoRecibida(Usuario especialista, String nombreCliente, String servicio) {
-        notificar(especialista, "¡Nueva Oportunidad!", nombreCliente + " necesita servicio de " + servicio);
+        notificar(especialista, "¡Nueva Oportunidad!", nombreCliente + " te envio una solicitud de trabajo. Ingresa a la app para visualizar los detalles y enviarle una respuesta. " );
     }
 
     @Override
     public void notificarNuevoTrabajoCreado(Usuario especialista, String nombreCliente) {
-        notificar(especialista, "Trabajo Iniciado", "Has comenzado un trabajo con " + nombreCliente);
+        notificar(especialista, "Trabajo Creado", "Se creo un trabajo con el cliente " + nombreCliente + " recuerda ingresar a la app para ver los detalles en tu seccion de trabajos y controlar los estados del trabajo.");
     }
 
     @Override
-    public void notificarConfirmacionTrabajoFinalizado(Usuario especialista) {
-        notificar(especialista, "Trabajo Finalizado", "Marcaste el trabajo como terminado.");
+    public void notificarConfirmacionTrabajoFinalizado(Usuario especialista, TrabajoApp trabajoApp) {
+        notificar(especialista, "Trabajo Finalizado", "Marcaste el trabajo: " + trabajoApp.getTitulo() + " como finalizado, para mas detalles ingrese a su seccion de trabajos desde la app.");
+    }
+
+    @Override
+    public void notificarConfirmacionTrabajoIniciado(Usuario especialista, TrabajoApp trabajoApp) {
+        notificar(especialista, "Trabajo iniciado", "Marcaste el trabajo con nombre: " + trabajoApp.getTitulo() + " |EN PROCESO|, por lo tanto se ha dado inicio al mismo, para mas detalles ingrese a su seccion de trabajos desde la app.");
     }
 
     @Override
     public void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente) {
-        notificar(especialista, "Nueva Reseña", nombreCliente + " te dejó una calificación.");
+        notificar(especialista, "Nueva Reseña", nombreCliente + " te dejó una calificación en tu trabajo! Ingresa a la app y dirigite a la seccion de tus reseñas para mas detalles.");
     }
 }

@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
@@ -29,6 +30,7 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
     private final TrabajoAppRepository trabajoAppRepository;
     private final AuthServiceImpl authServiceImpl;
     private final EspecialistaService especialistaService;
+    private final NotificacionService notificacionService;
 
     ///  METODO APRA GUARDAR EL TRABAJO QUE AUTOMATICAMENTE LLEGA UNA VEZ QUE UNA SOLICITUD ES ACEPTADA
     @Override
@@ -146,8 +148,12 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
             //si el estado nuevo es en proceso, se le asigna fecha de inicio, y si es finalizado se le asigna fecha de fin
             if (estado.equals(EstadosTrabajos.EN_PROCESO)) {
                 trabajoApp.setFechaInicio(LocalDate.now());
+                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre());
+                notificacionService.notificarConfirmacionTrabajoIniciado(trabajoApp.getEspecialista().getUsuario(), trabajoApp);
             } else if (estado.equals(EstadosTrabajos.FINALIZADO)) {
                 trabajoApp.setFechaFin(LocalDate.now());
+                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre());
+                notificacionService.notificarConfirmacionTrabajoFinalizado(trabajoApp.getEspecialista().getUsuario(), trabajoApp);
             }
         }
         trabajoAppRepository.save(trabajoApp);
