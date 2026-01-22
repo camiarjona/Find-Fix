@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.notificacion.controller;
 
+import com.findfix.find_fix_app.notificacion.dto.NotificacionDTO;
 import com.findfix.find_fix_app.notificacion.model.Notificacion;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.usuario.model.Usuario;
@@ -23,9 +24,9 @@ public class NotificacionController {
 
     @GetMapping("/mis-notificaciones")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<Notificacion>>> obtenerMisNotificaciones() throws UsuarioNotFoundException {
+    public ResponseEntity<ApiResponse<List<NotificacionDTO>>> obtenerMisNotificaciones() throws UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
-        List<Notificacion> notificaciones = notificacionService.obtenerMisNotificaciones(usuario);
+        List<NotificacionDTO> notificaciones = notificacionService.obtenerMisNotificaciones(usuario);
         return ResponseEntity.ok(new ApiResponse<>("Notificaciones obtenidas con éxito", notificaciones));
     }
 

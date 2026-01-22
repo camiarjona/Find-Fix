@@ -1,20 +1,19 @@
 package com.findfix.find_fix_app.notificacion.service;
 import java.util.List;
 
+import com.findfix.find_fix_app.notificacion.dto.NotificacionDTO;
 import com.findfix.find_fix_app.notificacion.model.Notificacion;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 
 public interface NotificacionService {
 
-    // Métodos funcionales para el Controller
-    List<Notificacion> obtenerMisNotificaciones(Usuario usuario);
+    List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario);
     void marcarComoLeida(Long idNotificacion);
 
-    // Método Genérico
+
     void notificar(Usuario destinatario, String titulo, String mensaje);
 
-    // --- MÉTODOS DE NEGOCIO (Los 14 casos) ---
     void notificarSolicitudCambioContrasena(Usuario usuario);
     void notificarCambioContrasenaExitoso(Usuario usuario);
     void notificarReporteRecibido(Usuario usuario);

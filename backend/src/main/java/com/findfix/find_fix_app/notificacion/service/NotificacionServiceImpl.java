@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.notificacion.service;
 
 import com.findfix.find_fix_app.especialista.model.Especialista;
+import com.findfix.find_fix_app.notificacion.dto.NotificacionDTO;
 import com.findfix.find_fix_app.notificacion.model.Notificacion;
 import com.findfix.find_fix_app.notificacion.repository.NotificacionRepository;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
@@ -29,8 +30,17 @@ public class NotificacionServiceImpl implements NotificacionService {
     private String remitente;
 
     @Override
-    public List<Notificacion> obtenerMisNotificaciones(Usuario usuario) {
-        return notificacionRepository.findByUsuarioOrderByFechaCreacionDesc(usuario);
+   public List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario) {
+        List<Notificacion> notificaciones = notificacionRepository.findByUsuario_UsuarioIdOrderByFechaCreacionDesc(usuario.getUsuarioId());
+        return notificaciones.stream()
+                .map(n -> new NotificacionDTO(
+                        n.getId(),
+                        n.getTitulo(),
+                        n.getMensaje(),
+                        n.isLeida(),
+                        n.getFechaCreacion()
+                ))
+                .toList();
     }
 
     @Override
