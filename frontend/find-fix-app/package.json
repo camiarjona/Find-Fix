@@ -31,7 +31,9 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "chart.js": "^4.5.1",
+    "cloudinary": "^2.9.0",
     "ng2-charts": "^8.0.0",
+    "ngx-dropzone": "^3.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
