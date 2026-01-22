@@ -41,6 +41,9 @@ public class Usuario {
 
     private String telefono;
 
+    private String fotoUrl; // URL imagen
+    private String fotoId;  // public_id Cloudinary
+
     @Enumerated(EnumType.STRING)
     private CiudadesDisponibles ciudad;
 
