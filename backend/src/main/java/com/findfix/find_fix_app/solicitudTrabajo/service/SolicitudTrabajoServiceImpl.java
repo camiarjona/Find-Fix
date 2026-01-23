@@ -56,10 +56,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
         notificacionService.notificarNuevaSolicitudTrabajoRecibida(
                 solicitudTrabajo.getEspecialista().getUsuario(),
                 solicitudTrabajo.getUsuario().getNombre(),
-                solicitudTrabajo.getDescripcion());
+                solicitudTrabajo.getDescripcion(), "ESPECIALISTA");
         notificacionService.notificarConfirmacionSolicitudEnviada(
                 solicitudTrabajo.getUsuario(),
-                solicitudTrabajo.getEspecialista().getUsuario().getNombre());
+                solicitudTrabajo.getEspecialista().getUsuario().getNombre(),"CLIENTE");
         return solicitudTrabajoRepository.save(solicitudTrabajo);
     }
 
@@ -91,11 +91,11 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
             if (nuevoEstado == EstadosSolicitudes.ACEPTADO) {
                 trabajoAppService.registrarDesdeSolicitud(solicitudTrabajo, especialista);
                 notificacionService.notificarRespuestaSolicitudTrabajo(solicitudTrabajo.getUsuario(),
-                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), true);
-                notificacionService.notificarNuevoTrabajoCreado(solicitudTrabajo.getEspecialista().getUsuario(),solicitudTrabajo.getUsuario().getNombre());
+                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), true,"CLIENTE");
+                notificacionService.notificarNuevoTrabajoCreado(solicitudTrabajo.getEspecialista().getUsuario(),solicitudTrabajo.getUsuario().getNombre(),"ESPECIALISTA");
             } else if (nuevoEstado == EstadosSolicitudes.RECHAZADO) {
                 notificacionService.notificarRespuestaSolicitudTrabajo(solicitudTrabajo.getUsuario(),
-                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), false);
+                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), false,"CLIENTE");
             }
         }
     }

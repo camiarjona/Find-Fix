@@ -210,7 +210,7 @@
 
         <div class="header-divider"></div>
 
-        <app-notificacion-component></app-notificacion-component>
+        <app-notificacion-component [rolActual]="'CLIENTE'"></app-notificacion-component>
 
        <button class="theme-toggle" aria-label="Cambiar tema"
   title="Cambiar a tema {{ themeService.isDarkMode() ? 'claro' : 'oscuro' }}"

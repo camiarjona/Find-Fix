@@ -24,9 +24,9 @@ public class NotificacionController {
 
     @GetMapping("/mis-notificaciones")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<NotificacionDTO>>> obtenerMisNotificaciones() throws UsuarioNotFoundException {
+    public ResponseEntity<ApiResponse<List<NotificacionDTO>>> obtenerMisNotificaciones(@RequestParam String rolVista) throws UsuarioNotFoundException {
         Usuario usuario = authService.obtenerUsuarioAutenticado();
-        List<NotificacionDTO> notificaciones = notificacionService.obtenerMisNotificaciones(usuario);
+        List<NotificacionDTO> notificaciones = notificacionService.obtenerMisNotificaciones(usuario, rolVista);
         return ResponseEntity.ok(new ApiResponse<>("Notificaciones obtenidas con éxito", notificaciones));
     }
 

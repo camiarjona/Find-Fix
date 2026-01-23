@@ -5,5 +5,6 @@ public record NotificacionDTO(
     String titulo,
     String mensaje,
     boolean leida,
-    LocalDateTime fechaCreacion
+    LocalDateTime fechaCreacion,
+    String rolDestinatario 
 ) {}

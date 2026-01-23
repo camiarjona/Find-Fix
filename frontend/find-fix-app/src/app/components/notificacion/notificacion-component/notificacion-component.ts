@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, inject, Input, OnInit, OnDestroy } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 import { NotificacionModels } from '../../../models/general/notificacion.models';
 import { NotificacionService } from '../../../services/notificacion/notificacion-service';
 import { CommonModule } from '@angular/common';
@@ -14,16 +15,29 @@ export class NotificacionComponent implements OnInit {
 private notificationService = inject(NotificacionService);
   private elementRef = inject(ElementRef);
   private cdr = inject(ChangeDetectorRef);
+  @Input() rolActual: string = 'CLIENTE';
+  private pollingSubscription: Subscription | undefined; // <--- Variable para controlar el tiempo
   notificaciones: NotificacionModels[] = [];
   cantidadNoLeidas: number = 0;
   esVisible: boolean = false;
 
   ngOnInit(): void {
+
     this.cargarNotificaciones();
+    this.pollingSubscription = interval(10000).subscribe(() => {
+      if (!this.esVisible) {
+        this.cargarNotificaciones();
+      }
+    });
   }
 
+  ngOnDestroy(): void {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe(); // Apagamos el reloj
+    }
+  }
   cargarNotificaciones() {
-    this.notificationService.obtenerMisNotificaciones().subscribe({
+    this.notificationService.obtenerMisNotificaciones(this.rolActual).subscribe({
       next: (response) => {
         this.notificaciones = response.data.sort((a, b) =>
           new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime()

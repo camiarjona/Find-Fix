@@ -24,12 +24,24 @@ public class Notificacion {
     @Column(nullable = false) // length por defecto es 255, podemos poner 500.
     private String mensaje;
 
+    @Column(name = "rol_destinatario")
+    private String rolDestinatario; // Guardaremos "CLIENTE", "ESPECIALISTA" o "ADMIN"
+
     private boolean leida = false;
 
     private LocalDateTime fechaCreacion;
 
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
+
+
+    
+    public String getRolDestinatario() {
+        return rolDestinatario;
+    }
+
+    public void setRolDestinatario(String rolDestinatario) {
+        this.rolDestinatario = rolDestinatario;
+    }
 }

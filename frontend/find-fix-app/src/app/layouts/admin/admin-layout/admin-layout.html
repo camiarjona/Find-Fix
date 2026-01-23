@@ -124,7 +124,7 @@
 
     <header class="main-header">
       <div class="header-controls">
-        <app-notificacion-component></app-notificacion-component>
+        <app-notificacion-component [rolActual]="'ADMIN'"></app-notificacion-component>
         <button class="theme-toggle" aria-label="Cambiar tema"
           title="Cambiar a tema {{ themeService.isDarkMode() ? 'claro' : 'oscuro' }}" (click)="toggleTheme()">
 

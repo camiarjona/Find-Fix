@@ -8,30 +8,30 @@ import com.findfix.find_fix_app.usuario.model.Usuario;
 
 public interface NotificacionService {
 
-    List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario);
+    List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario, String rolVista);
     void marcarComoLeida(Long idNotificacion);
 
 
-    void notificar(Usuario destinatario, String titulo, String mensaje);
+    void notificar(Usuario destinatario, String titulo, String mensaje, String rolDestinatario);
 
-    void notificarSolicitudCambioContrasena(Usuario usuario);
-    void notificarCambioContrasenaExitoso(Usuario usuario);
-    void notificarReporteRecibido(Usuario usuario);
+    void notificarSolicitudCambioContrasena(Usuario usuario,String rolDestinatario);
+    void notificarCambioContrasenaExitoso(Usuario usuario, String rolDestinatario);
+    void notificarReporteRecibido(Usuario usuario, String rolDestinatario);
     
-    void notificarAdminNuevaSolicitudEspecialista(Usuario admin, String nombreSolicitante);
-    void notificarAdminNuevoReporte(Usuario admin);
+    void notificarAdminNuevaSolicitudEspecialista(Usuario admin, String nombreSolicitante, String rolDestinatario);
+    void notificarAdminNuevoReporte(Usuario admin, String rolDestinatario);
     
-    void notificarResolucionSolicitudRol(Usuario usuario, boolean aprobado);
-    void notificarConfirmacionSolicitudEnviada(Usuario cliente, String nombreEspecialista);
-    void notificarRespuestaSolicitudTrabajo(Usuario cliente, String nombreEspecialista, boolean aceptada);
-    void notificarCambioEstadoTrabajo(Usuario cliente, String estado, String nombreEspecialista);
-    void notificarConfirmacionResenaRealizada(Usuario cliente, String nombreEspecialista);
-    void notificarConfirmacionSolicitudEspecialistaEnviada(Usuario usuario);
+    void notificarResolucionSolicitudRol(Usuario usuario, boolean aprobado, String rolDestinatario);
+    void notificarConfirmacionSolicitudEnviada(Usuario cliente, String nombreEspecialista, String rolDestinatario);
+    void notificarRespuestaSolicitudTrabajo(Usuario cliente, String nombreEspecialista, boolean aceptada, String rolDestinatario);
+    void notificarCambioEstadoTrabajo(Usuario cliente, String estado, String nombreEspecialista, String rolDestinatario);
+    void notificarConfirmacionResenaRealizada(Usuario cliente, String nombreEspecialista, String rolDestinatario);
+    void notificarConfirmacionSolicitudEspecialistaEnviada(Usuario usuario, String rolDestinatario);
     
-    void notificarNuevaSolicitudTrabajoRecibida(Usuario especialista, String nombreCliente, String servicio);
-    void notificarNuevoTrabajoCreado(Usuario especialista, String nombreCliente);
-    void notificarConfirmacionTrabajoFinalizado(Usuario especialista, TrabajoApp trabajoApp);
-    void notificarConfirmacionTrabajoIniciado(Usuario especialista, TrabajoApp trabajoApp);
+    void notificarNuevaSolicitudTrabajoRecibida(Usuario especialista, String nombreCliente, String servicio, String rolDestinatario);
+    void notificarNuevoTrabajoCreado(Usuario especialista, String nombreCliente, String rolDestinatario);
+    void notificarConfirmacionTrabajoFinalizado(Usuario especialista, TrabajoApp trabajoApp,String rolDestinatario);
+    void notificarConfirmacionTrabajoIniciado(Usuario especialista, TrabajoApp trabajoApp, String rolDestinatario);
 
-    void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente);
+    void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente, String rolDestinatario);
 }

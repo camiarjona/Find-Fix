@@ -148,12 +148,12 @@ public class TrabajoAppServiceImpl implements TrabajoAppService {
             //si el estado nuevo es en proceso, se le asigna fecha de inicio, y si es finalizado se le asigna fecha de fin
             if (estado.equals(EstadosTrabajos.EN_PROCESO)) {
                 trabajoApp.setFechaInicio(LocalDate.now());
-                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre());
-                notificacionService.notificarConfirmacionTrabajoIniciado(trabajoApp.getEspecialista().getUsuario(), trabajoApp);
+                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre(),"CLIENTE");
+                notificacionService.notificarConfirmacionTrabajoIniciado(trabajoApp.getEspecialista().getUsuario(), trabajoApp,"ESPECIALISTA");
             } else if (estado.equals(EstadosTrabajos.FINALIZADO)) {
                 trabajoApp.setFechaFin(LocalDate.now());
-                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre());
-                notificacionService.notificarConfirmacionTrabajoFinalizado(trabajoApp.getEspecialista().getUsuario(), trabajoApp);
+                notificacionService.notificarCambioEstadoTrabajo(trabajoApp.getUsuario(),trabajoApp.getEstado().getEstadoAmigable(),trabajoApp.getEspecialista().getUsuario().getNombre(),"CLIENTE");
+                notificacionService.notificarConfirmacionTrabajoFinalizado(trabajoApp.getEspecialista().getUsuario(), trabajoApp,"ESPECIALISTA");
             }
         }
         trabajoAppRepository.save(trabajoApp);

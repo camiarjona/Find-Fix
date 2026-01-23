@@ -9,14 +9,13 @@ import { NotificacionModels } from '../../models/general/notificacion.models';
 })
 export class NotificacionService {
   private http = inject(HttpClient);
-  // Ajustá el puerto si no es 8080
+
   private apiUrl = 'http://localhost:8080/notificaciones';
 
   constructor() { }
 
-  // GET: /notificaciones/mis-notificaciones
-  obtenerMisNotificaciones(): Observable<ApiResponse<NotificacionModels[]>> {
-    return this.http.get<ApiResponse<NotificacionModels[]>>(`${this.apiUrl}/mis-notificaciones`);
+  obtenerMisNotificaciones(rol: string): Observable<ApiResponse<NotificacionModels[]>> {
+    return this.http.get<ApiResponse<NotificacionModels[]>>(`${this.apiUrl}/mis-notificaciones?rolVista=${rol}`);
   }
 
   // PATCH: /notificaciones/{id}/leida

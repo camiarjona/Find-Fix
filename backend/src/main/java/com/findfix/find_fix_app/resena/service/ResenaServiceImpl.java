@@ -52,8 +52,8 @@ public class ResenaServiceImpl implements ResenaService {
         resena.setComentario(dto.getComentario());
         resena.setPuntuacion(dto.getPuntuacion());
         resena.setTrabajoApp(trabajo);
-        notificacionService.notificarNuevaResenaRecibida(trabajo.getEspecialista().getUsuario(),trabajo.getUsuario().getNombre());
-        notificacionService.notificarConfirmacionResenaRealizada(trabajo.getUsuario(),trabajo.getEspecialista().getUsuario().getNombre());
+        notificacionService.notificarNuevaResenaRecibida(trabajo.getEspecialista().getUsuario(),trabajo.getUsuario().getNombre(),"ESPECIALISTA");
+        notificacionService.notificarConfirmacionResenaRealizada(trabajo.getUsuario(),trabajo.getEspecialista().getUsuario().getNombre(), "CLIENTE");
         return repository.save(resena);
     }
 

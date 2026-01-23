@@ -51,8 +51,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         solicitudEspecialistaRepository.save(solicitudEspecialista);
         Usuario admin = usuarioRepository.findByEmail("findfixapp.utn@gmail.com") 
                 .orElseThrow(() -> new UsuarioNotFoundException("No se encontró al admin para notificar"));
-        notificacionService.notificarAdminNuevaSolicitudEspecialista(admin, solicitudEspecialista.getUsuario().getNombre());
-        notificacionService.notificarConfirmacionSolicitudEspecialistaEnviada(solicitudEspecialista.getUsuario());
+        notificacionService.notificarAdminNuevaSolicitudEspecialista(admin, solicitudEspecialista.getUsuario().getNombre(),"ADMIN");
+        notificacionService.notificarConfirmacionSolicitudEspecialistaEnviada(solicitudEspecialista.getUsuario(),"CLIENTE");
     }
 
     /// Metodo para controlar y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
@@ -132,10 +132,10 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 solicitudEspecialista.setRespuesta(respuesta);
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
                 especialistaService.guardar(solicitudEspecialista.getUsuario());
-                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), true);
+                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), true,"CLIENTE");
             }else if(nuevoEstado == EstadosSolicitudes.RECHAZADO)
             {
-                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), false);
+                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), false,"CLIENTE");
             }
         }
         solicitudEspecialistaRepository.save(solicitudEspecialista);

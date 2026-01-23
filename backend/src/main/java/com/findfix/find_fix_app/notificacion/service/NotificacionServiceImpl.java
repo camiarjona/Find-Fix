@@ -30,15 +30,16 @@ public class NotificacionServiceImpl implements NotificacionService {
     private String remitente;
 
     @Override
-   public List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario) {
-        List<Notificacion> notificaciones = notificacionRepository.findByUsuario_UsuarioIdOrderByFechaCreacionDesc(usuario.getUsuarioId());
+   public List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario, String rolVista) {
+        List<Notificacion> notificaciones = notificacionRepository.findByUsuario_UsuarioIdAndRolDestinatarioOrderByFechaCreacionDesc(usuario.getUsuarioId(), rolVista);
         return notificaciones.stream()
                 .map(n -> new NotificacionDTO(
                         n.getId(),
                         n.getTitulo(),
                         n.getMensaje(),
                         n.isLeida(),
-                        n.getFechaCreacion()
+                        n.getFechaCreacion(),
+                        n.getRolDestinatario()
                 ))
                 .toList();
     }
@@ -54,13 +55,14 @@ public class NotificacionServiceImpl implements NotificacionService {
     }
 
     @Override
-    public void notificar(Usuario destinatario, String titulo, String mensaje) {
+    public void notificar(Usuario destinatario, String titulo, String mensaje, String rolDestinatario) {
         Notificacion noti = new Notificacion();
         noti.setUsuario(destinatario);
         noti.setTitulo(titulo);
         noti.setMensaje(mensaje);
         noti.setFechaCreacion(LocalDateTime.now());
         noti.setLeida(false);
+        noti.setRolDestinatario(rolDestinatario);
         notificacionRepository.save(noti);
         try {
             enviarEmail(destinatario.getEmail(), titulo, mensaje);
@@ -211,87 +213,87 @@ public class NotificacionServiceImpl implements NotificacionService {
     }
 
     @Override
-    public void notificarSolicitudCambioContrasena(Usuario usuario) {
-        notificar(usuario, "Solicitud de Cambio de Contraseña", "Recibimos una solicitud para cambiar tu clave.");
+    public void notificarSolicitudCambioContrasena(Usuario usuario, String rolDestinatario) {
+        notificar(usuario, "Solicitud de Cambio de Contraseña", "Recibimos una solicitud para cambiar tu clave.", rolDestinatario);
     }
 
     @Override
-    public void notificarCambioContrasenaExitoso(Usuario usuario) {
-        notificar(usuario, "Contraseña Actualizada", "Tu contraseña ha sido modificada exitosamente, si usted no fue el responsable de esta accion proceda a mandar un reporte a nuestro soporte.");
+    public void notificarCambioContrasenaExitoso(Usuario usuario, String rolDestinatario) {
+        notificar(usuario, "Contraseña Actualizada", "Tu contraseña ha sido modificada exitosamente, si usted no fue el responsable de esta accion proceda a mandar un reporte a nuestro soporte.", rolDestinatario);
     }
 
     @Override
-    public void notificarReporteRecibido(Usuario usuario) {
-        notificar(usuario, "Reporte Recibido", "Recibimos tu reporte. Lo revisaremos pronto.");
+    public void notificarReporteRecibido(Usuario usuario, String rolDestinatario) {
+        notificar(usuario, "Reporte Recibido", "Recibimos tu reporte. Lo revisaremos pronto.", rolDestinatario);
     }
 
     @Override
-    public void notificarAdminNuevaSolicitudEspecialista(Usuario admin, String nombreSolicitante) {
+    public void notificarAdminNuevaSolicitudEspecialista(Usuario admin, String nombreSolicitante, String rolDestinatario) {
         notificar(admin, "Nueva Solicitud De Especialista", "El cliente " + nombreSolicitante
-                + " a realizado una solicitud para convertirse en especialista. Por favor no olvide ingresar a la app para enviar su respuesta.");
+                + " a realizado una solicitud para convertirse en especialista. Por favor no olvide ingresar a la app para enviar su respuesta.", rolDestinatario);
     }
 
     @Override
-    public void notificarAdminNuevoReporte(Usuario admin) {
-        notificar(admin, "Nuevo Reporte", "Hay un nuevo reporte pendiente de revisión.");
+    public void notificarAdminNuevoReporte(Usuario admin, String rolDestinatario) {
+        notificar(admin, "Nuevo Reporte", "Hay un nuevo reporte pendiente de revisión.", rolDestinatario);
     }
 
     @Override
-    public void notificarResolucionSolicitudRol(Usuario usuario, boolean aprobado) {
+    public void notificarResolucionSolicitudRol(Usuario usuario, boolean aprobado, String rolDestinatario) {
         String msg = aprobado ? "¡Felicidades! Su solicitud para ser especialista fue aceptada. ‼️Atención: para aparecer en las búsquedas de clientes, debe completar su perfil de especialista (ciudad, teléfono y al menos un oficio)." : "Tu solicitud fue rechazada por ahora, verifique la informacion y vuelva a intentarlo mas tarde.";
-        notificar(usuario, "Resolución Solicitud", msg);
+        notificar(usuario, "Resolución Solicitud", msg, rolDestinatario);
     }
 
     @Override
-    public void notificarConfirmacionSolicitudEspecialistaEnviada(Usuario usuario) {
+    public void notificarConfirmacionSolicitudEspecialistaEnviada(Usuario usuario, String rolDestinatario) {
         notificar(usuario,
                 "Solicitud Recibida",
-                "Hemos recibido tu solicitud para ser Especialista correctamente. Nuestro equipo administrativo la revisará y te notificaremos la resolución en breve.");
+                "Hemos recibido tu solicitud para ser Especialista correctamente. Nuestro equipo administrativo la revisará y te notificaremos la resolución en breve.", rolDestinatario);
     }
 
     @Override
-    public void notificarConfirmacionSolicitudEnviada(Usuario cliente, String nombreEspecialista) {
-        notificar(cliente, "Solicitud Enviada", "Hola " + cliente.getNombre() + "," + " le enviamos tu pedido a " + nombreEspecialista + " se te notificara la resolucion de la solicitud por esta misma via.");
+    public void notificarConfirmacionSolicitudEnviada(Usuario cliente, String nombreEspecialista, String rolDestinatario) {
+        notificar(cliente, "Solicitud Enviada", "Hola " + cliente.getNombre() + "," + " le enviamos tu pedido a " + nombreEspecialista + " se te notificara la resolucion de la solicitud por esta misma via.",rolDestinatario);
     }
 
     @Override
-    public void notificarRespuestaSolicitudTrabajo(Usuario cliente, String nombreEspecialista, boolean aceptada) {
+    public void notificarRespuestaSolicitudTrabajo(Usuario cliente, String nombreEspecialista, boolean aceptada, String rolDestinatario) {
         String msg = aceptada ? "¡Aceptaron tu solicitud!, ya puedes visualizar el trabajo creado en tu seccion `Mis trabajos`, no  olvides que tienes la informacion necesaria para contactar a tu profesional a cargo." : "Lamentablemente el especialista" + nombreEspecialista + "rechazó tu solicitud enviada, vuelve a intentarlo con otro de nuestros especialistas registrados.";
-        notificar(cliente, "Respuesta Solicitud", msg);
+        notificar(cliente, "Respuesta Solicitud", msg,rolDestinatario);
     }
 
     @Override
-    public void notificarCambioEstadoTrabajo(Usuario cliente, String estado, String nombreEspecialista) {
-        notificar(cliente, "Trabajo Actualizado", "El especialista " + nombreEspecialista + " a cargo de su trabajo, a realizado un cambio en su estado. " + "ESTADO: |" + estado + "| Ingrese a la app y su seccion Mis Trabajos para mas detalles.");
+    public void notificarCambioEstadoTrabajo(Usuario cliente, String estado, String nombreEspecialista, String rolDestinatario) {
+        notificar(cliente, "Trabajo Actualizado", "El especialista " + nombreEspecialista + " a cargo de su trabajo, a realizado un cambio en su estado. " + "ESTADO: |" + estado + "| Ingrese a la app y su seccion Mis Trabajos para mas detalles.", rolDestinatario);
     }
 
     @Override
-    public void notificarConfirmacionResenaRealizada(Usuario cliente, String nombreEspecialista) {
-        notificar(cliente, "Reseña Publicada", "La reseña realizada al especialista " + nombreEspecialista + " fue publicada. Gracias por tu opinión!.");
+    public void notificarConfirmacionResenaRealizada(Usuario cliente, String nombreEspecialista, String rolDestinatario) {
+        notificar(cliente, "Reseña Publicada", "La reseña realizada al especialista " + nombreEspecialista + " fue publicada. Gracias por tu opinión!.", rolDestinatario);
     }
 
     @Override
-    public void notificarNuevaSolicitudTrabajoRecibida(Usuario especialista, String nombreCliente, String servicio) {
-        notificar(especialista, "¡Nueva Oportunidad!", nombreCliente + " te envio una solicitud de trabajo. Ingresa a la app para visualizar los detalles y enviarle una respuesta. " );
+    public void notificarNuevaSolicitudTrabajoRecibida(Usuario especialista, String nombreCliente, String servicio, String rolDestinatario) {
+        notificar(especialista, "¡Nueva Oportunidad!", nombreCliente + " te envio una solicitud de trabajo. Ingresa a la app para visualizar los detalles y enviarle una respuesta. " , rolDestinatario);
     }
 
     @Override
-    public void notificarNuevoTrabajoCreado(Usuario especialista, String nombreCliente) {
-        notificar(especialista, "Trabajo Creado", "Se creo un trabajo con el cliente " + nombreCliente + " recuerda ingresar a la app para ver los detalles en tu seccion de trabajos y controlar los estados del trabajo.");
+    public void notificarNuevoTrabajoCreado(Usuario especialista, String nombreCliente, String rolDestinatario) {
+        notificar(especialista, "Trabajo Creado", "Se creo un trabajo con el cliente " + nombreCliente + " recuerda ingresar a la app para ver los detalles en tu seccion de trabajos y controlar los estados del trabajo.",rolDestinatario);
     }
 
     @Override
-    public void notificarConfirmacionTrabajoFinalizado(Usuario especialista, TrabajoApp trabajoApp) {
-        notificar(especialista, "Trabajo Finalizado", "Marcaste el trabajo: " + trabajoApp.getTitulo() + " como finalizado, para mas detalles ingrese a su seccion de trabajos desde la app.");
+    public void notificarConfirmacionTrabajoFinalizado(Usuario especialista, TrabajoApp trabajoApp, String rolDestinatario) {
+        notificar(especialista, "Trabajo Finalizado", "Marcaste el trabajo: " + trabajoApp.getTitulo() + " como finalizado, para mas detalles ingrese a su seccion de trabajos desde la app.", rolDestinatario);
     }
 
     @Override
-    public void notificarConfirmacionTrabajoIniciado(Usuario especialista, TrabajoApp trabajoApp) {
-        notificar(especialista, "Trabajo iniciado", "Marcaste el trabajo con nombre: " + trabajoApp.getTitulo() + " |EN PROCESO|, por lo tanto se ha dado inicio al mismo, para mas detalles ingrese a su seccion de trabajos desde la app.");
+    public void notificarConfirmacionTrabajoIniciado(Usuario especialista, TrabajoApp trabajoApp, String rolDestinatario) {
+        notificar(especialista, "Trabajo iniciado", "Marcaste el trabajo con nombre: " + trabajoApp.getTitulo() + " |EN PROCESO|, por lo tanto se ha dado inicio al mismo, para mas detalles ingrese a su seccion de trabajos desde la app.", rolDestinatario);
     }
 
     @Override
-    public void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente) {
-        notificar(especialista, "Nueva Reseña", nombreCliente + " te dejó una calificación en tu trabajo! Ingresa a la app y dirigite a la seccion de tus reseñas para mas detalles.");
+    public void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente, String rolDestinatario) {
+        notificar(especialista, "Nueva Reseña", nombreCliente + " te dejó una calificación en tu trabajo! Ingresa a la app y dirigite a la seccion de tus reseñas para mas detalles.",  rolDestinatario);
     }
 }

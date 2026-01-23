@@ -103,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setPassword(passwordEncoder.encode(actualizarPasswordDTO.passwordNuevo()));
         usuarioRepository.save(usuario);
-        notificacionService.notificarCambioContrasenaExitoso(usuario);
+        notificacionService.notificarCambioContrasenaExitoso(usuario,"CLIENTE");
         
     }
 
