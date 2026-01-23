@@ -89,128 +89,128 @@ public class NotificacionServiceImpl implements NotificacionService {
         }
     }
 
-    private String generarHtmlLindo(String titulo, String mensaje) {
-        String tituloSeguro = (titulo != null) ? titulo : "Notificación";
-        String mensajeSeguro = (mensaje != null) ? mensaje.replace("\n", "<br>") : "";
+   private String generarHtmlLindo(String titulo, String mensaje) {
+    String tituloSeguro = (titulo != null) ? titulo : "Notificación";
+    String mensajeSeguro = (mensaje != null) ? mensaje.replace("\n", "<br>") : "";
 
-        String plantilla = """
-                <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                    <meta charset="UTF-8">
-                    <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+    // URL de tu App (cambiala por la real si tenés, o dejala así)
+    String urlApp = "http://localhost:4200"; 
 
-                        .container {
-                            max-width: 600px;
-                            margin: 20px auto;
-                            background-color: #ffffff;
-                            border-radius: 12px;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-                            overflow: hidden;
-                        }
+    String plantilla = """
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    /* Reset básico */
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+                    table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+                    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
 
-                        .header {
-                            background-color: #ff6600; /* Naranja pedido */
-                            color: white;
-                            padding: 30px;
-                            text-align: center;
-                        }
+                    .container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        overflow: hidden;
+                    }
 
-                        .logo-wrapper {
-                            margin-bottom: 15px;
-                        }
+                    .header {
+                        background-color: #ff6600;
+                        padding: 30px 20px;
+                        text-align: center;
+                    }
 
-                        .logo-img {
-                            width: 70px;
-                            height: 70px;
-                            background-color: white;
-                            border-radius: 50%; /* Ahora sí podemos usar % tranquilo */
-                            padding: 5px;
-                            object-fit: contain;
-                        }
+                    .header h1 {
+                        margin: 15px 0 0 0;
+                        color: white;
+                        font-size: 32px;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                        font-weight: 900;
+                        text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+                    }
 
-                        .header h1 {
-                            margin: 0;
-                            font-size: 32px;
-                            letter-spacing: 2px;
-                            text-transform: uppercase;
-                            font-weight: 900;
-                            /* Simulación de borde negro grueso (Stroke) */
-                            text-shadow:
-                                -2px -2px 0 #000,
-                                 2px -2px 0 #000,
-                                -2px  2px 0 #000,
-                                 2px  2px 0 #000;
-                        }
+                    .content {
+                        padding: 40px 30px;
+                        color: #333333;
+                        line-height: 1.6;
+                        text-align: center;
+                    }
 
-                        .content {
-                            padding: 40px 30px;
-                            color: #333333;
-                            line-height: 1.6;
-                            text-align: center; /* Centrado pedido */
-                        }
+                    .content h2 {
+                        color: #ff6600;
+                        margin-top: 0;
+                        font-size: 24px;
+                    }
 
-                        .content h2 {
-                            color: #ff6600;
-                            margin-top: 0;
-                            font-size: 24px;
-                        }
+                    .btn {
+                        display: inline-block;
+                        padding: 14px 30px;
+                        background-color: #ff6600;
+                        color: white !important;
+                        text-decoration: none;
+                        border-radius: 30px;
+                        margin-top: 25px;
+                        font-weight: bold;
+                        font-size: 16px;
+                    }
 
-                        .btn {
-                            display: inline-block;
-                            padding: 14px 30px;
-                            background-color: #ff6600;
-                            color: white !important;
-                            text-decoration: none;
-                            border-radius: 30px;
-                            margin-top: 25px;
-                            font-weight: bold;
-                            font-size: 16px;
-                        }
+                    .footer {
+                        background-color: #f9f9f9;
+                        padding: 20px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #888888;
+                        border-top: 1px solid #eeeeee;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    
+                    <div class="header">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td align="center">
+                                    <img src="https://i.postimg.cc/tgmgJPvC/findfix-logo.png" 
+                                         alt="Logo FindFix" 
+                                         width="70" 
+                                         height="70"
+                                         style="display: block; width: 70px; height: 70px; background-color: white; border-radius: 50%; padding: 5px; border: 0;">
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <h1>FindFix</h1>
+                    </div>
 
-                        .footer {
-                            background-color: #f9f9f9;
-                            padding: 20px;
-                            text-align: center;
-                            font-size: 12px;
-                            color: #888888;
-                            border-top: 1px solid #eeeeee;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <div class="logo-wrapper">
-                                <img src="https://i.postimg.cc/tgmgJPvC/findfix-logo.png"" alt="Logo FindFix" class="logo-img">
-                            </div>
-                            <h1>FindFix</h1>
-                        </div>
+                    <div class="content">
+                        <h2>{{TITULO}}</h2>
+                        <p>{{MENSAJE}}</p>
 
-                        <div class="content">
-                            <h2>{{TITULO}}</h2>
-                            <p>{{MENSAJE}}</p>
-
-                            <div>
-                                <a href="" class="btn">Ir a la App</a>
-                            </div>
-                        </div>
-
-                        <div class="footer">
-                            <p>Estás recibiendo este correo porque usas <strong>FindFix</strong>.</p>
-                            <p>&copy; 2026 FindFix Team</p>
+                        <div>
+                            <a href="{{URL_APP}}" class="btn">Ir a la App</a>
                         </div>
                     </div>
-                </body>
-                </html>
-                """;
 
-    
-        return plantilla
-                .replace("{{TITULO}}", tituloSeguro)
-                .replace("{{MENSAJE}}", mensajeSeguro);
-    }
+                    <div class="footer">
+                        <p>Estás recibiendo este correo porque usas <strong>FindFix</strong>.</p>
+                        <p>&copy; 2026 FindFix Team</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """;
+
+    return plantilla
+            .replace("{{TITULO}}", tituloSeguro)
+            .replace("{{MENSAJE}}", mensajeSeguro)
+            .replace("{{URL_APP}}", urlApp);
+}
 
     @Override
     public void notificarSolicitudCambioContrasena(Usuario usuario, String rolDestinatario) {
