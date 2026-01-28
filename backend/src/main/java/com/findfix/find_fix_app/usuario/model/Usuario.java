@@ -42,6 +42,10 @@ public class Usuario {
 
     @Column(name = "ciudad")
     private String ciudad;
+    
+    private String fotoUrl; // URL imagen
+    private String fotoId;  // public_id Cloudinary
+
 
     @Column(columnDefinition = "boolean default true")
     private boolean activo = true;
