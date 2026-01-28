@@ -9,6 +9,13 @@ import { OficioModel } from '../../../models/admin-models/oficio-model';
 import { ActualizarOficios, PerfilEspecialista } from '../../../models/especialista/especialista.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
+import { HttpClient } from '@angular/common/http';
+
+interface Barrio {
+  nombre: string;
+  lat: number;
+  lon: number;
+}
 
 @Component({
   selector: 'app-mi-perfil',
@@ -21,36 +28,34 @@ export class MiPerfilEspecialista implements OnInit {
   private especialistaService = inject(EspecialistaService);
   private userService = inject(UserService);
   private oficiosService = inject(OficiosService);
+  private http = inject(HttpClient);
 
   public icons = UI_ICONS;
 
-  // --- ESTADO ---
   public perfil = signal<PerfilEspecialista | null>(null);
-  public allOficios = signal<OficioModel[]>([]); // Lista para el select
-  public selectableOficios = signal<OficioModel[]>([]); // Oficios disponibles para agregarse
-  public availableCities = signal<string[]>([]);
+  public allOficios = signal<OficioModel[]>([]);
+  public selectableOficios = signal<OficioModel[]>([]);
+  public citySuggestions = signal<any[]>([]);
   public isLoading = signal(true);
 
-  // --- EDICIÓN SIMPLE ---
+  public allBarrios: Barrio[] = [];
+
   public editingField = signal<string | null>(null);
   public tempValue = '';
 
-  // --- GESTIÓN DE OFICIOS ---
+  public tempLat: number | null = null;
+  public tempLon: number | null = null;
+
   public isAddingOficio = signal(false);
   public selectedOficioToAdd = '';
-  // Estado para controlar el modal de confirmación al eliminar un oficio
   public oficioToRemove: string | null = null;
 
-  // --- SEGURIDAD ---
   public passwordData = { passwordActual: '', passwordNuevo: '', confirmacion: '' };
   public isPasswordLoading = signal(false);
-
-  // Visibilidad Password
   public showCurrentPass = signal(false);
   public showNewPass = signal(false);
   public showConfirmPass = signal(false);
 
-  // ESTADO DEL MODAL DE FEEDBACK
   public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
 
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
@@ -63,12 +68,21 @@ export class MiPerfilEspecialista implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    this.cargarBarriosDelBackend();
+  }
+
+  cargarBarriosDelBackend() {
+    this.http.get<Barrio[]>('http://localhost:8080/api/barrios?ciudad=mdp')
+      .subscribe({
+        next: (data) => {
+          this.allBarrios = data;
+        },
+        error: (err) => console.error('Error al cargar barrios del JSON', err)
+      });
   }
 
   loadData() {
     this.isLoading.set(true);
-
-    // 1. Cargar Perfil
     this.especialistaService.getMiPerfil().subscribe({
       next: (data) => {
         this.perfil.set(data);
@@ -78,10 +92,6 @@ export class MiPerfilEspecialista implements OnInit {
       error: (err) => { console.error(err); this.isLoading.set(false); }
     });
 
-    // 2. Cargar Ciudades
-    this.userService.getCities().subscribe(res => this.availableCities.set(res.data));
-
-    // 3. Cargar Oficios
     this.oficiosService.getOficios(false).subscribe({
       next: (res) => {
         const lista = 'data' in res ? res.data : res;
@@ -95,43 +105,84 @@ export class MiPerfilEspecialista implements OnInit {
   private updateSelectableOficios() {
     const all = this.allOficios();
     const perfil = this.perfil();
-    if (!all || all.length === 0) {
-      this.selectableOficios.set([]);
-      return;
-    }
-
-    if (!perfil || !perfil.oficios) {
-      this.selectableOficios.set(all);
-      return;
-    }
-
+    if (!all || !all.length) { this.selectableOficios.set([]); return; }
+    if (!perfil || !perfil.oficios) { this.selectableOficios.set(all); return; }
     const existentes = new Set(perfil.oficios.map(o => String(o.nombre)));
-    const disponibles = all.filter(o => !existentes.has(String(o.nombre)));
-    this.selectableOficios.set(disponibles);
+    this.selectableOficios.set(all.filter(o => !existentes.has(String(o.nombre))));
   }
 
-  // --- MÉTODOS DE EDICIÓN ---
   startEdit(field: string, value: any) {
     this.editingField.set(field);
     this.tempValue = value || '';
+    this.citySuggestions.set([]);
+    this.tempLat = null;
+    this.tempLon = null;
   }
 
   cancelEdit() {
     this.editingField.set(null);
     this.tempValue = '';
+    this.citySuggestions.set([]);
+  }
+
+  buscarZona(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const termino = input.value.toLowerCase();
+    this.tempValue = input.value;
+
+    if (termino.length < 1) {
+      this.citySuggestions.set([]);
+      return;
+    }
+
+    const filtrados = this.allBarrios
+      .filter(b => b.nombre.toLowerCase().includes(termino))
+      .slice(0, 5);
+
+    this.citySuggestions.set(filtrados.map(b => ({
+      nombreVisual: b.nombre,
+      lat: b.lat,
+      lon: b.lon
+    })));
+  }
+
+  seleccionarZona(sugerencia: any) {
+    this.tempValue = sugerencia.nombreVisual;
+    this.tempLat = sugerencia.lat;
+    this.tempLon = sugerencia.lon;
+    this.citySuggestions.set([]);
   }
 
   saveEdit(field: string) {
     const valorTexto = String(this.tempValue);
     if (!valorTexto.trim()) return;
 
-    const data: Partial<PerfilEspecialista> = { [field]: this.tempValue };
+    const data: any = { [field]: this.tempValue };
+
+    if (field === 'ciudad') {
+      if (this.tempLat && this.tempLon) {
+        data.latitud = this.tempLat;
+        data.longitud = this.tempLon;
+      }
+    }
 
     this.especialistaService.actualizarDatos(data).subscribe({
       next: () => {
-        this.perfil.update(p => p ? { ...p, [field]: this.tempValue } : null);
+        this.perfil.update(p => {
+          if (!p) return null;
+          const updated = { ...p, [field]: this.tempValue };
+
+          if (field === 'ciudad' && this.tempLat && this.tempLon) {
+            (updated as any).latitud = this.tempLat;
+            (updated as any).longitud = this.tempLon;
+          }
+          return updated;
+        });
+
         this.editingField.set(null);
-        this.mostrarFeedback('¡Actualizado!', `Tu ${field} se ha guardado correctamente.`);
+
+        const nombreCampo = field === 'ciudad' ? 'Barrio' : field;
+        this.mostrarFeedback('¡Actualizado!', `Tu ${nombreCampo} se ha guardado correctamente.`);
       },
       error: (err) => {
         this.mostrarFeedback('Error', 'No se pudieron guardar los cambios.', 'error');
@@ -139,17 +190,14 @@ export class MiPerfilEspecialista implements OnInit {
     });
   }
 
-  // --- MÉTODOS DE OFICIOS ---
   addOficio() {
     if (!this.selectedOficioToAdd) return;
     const perfil = this.perfil();
-    if (perfil && perfil.oficios && perfil.oficios.some(o => o.nombre === this.selectedOficioToAdd)) {
+    if (perfil?.oficios?.some(o => o.nombre === this.selectedOficioToAdd)) {
       this.mostrarFeedback('Error', 'Ya tienes registrado ese oficio.', 'error');
       return;
     }
-
     const dto: ActualizarOficios = { agregar: [this.selectedOficioToAdd], eliminar: [] };
-
     this.especialistaService.actualizarOficios(dto).subscribe({
       next: () => {
         this.mostrarFeedback('¡Actualizado!', `Oficio agregado con éxito.`);
@@ -157,45 +205,17 @@ export class MiPerfilEspecialista implements OnInit {
         this.selectedOficioToAdd = '';
         this.reloadProfile();
       },
-      error: (err) => {
-        if (err && err.status === 409) {
-          const msg = err.error?.mensaje || 'Ya existe ese oficio en tu perfil.';
-          this.mostrarFeedback('Error', msg, 'error');
-        } else {
-          this.mostrarFeedback('Error', 'No se pudieron guardar los cambios.', 'error');
-        }
-      }
+      error: (err) => this.handleOficioError(err)
     });
   }
 
-  removeOficio(nombreOficio: string) {
-    const dto: ActualizarOficios = { agregar: [], eliminar: [nombreOficio] };
-
-    this.especialistaService.actualizarOficios(dto).subscribe({
-      next: () => {
-        this.perfil.update(p => p ? { ...p, oficios: p.oficios.filter(o => o.nombre !== nombreOficio) } : null);
-        this.updateSelectableOficios();
-      },
-      error: (err) => {
-        this.mostrarFeedback('Error', 'Error al eliminar oficio', 'error');
-      }
-    });
-  }
-
-  promptRemoveOficio(nombreOficio: string) {
-    this.oficioToRemove = nombreOficio;
-  }
-
-  cancelRemoveOficio() {
-    this.oficioToRemove = null;
-  }
+  promptRemoveOficio(nombreOficio: string) { this.oficioToRemove = nombreOficio; }
+  cancelRemoveOficio() { this.oficioToRemove = null; }
 
   confirmRemoveOficio() {
     if (!this.oficioToRemove) return;
-
     const nombre = this.oficioToRemove;
     const dto: ActualizarOficios = { agregar: [], eliminar: [nombre] };
-
     this.especialistaService.actualizarOficios(dto).subscribe({
       next: () => {
         this.perfil.update(p => p ? { ...p, oficios: p.oficios.filter(o => o.nombre !== nombre) } : null);
@@ -204,10 +224,18 @@ export class MiPerfilEspecialista implements OnInit {
         this.oficioToRemove = null;
       },
       error: (err) => {
-        this.mostrarFeedback('Error', err?.error?.mensaje || 'No se pudo eliminar el oficio.', 'error');
+        this.mostrarFeedback('Error', err?.error?.mensaje || 'Error al eliminar', 'error');
         this.oficioToRemove = null;
       }
     });
+  }
+
+  handleOficioError(err: any) {
+    if (err && err.status === 409) {
+      this.mostrarFeedback('Error', err.error?.mensaje || 'Conflicto de oficios.', 'error');
+    } else {
+      this.mostrarFeedback('Error', 'Error al procesar solicitud.', 'error');
+    }
   }
 
   reloadProfile() {
@@ -217,7 +245,6 @@ export class MiPerfilEspecialista implements OnInit {
     });
   }
 
-  // --- SEGURIDAD ---
   togglePass(field: 'curr' | 'new' | 'conf') {
     if (field === 'curr') this.showCurrentPass.update(v => !v);
     if (field === 'new') this.showNewPass.update(v => !v);
@@ -229,17 +256,15 @@ export class MiPerfilEspecialista implements OnInit {
       alert('Las contraseñas no coinciden'); return;
     }
     this.isPasswordLoading.set(true);
-
     const { confirmacion, ...data } = this.passwordData;
-
     this.userService.updatePassword(data).subscribe({
       next: () => {
-        this.mostrarFeedback('¡Actualizado!', 'Contraseña actualizada con éxito.');
+        this.mostrarFeedback('¡Actualizado!', 'Contraseña actualizada.');
         this.isPasswordLoading.set(false);
         this.passwordData = { passwordActual: '', passwordNuevo: '', confirmacion: '' };
       },
       error: (err) => {
-        this.mostrarFeedback('Error', err.error?.mensaje || 'Error al cambiar contraseña', 'error');
+        this.mostrarFeedback('Error', err.error?.mensaje || 'Error', 'error');
         this.isPasswordLoading.set(false);
       }
     });
