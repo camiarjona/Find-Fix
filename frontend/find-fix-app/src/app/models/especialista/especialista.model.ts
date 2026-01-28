@@ -66,6 +66,8 @@ export interface PerfilEspecialista {
   oficios: OficioEspecialista[];
   calificacionPromedio : number;
   dni : number;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface ResenaEspecialista {

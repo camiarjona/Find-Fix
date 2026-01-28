@@ -7,6 +7,8 @@ export interface UserProfile {
   telefono?: string;
   roles: string[];
   activo: boolean;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface LoginCredentials {
@@ -19,6 +21,9 @@ export interface RegisterCredentials {
   apellido: string;
   email: string;
   password: string;
+  ciudad: string;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface UpdateUserRequest {
@@ -26,6 +31,8 @@ export interface UpdateUserRequest {
   apellido?: string;
   telefono?: string;
   ciudad?: string;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface UpdatePasswordRequest {
