@@ -7,6 +7,8 @@ export interface UserProfile {
   telefono?: string;
   roles: string[];
   activo: boolean;
+  usuarioId: number;
+  fotoUrl?: string;
 }
 
 export interface LoginCredentials {

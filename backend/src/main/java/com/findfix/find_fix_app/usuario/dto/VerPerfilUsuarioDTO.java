@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 //dto para que el usuario pueda visualizar su perfil
 @Data
 public class VerPerfilUsuarioDTO {
+    private Long usuarioId;
     private String nombre;
     private String apellido;
     private String email;
@@ -18,14 +19,18 @@ public class VerPerfilUsuarioDTO {
     private String telefono;
     private Set<String> roles;
     private boolean activo;
+    private String fotoUrl;
 
 
     public VerPerfilUsuarioDTO(Usuario usuario) {
+
+        this.usuarioId = usuario.getUsuarioId();
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
         this.email = usuario.getEmail();
         this.ciudad = usuario.getCiudad() == null ? "No especificada" : usuario.getCiudad().getNombreAmigable();
         this.telefono = usuario.getTelefono();
+        this.fotoUrl = usuario.getFotoUrl();
 
         this.roles = usuario.getRoles().stream()
                 .map(Rol::getNombre)

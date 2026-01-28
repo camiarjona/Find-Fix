@@ -5,17 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
 import { UserProfile, UpdateUserRequest, UpdatePasswordRequest } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
+import { FotoPerfilService } from '../../../services/user/foto-perfil'; // Ajustá la ruta si es necesario
+import { NgxDropzoneModule } from 'ngx-dropzone'; // Si tu componente es standalone
 
 @Component({
   selector: 'app-mi-perfil-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalFeedbackComponent],
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent, NgxDropzoneModule],
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.css']
 })
 export class PerfilPage implements OnInit {
 
   private userService = inject(UserService);
+  private fotoService = inject(FotoPerfilService);
 
   public icons = UI_ICONS;
 
@@ -23,6 +26,11 @@ export class PerfilPage implements OnInit {
   public usuario = signal<UserProfile | null>(null);
   public availableCities = signal<string[]>([]);
   public isLoading = signal(true);
+
+  // --- LÓGICA DE FOTO DE PERFIL ---
+  public files: File[] = []; //
+  public isPhotoLoading = signal(false);
+  public isEditingPhoto = signal(false); // Controla si mostramos el dropzone
 
   // --- LÓGICA DE EDICIÓN (DATOS PERSONALES) ---
   public editingField = signal<string | null>(null);
@@ -72,6 +80,42 @@ export class PerfilPage implements OnInit {
       next: (res) => this.availableCities.set(res.data)
     });
   }
+
+  // --- NUEVOS MÉTODOS PARA LA FOTO ---
+  onSelect(event: any) {
+    this.files = [];
+    this.files.push(...event.addedFiles);
+  }
+
+  onRemove(event: any) {
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  guardarFoto() {
+    const user = this.usuario();
+    if (user && this.files.length > 0) {
+      this.isPhotoLoading.set(true);
+
+      this.fotoService.subirFoto(this.files[0], (user as any).id || user.usuarioId).subscribe({
+        next: (res) => {
+          // Actualizamos la señal del usuario localmente para que cambie la foto en la vista
+          this.usuario.set({ ...user, fotoUrl: res.url });
+          this.isPhotoLoading.set(false);
+          this.files = [];
+          this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
+        },
+        error: (err) => {
+          this.isPhotoLoading.set(false);
+          this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
+        }
+      });
+    }
+  }
+
+  cancelarCambioFoto() {
+  this.files = [];
+  this.isEditingPhoto.set(false);
+}
 
   // --- MÉTODOS DE EDICIÓN EN LÍNEA ---
   startEdit(field: string, currentValue: string | undefined) {

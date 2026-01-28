@@ -1,9 +1,82 @@
 <div class="profile-page-container">
-
   <div class="page-header">
     <h1>Configuración de Perfil</h1>
     <p>Gestiona tu información personal y la seguridad de tu cuenta</p>
   </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">Cargando perfil...</div>
+  } @else {
+
+  <div class="profile-hero-section">
+    <div class="avatar-container">
+      <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)" title="Cambiar foto de perfil">
+        @if (usuario()?.fotoUrl) {
+          <img [src]="usuario()?.fotoUrl" class="main-avatar">
+        } @else {
+          <div class="avatar-initials">
+            {{ usuario()?.nombre?.charAt(0) }}{{ usuario()?.apellido?.charAt(0) }}
+          </div>
+        }
+
+        <div class="avatar-overlay">
+          <i class="fas fa-camera"></i>
+          <span>EDITAR</span>
+        </div>
+        <div class="edit-badge"><i class="fas fa-pencil-alt"></i></div>
+      </div>
+
+      <div class="hero-info">
+        <h3>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</h3>
+        <span class="role-badge">{{ usuario()?.roles?.[0] }}</span>
+      </div>
+    </div>
+
+    <div class="photo-editor-backdrop" *ngIf="isEditingPhoto()" (click)="cancelarCambioFoto()">
+  <div class="photo-editor-modal" (click)="$event.stopPropagation()">
+
+    <button class="modal-close-btn" (click)="cancelarCambioFoto()">
+      <span>&times;</span>
+    </button>
+
+    <div class="modal-content-layout">
+      <div class="editor-column">
+        <p class="column-label">Foto Actual</p>
+        <div class="large-circle-preview">
+           <img [src]="usuario()?.fotoUrl || 'assets/default-avatar.png'">
+        </div>
+      </div>
+
+      <div class="editor-column">
+        <p class="column-label">Nueva Imagen</p>
+        <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
+          <ngx-dropzone-label>
+            <div class="drop-instructions">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Seleccionar foto</span>
+            </div>
+          </ngx-dropzone-label>
+          <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+          </ngx-dropzone-image-preview>
+        </ngx-dropzone>
+      </div>
+    </div>
+
+    <div class="modal-footer" *ngIf="files.length > 0">
+      <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
+        Descartar
+      </button>
+      <button class="btn-action btn-save-new" (click)="guardarFoto()" [disabled]="isPhotoLoading()">
+  <i class="fas fa-check" *ngIf="!isPhotoLoading()"></i> {{ isPhotoLoading() ? 'Subiendo...' : 'Guardar cambios' }}
+</button>
+    </div>
+  </div>
+</div>
+  </div>
+
+  }
+
+  <div class="profile-grid">
 
   @if (isLoading()) {
   <div class="loading-state">Cargando perfil...</div>
@@ -21,15 +94,7 @@
       </div>
 
       <div class="card-body">
-        <div class="user-banner">
-          <div class="avatar-circle">
-            {{ usuario()?.nombre?.charAt(0) }}{{ usuario()?.apellido?.charAt(0) }}
-          </div>
-          <div class="user-names">
-            <h3>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</h3>
-            <span class="role-badge">{{ usuario()?.roles?.[0] }}</span>
-          </div>
-        </div>
+
 
         <ul class="data-list">
           <li class="data-item">
