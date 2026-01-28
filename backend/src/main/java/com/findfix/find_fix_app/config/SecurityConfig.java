@@ -105,6 +105,10 @@ public class SecurityConfig {
                                         "/solicitud-especialista/actualizar/{id}")
                                 .hasRole("ADMIN")
 
+                                //BARRIOS
+
+                                .requestMatchers(HttpMethod.GET, "/api/barrios/**").permitAll()
+
                                 //ESPECIALISTAS
                                 .requestMatchers("/especialistas/disponibles").hasAnyRole("CLIENTE", "ESPECIALISTA")
 

@@ -16,7 +16,11 @@ public record ActualizarUsuarioDTO(
 
         @Pattern(regexp = "^[0-9]{10}$", message = "❌ El teléfono debe contener exactamente 10 dígitos numéricos ❌")
         String telefono,
-        String ciudad
+
+        String ciudad,
+
+        Double latitud,
+        Double longitud
 ) {
     public boolean tieneNombre() {
         return nombre != null;
@@ -32,5 +36,13 @@ public record ActualizarUsuarioDTO(
 
     public boolean tieneCiudad() {
         return ciudad != null;
+    }
+
+    public boolean tieneLatitud() {
+        return latitud != null;
+    }
+
+    public boolean tieneLongitud() {
+        return longitud != null;
     }
 }

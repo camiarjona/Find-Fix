@@ -1,7 +1,6 @@
 package com.findfix.find_fix_app.especialista.service;
 
 import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.especialista.Specifications.EspecialistaSpecifications;
 import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;
@@ -71,7 +70,12 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         }
 
         if (dto.tieneCiudad()) {
-            especialista.getUsuario().setCiudad(CiudadesDisponibles.desdeString(dto.ciudad()));
+            especialista.getUsuario().setCiudad(dto.ciudad());
+
+            if (dto.tieneCoordenadas()) {
+                especialista.getUsuario().setLatitud(dto.latitud());
+                especialista.getUsuario().setLongitud(dto.longitud());
+            }
         }
 
         if (dto.tieneDni() && !dto.dni().equals(especialista.getDni())) {
@@ -267,11 +271,10 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         // 3. Filtro por Ciudad
         if (filtro.tieneCiudad()) {
             try {
-                CiudadesDisponibles ciudadEnum = CiudadesDisponibles.desdeString(filtro.ciudad());
-                specifications.add(EspecialistaSpecifications.enCiudad(ciudadEnum));
+                String ciudad = filtro.ciudad();
+                specifications.add(EspecialistaSpecifications.enCiudad(ciudad));
             } catch (IllegalArgumentException e) {
-                throw new EspecialistaExcepcion("⚠️La ciudad ingresada no es válida. Ciudades disponibles: " +
-                        CiudadesDisponibles.ciudadesDisponibles());
+                throw new EspecialistaExcepcion("⚠️La ciudad ingresada no es válida.");
             }
         }
         // 4. Filtro por DNI

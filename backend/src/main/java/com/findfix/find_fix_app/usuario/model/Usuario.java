@@ -1,6 +1,5 @@
 package com.findfix.find_fix_app.usuario.model;
 
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudTrabajo.model.SolicitudTrabajo;
@@ -41,11 +40,17 @@ public class Usuario {
 
     private String telefono;
 
-    @Enumerated(EnumType.STRING)
-    private CiudadesDisponibles ciudad;
+    @Column(name = "ciudad")
+    private String ciudad;
 
     @Column(columnDefinition = "boolean default true")
     private boolean activo = true;
+
+    @Column(name = "latitud")
+    private Double latitud;
+
+    @Column(name = "longitud")
+    private Double longitud;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

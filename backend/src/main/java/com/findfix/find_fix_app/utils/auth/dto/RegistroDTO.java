@@ -25,7 +25,14 @@ public record RegistroDTO(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
                 message = "El apellido no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
-        String apellido
+        String apellido,
+
+        @NotBlank(message = "La ciudad es obligatoria")
+        String ciudad,
+
+        Double latitud,
+
+        Double longitud
 
 ) {
 }
