@@ -11,24 +11,6 @@
   padding: 40px 20px;
 }
 
-.header-contenedor {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto 30px;
-  padding: 20px 15px;
-  background-color: var(--bg-card);
-  border-radius: 16px;
-  box-shadow: 0 8px 25px var(--shadow-color);
-  text-align: center;
-  border-top: 5px solid var(--primary-color);
-  box-sizing: border-box;
-}
-
-.rol-titulo {
-  color: var(--text-main);
-  /* --- Header Section --- */
-}
-
 .header-section {
   background-color: var(--bg-card);
   border-radius: 16px;
@@ -50,18 +32,12 @@
   margin: 0 0 8px 0;
 }
 
-.rol-subtitulo {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
 .header-content p {
   margin: 0;
   color: var(--text-secondary);
   font-size: 1rem;
 }
 
-/* --- Botones Principales --- */
 .btn-primary {
   background-color: var(--primary-color);
   color: var(--text-inverse);
@@ -77,86 +53,26 @@
   box-shadow: 0 4px 6px rgba(245, 134, 52, 0.2);
 }
 
-.tabla-general {
-  overflow-x: auto;
-  background: var(--bg-card);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px var(--shadow-color);
-  margin-top: 20px;
-}
-
-.roles-tabla {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Inter', sans-serif;
-  min-width: 300px;
-}
-
-.roles-tabla th {
-  background-color: var(--primary-color);
-  color: var(--text-inverse);
-  text-align: left;
-  padding: 12px 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-}
-
-.roles-tabla td {
-  padding: 12px 15px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-main);
-  vertical-align: middle;
-  font-size: 0.9rem;
-}
-
-.roles-tabla tr:last-child td {
-  border-bottom: none;
-}
-
-.roles-tabla tr:hover {
-  background-color: var(--bg-app);
-}
-
-
-.rol-nombre {
-  background-color: var(--bg-input);
-  padding: 4px 10px;
-  border-radius: 20px;
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.acciones-col {
-  text-align: center;
-  width: 100px;
-}
-
 .btn-primary:hover {
   background-color: #e07528;
   transform: translateY(-1px);
   box-shadow: 0 6px 8px rgba(245, 134, 52, 0.3);
 }
 
-/* --- Form Area Animation --- */
 .form-area {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.4s ease;
   opacity: 0;
   margin-bottom: 0;
 }
 
 .form-area.visible {
-  max-height: 500px;
+  max-height: 600px;
   opacity: 1;
   margin-bottom: 30px;
 }
 
-/* --- Grid de Oficios (NUEVO DISEÑO) --- */
 .oficios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -167,13 +83,15 @@
   background: var(--bg-card);
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  padding: 20px;
+  padding: 16px;
   display: flex;
   align-items: center;
   gap: 16px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .oficio-card:hover {
@@ -194,32 +112,24 @@
   flex-shrink: 0;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background 0.2s;
-  color: var(--text-secondary);
-}
-
 .card-icon svg {
   width: 24px;
   height: 24px;
 }
 
 .card-info {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .oficio-name {
   font-weight: 700;
   color: var(--text-main);
   font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .oficio-id {
@@ -230,42 +140,36 @@
 }
 
 .card-actions {
+  margin-left: auto;
   display: flex;
-  gap: 8px;
+  align-items: center;
 }
 
 .action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid transparent;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .action-btn:hover {
   background-color: var(--bg-app);
-  color: var(--text-main);
+  color: var(--primary-color);
+  transform: scale(1.1);
 }
 
-.action-btn.delete:hover {
-  background-color: #fef2f2;
-  color: #ef4444;
-  border-color: #fee2e2;
+.action-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
-.action-btn.edit:hover {
-  background-color: #eff6ff;
-  color: #3b82f6;
-  border-color: #dbeafe;
-}
-
-/* --- Estados --- */
 .loading-state,
 .empty-state {
   text-align: center;
@@ -274,6 +178,7 @@
   background: var(--bg-card);
   border-radius: 16px;
   border: 1px dashed var(--border-color);
+  margin-top: 20px;
 }
 
 .spinner {
@@ -287,68 +192,52 @@
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* --- Toast Notification --- */
 .toast-message {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1050;
+  width: auto;
+  min-width: 300px;
   max-width: 90%;
-  width: 90%;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  text-align: center;
-  box-shadow: 0 4px 15px var(--shadow-color);
-  font-size: 0.9rem;
-  right: 20px;
   background: var(--bg-card);
-  padding: 16px 24px;
+  padding: 12px 20px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  z-index: 1000;
-  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border-left: 5px solid;
   font-weight: 500;
-}
-
-.alert-message.success {
-  background-color: var(--primary-color);
-  color: var(--text-inverse);
-  border-color: var(--primary-color);
+  font-size: 0.95rem;
+  animation: slideDownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .toast-message.success {
   border-color: #10b981;
   color: #065f46;
+  background-color: #ecfdf5;
 }
 
 .toast-message.error {
   border-color: #ef4444;
   color: #991b1b;
+  background-color: #fef2f2;
 }
 
-@keyframes slideIn {
+@keyframes slideDownFade {
   from {
-    transform: translateX(100%);
+    transform: translate(-50%, -20px);
     opacity: 0;
   }
-
   to {
-    transform: translateX(0);
+    transform: translate(-50%, 0);
     opacity: 1;
   }
 }
@@ -362,5 +251,9 @@
 
   .btn-primary {
     justify-content: center;
+  }
+
+  .oficios-grid {
+    grid-template-columns: 1fr;
   }
 }
