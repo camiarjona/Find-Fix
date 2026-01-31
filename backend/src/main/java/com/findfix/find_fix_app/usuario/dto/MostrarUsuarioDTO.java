@@ -18,12 +18,14 @@ public class MostrarUsuarioDTO {
     String apellido;
     String email;
     Set<String> rolesUsuario;
+    String fotoUrl;
 
     public MostrarUsuarioDTO(Usuario usuario) {
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
         this.email = usuario.getEmail();
         this.rolesUsuario = usuario.getRoles().stream().map(Rol::getNombre).collect(Collectors.toSet());
+        this.fotoUrl = usuario.getFotoUrl();
     }
 
 }

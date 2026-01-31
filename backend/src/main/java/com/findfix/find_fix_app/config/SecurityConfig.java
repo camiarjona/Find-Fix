@@ -39,6 +39,10 @@ public class SecurityConfig {
                                 //rutas públicas
                                 .requestMatchers("/auth/**", "/especialistas/publico").permitAll()
 
+                                //foto de perfil usuario
+                                .requestMatchers(HttpMethod.POST, "/api/usuarios/foto/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/usuarios/foto/**").permitAll()
+
                                 //rutas usuario comun
                                 .requestMatchers(
                                         "/usuario/**")
