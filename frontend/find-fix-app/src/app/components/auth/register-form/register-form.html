@@ -19,6 +19,24 @@
   <small class="error-message">El apellido es obligatorio.</small>
   }
 
+  <div class="form-field barrio-container">
+    <input id="reg-ciudad" formControlName="ciudad" type="text" placeholder=" " autocomplete="off"/>
+    <label for="reg-ciudad">Barrio</label>
+
+    @if (mostrandoResultados() && resultadosBusqueda().length > 0) {
+      <ul class="resultados-busqueda">
+        @for (barrio of resultadosBusqueda(); track $index) {
+          <li (click)="seleccionarLocalidad(barrio)">
+            {{ barrio.nombre }}
+          </li>
+        }
+      </ul>
+    }
+  </div>
+  @if (registerForm.get('ciudad')?.invalid && registerForm.get('ciudad')?.touched) {
+    <small class="error-message">Debes seleccionar un barrio.</small>
+  }
+
   <div class="form-field">
     <input id="reg-email" formControlName="email" type="email" placeholder=" " />
     <label for="reg-email">Email</label>
@@ -28,30 +46,21 @@
   }
 
   <div class="form-field">
-
     <div class="password-wrapper">
-
       <input id="reg-password" formControlName="password" [type]="showPassword() ? 'text' : 'password'"
         placeholder=" " />
-
       <label for="reg-password">Contraseña</label>
-
       <button type="button" class="toggle-btn" (click)="togglePassword()" tabindex="-1">
         @if (showPassword()) {
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            [attr.d]="icons.EYE_OPEN" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_OPEN" />
         </svg>
         } @else {
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            [attr.d]="icons.EYE_CLOSED" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_CLOSED" />
         </svg>
         }
       </button>
-
     </div>
   </div>
   @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {

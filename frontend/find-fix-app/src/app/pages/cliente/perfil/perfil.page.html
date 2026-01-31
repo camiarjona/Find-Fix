@@ -193,15 +193,31 @@
           </li>
 
           <li class="data-item">
-            <span class="label">Ciudad</span>
+            <span class="label">Zona de trabajo</span>
             <div class="value-container">
               @if (editingField() === 'ciudad') {
               <div class="edit-mode">
-                <select [(ngModel)]="tempValue" class="input-inline">
-                  @for (city of availableCities(); track city) {
-                  <option [value]="city">{{ city }}</option>
+
+                <div class="search-wrapper">
+                  <input
+                    type="text"
+                    [value]="tempValue"
+                    (input)="buscarCiudades($event)"
+                    class="input-inline"
+                    placeholder="Ej: Los Troncos, Mar del Plata"
+                  >
+
+                 @if (citySuggestions().length > 0) {
+                    <ul class="suggestions-list">
+                      @for (sug of citySuggestions(); track sug.lat) {
+                        <li (click)="seleccionarCiudad(sug)" class="suggestion-item">
+                          {{ sug.nombreVisual }}
+                        </li>
+                      }
+                    </ul>
                   }
-                </select>
+                </div>
+
                 <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
                     <path [attr.d]="icons.SAVE">

@@ -29,7 +29,7 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
 
         // Verificar ciudad
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
-                ? especialista.getUsuario().getCiudad().getNombreAmigable()
+                ? especialista.getUsuario().getCiudad()
                 : "No especificado";
 
         this.telefono = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getTelefono() : "Usuario desvinculado");

@@ -4,7 +4,6 @@ import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
 import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
@@ -67,7 +66,18 @@ public class AuthServiceImpl implements AuthService{
         usuario.setPassword(passwordEncoder.encode(registroDTO.password()));
         usuario.setNombre(registroDTO.nombre());
         usuario.setApellido(registroDTO.apellido());
-        usuario.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+
+        if (registroDTO.ciudad() != null) {
+            usuario.setCiudad(registroDTO.ciudad());
+        } else {
+            usuario.setCiudad("No especificado");
+        }
+
+        if (registroDTO.latitud() != null && registroDTO.longitud() != null) {
+            usuario.setLatitud(registroDTO.latitud());
+            usuario.setLongitud(registroDTO.longitud());
+        }
+
         usuario.setTelefono("No especificado.");
 
         Rol rol = rolRepository.findByNombre("CLIENTE")

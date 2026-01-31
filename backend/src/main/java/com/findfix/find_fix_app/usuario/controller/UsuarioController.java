@@ -1,7 +1,6 @@
 package com.findfix.find_fix_app.usuario.controller;
 
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.usuario.dto.*;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
@@ -46,10 +45,4 @@ public class UsuarioController {
         return ResponseEntity.ok(new ApiResponse<>("\uD83D\uDC64Perfil\uD83D\uDC64", usuarioDTO));
     }
 
-    @GetMapping("/ciudades-disponibles") //CHEQUEADO
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'ESPECIALISTA')")
-    public ResponseEntity<ApiResponse<List<String>>> verCiudadesDisponibles() {
-        List<String> ciudadesDisponibles = CiudadesDisponibles.ciudadesDisponibles();
-        return ResponseEntity.ok(new ApiResponse<>("Ciudades disponibles", ciudadesDisponibles));
-    }
 }
