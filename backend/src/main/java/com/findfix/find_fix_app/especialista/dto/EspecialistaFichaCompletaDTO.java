@@ -16,6 +16,8 @@ public class EspecialistaFichaCompletaDTO implements DatosEspecialista {
     private Set<String> oficios;
     private String email;
     private Double calificacionPromedio;
+    private Double latitud;
+    private Double longitud;
 
 
     public EspecialistaFichaCompletaDTO(Especialista especialista) {
@@ -26,7 +28,7 @@ public class EspecialistaFichaCompletaDTO implements DatosEspecialista {
 
             // Validar ciudad
             this.ciudad = (especialista.getUsuario().getCiudad() != null)
-                    ? especialista.getUsuario().getCiudad().getNombreAmigable()
+                    ? especialista.getUsuario().getCiudad()
                     : "No especificado";
 
             this.descripcion = validarYObtenerString(especialista.getDescripcion());
@@ -36,6 +38,9 @@ public class EspecialistaFichaCompletaDTO implements DatosEspecialista {
 
             // Calcular calificación
             this.calificacionPromedio = calcularPromedioCalificacion(especialista);
+
+            this.latitud = especialista.getUsuario().getLatitud();
+            this.longitud = especialista.getUsuario().getLongitud();
         }
 
 }

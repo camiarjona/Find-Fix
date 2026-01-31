@@ -20,6 +20,9 @@ public record ActualizarEspecialistaDTO(
         String apellido,
         String telefono,
         String ciudad,
+        Double latitud,
+        Double longitud,
+
         @Digits(integer = 8, fraction = 0, message = "El DNI debe tener 8 dígitos")
         Long dni
 ) {
@@ -45,5 +48,9 @@ public record ActualizarEspecialistaDTO(
 
     public boolean tieneDni() {
         return dni != null;
+    }
+
+    public boolean tieneCoordenadas() {
+        return latitud != null && longitud != null;
     }
 }

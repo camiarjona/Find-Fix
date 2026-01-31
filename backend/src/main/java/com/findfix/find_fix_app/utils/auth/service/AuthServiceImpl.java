@@ -96,7 +96,18 @@ public class AuthServiceImpl implements AuthService {
         usuario.setPassword(passwordEncoder.encode(registroDTO.password()));
         usuario.setNombre(registroDTO.nombre());
         usuario.setApellido(registroDTO.apellido());
-        usuario.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+
+        if (registroDTO.ciudad() != null) {
+            usuario.setCiudad(registroDTO.ciudad());
+        } else {
+            usuario.setCiudad("No especificado");
+        }
+
+        if (registroDTO.latitud() != null && registroDTO.longitud() != null) {
+            usuario.setLatitud(registroDTO.latitud());
+            usuario.setLongitud(registroDTO.longitud());
+        }
+
         usuario.setTelefono("No especificado.");
 
         Rol rol = rolRepository.findByNombre("CLIENTE")

@@ -40,7 +40,7 @@ public class EspecialistaRespuestaDTO {
 
         // Manejo seguro de ciudad
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
-                ? especialista.getUsuario().getCiudad().getNombreAmigable()
+                ? especialista.getUsuario().getCiudad()
                 : "Ciudad no especificada";
 
         // Manejo seguro de oficios
