@@ -1,7 +1,7 @@
-package com.findfix.find_fix_app.utils.auth.repository;
+package com.findfix.find_fix_app.auth.repository;
 
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.utils.auth.model.RefreshToken;
+import com.findfix.find_fix_app.auth.model.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

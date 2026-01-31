@@ -1,9 +1,9 @@
-package com.findfix.find_fix_app.utils.auth.service;
+package com.findfix.find_fix_app.auth.service;
 
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
-import com.findfix.find_fix_app.utils.auth.model.RefreshToken;
-import com.findfix.find_fix_app.utils.auth.repository.RefreshTokenRepository;
+import com.findfix.find_fix_app.auth.model.RefreshToken;
+import com.findfix.find_fix_app.auth.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.usuario.service;
+package com.findfix.find_fix_app.servicesGenerales;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

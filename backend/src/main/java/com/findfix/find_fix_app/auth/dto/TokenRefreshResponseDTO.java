@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.utils.auth.dto;
+package com.findfix.find_fix_app.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
