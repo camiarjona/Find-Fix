@@ -1,20 +1,20 @@
 package com.findfix.find_fix_app.config;
 
+import com.findfix.find_fix_app.utils.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import jakarta.servlet.http.Cookie;
 
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,15 +22,22 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         request -> request
-
-                                .requestMatchers("/auth/login", "/auth/registrar", "/especialistas/publico").permitAll()
+                                //rutas públicas
+                                .requestMatchers("/auth/**", "/especialistas/publico").permitAll()
 
                                 //rutas usuario comun
                                 .requestMatchers(
@@ -132,22 +139,8 @@ public class SecurityConfig {
 
                                 .anyRequest().authenticated()
                 )
-                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .addLogoutHandler((request, response, authentication) -> {
-                            Cookie cookie = new Cookie("JSESSIONID", null);
-                            cookie.setPath("/");
-                            cookie.setHttpOnly(true);
-                            cookie.setMaxAge(0);
-                            response.addCookie(cookie);
-                            System.out.println(">>> LOGOUT: Cookie JSESSIONID borrada manualmente.");
-                        })
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            response.setStatus(HttpStatus.OK.value());
-                        })
-                )
+                .authenticationProvider(authenticationProvider) // Usamos el provider de ApplicationConfig
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Ponemos nuestro filtro
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -170,14 +163,7 @@ public class SecurityConfig {
                                     """);
                         })
                 )
-                .csrf(AbstractHttpConfigurer::disable)
-                //.httpBasic(Customizer.withDefaults())
                 .build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
