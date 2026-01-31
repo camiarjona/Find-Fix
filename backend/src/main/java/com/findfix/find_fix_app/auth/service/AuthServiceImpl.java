@@ -1,12 +1,12 @@
-package com.findfix.find_fix_app.utils.auth.service;
+package com.findfix.find_fix_app.auth.service;
 
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
-import com.findfix.find_fix_app.utils.auth.dto.AuthResponseDTO;
-import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
-import com.findfix.find_fix_app.utils.auth.dto.TokenRefreshResponseDTO;
-import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
-import com.findfix.find_fix_app.utils.auth.model.RefreshToken;
+import com.findfix.find_fix_app.auth.dto.AuthResponseDTO;
+import com.findfix.find_fix_app.auth.dto.RegistroDTO;
+import com.findfix.find_fix_app.auth.dto.TokenRefreshResponseDTO;
+import com.findfix.find_fix_app.auth.dto.UsuarioLoginDTO;
+import com.findfix.find_fix_app.auth.model.RefreshToken;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;

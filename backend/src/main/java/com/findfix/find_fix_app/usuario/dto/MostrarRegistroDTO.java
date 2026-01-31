@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.usuario.dto;
 
-import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
+import com.findfix.find_fix_app.auth.dto.RegistroDTO;
 import lombok.Data;
 
 @Data

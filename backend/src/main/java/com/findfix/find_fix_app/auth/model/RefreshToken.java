@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.utils.auth.model;
+package com.findfix.find_fix_app.auth.model;
 
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import jakarta.persistence.*;

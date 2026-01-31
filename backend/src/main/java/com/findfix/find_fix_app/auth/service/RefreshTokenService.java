@@ -1,7 +1,6 @@
-package com.findfix.find_fix_app.utils.auth.service;
+package com.findfix.find_fix_app.auth.service;
 
-import com.findfix.find_fix_app.utils.auth.model.RefreshToken;
-import org.springframework.transaction.annotation.Transactional;
+import com.findfix.find_fix_app.auth.model.RefreshToken;
 
 public interface RefreshTokenService {
     RefreshToken findByToken(String token);

@@ -1,14 +1,14 @@
-package com.findfix.find_fix_app.utils.auth.controller;
+package com.findfix.find_fix_app.auth.controller;
 
 import com.findfix.find_fix_app.usuario.dto.VerPerfilUsuarioDTO;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
-import com.findfix.find_fix_app.utils.auth.CookieUtil;
-import com.findfix.find_fix_app.utils.auth.dto.AuthResponseDTO;
-import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
-import com.findfix.find_fix_app.utils.auth.dto.TokenRefreshResponseDTO;
-import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
-import com.findfix.find_fix_app.utils.auth.service.AuthService;
+import com.findfix.find_fix_app.auth.CookieUtil;
+import com.findfix.find_fix_app.auth.dto.AuthResponseDTO;
+import com.findfix.find_fix_app.auth.dto.RegistroDTO;
+import com.findfix.find_fix_app.auth.dto.TokenRefreshResponseDTO;
+import com.findfix.find_fix_app.auth.dto.UsuarioLoginDTO;
+import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
