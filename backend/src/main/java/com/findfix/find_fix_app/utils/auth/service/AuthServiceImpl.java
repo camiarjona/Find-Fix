@@ -7,7 +7,6 @@ import com.findfix.find_fix_app.utils.auth.dto.RegistroDTO;
 import com.findfix.find_fix_app.utils.auth.dto.TokenRefreshResponseDTO;
 import com.findfix.find_fix_app.utils.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.utils.auth.model.RefreshToken;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
