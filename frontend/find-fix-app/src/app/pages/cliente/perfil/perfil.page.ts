@@ -31,6 +31,7 @@ export class PerfilPage implements OnInit {
   public files: File[] = []; //
   public isPhotoLoading = signal(false);
   public isEditingPhoto = signal(false); // Controla si mostramos el dropzone
+  public tempPhotoUrl = signal<string | null>(null);
 
   // --- LÓGICA DE EDICIÓN (DATOS PERSONALES) ---
   public editingField = signal<string | null>(null);
@@ -83,34 +84,45 @@ export class PerfilPage implements OnInit {
 
   // --- NUEVOS MÉTODOS PARA LA FOTO ---
   onSelect(event: any) {
-    this.files = [];
-    this.files.push(...event.addedFiles);
-  }
+  if (event.addedFiles && event.addedFiles.length > 0) {
+    this.files = [event.addedFiles[0]]; // Solo permitimos uno, así que reemplazamos
 
-  onRemove(event: any) {
-    this.files.splice(this.files.indexOf(event), 1);
+    // CREAR PREVISUALIZACIÓN LOCAL INSTANTÁNEA
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.tempPhotoUrl.set(e.target.result); // Esto es instantáneo
+    };
+    reader.readAsDataURL(this.files[0]);
   }
+}
+
+ onRemove(event: any) {
+  this.files = [];
+  this.tempPhotoUrl.set(null);
+}
 
   guardarFoto() {
-    const user = this.usuario();
-    if (user && this.files.length > 0) {
-      this.isPhotoLoading.set(true);
+  const user = this.usuario();
+  if (user && this.files.length > 0) {
+    this.isPhotoLoading.set(true);
 
-      this.fotoService.subirFoto(this.files[0], (user as any).id || user.usuarioId).subscribe({
-        next: (res) => {
-          // Actualizamos la señal del usuario localmente para que cambie la foto en la vista
-          this.usuario.set({ ...user, fotoUrl: res.url });
-          this.isPhotoLoading.set(false);
-          this.files = [];
-          this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
-        },
-        error: (err) => {
-          this.isPhotoLoading.set(false);
-          this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
-        }
-      });
-    }
+    this.fotoService.subirFoto(this.files[0], user.usuarioId).subscribe({
+      next: (res) => {
+        this.usuario.set({ ...user, fotoUrl: res.url });
+        this.isPhotoLoading.set(false);
+
+        // --- MEJORAS ESTÉTICAS ---
+        this.cancelarCambioFoto(); // Limpia archivos y cierra el modal
+        this.tempPhotoUrl.set(null); // Limpia la previsualización temporal
+        this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
+      },
+      error: (err) => {
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
+      }
+    });
   }
+}
 
   cancelarCambioFoto() {
   this.files = [];

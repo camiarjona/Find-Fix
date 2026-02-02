@@ -705,3 +705,7 @@ ngx-dropzone-image-preview {
 ngx-dropzone-image-preview {
   border-radius: 50% !important;
 }
+
+.large-circle-preview img {
+  transition: opacity 0.3s ease-in-out;
+}

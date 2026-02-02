@@ -41,11 +41,11 @@
 
     <div class="modal-content-layout">
       <div class="editor-column">
-        <p class="column-label">Foto Actual</p>
+        <p class="column-label">Vista Previa</p>
         <div class="large-circle-preview">
-           <img [src]="usuario()?.fotoUrl || 'assets/default-avatar.png'">
-        </div>
+        <img [src]="tempPhotoUrl() || usuario()?.fotoUrl || 'assets/default-avatar.png'">
       </div>
+    </div>
 
       <div class="editor-column">
         <p class="column-label">Nueva Imagen</p>

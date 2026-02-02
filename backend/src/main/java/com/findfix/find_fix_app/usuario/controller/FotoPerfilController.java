@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class FotoPerfilController {
     private String presetName;
 
     @PostMapping("/subir/{id}")
+    @Transactional
     public ResponseEntity<?> subirFoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         // 1. Buscamos al usuario en Neon
         Usuario usuario = usuarioRepository.findById(id)
@@ -47,7 +49,15 @@ public class FotoPerfilController {
         usuario.setFotoUrl(resultado.get("secure_url").toString());
         usuario.setFotoId(resultado.get("public_id").toString());
 
-        usuarioRepository.save(usuario);
+        // Forzamos el guardado y capturamos el retorno
+        Usuario resultadoFinal = usuarioRepository.saveAndFlush(usuario); 
+
+        System.out.println(">>> Intentando persistir ID: " + usuario.getUsuarioId());
+        System.out.println(">>> URL a guardar: " + usuario.getFotoUrl());
+
+        System.out.println("DEBUG: ¿Se guardó en BD? URL final: " + resultadoFinal.getFotoUrl());
+
+        usuarioRepository.flush(); // Esto obliga a que si hay un error de base de datos, salte YA.
 
         return ResponseEntity.ok(Map.of("url", usuario.getFotoUrl(), "message", "Foto actualizada con éxito"));
     }
