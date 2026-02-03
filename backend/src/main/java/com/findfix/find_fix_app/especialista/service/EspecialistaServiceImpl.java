@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.especialista.service;
 
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.especialista.Specifications.EspecialistaSpecifications;
 import com.findfix.find_fix_app.especialista.dto.*;
 import com.findfix.find_fix_app.especialista.model.Especialista;

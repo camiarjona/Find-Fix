@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.usuario.controller;
 
-import com.findfix.find_fix_app.usuario.service.CloudinaryService;
+import com.findfix.find_fix_app.servicesGenerales.CloudinaryService;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
