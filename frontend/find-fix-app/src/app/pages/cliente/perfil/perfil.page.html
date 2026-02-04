@@ -10,21 +10,28 @@
 
   <div class="profile-hero-section">
     <div class="avatar-container">
-      <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)" title="Cambiar foto de perfil">
-        @if (usuario()?.fotoUrl) {
-          <img [src]="usuario()?.fotoUrl" class="main-avatar">
-        } @else {
-          <div class="avatar-initials">
-            {{ usuario()?.nombre?.charAt(0) }}{{ usuario()?.apellido?.charAt(0) }}
-          </div>
-        }
+      <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)">
 
-        <div class="avatar-overlay">
-          <i class="fas fa-camera"></i>
-          <span>EDITAR</span>
-        </div>
-        <div class="edit-badge"><i class="fas fa-pencil-alt"></i></div>
-      </div>
+  @if (usuario()?.fotoUrl && !fotoError()) {
+    <img [src]="usuario()?.fotoUrl"
+         class="main-avatar"
+         (error)="fotoError.set(true)">
+  }
+
+  @else {
+    <div class="avatar-initials">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 80px; height: 80px;">
+        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#CCCCCC"/>
+      </svg>
+    </div>
+  }
+
+  <div class="avatar-overlay">
+    <i class="fas fa-camera"></i>
+    <span>EDITAR</span>
+  </div>
+  <div class="edit-badge"><i class="fas fa-pencil-alt"></i></div>
+</div>
 
       <div class="hero-info">
         <h3>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</h3>
@@ -43,36 +50,62 @@
       <div class="editor-column">
         <p class="column-label">Vista Previa</p>
         <div class="large-circle-preview">
-        <img [src]="tempPhotoUrl() || usuario()?.fotoUrl || 'assets/default-avatar.png'">
-      </div>
+  @if (tempPhotoUrl()) {
+    <img [src]="tempPhotoUrl()" alt="Vista previa">
+  } @else {
+    <i class="fas fa-user" style="font-size: 3rem; color: #eee;"></i>
+  }
+</div>
     </div>
 
       <div class="editor-column">
-        <p class="column-label">Nueva Imagen</p>
+
+        <div class="editor-column" *ngIf="isEditingPhoto()"> <p class="column-label">Nueva Imagen</p>
+
         <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
-          <ngx-dropzone-label>
-            <div class="drop-instructions">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <span>Seleccionar foto</span>
-            </div>
-          </ngx-dropzone-label>
-          <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-          </ngx-dropzone-image-preview>
-        </ngx-dropzone>
+  <ngx-dropzone-label style="width: 100%; height: 100%;">
+
+    <div class="drop-instructions" *ngIf="!tempPhotoUrl()">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <span>Seleccionar foto</span>
+    </div>
+
+    <div class="custom-preview" *ngIf="tempPhotoUrl()">
+      <img [src]="tempPhotoUrl()" class="preview-img">
+
+      <button class="remove-btn-overlay" (click)="$event.stopPropagation(); onRemove($event)">
+  <span>&times;</span> </button>
+    </div>
+
+  </ngx-dropzone-label>
+</ngx-dropzone>
+    </div>
       </div>
     </div>
 
-    <div class="modal-footer" *ngIf="files.length > 0">
-      <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
-        Descartar
+  <div class="modal-footer">
+  <div class="left-actions">
+    @if (usuario()?.fotoUrl) {
+      <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
+        <i class="fas fa-trash-alt"></i> Eliminar Foto
       </button>
-      <button class="btn-action btn-save-new" (click)="guardarFoto()" [disabled]="isPhotoLoading()">
-  <i class="fas fa-check" *ngIf="!isPhotoLoading()"></i> {{ isPhotoLoading() ? 'Subiendo...' : 'Guardar cambios' }}
-</button>
-    </div>
+    }
+    <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
+      Descartar
+    </button>
   </div>
+
+  <button class="btn-action btn-save-new"
+          [disabled]="files.length === 0 || isPhotoLoading()"
+          (click)="guardarFoto()">
+    <i class="fas fa-check" *ngIf="!isPhotoLoading()"></i>
+    {{ isPhotoLoading() ? 'Subiendo...' : 'Guardar Cambios' }}
+  </button>
+</div>
+
 </div>
   </div>
+</div>
 
   }
 

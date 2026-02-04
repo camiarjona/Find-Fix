@@ -7,6 +7,7 @@ import { UserProfile, UpdateUserRequest, UpdatePasswordRequest } from '../../../
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { FotoPerfilService } from '../../../services/user/foto-perfil'; // Ajustá la ruta si es necesario
 import { NgxDropzoneModule } from 'ngx-dropzone'; // Si tu componente es standalone
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-mi-perfil-page',
@@ -19,6 +20,7 @@ export class PerfilPage implements OnInit {
 
   private userService = inject(UserService);
   private fotoService = inject(FotoPerfilService);
+  private cd = inject(ChangeDetectorRef);
 
   public icons = UI_ICONS;
 
@@ -30,8 +32,9 @@ export class PerfilPage implements OnInit {
   // --- LÓGICA DE FOTO DE PERFIL ---
   public files: File[] = []; //
   public isPhotoLoading = signal(false);
-  public isEditingPhoto = signal(false); // Controla si mostramos el dropzone
+  public isEditingPhoto = signal(false);
   public tempPhotoUrl = signal<string | null>(null);
+  public fotoError = signal(false);
 
   // --- LÓGICA DE EDICIÓN (DATOS PERSONALES) ---
   public editingField = signal<string | null>(null);
@@ -67,14 +70,15 @@ export class PerfilPage implements OnInit {
 
   loadData() {
     this.isLoading.set(true);
-    // 1. Cargar Perfil
     this.userService.getProfile().subscribe({
-      next: (res) => {
+   next: (res) => {
         this.usuario.set(res.data);
+        this.fotoError.set(false);
         this.isLoading.set(false);
       },
-      error: (err) => { console.error(err); this.isLoading.set(false); }
-    });
+    error: (err) => {
+      console.error(err); this.isLoading.set(false); }
+});
 
     // 2. Cargar Ciudades
     this.userService.getCities().subscribe({
@@ -83,16 +87,28 @@ export class PerfilPage implements OnInit {
   }
 
   // --- NUEVOS MÉTODOS PARA LA FOTO ---
-  onSelect(event: any) {
+ onSelect(event: any) {
   if (event.addedFiles && event.addedFiles.length > 0) {
-    this.files = [event.addedFiles[0]]; // Solo permitimos uno, así que reemplazamos
+    // 1. Limpiamos y creamos una referencia nueva
+    // (Esto "resetea" visualmente el componente)
+    this.files = [];
 
-    // CREAR PREVISUALIZACIÓN LOCAL INSTANTÁNEA
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.tempPhotoUrl.set(e.target.result); // Esto es instantáneo
-    };
-    reader.readAsDataURL(this.files[0]);
+    const file = event.addedFiles[0];
+
+    // 2. Usamos un pequeño delay (setTimeout) para que Angular
+    // procese el vaciado antes de meter el nuevo archivo
+    setTimeout(() => {
+      this.files = [file]; // Asignamos el nuevo archivo en un array nuevo
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.tempPhotoUrl.set(e.target.result);
+        this.cd.detectChanges();
+      };
+      reader.readAsDataURL(file);
+
+      this.cd.detectChanges();
+    }, 0);
   }
 }
 
@@ -126,7 +142,32 @@ export class PerfilPage implements OnInit {
 
   cancelarCambioFoto() {
   this.files = [];
+  this.tempPhotoUrl.set(null);
   this.isEditingPhoto.set(false);
+}
+
+eliminarFotoActual() {
+  const user = this.usuario();
+  if (!user) return;
+
+  if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
+    this.isPhotoLoading.set(true);
+
+    // Convertimos el ID a string para que no chille el TS
+    this.fotoService.eliminarFoto(user.usuarioId.toString()).subscribe({
+      next: () => {
+        // Usamos undefined en lugar de null para respetar el modelo
+        this.usuario.set({ ...user, fotoUrl: undefined });
+        this.isPhotoLoading.set(false);
+        this.cancelarCambioFoto();
+        this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
+      },
+      error: (err) => {
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo eliminar la foto.', 'error');
+      }
+    });
+  }
 }
 
   // --- MÉTODOS DE EDICIÓN EN LÍNEA ---

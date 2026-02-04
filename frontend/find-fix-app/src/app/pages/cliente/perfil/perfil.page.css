@@ -302,26 +302,35 @@
 
 .avatar-wrapper {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   cursor: pointer;
   border: 4px solid #fff;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   overflow: hidden;
   margin-bottom: 15px;
-  background: #ff9b29; /* Color de fondo si hay iniciales */
+  background: #ffffff; /* Color de fondo si hay iniciales */
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* Ajusta la foto al círculo sin deformar */
+  object-position: center; /* Centra la imagen */
+  display: block;
 }
 
 .avatar-initials {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-  color: white;
-  font-weight: bold;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #ffffff !important; /* El fondo blanco que elegiste */
+  position: relative;
+  z-index: 1; /* Para que esté por debajo del overlay de "EDITAR" */
 }
 
 .hero-info h3 { margin: 0; font-size: 1.5rem; }
@@ -405,6 +414,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  border: none;
 }
 
 /* Dropzone alineado y limpio */
@@ -445,12 +456,13 @@
 
 /* Footer del modal */
 .modal-footer {
-  margin-top: 30px;
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  border-top: 1px solid #eee;
+  align-items: center;
+  justify-content: center; /* Centra por defecto */
+  gap: 20px;
+  width: 100%;
   padding-top: 20px;
+  position: relative;
 }
 
 /* Paleta de Colores Principal */
@@ -539,6 +551,11 @@
   transition: all 0.2s;
   border: none;
   font-family: inherit;
+}
+
+.btn-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(0.9); /* Oscurece un poquito el color actual */
 }
 
 .btn-primary {
@@ -635,22 +652,21 @@ ngx-dropzone-image-preview {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
 }
 
 /* BOTONES - Colores Sólidos */
-.btn-action {
-  padding: 12px 25px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: 0.3s;
-}
-
 .btn-save-new {
-  background-color: #f36f21;;
+  background-color: #f36f21;
   color: white !important;
   box-shadow: 0 4px 12px rgba(243, 111, 33, 0.2);
+}
+
+.btn-save-new:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-discard-new {
@@ -661,13 +677,6 @@ ngx-dropzone-image-preview {
 
 .btn-discard-new:hover {
   background: #e5e5e5 !important;
-}
-
-
-
-/* 2. EFECTO HOVER EN EL AVATAR PRINCIPAL (Donde hacés click) */
-.avatar-wrapper {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .avatar-wrapper:hover {
@@ -682,6 +691,7 @@ ngx-dropzone-image-preview {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .btn-save-new:hover:not(:disabled) {
@@ -694,6 +704,25 @@ ngx-dropzone-image-preview {
   transform: translateY(-1px); /* Efecto de rebote al cliquear */
 }
 
+.btn-delete-photo {
+  background-color: #f36f21;
+  color: #ffffff;
+  position: absolute;      /* Lo sacamos del flujo para que no empuje */
+  left: 0;
+  /* Si existe, lo alejamos un poco de los centrales si querés,
+     o lo dejamos fluir en el centro con ellos */
+}
+
+.btn-delete-photo:hover:not(:disabled) {
+  background: #d95d1a !important;
+  transform: translateY(-3px); /* Se eleva */
+  box-shadow: 0 6px 15px rgba(243, 111, 33, 0.4) !important;
+}
+
+.btn-delete-photo:active:not(:disabled) {
+  transform: translateY(-1px); /* Efecto de rebote al cliquear */
+}
+
 /* Efecto para el botón descartar */
 .btn-discard-new:hover {
   background: #ebebeb !important;
@@ -702,10 +731,125 @@ ngx-dropzone-image-preview {
 }
 
 /* Para que la previsualización también sea circular al elegir la foto */
-ngx-dropzone-image-preview {
-  border-radius: 50% !important;
+
+.clean-dropzone-orange {
+  border: 2px dashed #ddd !important;
+  border-radius: 15px !important;
+  background: var(--ff-bg-gray) !important;
+  width: 190px !important;
+  height: 190px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 0 auto; /* Centra el cuadrado en su columna */
 }
 
-.large-circle-preview img {
-  transition: opacity 0.3s ease-in-out;
+.clean-dropzone-orange ngx-dropzone-label {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
+
+/* 2. La imagen ocupa todo el cuadrado punteado */
+.custom-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Para que no se deforme */
+  display: block;
+}
+
+/* 3. Estilo de la cruz (Blanca con cruz negra) */
+.remove-btn-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgb(255, 255, 255); /* Fondo blanco */
+  color: black;      /* Cruz negra */
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 4. Efecto HOVER: Mostrar la cruz al pasar por el dropzone */
+.custom-preview:hover .remove-btn-overlay {
+  opacity: 1;
+}
+
+/* Un toque extra: que la cruz se agrande un poquito al tocarla */
+.remove-btn-overlay:hover {
+  transform: scale(1.1);
+  background: #f0f0f0;
+}
+
+.drop-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  gap: 8px; /* Espacio entre icono y texto */
+}
+
+.drop-instructions i {
+  font-size: 1.8rem; /* Un pelín más chico para el nuevo tamaño */
+  color: var(--ff-orange);
+}
+
+.drop-instructions span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Separa los bloques a los extremos */
+  width: 100%;
+  margin-top: 25px;
+  padding: 0 10px;
+}
+
+.left-actions {
+  display: flex;
+  gap: 12px; /* Espacio entre Eliminar y Descartar */
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center; /* Centra los botones dentro del grupo */
+  flex-grow: 1;            /* Permite que el grupo use el espacio disponible */
+  max-width: fit-content;  /* Pero que no se estire de más */
+}
+
+.main-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: white; /* Esto evita que se vea el fondo naranja o gris si la foto es PNG */
+  display: block;
+}
+

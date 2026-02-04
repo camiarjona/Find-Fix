@@ -61,4 +61,25 @@ public class FotoPerfilController {
 
         return ResponseEntity.ok(Map.of("url", usuario.getFotoUrl(), "message", "Foto actualizada con éxito"));
     }
+
+    @DeleteMapping("/eliminar/{id}")
+    @Transactional
+    public ResponseEntity<?> eliminarFoto(@PathVariable Long id) throws IOException {
+    // 1. Buscamos al usuario
+    Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+    // 2. Si tiene fotoId, la borramos de Cloudinary
+    if (usuario.getFotoId() != null) {
+        cloudinaryService.eliminarImagen(usuario.getFotoId());
+    }
+
+    // 3. Limpiamos los campos en la base de datos
+    usuario.setFotoUrl(null);
+    usuario.setFotoId(null);
+
+    usuarioRepository.save(usuario);
+
+    return ResponseEntity.ok(Map.of("message", "Foto eliminada con éxito"));
+}
 }
