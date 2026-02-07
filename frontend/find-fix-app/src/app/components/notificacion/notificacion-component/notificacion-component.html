@@ -1,0 +1,40 @@
+<div class="notification-wrapper">
+    <button class="bell-btn" (click)="toggleMenu()" [class.active]="esVisible">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+
+        <span *ngIf="cantidadNoLeidas > 0" class="badge">
+            {{ cantidadNoLeidas > 9 ? '+9' : cantidadNoLeidas }}
+        </span>
+    </button>
+
+    <div class="dropdown-menu" *ngIf="esVisible">
+        <div class="dropdown-header">
+            <h3>Notificaciones</h3>
+        </div>
+
+        <div class="dropdown-body">
+            <div *ngIf="notificaciones.length === 0" class="empty-state">
+                <p>No tienes notificaciones.</p>
+            </div>
+
+            <div *ngFor="let noti of notificaciones"
+                 class="noti-item"
+                 [class.unread]="!noti.leida"
+                 (click)="marcarComoLeida(noti)">
+
+                <div class="noti-indicator">
+                    <span *ngIf="!noti.leida" class="dot"></span>
+                </div>
+
+                <div class="noti-content">
+                    <h4>{{ noti.titulo }}</h4>
+                    <p>{{ noti.mensaje }}</p>
+                    <span class="noti-date">{{ noti.fechaCreacion | date:'short' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

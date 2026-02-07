@@ -6,11 +6,12 @@ import { UserProfile } from '../../../models/user/user.model';
 import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { ThemeService } from '../../../services/tema/theme.service';
+import { NotificacionComponent } from "../../../components/notificacion/notificacion-component/notificacion-component";
 
 @Component({
   selector: 'app-cliente-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionComponent],
   templateUrl: './cliente-layout.html',
   styleUrl: './cliente-layout.css',
 })
@@ -63,7 +64,7 @@ export class ClienteLayout {
   }
 
 toggleTheme() {
-    this.themeService.toggleTheme(); 
+    this.themeService.toggleTheme();
   }
 
  /** Cambia el rol de cliente a especialista y viceversa */
