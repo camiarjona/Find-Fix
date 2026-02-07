@@ -1,6 +1,6 @@
 package com.findfix.find_fix_app.resena.service;
 
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;

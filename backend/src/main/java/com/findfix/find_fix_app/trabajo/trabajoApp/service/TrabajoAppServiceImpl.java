@@ -2,7 +2,7 @@ package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;

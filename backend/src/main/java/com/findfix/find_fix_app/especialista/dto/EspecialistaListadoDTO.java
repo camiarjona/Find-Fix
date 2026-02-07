@@ -13,6 +13,8 @@ public class EspecialistaListadoDTO implements DatosEspecialista {
     private Set<String> oficios;
     private Double calificacionPromedio;
     private String email;
+    private Double latitud;
+    private Double longitud;
 
     public EspecialistaListadoDTO(Especialista especialista) {
         this.nombre = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getNombre() : "Usuario desvinculado");
@@ -21,7 +23,7 @@ public class EspecialistaListadoDTO implements DatosEspecialista {
 
         // Manejo de ciudad nula
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
-                ? especialista.getUsuario().getCiudad().getNombreAmigable()
+                ? especialista.getUsuario().getCiudad()
                 : "No especificado";
 
         // Manejo de oficios nulos
@@ -29,6 +31,9 @@ public class EspecialistaListadoDTO implements DatosEspecialista {
 
         // Cálculo de calificación
         this.calificacionPromedio = calcularPromedioCalificacion(especialista);
+
+        this.latitud = especialista.getUsuario().getLatitud();
+        this.longitud = especialista.getUsuario().getLongitud();
     }
 
 }

@@ -1,20 +1,21 @@
 package com.findfix.find_fix_app.config;
 
+import com.findfix.find_fix_app.utils.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import jakarta.servlet.http.Cookie;
 
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,15 +23,26 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         request -> request
+                                //rutas públicas
+                                .requestMatchers("/auth/**", "/especialistas/publico").permitAll()
 
-                                .requestMatchers("/auth/login", "/auth/registrar", "/especialistas/publico").permitAll()
+                                //foto de perfil usuario
+                                .requestMatchers(HttpMethod.POST, "/api/usuarios/foto/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/usuarios/foto/**").permitAll()
 
                                 //rutas usuario comun
                                 .requestMatchers(
@@ -42,19 +54,13 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
 
                                 //OFICIOS ESPECIALISTA/CLIENTE
-                                .requestMatchers("/oficios/disponibles").hasAnyRole("ESPECIALISTA", "CLIENTE")
+                                .requestMatchers("/oficios/**").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
 
-                                .requestMatchers("/oficios").hasAnyRole("ESPECIALISTA", "CLIENTE", "ADMIN")
+                                // OFICIOS ADMIN
+                                .requestMatchers("/admin/oficios/**").hasAnyRole("ADMIN")
 
-                                // DELETE | OFICIOS | ROLES
-                                .requestMatchers("/admin/**",
-                                        "/oficios/buscar/{id}",
-                                        "/oficios/agregar",
-                                        "/oficios/actualizar/{id}",
-                                        "/oficios/eliminar/{id}",
-                                        "/oficios/nombre/{nombre}",
-                                        "/roles/**")
-                                .hasRole("ADMIN")
+                                // ROLES ADMIN
+                                .requestMatchers("/roles/**").hasRole("ADMIN")
 
                                 //TRABAJOS EXTERNOS (para especialistas)
                                 .requestMatchers("/trabajos-externos/**").hasRole("ESPECIALISTA")
@@ -105,6 +111,10 @@ public class SecurityConfig {
                                         "/solicitud-especialista/actualizar/{id}")
                                 .hasRole("ADMIN")
 
+                                //BARRIOS
+
+                                .requestMatchers(HttpMethod.GET, "/api/barrios/**").permitAll()
+
                                 //ESPECIALISTAS
                                 .requestMatchers("/especialistas/disponibles").hasAnyRole("CLIENTE", "ESPECIALISTA")
 
@@ -138,22 +148,8 @@ public class SecurityConfig {
 
                                 .anyRequest().authenticated()
                 )
-                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .addLogoutHandler((request, response, authentication) -> {
-                            Cookie cookie = new Cookie("JSESSIONID", null);
-                            cookie.setPath("/");
-                            cookie.setHttpOnly(true);
-                            cookie.setMaxAge(0);
-                            response.addCookie(cookie);
-                            System.out.println(">>> LOGOUT: Cookie JSESSIONID borrada manualmente.");
-                        })
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            response.setStatus(HttpStatus.OK.value());
-                        })
-                )
+                .authenticationProvider(authenticationProvider) // Usamos el provider de ApplicationConfig
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Ponemos nuestro filtro
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -176,14 +172,7 @@ public class SecurityConfig {
                                     """);
                         })
                 )
-                .csrf(AbstractHttpConfigurer::disable)
-                //.httpBasic(Customizer.withDefaults())
                 .build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors} from '@angular/common/http';
 import { httpCredentialInterceptor } from './components/interceptors/http-credential.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { authInterceptor } from './components/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(
-        withInterceptors([httpCredentialInterceptor])
+        withInterceptors([authInterceptor])
     ),
 
     provideCharts(withDefaultRegisterables())

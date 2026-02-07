@@ -1,7 +1,7 @@
 package com.findfix.find_fix_app.solicitudEspecialista.service;
 
 import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;

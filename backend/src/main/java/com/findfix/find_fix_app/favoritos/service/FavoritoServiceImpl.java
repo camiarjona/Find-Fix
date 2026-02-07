@@ -5,7 +5,7 @@ import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.favoritos.model.Favorito;
 import com.findfix.find_fix_app.favoritos.repository.FavoritoRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.FavoritoException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;

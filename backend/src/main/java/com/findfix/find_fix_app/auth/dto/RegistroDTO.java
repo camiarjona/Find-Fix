@@ -1,4 +1,4 @@
-package com.findfix.find_fix_app.utils.auth.dto;
+package com.findfix.find_fix_app.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +25,14 @@ public record RegistroDTO(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
                 message = "El apellido no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
-        String apellido
+        String apellido,
+
+        @NotBlank(message = "La ciudad es obligatoria")
+        String ciudad,
+
+        Double latitud,
+
+        Double longitud
 
 ) {
 }

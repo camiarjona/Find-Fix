@@ -19,6 +19,7 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
     private Set<Oficio> oficios;
     private Double calificacionPromedio;
     private Long dni;
+    private String fotoUrl;
 
     public VerPerfilEspecialistaDTO(Especialista especialista) {
 
@@ -28,11 +29,16 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
 
         // Verificar ciudad
         this.ciudad = (especialista.getUsuario().getCiudad() != null)
-                ? especialista.getUsuario().getCiudad().getNombreAmigable()
+                ? especialista.getUsuario().getCiudad()
                 : "No especificado";
 
         this.telefono = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getTelefono() : "Usuario desvinculado");
         this.descripcion = validarYObtenerString(especialista.getDescripcion());
+
+        // Asignar foto
+        this.fotoUrl = (especialista.getUsuario() != null) 
+                ? especialista.getUsuario().getFotoUrl() 
+                : null;
 
         // Verificar oficios
         this.oficios = especialista.getOficios();
