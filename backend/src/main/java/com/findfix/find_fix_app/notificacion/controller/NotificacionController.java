@@ -5,7 +5,7 @@ import com.findfix.find_fix_app.notificacion.model.Notificacion;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
-import com.findfix.find_fix_app.utils.auth.service.AuthService;
+import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
