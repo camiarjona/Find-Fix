@@ -2,8 +2,6 @@ package com.findfix.find_fix_app.usuario.service;
 
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
-import com.findfix.find_fix_app.utils.auth.service.AuthService;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.rol.model.Rol;
