@@ -7,6 +7,7 @@ import com.findfix.find_fix_app.auth.dto.RegistroDTO;
 import com.findfix.find_fix_app.auth.dto.TokenRefreshResponseDTO;
 import com.findfix.find_fix_app.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.auth.model.RefreshToken;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
@@ -32,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
-
+    private final NotificacionService notificacionService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
@@ -113,8 +114,9 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
 
         usuario.getRoles().add(rol);
-
-        return usuarioRepository.save(usuario);
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        notificacionService.notificarBienvenida(usuarioGuardado, "CLIENTE");
+        return usuarioGuardado;
     }
 
     @Override

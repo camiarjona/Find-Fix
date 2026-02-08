@@ -10,7 +10,7 @@ public interface NotificacionService {
 
     List<NotificacionDTO> obtenerMisNotificaciones(Usuario usuario, String rolVista);
     void marcarComoLeida(Long idNotificacion);
-
+    void notificarBienvenida(Usuario usuario, String rolDestinatario);
 
     void notificar(Usuario destinatario, String titulo, String mensaje, String rolDestinatario);
 
