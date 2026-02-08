@@ -17,10 +17,11 @@
 }
 
 .profile-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -35,6 +36,8 @@
   box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
   overflow: visible;
   border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 900px;
 }
 
 .card-header {
@@ -372,7 +375,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hero Section */
+/* Foto */
 .profile-hero-section {
   display: flex;
   flex-direction: column;
@@ -386,26 +389,35 @@
 
 .avatar-wrapper {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   cursor: pointer;
   border: 4px solid #fff;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   overflow: hidden;
   margin-bottom: 15px;
-  background: #ff9b29; /* Color de fondo si hay iniciales */
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .avatar-initials {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-  color: white;
-  font-weight: bold;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #ffffff !important;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-info h3 { margin: 0; font-size: 1.5rem; }
@@ -451,7 +463,7 @@
 /* Layout del Modal */
 .modal-content-layout {
   display: flex;
-  align-items: flex-start; /* Alinea los labels arriba */
+  align-items: flex-start;
   justify-content: center;
   gap: 50px;
   padding: 20px 0;
@@ -460,7 +472,7 @@
 .editor-column {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra todo horizontalmente dentro de la columna */
+  align-items: center;
   width: 250px;
 }
 
@@ -489,13 +501,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  border: none;
 }
 
 /* Dropzone alineado y limpio */
 .clean-dropzone {
-  width: 180px !important; /* Mismo ancho que el círculo para simetría */
+  width: 180px !important;
   height: 180px !important;
-  border: 2px dashed #ddd !important; /* Un borde sutil ayuda a ver dónde cliquear */
+  border: 2px dashed #ddd !important;
   border-radius: 15px !important;
   background: #fafafa !important;
   transition: all 0.3s ease;
@@ -529,31 +543,31 @@
 
 /* Footer del modal */
 .modal-footer {
-  margin-top: 30px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 15px;
-  border-top: 1px solid #eee;
+  gap: 20px;
+  width: 100%;
   padding-top: 20px;
+  position: relative;
 }
 
 /* Paleta de Colores Principal */
 :root {
-  --ff-orange: #f36f21; /* El naranja característico */
+  --ff-orange: #f36f21;
   --ff-orange-hover: #d95d1a;
   --ff-bg-gray: #f4f4f4;
 }
 
-/* Modal Estilo Premium */
 .photo-editor-modal {
   background: white;
-  padding: 40px; /* Más espacio para que no se encimen los textos */
+  padding: 40px;
   border-radius: 20px;
   position: relative;
   max-width: 650px;
   width: 95%;
   box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-  font-family: inherit; /* Usa la misma letra que tu app */
+  font-family: inherit;
 }
 
 /* Cruz de cierre Naranja */
@@ -625,6 +639,11 @@
   font-family: inherit;
 }
 
+.btn-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(0.9);
+}
+
 .btn-primary {
   background: var(--ff-orange);
   color: white;
@@ -654,16 +673,14 @@
   --ff-orange-hover: #d95d1a;
 }
 
-/* Modal con espacio suficiente para que no se tape nada */
 .photo-editor-modal {
   background: white;
-  padding: 50px 40px 40px; /* Más padding arriba para la cruz */
+  padding: 50px 40px 40px;
   border-radius: 20px;
   position: relative;
   max-width: 600px;
   width: 90%;
   box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  /* IMPORTANTE: Quitamos overflow hidden para que se vea la cruz afuera */
   overflow: visible !important;
 }
 
@@ -681,16 +698,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px; /* Tamaño de la X */
+  font-size: 30px;
   cursor: pointer;
   z-index: 9999;
 }
 
-/* Solución palabra tapada: labels de columna */
 .column-label {
   font-weight: 700;
   color: #444;
-  margin-bottom: 30px !important; /* Más espacio abajo */
+  margin-bottom: 30px !important;
   display: block;
   width: 100%;
   text-align: center;
@@ -709,7 +725,6 @@
   position: relative;
 }
 
-/* Forzamos a que la imagen subida ocupe todo el cuadro */
 ngx-dropzone-image-preview {
   width: 100% !important;
   height: 100% !important;
@@ -719,22 +734,21 @@ ngx-dropzone-image-preview {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
 }
 
-/* BOTONES - Colores Sólidos */
-.btn-action {
-  padding: 12px 25px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: 0.3s;
-}
-
+/* Mas botones */
 .btn-save-new {
-  background-color: #f36f21;;
+  background-color: #f36f21;
   color: white !important;
   box-shadow: 0 4px 12px rgba(243, 111, 33, 0.2);
+}
+
+.btn-save-new:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-discard-new {
@@ -747,45 +761,220 @@ ngx-dropzone-image-preview {
   background: #e5e5e5 !important;
 }
 
-
-
-/* 2. EFECTO HOVER EN EL AVATAR PRINCIPAL (Donde hacés click) */
-.avatar-wrapper {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 .avatar-wrapper:hover {
-  transform: scale(1.05); /* Se agranda un poquito */
+  transform: scale(1.05);
   box-shadow: 0 8px 25px rgba(243, 111, 33, 0.3);
 }
 
-/* 3. EFECTOS EN BOTONES (Elevación y Sombra) */
+/* 3. EFECTOS EN BOTONES */
 .btn-save-new {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .btn-save-new:hover:not(:disabled) {
   background: #d95d1a !important;
-  transform: translateY(-3px); /* Se eleva */
+  transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(243, 111, 33, 0.4) !important;
 }
 
 .btn-save-new:active:not(:disabled) {
-  transform: translateY(-1px); /* Efecto de rebote al cliquear */
+  transform: translateY(-1px);
 }
 
-/* Efecto para el botón descartar */
+.btn-delete-photo {
+  background-color: #f36f21;
+  color: #ffffff;
+  position: absolute;
+  left: 0;
+}
+
+.btn-delete-photo:hover:not(:disabled) {
+  background: #d95d1a !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(243, 111, 33, 0.4) !important;
+}
+
+.btn-delete-photo:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
 .btn-discard-new:hover {
   background: #ebebeb !important;
   color: #333 !important;
   transform: translateY(-2px);
 }
 
-/* Para que la previsualización también sea circular al elegir la foto */
-ngx-dropzone-image-preview {
-  border-radius: 50% !important;
+.clean-dropzone-orange {
+  border: 2px dashed #ddd !important;
+  border-radius: 15px !important;
+  background: var(--ff-bg-gray) !important;
+  width: 190px !important;
+  height: 190px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+}
+
+.clean-dropzone-orange ngx-dropzone-label {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* 2. La imagen ocupa todo el cuadrado punteado */
+.custom-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3. Estilo de la cruz (Blanca con cruz negra) */
+.remove-btn-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 4. Efecto HOVER */
+.custom-preview:hover .remove-btn-overlay {
+  opacity: 1;
+}
+
+.remove-btn-overlay:hover {
+  transform: scale(1.1);
+  background: #f0f0f0;
+}
+
+.drop-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  gap: 8px;
+}
+
+.drop-instructions i {
+  font-size: 1.8rem;
+  color: var(--ff-orange);
+}
+
+.drop-instructions span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 25px;
+  padding: 0 10px;
+}
+
+.left-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: fit-content;
+}
+
+.main-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: white;
+  display: block;
+}
+
+/* --- AJUSTE PARA TABLETS Y CELULARES --- */
+@media (max-width: 768px) {
+  .avatar-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+
+  .avatar-initials svg {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .profile-hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .photo-editor-modal {
+    padding: 40px 20px 25px;
+    width: 95%;
+    border-radius: 15px;
+  }
+
+  .photo-editor-modal h2 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-action {
+    width: 100%;
+    margin: 0;
+  }
 }

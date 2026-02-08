@@ -43,7 +43,10 @@ public class Usuario {
     @Column(name = "ciudad")
     private String ciudad;
     
+    @Column(name = "foto_url")
     private String fotoUrl; // URL imagen
+
+    @Column(name = "foto_id")
     private String fotoId;  // public_id Cloudinary
 
 

@@ -4,6 +4,7 @@ import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
 import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
@@ -12,6 +13,7 @@ import com.findfix.find_fix_app.solicitudEspecialista.Specifications.SolicitudEs
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.repository.SolicitudEspecialistaRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
+import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,7 +30,8 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     private final SolicitudEspecialistaRepository solicitudEspecialistaRepository;
     private final EspecialistaService especialistaService;
     private final UsuarioService usuarioService;
-
+    private final NotificacionService notificacionService; 
+    private final UsuarioRepository usuarioRepository;
 
     /// Metodo para que el usuario mande una solicitud para ser especialista
     @Override
@@ -39,13 +42,17 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         verificarUsuario(usuario);
-
+      
         solicitudEspecialista.setUsuario(usuario);
         solicitudEspecialista.setFechaSolicitud(LocalDate.now());
         solicitudEspecialista.setMotivo(dto.motivo());
         solicitudEspecialista.setEstado(EstadosSolicitudes.PENDIENTE);
 
         solicitudEspecialistaRepository.save(solicitudEspecialista);
+        Usuario admin = usuarioRepository.findByEmail("findfixapp.utn@gmail.com") 
+                .orElseThrow(() -> new UsuarioNotFoundException("No se encontró al admin para notificar"));
+        notificacionService.notificarAdminNuevaSolicitudEspecialista(admin, solicitudEspecialista.getUsuario().getNombre(),"ADMIN");
+        notificacionService.notificarConfirmacionSolicitudEspecialistaEnviada(solicitudEspecialista.getUsuario(),"CLIENTE");
     }
 
     /// Metodo para controlar y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
@@ -125,6 +132,10 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
                 solicitudEspecialista.setRespuesta(respuesta);
                 usuarioService.agregarRol(solicitudEspecialista.getUsuario(), "ESPECIALISTA");
                 especialistaService.guardar(solicitudEspecialista.getUsuario());
+                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), true,"CLIENTE");
+            }else if(nuevoEstado == EstadosSolicitudes.RECHAZADO)
+            {
+                notificacionService.notificarResolucionSolicitudRol(solicitudEspecialista.getUsuario(), false,"CLIENTE");
             }
         }
         solicitudEspecialistaRepository.save(solicitudEspecialista);

@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ThemeService } from '../../../services/tema/theme.service';
+import { NotificacionComponent } from "../../../components/notificacion/notificacion-component/notificacion-component";
 
 @Component({
   selector: 'app-especialista-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionComponent],
   templateUrl: './especialista-layout.html',
   styleUrl: './especialista-layout.css',
 })

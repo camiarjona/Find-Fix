@@ -3,6 +3,7 @@ package com.findfix.find_fix_app.resena.service;
 import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.utils.enums.EstadosTrabajos;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.resena.dto.CrearResenaDTO;
@@ -27,6 +28,7 @@ public class ResenaServiceImpl implements ResenaService {
     private final AuthServiceImpl autorizacion;
     private final EspecialistaService especialistaService;
     private final TrabajoAppService trabajoService;
+    private final NotificacionService notificacionService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -50,7 +52,8 @@ public class ResenaServiceImpl implements ResenaService {
         resena.setComentario(dto.getComentario());
         resena.setPuntuacion(dto.getPuntuacion());
         resena.setTrabajoApp(trabajo);
-
+        notificacionService.notificarNuevaResenaRecibida(trabajo.getEspecialista().getUsuario(),trabajo.getUsuario().getNombre(),"ESPECIALISTA");
+        notificacionService.notificarConfirmacionResenaRealizada(trabajo.getUsuario(),trabajo.getEspecialista().getUsuario().getNombre(), "CLIENTE");
         return repository.save(resena);
     }
 

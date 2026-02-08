@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void precargarAdmin() {
-        String emailAdmin = "admin@admin.com";
+        String emailAdmin = "findfixapp.utn@gmail.com";
 
         if (!usuarioRepository.existsByEmail(emailAdmin)) {
             Rol rolAdmin = rolRepository.findByNombre("ADMIN")

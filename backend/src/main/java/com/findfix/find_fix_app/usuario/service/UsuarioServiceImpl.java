@@ -1,6 +1,8 @@
 package com.findfix.find_fix_app.usuario.service;
 
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
+import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
 import com.findfix.find_fix_app.rol.model.Rol;
@@ -33,7 +35,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     @Lazy
     private EspecialistaService especialistaService;
-
+    private final NotificacionService notificacionService;
     private final UsuarioDesvinculacionService usuarioDesvinculacionService;
 
     //metodo para guardar un usuario basico
@@ -96,6 +98,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setPassword(passwordEncoder.encode(actualizarPasswordDTO.passwordNuevo()));
         usuarioRepository.save(usuario);
+        notificacionService.notificarCambioContrasenaExitoso(usuario,"CLIENTE");
+        
     }
 
     // metodo para actualizar atributos de un usuario
