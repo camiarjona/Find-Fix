@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { LoginCredentials, RegisterCredentials, UserProfile } from '../../models/user/user.model';
 import { ApiResponse } from '../../models/api-response/apiResponse.model';
@@ -30,41 +30,78 @@ export class AuthService {
     return user?.roles.includes('CLIENTE') && user.roles.includes('ESPECIALISTA');
   })
 
+  constructor() {
+    this.recuperarSesion();
+  }
+
 
   login(credentials: LoginCredentials) {
-    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/auth/login`, credentials, {withCredentials: true})
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true })
       .pipe(
         tap(response => {
           if (response.data) {
-            localStorage.setItem('accessToken', response.data.accessToken);
-
-            const user: UserProfile = {
-              usuarioId: response.data.id,
-              email: response.data.email,
-              nombre: response.data.nombre,
-              apellido: response.data.apellido,
-              roles: response.data.roles,
-              activo: response.data.activo
-            };
-
-            this.currentUser.set(user);
+            this.handleAuthentication(response.data);
           }
         })
       );
   }
 
-  logout(): void {
-    console.log('🚪 Iniciando proceso de logout...');
+  loginWithGoogle(googleToken: string) {
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/auth/login/google`, { token: googleToken }, { withCredentials: true })
+      .pipe(
+        tap(response => {
+          if (response.data) {
+            this.handleAuthentication(response.data);
+          }
+        }
+        ));
+  }
 
-    this.http.post(`${this.apiUrl}/auth/logout`, {}, { responseType: 'text', withCredentials: true})
+  private handleAuthentication(data: AuthResponse) {
+    // 1. Guardar Access Token
+    localStorage.setItem('accessToken', data.accessToken);
+
+    // 2. Mapear respuesta a UserProfile
+    const user: UserProfile = {
+      usuarioId: data.id,
+      email: data.email,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      roles: data.roles,
+      activo: data.activo
+    };
+
+    localStorage.setItem('currentUser', JSON.stringify(user));
+
+    this.currentUser.set(user);
+  }
+
+  private recuperarSesion() {
+    const accessToken = localStorage.getItem('accessToken');
+    const userStored = localStorage.getItem('currentUser');
+
+    if (accessToken && userStored) {
+      try {
+        const user: UserProfile = JSON.parse(userStored);
+        this.currentUser.set(user);
+      } catch (e) {
+        console.error('Error recuperando sesión local', e);
+        this.logout();
+      }
+    }
+  }
+
+  logout(): void {
+    console.log('Iniciando proceso de logout...');
+
+    this.http.post(`${this.apiUrl}/auth/logout`, {}, { responseType: 'text', withCredentials: true })
       .subscribe({
         next: () => {
-          console.log('✅ Backend confirmó logout. Cookie eliminada.');
+          console.log('Backend confirmó logout. Cookie eliminada.');
           this.finalizarSesionLocal();
         },
         error: (err) => {
-          console.warn('⚠️ El backend no respondió OK, pero cerramos sesión igual.', err);
-          // Forzamos el cierre local aunque el backend falle o dé error de red
+          console.warn('El backend no respondió OK, pero cerramos sesión igual.', err);
           this.finalizarSesionLocal();
         }
       });
@@ -72,9 +109,10 @@ export class AuthService {
 
   private finalizarSesionLocal() {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('currentUser');
     this.currentUser.set(null);
     this.activeRole.set(null);
-    this.router.navigate(['/auth']); // O al home
+    this.router.navigate(['/auth']);
   }
 
   register(register: RegisterCredentials): Observable<ApiResponse<UserProfile>> {
@@ -85,10 +123,10 @@ export class AuthService {
     return this.http.post<ApiResponse<{ accessToken: string }>>(
       `${this.apiUrl}/auth/refresh-token`,
       {},
-      { withCredentials: true } // Envía la cookie automáticamente
+      { withCredentials: true }
     ).pipe(
       tap(response => {
-        if(response.data?.accessToken) {
+        if (response.data?.accessToken) {
           localStorage.setItem('accessToken', response.data.accessToken);
         }
       })
@@ -98,7 +136,7 @@ export class AuthService {
   // --- UTILIDADES ---
 
   public setInitialRole(role: ActiveRole) {
-      this.activeRole.set(role);
+    this.activeRole.set(role);
   }
 
   public switchActiveRole() {
@@ -109,7 +147,7 @@ export class AuthService {
   }
 
   getToken(): string | null {
-      return localStorage.getItem('accessToken');
+    return localStorage.getItem('accessToken');
   }
 
 }
