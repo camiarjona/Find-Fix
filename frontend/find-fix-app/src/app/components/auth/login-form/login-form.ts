@@ -3,10 +3,11 @@ import { Component, EventEmitter, inject, Input, Output, signal } from '@angular
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginCredentials } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
+import { GoogleLoginButton } from '../../utils/google-login-button/google-login-button';
 
 @Component({
   selector: 'app-login-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, GoogleLoginButton],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css',
 })

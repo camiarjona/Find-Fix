@@ -163,7 +163,6 @@
   color: var(--primary-color, #F58634);
 }
 
-
 @media (max-width: 767px) {
 
   :host {

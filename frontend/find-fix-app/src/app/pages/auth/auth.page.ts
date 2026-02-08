@@ -6,6 +6,7 @@ import { LoginCredentials, RegisterCredentials } from '../../models/user/user.mo
 import { RegisterForm } from "../../components/auth/register-form/register-form";
 import { LoginForm } from "../../components/auth/login-form/login-form";
 import { ModalFeedbackComponent } from "../../components/general/modal-feedback.component/modal-feedback.component";
+import { GoogleLoginButton } from '../../components/utils/google-login-button/google-login-button';
 
 @Component({
   selector: 'app-auth-page',
@@ -14,7 +15,8 @@ import { ModalFeedbackComponent } from "../../components/general/modal-feedback.
     CommonModule,
     RegisterForm,
     LoginForm,
-    ModalFeedbackComponent
+    ModalFeedbackComponent,
+    GoogleLoginButton
 ],
   templateUrl: './auth.page.html',
   styleUrl: './auth.page.css'

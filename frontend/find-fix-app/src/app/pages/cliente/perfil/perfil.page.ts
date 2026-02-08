@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
 import { UserProfile, UpdatePasswordRequest } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
-import { FotoPerfilService } from '../../../services/user/foto-perfil'; // Ajustá la ruta si es necesario
-import { NgxDropzoneModule } from 'ngx-dropzone'; // Si tu componente es standalone
+import { FotoPerfilService } from '../../../services/user/foto-perfil';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import { HttpClient } from '@angular/common/http';
 
 interface Barrio {
