@@ -42,9 +42,18 @@ public class OficioServiceImpl implements OficioService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void modificarOficio(Long id, Oficio nuevo) throws OficioNotFoundException {
-        Optional<Oficio> existente = Optional.ofNullable(buscarPorId(id).orElseThrow(() -> new OficioNotFoundException("\n Oficio no encontrado. ")));
-            existente.get().setNombre(nuevo.getNombre());
-            oficioRepository.save(existente.get());
+        Oficio existente = buscarPorId(id)
+                .orElseThrow(() -> new OficioNotFoundException("Oficio no encontrado."));
+
+        String nuevoNombre = nuevo.getNombre().toUpperCase().trim();
+
+        if (!existente.getNombre().equalsIgnoreCase(nuevoNombre) &&
+                oficioRepository.existsByNombreIgnoreCase(nuevoNombre)) {
+            throw new OficioNotFoundException("Ya existe otro oficio con el nombre: " + nuevoNombre);
+        }
+
+        existente.setNombre(nuevoNombre);
+        oficioRepository.save(existente);
     }
 
     @Override

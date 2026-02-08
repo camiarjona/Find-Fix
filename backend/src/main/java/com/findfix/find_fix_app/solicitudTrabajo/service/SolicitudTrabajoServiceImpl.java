@@ -1,9 +1,10 @@
 package com.findfix.find_fix_app.solicitudTrabajo.service;
 
-import com.findfix.find_fix_app.utils.auth.service.AuthServiceImpl;
+import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.model.Especialista;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
+import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudTrabajoNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.EspecialistaNotFoundException;
@@ -35,11 +36,13 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     private final EspecialistaService especialistaService;
     private final AuthServiceImpl authServiceImpl;
     private final TrabajoAppService trabajoAppService;
+    private final NotificacionService notificacionService;
 
-    //metodo para registrar una nueva solicitud de trabajo
+    // metodo para registrar una nueva solicitud de trabajo
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public SolicitudTrabajo registrarNuevaSolicitud(SolicitarTrabajoDTO solicitarTrabajoDTO) throws UsuarioNotFoundException, EspecialistaNotFoundException {
+    public SolicitudTrabajo registrarNuevaSolicitud(SolicitarTrabajoDTO solicitarTrabajoDTO)
+            throws UsuarioNotFoundException, EspecialistaNotFoundException {
         SolicitudTrabajo solicitudTrabajo = new SolicitudTrabajo();
 
         Especialista especialista = especialistaService.buscarPorEmail(solicitarTrabajoDTO.emailEspecialista())
@@ -50,23 +53,32 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
         solicitudTrabajo.setUsuario(authServiceImpl.obtenerUsuarioAutenticado());
         solicitudTrabajo.setFechaCreacion(LocalDate.now());
         solicitudTrabajo.setEspecialista(especialista);
+        notificacionService.notificarNuevaSolicitudTrabajoRecibida(
+                solicitudTrabajo.getEspecialista().getUsuario(),
+                solicitudTrabajo.getUsuario().getNombre(),
+                solicitudTrabajo.getDescripcion(), "ESPECIALISTA");
+        notificacionService.notificarConfirmacionSolicitudEnviada(
+                solicitudTrabajo.getUsuario(),
+                solicitudTrabajo.getEspecialista().getUsuario().getNombre(),"CLIENTE");
         return solicitudTrabajoRepository.save(solicitudTrabajo);
     }
 
-    //metodo para actualizar el estado de una solicitud (especialista)
+    // metodo para actualizar el estado de una solicitud (especialista)
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void actualizarEstadoSolicitud(ActualizarEstadoDTO actualizar, Long idSolicitud) throws SolicitudTrabajoNotFoundException, UsuarioNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
+    public void actualizarEstadoSolicitud(ActualizarEstadoDTO actualizar, Long idSolicitud)
+            throws SolicitudTrabajoNotFoundException, UsuarioNotFoundException, EspecialistaNotFoundException,
+            SolicitudTrabajoException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         SolicitudTrabajo solicitudTrabajo = solicitudTrabajoRepository.findById(idSolicitud)
                 .orElseThrow(() -> new SolicitudTrabajoNotFoundException("Solicitud de trabajo no encontrada"));
 
-        //validamos que la solicitud a actualizar corresponda al especialista
+        // validamos que la solicitud a actualizar corresponda al especialista
         validarEspecialista(solicitudTrabajo, especialista);
 
-        //validamos el estado de la solicitud ingresada
+        // validamos el estado de la solicitud ingresada
         validarEstado(solicitudTrabajo);
 
         if (actualizar.tieneEstado()) {
@@ -78,6 +90,12 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
             // si la solicitud es aceptada, pasa a ser un trabajo en la app
             if (nuevoEstado == EstadosSolicitudes.ACEPTADO) {
                 trabajoAppService.registrarDesdeSolicitud(solicitudTrabajo, especialista);
+                notificacionService.notificarRespuestaSolicitudTrabajo(solicitudTrabajo.getUsuario(),
+                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), true,"CLIENTE");
+                notificacionService.notificarNuevoTrabajoCreado(solicitudTrabajo.getEspecialista().getUsuario(),solicitudTrabajo.getUsuario().getNombre(),"ESPECIALISTA");
+            } else if (nuevoEstado == EstadosSolicitudes.RECHAZADO) {
+                notificacionService.notificarRespuestaSolicitudTrabajo(solicitudTrabajo.getUsuario(),
+                        solicitudTrabajo.getEspecialista().getUsuario().getNombre(), false,"CLIENTE");
             }
         }
     }
@@ -85,7 +103,8 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     // metodo para obtener las solicitudes enviadas (como cliente)
     @Override
     @Transactional(readOnly = true)
-    public List<SolicitudTrabajo> obtenerSolicitudesDelCliente() throws UsuarioNotFoundException, SolicitudTrabajoException {
+    public List<SolicitudTrabajo> obtenerSolicitudesDelCliente()
+            throws UsuarioNotFoundException, SolicitudTrabajoException {
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         List<SolicitudTrabajo> solicitudesEnviadas = solicitudTrabajoRepository.findByUsuario(usuario);
@@ -100,16 +119,19 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     // metodo para obtener las solicitudes recibidas (como especialista)
     @Override
     @Transactional(readOnly = true)
-    public List<SolicitudTrabajo> obtenerSolicitudesDelEspecialista() throws UsuarioNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
+    public List<SolicitudTrabajo> obtenerSolicitudesDelEspecialista()
+            throws UsuarioNotFoundException, EspecialistaNotFoundException, SolicitudTrabajoException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
         return solicitudTrabajoRepository.findByEspecialista(especialista);
     }
 
-    // metodo para eliminar una solicitud de trabajo si aún está pendiente (cancelar trabajo desde cliente)
+    // metodo para eliminar una solicitud de trabajo si aún está pendiente (cancelar
+    // trabajo desde cliente)
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void eliminarSolicitud(Long idSolicitud) throws SolicitudTrabajoNotFoundException, UsuarioNotFoundException, SolicitudTrabajoException {
+    public void eliminarSolicitud(Long idSolicitud)
+            throws SolicitudTrabajoNotFoundException, UsuarioNotFoundException, SolicitudTrabajoException {
         SolicitudTrabajo solicitudTrabajo = solicitudTrabajoRepository.findById(idSolicitud)
                 .orElseThrow(() -> new SolicitudTrabajoNotFoundException("Solicitud de trabajo no encontrada"));
 
@@ -131,7 +153,8 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     // metodo para filtrar solicitudes según criterios
     @Override
     @Transactional(readOnly = true)
-    public List<SolicitudTrabajo> filtrarSolicitudesRecibidas(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UsuarioNotFoundException, EspecialistaNotFoundException {
+    public List<SolicitudTrabajo> filtrarSolicitudesRecibidas(BuscarSolicitudDTO filtro)
+            throws SolicitudTrabajoException, UsuarioNotFoundException, EspecialistaNotFoundException {
 
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
@@ -156,7 +179,8 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SolicitudTrabajo> filtrarSolicitudesEnviadas(BuscarSolicitudDTO filtro) throws SolicitudTrabajoException, UsuarioNotFoundException {
+    public List<SolicitudTrabajo> filtrarSolicitudesEnviadas(BuscarSolicitudDTO filtro)
+            throws SolicitudTrabajoException, UsuarioNotFoundException {
 
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
@@ -195,9 +219,11 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
 
     // metodo para validar que la solicitud corresponda al especialista
     @Override
-    public void validarEspecialista(SolicitudTrabajo solicitudTrabajo, Especialista especialista) throws SolicitudTrabajoException {
+    public void validarEspecialista(SolicitudTrabajo solicitudTrabajo, Especialista especialista)
+            throws SolicitudTrabajoException {
         if (!Objects.equals(especialista.getEspecialistaId(), solicitudTrabajo.getEspecialista().getEspecialistaId())) {
-            throw new SolicitudTrabajoException("La solicitud que desea modificar no le pertenece. Corrobore el id ingresado.");
+            throw new SolicitudTrabajoException(
+                    "La solicitud que desea modificar no le pertenece. Corrobore el id ingresado.");
         }
     }
 
@@ -205,7 +231,8 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     @Override
     public void validarCliente(SolicitudTrabajo solicitudTrabajo, Usuario usuario) throws SolicitudTrabajoException {
         if (!Objects.equals(usuario.getUsuarioId(), solicitudTrabajo.getUsuario().getUsuarioId())) {
-            throw new SolicitudTrabajoException("La solicitud que desea eliminar no le pertenece. Corrobore el id ingresado.");
+            throw new SolicitudTrabajoException(
+                    "La solicitud que desea eliminar no le pertenece. Corrobore el id ingresado.");
         }
     }
 

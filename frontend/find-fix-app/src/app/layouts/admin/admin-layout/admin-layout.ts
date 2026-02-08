@@ -3,10 +3,11 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angular/router';
 import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 import { ThemeService } from '../../../services/tema/theme.service';
+import { NotificacionComponent } from "../../../components/notificacion/notificacion-component/notificacion-component";
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterOutlet, RouterLinkWithHref],
+  imports: [RouterOutlet, RouterLinkWithHref, NotificacionComponent],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
 })

@@ -2,8 +2,13 @@
   <form (ngSubmit)="submitOficio()">
 
     <div class="form-header">
-      <h2>Nuevo Oficio</h2>
-      <p>Ingresa el nombre de la especialidad para agregarla al catálogo.</p>
+      @if (formStatus() === 'editing') {
+        <h2>Editar Oficio</h2>
+        <p>Modifica el nombre de la especialidad seleccionada.</p>
+      } @else {
+        <h2>Nuevo Oficio</h2>
+        <p>Ingresa el nombre de la especialidad para agregarla al catálogo.</p>
+      }
     </div>
 
     <div class="form-body">
@@ -34,18 +39,22 @@
       }
     </div>
 
-    <div class="form-footer">
+<div class="form-footer">
       <button type="button" class="btn-cancel" (click)="cancel()" [disabled]="isLoading()">
         Cancelar
       </button>
+
       <button type="submit" class="btn-submit" [disabled]="!oficioName.trim() || isLoading()">
         @if (isLoading()) {
-        <span class="spinner-mini"></span> Guardando...
+          <span class="spinner-mini"></span> Procesando...
         } @else {
-        Guardar Oficio
+          @if (formStatus() === 'editing') {
+            Actualizar Oficio
+          } @else {
+            Guardar Oficio
+          }
         }
       </button>
     </div>
-
   </form>
 </div>

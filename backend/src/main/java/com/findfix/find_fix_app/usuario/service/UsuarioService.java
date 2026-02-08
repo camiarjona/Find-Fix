@@ -23,7 +23,6 @@ public interface UsuarioService {
     void eliminarRol(Usuario usuario, String nombreRol) throws RolNotFoundException;
     VerPerfilUsuarioDTO verPerfilUsuario() throws UsuarioNotFoundException;
     void actualizarUsuarioEspecialista(Usuario usuario);
-    List<String> ciudadesDisponibles();
     void desactivarUsuario(String email) throws UsuarioNotFoundException;
     void activarUsuario(String email) throws UsuarioNotFoundException;
     void eliminarCuentaPorEmail(String email) throws UsuarioNotFoundException, EspecialistaNotFoundException, RolNotFoundException;

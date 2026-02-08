@@ -1,0 +1,131 @@
+.notification-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.bell-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 8px;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.bell-btn:hover, .bell-btn.active {
+    color: #ff6600;
+}
+
+
+.badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff3b30;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 16px;
+    text-align: center;
+    border: 2px solid white;
+}
+
+/* El menú flotante */
+.dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: -50px;
+    width: 320px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+    z-index: 1000;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+    background-color: #fff;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.dropdown-body {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+/* Scrollbar linda */
+.dropdown-body::-webkit-scrollbar { width: 6px; }
+.dropdown-body::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
+
+.noti-item {
+    padding: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.noti-item:hover {
+    background-color: #f9f9f9;
+}
+
+
+.noti-item.unread {
+    background-color: #fff8f3;
+    border-left: 4px solid #ff6600;
+}
+
+.noti-indicator {
+    width: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ff6600;
+    border-radius: 50%;
+}
+
+.noti-content h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.noti-content p {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.noti-date {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.empty-state {
+    padding: 30px;
+    text-align: center;
+    color: #999;
+}

@@ -6,6 +6,8 @@ export interface EspecialistaDTO {
   calificacionPromedio: number;
   email: string;
   imagen?: string;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface FiltroEspecialistasDTO {

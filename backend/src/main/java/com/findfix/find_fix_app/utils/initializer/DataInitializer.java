@@ -6,7 +6,6 @@ import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
-import com.findfix.find_fix_app.utils.enums.CiudadesDisponibles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -57,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void precargarAdmin() {
-        String emailAdmin = "admin@admin.com";
+        String emailAdmin = "findfixapp.utn@gmail.com";
 
         if (!usuarioRepository.existsByEmail(emailAdmin)) {
             Rol rolAdmin = rolRepository.findByNombre("ADMIN")
@@ -69,7 +68,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setApellido("Principal");
             admin.setPassword(passwordEncoder.encode("admin123")); // Cambialo si querés
             admin.setRoles(Set.of(rolAdmin));
-            admin.setCiudad(CiudadesDisponibles.NO_ESPECIFICADO);
+            admin.setCiudad("No especificado");
             admin.setTelefono("No especificado");
 
             usuarioRepository.save(admin);

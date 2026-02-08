@@ -1,11 +1,11 @@
-<div class="profile-page-container">
+< class="profile-page-container">
   <div class="page-header">
     <h1>Configuración de Perfil</h1>
     <p>Gestiona tu información personal y la seguridad de tu cuenta</p>
   </div>
 
   @if (isLoading()) {
-    <div class="loading-state">Cargando perfil...</div>
+  <div class="loading-state">Cargando perfil...</div>
   } @else {
 
   <div class="profile-hero-section">
@@ -40,11 +40,11 @@
     </div>
 
     <div class="photo-editor-backdrop" *ngIf="isEditingPhoto()" (click)="cancelarCambioFoto()">
-  <div class="photo-editor-modal" (click)="$event.stopPropagation()">
+      <div class="photo-editor-modal" (click)="$event.stopPropagation()">
 
-    <button class="modal-close-btn" (click)="cancelarCambioFoto()">
-      <span>&times;</span>
-    </button>
+        <button class="modal-close-btn" (click)="cancelarCambioFoto()">
+          <span>&times;</span>
+        </button>
 
     <div class="modal-content-layout">
       <div class="editor-column">
@@ -58,6 +58,21 @@
 </div>
     </div>
 
+          <div class="editor-column">
+            <p class="column-label">Nueva Imagen</p>
+            <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
+              <ngx-dropzone-label>
+                <div class="drop-instructions">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Seleccionar foto</span>
+                </div>
+              </ngx-dropzone-label>
+              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
+                [removable]="true" (removed)="onRemove(f)">
+              </ngx-dropzone-image-preview>
+            </ngx-dropzone>
+          </div>
+        </div>
       <div class="editor-column">
 
         <div class="editor-column" *ngIf="isEditingPhoto()"> <p class="column-label">Nueva Imagen</p>
@@ -105,259 +120,270 @@
 
 </div>
   </div>
-</div>
+
 
   }
 
   <div class="profile-grid">
 
-  @if (isLoading()) {
-  <div class="loading-state">Cargando perfil...</div>
-  } @else {
+    @if (isLoading()) {
+    <div class="loading-state">Cargando perfil...</div>
+    } @else {
 
-  <div class="profile-grid">
+    <div class="profile-grid">
 
-    <section class="card personal-info-card">
-      <div class="card-header">
-        <div class="header-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24"
-            height="24" stroke-width="1.3" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
-          </svg></div>
-        <h2>Información Personal</h2>
-      </div>
+      <section class="card personal-info-card">
+        <div class="card-header">
+          <div class="header-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24"
+              height="24" stroke-width="1.3" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.USER" />
+            </svg></div>
+          <h2>Información Personal</h2>
+        </div>
 
-      <div class="card-body">
+        <div class="card-body">
 
 
-        <ul class="data-list">
-          <li class="data-item">
-            <span class="label">Nombre</span>
-            <div class="value-container">
-              @if (editingField() === 'nombre') {
-              <div class="edit-mode">
-                <input type="text" [(ngModel)]="tempValue" class="input-inline">
-                <button class="action-btn save" (click)="saveEdit('nombre')"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.SAVE">
+          <ul class="data-list">
+            <li class="data-item">
+              <span class="label">Nombre</span>
+              <div class="value-container">
+                @if (editingField() === 'nombre') {
+                <div class="edit-mode">
+                  <input type="text" [(ngModel)]="tempValue" class="input-inline">
+                  <button class="action-btn save" (click)="saveEdit('nombre')"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.SAVE">
+                      </path>
+                    </svg></button>
+                  <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.CANCEL">
+                      </path>
+                    </svg></button>
+                </div>
+                } @else {
+                <span class="value">{{ usuario()?.nombre }}</span>
+                <button class="edit-pencil" (click)="startEdit('nombre', usuario()?.nombre)"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.EDIT">
                     </path>
                   </svg></button>
-                <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.CANCEL">
-                    </path>
-                  </svg></button>
+                }
               </div>
-              } @else {
-              <span class="value">{{ usuario()?.nombre }}</span>
-              <button class="edit-pencil" (click)="startEdit('nombre', usuario()?.nombre)"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.EDIT">
-                  </path>
-                </svg></button>
-              }
-            </div>
-          </li>
+            </li>
 
-          <li class="data-item">
-            <span class="label">Apellido</span>
-            <div class="value-container">
-              @if (editingField() === 'apellido') {
-              <div class="edit-mode">
-                <input type="text" [(ngModel)]="tempValue" class="input-inline">
-                <button class="action-btn save" (click)="saveEdit('apellido')"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.SAVE">
+            <li class="data-item">
+              <span class="label">Apellido</span>
+              <div class="value-container">
+                @if (editingField() === 'apellido') {
+                <div class="edit-mode">
+                  <input type="text" [(ngModel)]="tempValue" class="input-inline">
+                  <button class="action-btn save" (click)="saveEdit('apellido')"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.SAVE">
+                      </path>
+                    </svg></button>
+                  <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.CANCEL">
+                      </path>
+                    </svg></button>
+                </div>
+                } @else {
+                <span class="value">{{ usuario()?.apellido }}</span>
+                <button class="edit-pencil" (click)="startEdit('apellido', usuario()?.apellido)"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.EDIT">
                     </path>
                   </svg></button>
-                <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.CANCEL">
-                    </path>
-                  </svg></button>
+                }
               </div>
-              } @else {
-              <span class="value">{{ usuario()?.apellido }}</span>
-              <button class="edit-pencil" (click)="startEdit('apellido', usuario()?.apellido)"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.EDIT">
-                  </path>
-                </svg></button>
-              }
-            </div>
-          </li>
+            </li>
 
-          <li class="data-item">
-            <span class="label">Email</span>
-            <div class="value-container">
-              <span class="value locked">{{ usuario()?.email }}</span>
-              <span class="lock-icon" title="No editable"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.LOCK"></path>
-                </svg></span>
-            </div>
-          </li>
-
-          <li class="data-item">
-            <span class="label">Teléfono</span>
-            <div class="value-container">
-              @if (editingField() === 'telefono') {
-              <div class="edit-mode">
-                <input type="text" [(ngModel)]="tempValue" class="input-inline">
-                <button class="action-btn save" (click)="saveEdit('telefono')"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.SAVE">
-                    </path>
-                  </svg></button>
-                <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.CANCEL">
-                    </path>
-                  </svg></button>
+            <li class="data-item">
+              <span class="label">Email</span>
+              <div class="value-container">
+                <span class="value locked">{{ usuario()?.email }}</span>
+                <span class="lock-icon" title="No editable"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.LOCK"></path>
+                  </svg></span>
               </div>
-              } @else {
-              <span class="value">{{ usuario()?.telefono || 'No especificado' }}</span>
-              <button class="edit-pencil" (click)="startEdit('telefono', usuario()?.telefono)"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.EDIT">
-                  </path>
-                </svg></button>
-              }
-            </div>
-          </li>
+            </li>
 
-          <li class="data-item">
-            <span class="label">Ciudad</span>
-            <div class="value-container">
-              @if (editingField() === 'ciudad') {
-              <div class="edit-mode">
-                <select [(ngModel)]="tempValue" class="input-inline">
-                  @for (city of availableCities(); track city) {
-                  <option [value]="city">{{ city }}</option>
+            <li class="data-item">
+              <span class="label">Teléfono</span>
+              <div class="value-container">
+                @if (editingField() === 'telefono') {
+                <div class="edit-mode">
+                  <input type="text" [(ngModel)]="tempValue" class="input-inline">
+                  <button class="action-btn save" (click)="saveEdit('telefono')"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.SAVE">
+                      </path>
+                    </svg></button>
+                  <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.CANCEL">
+                      </path>
+                    </svg></button>
+                </div>
+                } @else {
+                <span class="value">{{ usuario()?.telefono || 'No especificado' }}</span>
+                <button class="edit-pencil" (click)="startEdit('telefono', usuario()?.telefono)"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.EDIT">
+                    </path>
+                  </svg></button>
+                }
+              </div>
+            </li>
+
+            <li class="data-item">
+              <span class="label">Zona de trabajo</span>
+              <div class="value-container">
+                @if (editingField() === 'ciudad') {
+                <div class="edit-mode">
+
+                  <div class="search-wrapper">
+                    <input type="text" [value]="tempValue" (input)="buscarCiudades($event)" class="input-inline"
+                      placeholder="Ej: Los Troncos, Mar del Plata">
+
+                    @if (citySuggestions().length > 0) {
+                    <ul class="suggestions-list">
+                      @for (sug of citySuggestions(); track sug.lat) {
+                      <li (click)="seleccionarCiudad(sug)" class="suggestion-item">
+                        {{ sug.nombreVisual }}
+                      </li>
+                      }
+                    </ul>
+                    }
+                  </div>
+
+                  <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.SAVE">
+                      </path>
+                    </svg></button>
+                  <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
+                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                      <path [attr.d]="icons.CANCEL">
+                      </path>
+                    </svg></button>
+                </div>
+                } @else {
+                <span class="value">{{ usuario()?.ciudad || 'No especificada' }}</span>
+                <button class="edit-pencil" (click)="startEdit('ciudad', usuario()?.ciudad)"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.EDIT">
+                    </path>
+                  </svg></button>
+                }
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card security-card">
+        <div class="card-header">
+          <div class="header-icon locked-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              width="30" height="30" stroke-width="1.3" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.ESCUDO" />
+            </svg></div>
+          <h2>Seguridad</h2>
+        </div>
+
+        <div class="card-body">
+          <form (ngSubmit)="changePassword()" class="security-form">
+
+            <div class="form-group">
+              <label>Contraseña Actual</label>
+              <div class="password-wrapper">
+                <input [type]="showCurrentPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordActual"
+                  name="curr" placeholder="••••••" required>
+
+                <button type="button" class="toggle-btn" (click)="togglePass('curr')">
+                  @if (showCurrentPass()) {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                  } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
                   }
-                </select>
-                <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.SAVE">
-                    </path>
-                  </svg></button>
-                <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.CANCEL">
-                    </path>
-                  </svg></button>
+                </button>
               </div>
-              } @else {
-              <span class="value">{{ usuario()?.ciudad || 'No especificada' }}</span>
-              <button class="edit-pencil" (click)="startEdit('ciudad', usuario()?.ciudad)"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.EDIT">
-                  </path>
-                </svg></button>
-              }
             </div>
-          </li>
-        </ul>
-      </div>
-    </section>
 
-    <section class="card security-card">
-      <div class="card-header">
-        <div class="header-icon locked-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            width="30" height="30" stroke-width="1.3" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.ESCUDO" />
-          </svg></div>
-        <h2>Seguridad</h2>
-      </div>
-
-      <div class="card-body">
-        <form (ngSubmit)="changePassword()" class="security-form">
-
-          <div class="form-group">
-            <label>Contraseña Actual</label>
-            <div class="password-wrapper">
-              <input [type]="showCurrentPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordActual"
-                name="curr" placeholder="••••••" required>
-
-              <button type="button" class="toggle-btn" (click)="togglePass('curr')">
-                @if (showCurrentPass()) {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-                }
-              </button>
+            <div class="form-group">
+              <label>Nueva Contraseña</label>
+              <div class="password-wrapper">
+                <input [type]="showNewPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordNuevo" name="new"
+                  placeholder="Mínimo 6 caracteres" required>
+                <button type="button" class="toggle-btn" (click)="togglePass('new')">
+                  @if (showNewPass()) {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                  } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                  }
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>Nueva Contraseña</label>
-            <div class="password-wrapper">
-              <input [type]="showNewPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordNuevo" name="new"
-                placeholder="Mínimo 6 caracteres" required>
-              <button type="button" class="toggle-btn" (click)="togglePass('new')">
-                @if (showNewPass()) {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-                }
-              </button>
+            <div class="form-group">
+              <label>Confirmar Nueva</label>
+              <div class="password-wrapper">
+                <input [type]="showConfirmPass() ? 'text' : 'password'" [(ngModel)]="passwordData.confirmacion"
+                  name="conf" placeholder="Repítela" required>
+                <button type="button" class="toggle-btn" (click)="togglePass('conf')">
+                  @if (showConfirmPass()) {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                  } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                  }
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>Confirmar Nueva</label>
-            <div class="password-wrapper">
-              <input [type]="showConfirmPass() ? 'text' : 'password'" [(ngModel)]="passwordData.confirmacion"
-                name="conf" placeholder="Repítela" required>
-              <button type="button" class="toggle-btn" (click)="togglePass('conf')">
-                @if (showConfirmPass()) {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-                }
-              </button>
-            </div>
-          </div>
+            <button type="submit" class="btn-full-width" [disabled]="isPasswordLoading()">
+              {{ isPasswordLoading() ? 'Actualizando...' : 'Cambiar Contraseña' }}
+            </button>
+          </form>
+        </div>
+      </section>
 
-          <button type="submit" class="btn-full-width" [disabled]="isPasswordLoading()">
-            {{ isPasswordLoading() ? 'Actualizando...' : 'Cambiar Contraseña' }}
-          </button>
-        </form>
-      </div>
-    </section>
-
+    </div>
+    }
   </div>
-  }
-</div>
 
-@if (feedbackData.visible) {
-<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
-  (cerrar)="cerrarFeedback()">
-</app-modal-feedback>
-}
+  @if (feedbackData.visible) {
+  <app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
+    (cerrar)="cerrarFeedback()">
+  </app-modal-feedback>
+  }

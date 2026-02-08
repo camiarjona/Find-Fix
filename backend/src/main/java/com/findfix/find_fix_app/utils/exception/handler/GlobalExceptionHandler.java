@@ -120,6 +120,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    /// maneje de errores para notificaciones
+    @ExceptionHandler(NotificacionException.class)
+    public ResponseEntity<ErrorResponse> handleNotificacionError(NotificacionException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Error de Notificación")
+                .message(ex.getMessage())
+                .path(getCurrentPath())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
     // Maneja errores generales no contemplados
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {

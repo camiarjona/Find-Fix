@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AdminDialogConfirm } from '../admin-dialog-confirm/admin-dialog-confirm';
 import { OficiosFormAdminComponent } from "../oficios-form-admin-component/oficios-form-admin-component";
 import { OficiosService } from '../../../services/admin-services/oficios-service';
-import { messageConfirm, OficioToDelete } from '../../../models/admin-models/oficio-model';
+import { messageConfirm, OficioModel, OficioToDelete } from '../../../models/admin-models/oficio-model';
 
 @Component({
   selector: 'app-oficios-list-admin-component',
@@ -48,9 +48,15 @@ export class OficiosListAdminComponent implements OnInit {
     });
   }
 
-  toggleForm(): void {
+toggleForm(): void {
     const current = this.formStatus();
-    this.oficiosService.formStatus.set(current === 'hidden' ? 'creating' : 'hidden');
+    if (current === 'hidden') {
+      this.oficiosService.selectedOficio.set(null);
+      this.oficiosService.formStatus.set('creating');
+    } else {
+      this.oficiosService.formStatus.set('hidden');
+      this.oficiosService.selectedOficio.set(null);
+    }
   }
 
   eliminarOficio(id: number, nombre: string): void {
@@ -78,8 +84,9 @@ export class OficiosListAdminComponent implements OnInit {
     this.currentOffcioToDelete = { id: null, nombre: null };
   }
 
-  mostrarAvisoEdicion(): void {
-    this.displayPageMessage('⚠️ Esta opción se encuentra deshabilitada momentáneamente.', 'error');
+  editarOficio(oficio: OficioModel): void {
+    this.oficiosService.selectedOficio.set(oficio);
+    this.oficiosService.formStatus.set('editing');
   }
 
   displayPageMessage(message: string, type: 'success' | 'error'): void {
