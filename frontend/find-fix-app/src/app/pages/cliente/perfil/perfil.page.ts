@@ -7,6 +7,7 @@ import { UserProfile, UpdatePasswordRequest } from '../../../models/user/user.mo
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { FotoPerfilService } from '../../../services/user/foto-perfil'; // Ajustá la ruta si es necesario
 import { NgxDropzoneModule } from 'ngx-dropzone'; // Si tu componente es standalone
+import { ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 interface Barrio {
@@ -26,6 +27,7 @@ export class PerfilPage implements OnInit {
 
   private userService = inject(UserService);
   private fotoService = inject(FotoPerfilService);
+  private cd = inject(ChangeDetectorRef);
   private http = inject(HttpClient);
 
   public icons = UI_ICONS;
@@ -36,7 +38,9 @@ export class PerfilPage implements OnInit {
   // --- LÓGICA DE FOTO DE PERFIL ---
   public files: File[] = []; //
   public isPhotoLoading = signal(false);
-  public isEditingPhoto = signal(false); // Controla si mostramos el dropzone
+  public isEditingPhoto = signal(false);
+  public tempPhotoUrl = signal<string | null>(null);
+  public fotoError = signal(false);
 
   // --- LÓGICA DE EDICIÓN (DATOS PERSONALES) ---
   // --- VARIABLES PARA BARRIOS (JSON) ---
@@ -88,48 +92,97 @@ export class PerfilPage implements OnInit {
   loadData() {
     this.isLoading.set(true);
     this.userService.getProfile().subscribe({
-      next: (res) => {
+   next: (res) => {
         this.usuario.set(res.data);
+        this.fotoError.set(false);
         this.isLoading.set(false);
       },
       error: (err) => { console.error(err); this.isLoading.set(false); }
     });
-  }
+    }
 
   // --- NUEVOS MÉTODOS PARA LA FOTO ---
-  onSelect(event: any) {
+ onSelect(event: any) {
+  if (event.addedFiles && event.addedFiles.length > 0) {
+    // 1. Limpiamos y creamos una referencia nueva
+    // (Esto "resetea" visualmente el componente)
     this.files = [];
-    this.files.push(...event.addedFiles);
-  }
 
-  onRemove(event: any) {
-    this.files.splice(this.files.indexOf(event), 1);
+    const file = event.addedFiles[0];
+
+    // 2. Usamos un pequeño delay (setTimeout) para que Angular
+    // procese el vaciado antes de meter el nuevo archivo
+    setTimeout(() => {
+      this.files = [file]; // Asignamos el nuevo archivo en un array nuevo
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.tempPhotoUrl.set(e.target.result);
+        this.cd.detectChanges();
+      };
+      reader.readAsDataURL(file);
+
+      this.cd.detectChanges();
+    }, 0);
   }
+}
+
+ onRemove(event: any) {
+  this.files = [];
+  this.tempPhotoUrl.set(null);
+}
 
   guardarFoto() {
-    const user = this.usuario();
-    if (user && this.files.length > 0) {
-      this.isPhotoLoading.set(true);
+  const user = this.usuario();
+  if (user && this.files.length > 0) {
+    this.isPhotoLoading.set(true);
 
-      this.fotoService.subirFoto(this.files[0], (user as any).id || user.usuarioId).subscribe({
-        next: (res) => {
-          // Actualizamos la señal del usuario localmente para que cambie la foto en la vista
-          this.usuario.set({ ...user, fotoUrl: res.url });
-          this.isPhotoLoading.set(false);
-          this.files = [];
-          this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
-        },
-        error: (err) => {
-          this.isPhotoLoading.set(false);
-          this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
-        }
-      });
-    }
+    this.fotoService.subirFoto(this.files[0], user.usuarioId).subscribe({
+      next: (res) => {
+        this.usuario.set({ ...user, fotoUrl: res.url });
+        this.isPhotoLoading.set(false);
+
+        // --- MEJORAS ESTÉTICAS ---
+        this.cancelarCambioFoto(); // Limpia archivos y cierra el modal
+        this.tempPhotoUrl.set(null); // Limpia la previsualización temporal
+        this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
+      },
+      error: (err) => {
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
+      }
+    });
   }
+}
 
   cancelarCambioFoto() {
   this.files = [];
+  this.tempPhotoUrl.set(null);
   this.isEditingPhoto.set(false);
+}
+
+eliminarFotoActual() {
+  const user = this.usuario();
+  if (!user) return;
+
+  if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
+    this.isPhotoLoading.set(true);
+
+    // Convertimos el ID a string para que no chille el TS
+    this.fotoService.eliminarFoto(user.usuarioId.toString()).subscribe({
+      next: () => {
+        // Usamos undefined en lugar de null para respetar el modelo
+        this.usuario.set({ ...user, fotoUrl: undefined });
+        this.isPhotoLoading.set(false);
+        this.cancelarCambioFoto();
+        this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
+      },
+      error: (err) => {
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo eliminar la foto.', 'error');
+      }
+    });
+  }
 }
 
   // --- MÉTODOS DE EDICIÓN EN LÍNEA ---
