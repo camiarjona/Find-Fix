@@ -152,6 +152,10 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
 
     this.cargarBarriosDelBackend();
 
+    // Intenta obtener la ubicación real primero.
+    // Si el usuario rechaza, usará la del perfil (cargarDatosUsuario) como plan B.
+    this.obtenerUbicacionGPS();
+
     this.cargarDatosUsuario();
 
   }
@@ -181,6 +185,8 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
             this.colocarPinRojoUsuario(this.userLat, this.userLon, "Tu ubicación");
 
           }
+
+          this.aplicarFiltros();
 
         }
 
@@ -587,6 +593,10 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
 
     }
 
+    if (this.userLat && this.userLon) {
+      filtrosEnviar.latitud = this.userLat;
+      filtrosEnviar.longitud = this.userLon;
+    }
 
 
     if (Object.keys(filtrosEnviar).length === 0) {
@@ -758,5 +768,44 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
 
   }
 
+
+  obtenerUbicacionGPS() {
+    if (!navigator.geolocation) {
+      this.mostrarFeedback('Error', 'Tu navegador no soporta geolocalización', 'error');
+      return;
+    }
+
+    // Mostramos feedback visual de que estamos buscando
+    this.mostrarFeedback('Ubicando...', 'Obteniendo tu posición actual...', 'success');
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // 1. Guardamos las coordenadas exactas
+        this.userLat = position.coords.latitude;
+        this.userLon = position.coords.longitude;
+
+        console.log("📍 GPS Detectado:", this.userLat, this.userLon);
+
+        // 2. Actualizamos el mapa visualmente
+        if (this.map) {
+          this.map.setView([this.userLat, this.userLon], 15);
+          this.colocarPinRojoUsuario(this.userLat, this.userLon, "Estás aquí (GPS)");
+        }
+
+        // 3. AUTOMÁTICAMENTE ACTUALIZAMOS LA LISTA ORDENADA
+        this.aplicarFiltros();
+
+        // Cerramos el mensaje de carga
+        this.cerrarFeedback();
+      },
+      (error) => {
+        console.error(error);
+        let mensaje = 'No pudimos obtener tu ubicación.';
+        if (error.code === 1) mensaje = 'Necesitamos permiso para ver tu ubicación.';
+        this.mostrarFeedback('Error', mensaje, 'error');
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+  }
 }
 

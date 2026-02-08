@@ -15,6 +15,8 @@ export interface FiltroEspecialistasDTO {
   ciudad?: string;
   minCalificacion?: number;
   email?: string;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface CrearSolicitudTrabajoDTO {

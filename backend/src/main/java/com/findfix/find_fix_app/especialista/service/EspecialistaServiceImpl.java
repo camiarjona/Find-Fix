@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import com.findfix.find_fix_app.utils.geo.GeoUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
         especialistaRepository.save(especialista);
     }
 
-    /// Metodo para traerme el especialista segun el usuario registrado
+    /// Metodo para traerme el especialista según el usuario registrado
     public Especialista obtenerEspecialistaAutenticado()
             throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
@@ -141,7 +142,7 @@ public class EspecialistaServiceImpl implements EspecialistaService {
                 throw new EspecialistaNotFoundException("⚠️No hay especialistas disponibles en este momento.");
             }
             return especialistasDisponibles;
-            
+
         } catch (UsuarioNotFoundException e) {
             return especialistas;
         }
@@ -254,74 +255,97 @@ public class EspecialistaServiceImpl implements EspecialistaService {
 
     /// Metodo para filtrar especialistas
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(readOnly = true) // Cambiar a readOnly para búsquedas
     public List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro)
             throws EspecialistaExcepcion, UsuarioNotFoundException {
 
+        // 1. Filtros de Base de Datos (SQL)
         List<Specification<Especialista>> specifications = new ArrayList<>();
 
-        // 1. Filtro por ID
-        if (filtro.tieneId()) {
-            specifications.add(EspecialistaSpecifications.tieneId(filtro.id()));
-        }
-        // 2. Filtro por Oficio
-        if (filtro.tieneOficio()) {
+        if (filtro.tieneId()) specifications.add(EspecialistaSpecifications.tieneId(filtro.id()));
+        if (filtro.tieneOficio())
             specifications.add(EspecialistaSpecifications.tieneOficio(filtro.oficio().toUpperCase()));
-        }
-        // 3. Filtro por Ciudad
         if (filtro.tieneCiudad()) {
             try {
-                String ciudad = filtro.ciudad();
-                specifications.add(EspecialistaSpecifications.enCiudad(ciudad));
+                specifications.add(EspecialistaSpecifications.enCiudad(filtro.ciudad()));
             } catch (IllegalArgumentException e) {
                 throw new EspecialistaExcepcion("⚠️La ciudad ingresada no es válida.");
             }
         }
-        // 4. Filtro por DNI
-        if (filtro.tieneDni()) {
-            if (filtro.dni().toString().length() == 8) {
-                throw new EspecialistaExcepcion("⚠️El DNI debe tener 8 dígitos");
-            }
-            specifications.add(EspecialistaSpecifications.tieneDni(filtro.dni()));
-        }
-        // 5. Filtro por Email
-        if (filtro.tieneEmail()) {
-            if (!filtro.email().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-                throw new EspecialistaExcepcion("⚠️El formato del email no es válido");
-            }
-            specifications.add(EspecialistaSpecifications.tieneEmail(filtro.email()));
-        }
-        // 6. Filtro por Calificación Mínima
-        if (filtro.tieneCalificacionMinima()) {
-            if (filtro.minCalificacion() < 0 || filtro.minCalificacion() > 5) {
-                throw new EspecialistaExcepcion("⚠️La calificación debe estar entre 0 y 5");
-            }
+        if (filtro.tieneDni()) specifications.add(EspecialistaSpecifications.tieneDni(filtro.dni()));
+        if (filtro.tieneEmail()) specifications.add(EspecialistaSpecifications.tieneEmail(filtro.email()));
+        if (filtro.tieneCalificacionMinima())
             specifications.add(EspecialistaSpecifications.tieneCalificacionMinima(filtro.minCalificacion()));
-        }
 
         Specification<Especialista> finalSpec = specifications.stream()
                 .reduce(Specification::and)
                 .orElse(EspecialistaSpecifications.tieneDatosCompletos())
                 .and(EspecialistaSpecifications.tieneDatosCompletos());
 
-        List<Especialista> especialistas = especialistaRepository.findAll(finalSpec);
+        // 2. Traer lista (convertida a ArrayList para poder modificarla)
+        List<Especialista> especialistas = new ArrayList<>(especialistaRepository.findAll(finalSpec));
 
+        // 3. Filtrar al usuario logueado
         try {
             Usuario usuarioLogueado = authServiceImpl.obtenerUsuarioAutenticado();
+            especialistas.removeIf(e -> e.getUsuario().equals(usuarioLogueado));
+        } catch (UsuarioNotFoundException e) { /* Ignorar si no está logueado */ }
 
-            especialistas = especialistas.stream()
-                    .filter(e -> !e.getUsuario().equals(usuarioLogueado))
+        // -----------------------------------------------------------
+        // 4. AQUÍ ESTABA EL ERROR. BORRA 'this.aplicarFiltros();'
+        // Y PON ESTA LÓGICA DE ORDENAMIENTO EN SU LUGAR:
+        // -----------------------------------------------------------
+        if (filtro.tieneUbicacion()) {
+            especialistas.sort((e1, e2) -> {
+                // BLINDAJE: Si un especialista no tiene coordenadas (ej: Nicolás/Camila), va al final.
+                boolean e1SinDatos = e1.getUsuario().getLatitud() == null || e1.getUsuario().getLongitud() == null;
+                boolean e2SinDatos = e2.getUsuario().getLatitud() == null || e2.getUsuario().getLongitud() == null;
+
+                if (e1SinDatos && e2SinDatos) return 0; // Ambos sin datos -> igual
+                if (e1SinDatos) return 1;  // e1 sin datos -> va al fondo
+                if (e2SinDatos) return -1; // e2 sin datos -> va al fondo
+
+                // Cálculo de distancia real con Haversine
+                double dist1 = com.findfix.find_fix_app.utils.geo.GeoUtils.calcularDistancia(
+                        filtro.latitudUsuario(), filtro.longitudUsuario(),
+                        e1.getUsuario().getLatitud(), e1.getUsuario().getLongitud()
+                );
+
+                double dist2 = com.findfix.find_fix_app.utils.geo.GeoUtils.calcularDistancia(
+                        filtro.latitudUsuario(), filtro.longitudUsuario(),
+                        e2.getUsuario().getLatitud(), e2.getUsuario().getLongitud()
+                );
+
+                return Double.compare(dist1, dist2); // Ordenar de menor a mayor distancia
+            });
+            // -----------------------------------------------------------
+
+            if (especialistas.isEmpty()) {
+                throw new EspecialistaExcepcion("⚠️No se encontraron especialistas con los criterios especificados");
+            }
+
+            return especialistas.stream()
+                    .map(EspecialistaFichaCompletaDTO::new)
                     .toList();
+        }
+        Specification<Especialista> finalSpecE = specifications.stream()
+                .reduce(Specification::and)
+                .orElse(EspecialistaSpecifications.tieneDatosCompletos())
+                .and(EspecialistaSpecifications.tieneDatosCompletos());
 
+        List<Especialista> especialistasList = new ArrayList<>(especialistaRepository.findAll(finalSpecE));
+        try {
+            Usuario usuarioLogueado = authServiceImpl.obtenerUsuarioAutenticado();
+            especialistas.removeIf(e -> e.getUsuario().equals(usuarioLogueado));
         } catch (UsuarioNotFoundException e) {
         }
 
-        if (especialistas.isEmpty()) {
-            throw new EspecialistaExcepcion("⚠️No se encontraron especialistas con los criterios especificados");
-        }
+            if (especialistas.isEmpty()) {
+                throw new EspecialistaExcepcion("⚠️No se encontraron especialistas con los criterios especificados");
+            }
 
-        return especialistas.stream()
-                .map(EspecialistaFichaCompletaDTO::new)
-                .toList();
+            return especialistas.stream()
+                    .map(EspecialistaFichaCompletaDTO::new)
+                    .toList();
+        }
     }
-}
