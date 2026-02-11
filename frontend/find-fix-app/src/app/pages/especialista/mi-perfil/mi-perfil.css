@@ -19,10 +19,13 @@
 }
 
 .profile-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .user-names h3 {
@@ -40,11 +43,16 @@
 }
 
 .card {
+  width: 100%;
   background: var(--bg-card);
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px var(--shadow-color);
   border: 1px solid var(--border-color);
   overflow: hidden;
+}
+
+.personal-info-card, .security-card {
+  max-width: 900px; /* Aseguramos que ambas tengan el mismo tope de ancho */
 }
 
 .card-header {
@@ -436,4 +444,637 @@
   font-size: 0.9rem;
   color: var(--text-main);
   border-bottom: 1px solid var(--border-color);
+}
+/* Foto */
+.profile-hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.avatar-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 15px;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #ffffff !important;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-info h3 { margin: 0; font-size: 1.5rem; }
+
+/* MODAL DE EDICIÓN */
+.photo-editor-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.photo-editor-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 700px;
+  width: 90%;
+}
+
+.modal-content-layout {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.large-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #eee;
+}
+
+.large-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Layout del Modal */
+.modal-content-layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 50px;
+  padding: 20px 0;
+}
+
+.editor-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+}
+
+.column-label {
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Círculo de vista previa */
+.large-circle-preview {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.large-circle-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+}
+
+/* Dropzone alineado y limpio */
+.clean-dropzone {
+  width: 180px !important;
+  height: 180px !important;
+  border: 2px dashed #ddd !important;
+  border-radius: 15px !important;
+  background: #fafafa !important;
+  transition: all 0.3s ease;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.clean-dropzone:hover {
+  background: #f0f7ff !important;
+  border-color: #007bff !important;
+}
+
+.drop-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #888;
+}
+
+.drop-instructions i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.drop-instructions span {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Footer del modal */
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding-top: 20px;
+  position: relative;
+}
+
+/* Paleta de Colores Principal */
+:root {
+  --ff-orange: #f36f21;
+  --ff-orange-hover: #d95d1a;
+  --ff-bg-gray: #f4f4f4;
+}
+
+.photo-editor-modal {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 650px;
+  width: 95%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  font-family: inherit;
+}
+
+/* Cruz de cierre Naranja */
+.modal-close-btn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: var(--ff-orange);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(243, 111, 33, 0.4);
+  transition: transform 0.2s;
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.1);
+  background: var(--ff-orange-hover);
+}
+
+/* Etiquetas de columna (Sin que se corten) */
+.column-label {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+/* Dropzone con toque naranja */
+.clean-dropzone-orange {
+  border: 2px solid #eee !important;
+  border-radius: 15px !important;
+  background: var(--ff-bg-gray) !important;
+  width: 200px !important;
+  height: 200px !important;
+  transition: all 0.3s ease;
+}
+
+.clean-dropzone-orange:hover {
+  border-color: var(--ff-orange) !important;
+  background: #fff !important;
+}
+
+.orange-text {
+  color: var(--ff-orange);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Botones Finales */
+.btn-action {
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(0.9);
+}
+
+.btn-primary {
+  background: var(--ff-orange);
+  color: white;
+  box-shadow: 0 4px 12px rgba(243, 111, 33, 0.3);
+}
+
+.btn-primary:hover {
+  background: var(--ff-orange-hover);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #666;
+  border: 2px solid #eee;
+  margin-right: 15px;
+}
+
+.btn-outline:hover {
+  background: #f8f8f8;
+  border-color: #ddd;
+}
+
+/* Variables */
+:root {
+  --ff-orange: #f36f21;
+  --ff-orange-hover: #d95d1a;
+}
+
+.photo-editor-modal {
+  background: white;
+  padding: 50px 40px 40px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  overflow: visible !important;
+}
+
+/* La Cruz Naranja - Ahora visible y centrada */
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--ff-orange) !important;
+  color: #555 !important;
+  border:none;
+  width: 45px;
+  height: 45px;
+  border-radius: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.column-label {
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 30px !important;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Dropzone y centrado de imagen nueva */
+.clean-dropzone-orange {
+  border: 2px dashed #ddd !important;
+  background: #fdfdfd !important;
+  width: 200px !important;
+  height: 200px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  position: relative;
+}
+
+ngx-dropzone-image-preview {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
+}
+
+/* Mas botones */
+.btn-save-new {
+  background-color: #f36f21;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(243, 111, 33, 0.2);
+}
+
+.btn-save-new:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-discard-new {
+  background: #f1f1f1 !important;
+  color: #555 !important;
+  margin-right: 15px;
+}
+
+.btn-discard-new:hover {
+  background: #e5e5e5 !important;
+}
+
+.avatar-wrapper:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(243, 111, 33, 0.3);
+}
+
+/* 3. EFECTOS EN BOTONES */
+.btn-save-new {
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btn-save-new:hover:not(:disabled) {
+  background: #d95d1a !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(243, 111, 33, 0.4) !important;
+}
+
+.btn-save-new:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-delete-photo {
+  background-color: #f36f21;
+  color: #ffffff;
+  position: absolute;
+  left: 0;
+}
+
+.btn-delete-photo:hover:not(:disabled) {
+  background: #d95d1a !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(243, 111, 33, 0.4) !important;
+}
+
+.btn-delete-photo:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-discard-new:hover {
+  background: #ebebeb !important;
+  color: #333 !important;
+  transform: translateY(-2px);
+}
+
+.clean-dropzone-orange {
+  border: 2px dashed #ddd !important;
+  border-radius: 15px !important;
+  background: var(--ff-bg-gray) !important;
+  width: 190px !important;
+  height: 190px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+}
+
+.clean-dropzone-orange ngx-dropzone-label {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* 2. La imagen ocupa todo el cuadrado punteado */
+.custom-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3. Estilo de la cruz (Blanca con cruz negra) */
+.remove-btn-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 4. Efecto HOVER */
+.custom-preview:hover .remove-btn-overlay {
+  opacity: 1;
+}
+
+.remove-btn-overlay:hover {
+  transform: scale(1.1);
+  background: #f0f0f0;
+}
+
+.drop-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  gap: 8px;
+}
+
+.drop-instructions i {
+  font-size: 1.8rem;
+  color: var(--ff-orange);
+}
+
+.drop-instructions span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 25px;
+  padding: 0 10px;
+}
+
+.left-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: fit-content;
+}
+
+.main-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: white;
+  display: block;
+}
+
+/* --- AJUSTE PARA TABLETS Y CELULARES --- */
+@media (max-width: 768px) {
+  .avatar-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+
+  .avatar-initials svg {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .profile-hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .photo-editor-modal {
+    padding: 40px 20px 25px;
+    width: 95%;
+    border-radius: 15px;
+  }
+
+  .photo-editor-modal h2 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-action {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+.oficios-hero-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.role-badge {
+  display: inline-block;
+  background-color: #dcfce7; /* Verde clarito de fondo */
+  color: #166534;           /* Texto verde fuerte */
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  border: 1px solid #bbf7d0;
+  white-space: nowrap;
 }
