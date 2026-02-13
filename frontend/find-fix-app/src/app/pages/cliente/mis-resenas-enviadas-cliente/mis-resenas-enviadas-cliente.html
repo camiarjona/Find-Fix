@@ -25,9 +25,17 @@
     <div class="resena-card">
       <div class="top">
         <div class="user">
-          <div class="avatar">
-            {{ resena.nombreEspecialista ? resena.nombreEspecialista.charAt(0).toUpperCase() : 'E' }}
-          </div>
+          <div class="user">
+        <div class="avatar-resena-wrapper">
+          @if (resena.fotoUrlEspecialista) {
+            <img [src]="resena.fotoUrlEspecialista" class="avatar-resena-img" alt="Foto">
+          } @else {
+            <div class="avatar-resena-initials fallback-orange">
+              {{ resena.nombreEspecialista ? resena.nombreEspecialista.charAt(0).toUpperCase() : 'E' }}
+            </div>
+          }
+        </div>
+      </div>
           <div class="user-info">
             <span class="role-label">Para:</span>
             <strong>{{ resena.nombreEspecialista || 'Especialista' }}</strong>

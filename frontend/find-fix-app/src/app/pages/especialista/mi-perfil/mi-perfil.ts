@@ -107,19 +107,11 @@ export class MiPerfilEspecialista implements OnInit {
 
   guardarFoto() {
   const perfilActual = this.perfil();
-
-  // Si no hay perfil, ni intentamos buscar el ID
   if (!perfilActual) {
     console.error("El perfil es null, no se puede guardar la foto");
     return;
   }
 
-  console.log('--- EXAMEN DE PROPIEDADES ---');
-  // Usamos 'as object' para que Object.keys no chille
-  console.log('Nombres de campos que llegan del Back:', Object.keys(perfilActual as object));
-  console.log('Valor del campo ID:', perfilActual.id);
-
-  // Intentamos capturar el ID (probamos con 'id' y 'usuarioId' por si las moscas)
   const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
 
   if (this.files.length === 0 || !idFinal) {
@@ -130,7 +122,6 @@ export class MiPerfilEspecialista implements OnInit {
 
   this.isPhotoLoading.set(true);
 
-  // Usamos el idFinal que ya sabemos que tiene valor
   this.fotoService.subirFoto(this.files[0], idFinal).subscribe({
     next: (res) => {
       this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);

@@ -176,9 +176,23 @@
 
           <div class="card-header">
 
-            <div class="avatar">{{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}</div>
+            <div class="avatar-card-wrapper">
 
+              @if (esp.fotoUrl) {
 
+                <img [src]="esp.fotoUrl" class="avatar-img-small" alt="Foto de {{ esp.nombre }}">
+
+              } @else {
+
+                <div class="avatar-initials-small fallback-orange">
+
+                  {{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}
+
+                </div>
+
+              }
+
+            </div>
 
             <div class="header-info">
 
@@ -334,11 +348,21 @@
 
     <div class="profile-header-modal">
 
-      <div class="avatar-large">
+      <div class="avatar-large-wrapper">
 
-        {{ especialistaSeleccionaCompleto()?.nombre?.charAt(0) }}{{
+        @if (especialistaSeleccionaCompleto()?.fotoUrl) {
 
-        especialistaSeleccionaCompleto()?.apellido?.charAt(0) }}
+          <img [src]="especialistaSeleccionaCompleto()?.fotoUrl" class="avatar-img-large">
+
+        } @else {
+
+          <div class="avatar-initials-large fallback-orange">
+
+            {{ especialistaSeleccionaCompleto()?.nombre?.charAt(0) }}{{ especialistaSeleccionaCompleto()?.apellido?.charAt(0) }}
+
+          </div>
+
+        }
 
       </div>
 

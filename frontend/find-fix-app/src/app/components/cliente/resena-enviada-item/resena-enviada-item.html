@@ -1,9 +1,26 @@
 <mat-card *ngIf="resena" class="resena-card">
   <mat-card-header>
+    <div mat-card-avatar class="avatar-resena-wrapper">
+      @if (resena.fotoUrlCliente || resena.fotoUrlEspecialista) {
+        <img [src]="resena.fotoUrlCliente || resena.fotoUrlEspecialista"
+             class="avatar-resena-img"
+             alt="Foto de perfil">
+      } @else {
+        <div class="avatar-resena-initials fallback-orange">
+          {{ (resena.nombreCliente || resena.nombreEspecialista)?.charAt(0) }}
+        </div>
+      }
+    </div>
+
     <mat-card-title>
-      <mat-icon color="primary">person_pin</mat-icon>
-      Para: **{{ resena.nombreEspecialista }}**
+      <span class="resena-user-name">
+        {{ resena.nombreCliente || resena.nombreEspecialista }}
+      </span>
     </mat-card-title>
+
+    <mat-card-subtitle *ngIf="resena.nombreEspecialista">
+      Especialista calificado
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>

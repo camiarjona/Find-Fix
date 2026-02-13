@@ -25,12 +25,20 @@
     <div class="resena-card">
       <div class="top">
         <div class="user">
-          <div class="avatar">
-            {{ resena.nombreCliente ? resena.nombreCliente.charAt(0).toUpperCase() : 'C' }}
-          </div>
-          <strong>{{ resena.nombreCliente || 'Cliente' }}</strong>
+        <div class="avatar-resena-wrapper">
+          @if (resena.fotoUrlCliente) {
+            <img [src]="resena.fotoUrlCliente" class="avatar-resena-img" alt="Foto">
+          } @else {
+            <div class="avatar-resena-initials fallback-orange">
+              {{ resena.nombreCliente ? resena.nombreCliente.charAt(0).toUpperCase() : 'E' }}
+            </div>
+          }
         </div>
-
+        <div class="user-info">
+            <span class="role-label">De:</span>
+            <strong>{{ resena.nombreCliente || 'Clientes' }}</strong>
+          </div>
+      </div>
         <div class="stars-display">
           @for (s of getEstrellas(resena.puntuacion); track $index) {
           <span [class.filled]="s === 1">★</span>

@@ -8,6 +8,7 @@ export interface EspecialistaDTO {
   imagen?: string;
   latitud?: number;
   longitud?: number;
+  fotoUrl?: string;
 }
 
 export interface FiltroEspecialistasDTO {

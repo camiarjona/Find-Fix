@@ -15,6 +15,7 @@ public class EspecialistaListadoDTO implements DatosEspecialista {
     private String email;
     private Double latitud;
     private Double longitud;
+    private String fotoUrl;
 
     public EspecialistaListadoDTO(Especialista especialista) {
         this.nombre = validarYObtenerString(especialista.getUsuario() != null ? especialista.getUsuario().getNombre() : "Usuario desvinculado");
@@ -34,6 +35,7 @@ public class EspecialistaListadoDTO implements DatosEspecialista {
 
         this.latitud = especialista.getUsuario().getLatitud();
         this.longitud = especialista.getUsuario().getLongitud();
+        this.fotoUrl = (especialista.getUsuario() != null) ? especialista.getUsuario().getFotoUrl() : null;
     }
 
 }
