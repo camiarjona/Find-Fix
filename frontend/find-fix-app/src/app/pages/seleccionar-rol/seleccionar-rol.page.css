@@ -102,7 +102,6 @@
   }
 }
 
-/* Mobile adjustments: stack options, reduce padding and sizes */
 @media (max-width: 767px) {
   .selection-card {
     padding: 20px;
@@ -149,3 +148,48 @@
   }
 }
 
+:host-context(.dark-mode) .container,
+:host-context(.dark-mode) .seleccionar-rol-wrapper {
+    background: radial-gradient(circle at center, #333333 0%, #121212 100%);
+    color: #e0e0e0;
+}
+
+:host-context(.dark-mode) .selection-card {
+  background-color: #252525;
+     background-color: rgba(37, 37, 37, 0.95);
+     backdrop-filter: blur(10px);
+
+  color: #e0e0e0;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid #333;
+}
+
+
+:host-context(.dark-mode) .selection-card h1 {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+:host-context(.dark-mode) .selection-card > p {
+  color: #bbbbbb;
+}
+
+
+:host-context(.dark-mode) .role-box {
+  background-color: #2e2e2e;
+  border-color: #444;
+}
+
+:host-context(.dark-mode) .role-box p {
+  color: #cccccc;
+}
+
+:host-context(.dark-mode) .role-box:hover {
+  background-color: #383838;
+  border-color: var(--primary-color, #F58634);
+  box-shadow: 0 0 15px rgba(245, 134, 52, 0.3);
+}
+
+:host-context(.dark-mode) .role-icon {
+  color: #e0e0e0;
+}
