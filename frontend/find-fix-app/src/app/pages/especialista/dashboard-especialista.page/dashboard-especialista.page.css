@@ -388,3 +388,58 @@
     height: 150px;
   }
 }
+
+:host-context(.dark-mode) .section-header h2 {
+    color: #ffffff;
+}
+
+:host-context(.dark-mode) .resena-card {
+    background-color: #1f1f1f;
+    border-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+:host-context(.dark-mode) .resena-card:hover {
+    background-color: #252525;
+    border-color: var(--primary-color, #F58634);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+
+:host-context(.dark-mode) .user-name {
+    color: #e0e0e0;
+}
+
+:host-context(.dark-mode) .comentario {
+    color: #b0b0b0;
+}
+
+
+:host-context(.dark-mode) .card-footer {
+    border-top-color: #333;
+    color: #777;
+}
+
+
+:host-context(.dark-mode) .empty-card {
+    background-color: #1f1f1f;
+    border-color: #444;
+    color: #888;
+}
+
+
+:host-context(.dark-mode) .avatar-circle {
+    box-shadow: 0 0 10px rgba(245, 134, 52, 0.4);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+
+:host-context(.dark-mode) .btn-link {
+    color: #ff9f5e;
+}
+
+:host-context(.dark-mode) .btn-link:hover {
+    color: #ffb888;
+}

@@ -30,8 +30,11 @@
 
 </div>
 
-@if (feedbackData.visible) {
-<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
-  (cerrar)="cerrarFeedback()">
-</app-modal-feedback>
+@if (feedbackData().visible) {
+  <app-modal-feedback
+    [titulo]="feedbackData().titulo"
+    [mensaje]="feedbackData().mensaje"
+    [tipo]="feedbackData().tipo"
+    (cerrar)="cerrarFeedback()">
+  </app-modal-feedback>
 }
