@@ -1,144 +1,138 @@
 @import url('../form-styles.css');
 
-.mobile-toggle-link {
-  display: none;
-  margin-top: 15px;
-  color: #555;
+.app-form-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 25px 20px;
+  box-sizing: border-box;
 }
 
-.mobile-toggle-link a {
-  color: var(--primary-color, #F58634);
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
+.form-title {
+  font-size: 1.5rem !important;
+  margin: 0 0 5px 0 !important;
+  text-align: center;
 }
 
-.mobile-toggle-link a:hover {
-  text-decoration: underline;
+.form-subtitle {
+  font-size: 0.8rem;
+  margin-bottom: 20px;
+  color: #666;
+  text-align: center;
 }
 
-@media (max-width: 767px) {
-  .mobile-toggle-link {
-    display: block;
-  }
-
-  .app-form-content {
-    border-radius: 8px;
-  }
-
-
-  .mobile-cta-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0 12px 0;
-  }
-
-  .mobile-cta-icon svg {
-    width: 48px;
-    height: 48px;
-    color: var(--primary-color, #F58634);
-  }
-}
-
-
-.mobile-cta-icon {
-  display: none;
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
 .form-field {
   position: relative;
+  width: 100%;
 }
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.7rem;
+  position: absolute;
+  bottom: -15px;
+  left: 5px;
+}
+
+.form-field input {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 8px 12px !important;
+  font-size: 0.9rem !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.3s ease;
+}
+
+.is-loading input {
+  background-color: #f8f8f8 !important;
+  color: #999;
+}
+
+.btn-gps {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #F58634;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(245, 134, 52, 0.2);
+  border-top-color: #F58634;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .resultados-busqueda {
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-              0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  max-height: 160px;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-height: 120px;
   overflow-y: auto;
-  z-index: 50;
-  list-style: none;
+  z-index: 9999;
   padding: 0;
   margin: 0;
+  list-style: none;
 }
 
 .resultados-busqueda li {
   padding: 10px 15px;
   font-size: 0.9rem;
-  color: #4a4a4a;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.resultados-busqueda li:hover {
-  background-color: #f3f4f6;
-  color: #2563eb;
-  padding-left: 18px;
-}
-
-.resultados-busqueda::-webkit-scrollbar {
-  width: 5px;
-}
-.resultados-busqueda::-webkit-scrollbar-track {
-  background: transparent;
-}
-.resultados-busqueda::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 10px;
-}
-
-/* --- SOLO AGREGA ESTO AL FINAL DE TU CSS --- */
-
-/* 1. Fundamental: Hace que la lista flote respecto a este input */
-.form-field {
-  position: relative;
-}
-
-/* 2. La lista desplegable flotante */
-.resultados-busqueda {
-  position: absolute;       /* Flota encima del contenido */
-  top: 100%;                /* Aparece justo debajo del input */
-  left: 0;
-  width: 100%;              /* Ocupa el mismo ancho que el input */
-
-  background-color: white;  /* Fondo blanco sólido */
-  border: 1px solid #ccc;
-  border-top: none;         /* Se une visualmente con el input */
-  border-radius: 0 0 8px 8px;
-
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombrita para dar profundidad */
-  z-index: 9999;            /* ¡Muy importante! Para que tape el campo de Email */
-
-  max-height: 200px;        /* Altura máxima con scroll */
-  overflow-y: auto;
-
-  list-style: none;         /* Quita los puntos de la lista */
-  padding: 0;
-  margin: 0;
-}
-
-/* 3. Cada opción de barrio */
-.resultados-busqueda li {
-  padding: 10px 12px;       /* Espacio cómodo para el dedo/mouse */
-  cursor: pointer;
-  background-color: white;
   border-bottom: 1px solid #eee;
-  color: #333;              /* Texto oscuro */
-  font-size: 0.95rem;
 }
 
-/* 4. Efecto al pasar el mouse */
-.resultados-busqueda li:hover {
-  background-color: #f5f5f5; /* Gris clarito */
-  color: #F58634;            /* Tu naranja (opcional, si quieres que resalte) */
+.resultados-busqueda li:hover { background-color: #fff5ed; }
+
+.cta-button {
+  width: 100%;
+  margin-top: 25px;
+  height: 42px !important;
+}
+
+.mobile-toggle-link {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.form-field label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.form-field input:focus ~ label,
+.form-field input:not(:placeholder-shown) ~ label {
+  top: 0 !important;
+  background: white;
+  padding: 0 4px;
+  font-size: 0.75rem !important;
+  color: #F58634;
 }

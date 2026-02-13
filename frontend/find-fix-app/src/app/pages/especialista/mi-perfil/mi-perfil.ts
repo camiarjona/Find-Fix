@@ -1,6 +1,6 @@
 import { ModalFeedbackComponent } from './../../../components/general/modal-feedback.component/modal-feedback.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EspecialistaService } from '../../../services/especialista/especialista.service';
 import { UserService } from '../../../services/user/user.service';
@@ -10,6 +10,7 @@ import { ActualizarOficios, PerfilEspecialista } from '../../../models/especiali
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { HttpClient } from '@angular/common/http';
+import { LocationService } from '../../../services/general/location.service';
 
 interface Barrio {
   nombre: string;
@@ -19,6 +20,7 @@ interface Barrio {
 
 @Component({
   selector: 'app-mi-perfil',
+  standalone: true,
   imports: [CommonModule, FormsModule, ModalFeedbackComponent, ModalConfirmacionComponent],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
@@ -29,6 +31,8 @@ export class MiPerfilEspecialista implements OnInit {
   private userService = inject(UserService);
   private oficiosService = inject(OficiosService);
   private http = inject(HttpClient);
+  private cd = inject(ChangeDetectorRef);
+  private locationService = inject(LocationService);
 
   public icons = UI_ICONS;
 
@@ -60,10 +64,12 @@ export class MiPerfilEspecialista implements OnInit {
 
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData = { visible: true, titulo, mensaje, tipo };
+    this.cd.detectChanges();
   }
 
   cerrarFeedback() {
     this.feedbackData = { ...this.feedbackData, visible: false };
+    this.cd.detectChanges();
   }
 
   ngOnInit() {
@@ -268,5 +274,34 @@ export class MiPerfilEspecialista implements OnInit {
         this.isPasswordLoading.set(false);
       }
     });
+  }
+
+  async detectarYGuardarZona() {
+    try {
+      this.mostrarFeedback('Ubicando...', 'Identificando tu barrio...', 'success');
+
+      const coords = await this.locationService.obtenerCoordenadasGPS();
+
+      const barrioEncontrado = this.locationService.obtenerBarrioMasCercano(
+        coords.lat,
+        coords.lon,
+        this.allBarrios
+      );
+
+      if (barrioEncontrado) {
+        this.tempLat = barrioEncontrado.lat;
+        this.tempLon = barrioEncontrado.lon;
+        this.tempValue = barrioEncontrado.nombre;
+      }
+
+      // Cierre automático con delay de seguridad
+      setTimeout(() => {
+        this.cerrarFeedback();
+      }, 600);
+
+    } catch (err) {
+      console.error(err);
+      this.mostrarFeedback('Error', 'No se pudo obtener la ubicación', 'error');
+    }
   }
 }
