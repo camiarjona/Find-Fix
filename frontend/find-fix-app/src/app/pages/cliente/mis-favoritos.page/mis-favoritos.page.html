@@ -23,8 +23,15 @@
     @for (fav of favoritos(); track $index) {
     <article class="esp-card">
       <div class="card-header">
-        <div class="avatar">
-          {{ fav.nombre.charAt(0) }}{{ fav.apellido.charAt(0)}}
+        <div class="specialist-avatar">
+        @if (fav.fotoUrl) {
+          <img [src]="fav.fotoUrl" [alt]="fav.nombre" class="avatar-img">
+        }
+        @else {
+          <div class="avatar-placeholder">
+            {{ fav.nombre.charAt(0) }}{{ fav.apellido.charAt(0) }}
+          </div>
+        }
         </div>
 
         <div class="header-info">

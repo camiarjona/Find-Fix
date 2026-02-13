@@ -5,6 +5,7 @@ export interface FavoritoModel {
   oficios: string[];
   calificacionPromedio: number;
   email: string;
+  fotoUrl: string;
 }
 
 export interface AgregarFavoritoDTO {

@@ -138,10 +138,31 @@ export class MiPerfilEspecialista implements OnInit {
 }
 
   eliminarFotoActual() {
-    this.perfil.update(p => p ? { ...p, fotoUrl: '' } : null);
-    this.mostrarFeedback('Eliminada', 'Se ha quitado tu foto de perfil.');
-    this.cancelarCambioFoto();
+  const perfilActual = this.perfil();
+  if (!perfilActual) return;
+
+  const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+
+  if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
+    this.isPhotoLoading.set(true);
+
+    // IMPORTANTE: Ahora sí llamamos al servicio para impactar la BD y Cloudinary
+    this.fotoService.eliminarFoto(idFinal.toString()).subscribe({
+      next: () => {
+        // Actualizamos la interfaz solo si el backend respondió OK
+        this.perfil.update(p => p ? { ...p, fotoUrl: '' } : null);
+        this.isPhotoLoading.set(false);
+        this.cancelarCambioFoto();
+        this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
+      },
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo eliminar la foto del servidor.', 'error');
+      }
+    });
   }
+}
 
 
   cargarBarriosDelBackend() {
