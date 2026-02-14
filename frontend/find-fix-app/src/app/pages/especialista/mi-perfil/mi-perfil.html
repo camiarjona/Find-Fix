@@ -251,51 +251,56 @@
           </li>
 
 <li class="data-item">
-            <span class="label">Zona de Trabajo</span>
-            <div class="value-container">
-              @if (editingField() === 'ciudad') {
-              <div class="edit-mode">
+  <span class="label">Zona de Trabajo</span>
+  <div class="value-container">
+    @if (editingField() === 'ciudad') {
+    <div class="edit-mode">
+      <div class="horizontal-group" style="display: flex; align-items: center; gap: 5px; width: 100%;">
+        <div class="search-wrapper" style="position: relative; flex: 1; display: flex; align-items: center;">
+          <input
+            type="text"
+            [value]="tempValue"
+            (input)="buscarZona($event)"
+            class="input-inline"
+            placeholder="Ej: Los Troncos, Mar del Plata"
+            style="flex: 1; padding-right: 35px;"
+           >
 
-                <div class="horizontal-group">
+          <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarZona()" title="Usar GPS">
+            <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+             <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+            </svg>
+          </button>
 
-                  <div class="search-wrapper">
-                    <input
-                      type="text"
-                      [value]="tempValue"
-                      (input)="buscarZona($event)"
-                      class="input-inline"
-                      placeholder="Ej: Los Troncos, Mar del Plata"
-                     >
+          @if (citySuggestions().length > 0) {
+          <ul class="suggestions-list">
+            @for (sug of citySuggestions(); track sug.lat) {
+            <li (click)="seleccionarZona(sug)" class="suggestion-item">
+              {{ sug.nombreVisual }}
+            </li>
+            }
+          </ul>
+          }
+        </div>
 
-                    @if (citySuggestions().length > 0) {
-                    <ul class="suggestions-list">
-                      @for (sug of citySuggestions(); track sug.lat) {
-                      <li (click)="seleccionarZona(sug)" class="suggestion-item">
-                        {{ sug.nombreVisual }}
-                      </li>
-                      }
-                    </ul>
-                    }
-                  </div>
-
-                  <div class="actions">
-                    <button class="action-btn save" (click)="saveEdit('ciudad')">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
-                    </button>
-                    <button class="action-btn cancel" (click)="cancelEdit()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
-                    </button>
-                  </div>
-
-                </div> </div>
-              } @else {
-              <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
-              <button class="edit-pencil" (click)="startEdit('ciudad', perfil()?.ciudad)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
-              </button>
-              }
-            </div>
-          </li>
+        <div class="actions" style="display: flex; gap: 5px;">
+          <button class="action-btn save" (click)="saveEdit('ciudad')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
+          </button>
+          <button class="action-btn cancel" (click)="cancelEdit()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
+    <button class="edit-pencil" (click)="startEdit('ciudad', perfil()?.ciudad)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
+    </button>
+    }
+  </div>
+</li>
         </ul>
       </div>
     </section>
@@ -350,8 +355,15 @@
   </div>
 
 @if (feedbackData.visible) {
-<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo" (cerrar)="cerrarFeedback()"></app-modal-feedback>
+<app-modal-feedback
+  [class.modal-sin-boton]="feedbackData.titulo === 'Ubicando...'"
+  [titulo]="feedbackData.titulo"
+  [mensaje]="feedbackData.mensaje"
+  [tipo]="feedbackData.tipo"
+  (cerrar)="cerrarFeedback()">
+</app-modal-feedback>
 }
+
 @if (oficioToRemove) {
 <app-modal-confirmacion [titulo]="'Confirmar eliminación'" [mensaje]="'¿Dejar de ofrecer servicios de ' + oficioToRemove + '?'" (cancelar)="cancelRemoveOficio()" (confirmar)="confirmRemoveOficio()"></app-modal-confirmacion>
 }
