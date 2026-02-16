@@ -17,6 +17,7 @@ public class MostrarResenaDTO {
     private EstadosTrabajos estado;
     private String descripcion;
     private Double presupuesto;
+    private String fotoUrlCliente;
 
     public MostrarResenaDTO(Resena resena) {
         this.resenaId = resena.getResenaId();
@@ -27,5 +28,6 @@ public class MostrarResenaDTO {
         this.estado = resena.getTrabajoApp().getEstado();
         this.descripcion = resena.getTrabajoApp().getDescripcion();
         this.presupuesto = resena.getTrabajoApp().getPresupuesto();
+        this.fotoUrlCliente = resena.getTrabajoApp().getUsuario().getFotoUrl();
     }
 }

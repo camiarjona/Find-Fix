@@ -20,6 +20,7 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
     private Double calificacionPromedio;
     private Long dni;
     private String fotoUrl;
+    private Long id;
 
     public VerPerfilEspecialistaDTO(Especialista especialista) {
 
@@ -50,6 +51,8 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
         this.dni = (especialista.getDni() != null)
                 ? especialista.getDni()
                 : 0;
+
+        this.id = especialista.getUsuario().getUsuarioId();
     }
 
 }

@@ -23,8 +23,15 @@
     @for (fav of favoritos(); track $index) {
     <article class="esp-card">
       <div class="card-header">
-        <div class="avatar">
-          {{ fav.nombre.charAt(0) }}{{ fav.apellido.charAt(0)}}
+        <div class="specialist-avatar">
+        @if (fav.fotoUrl) {
+          <img [src]="fav.fotoUrl" [alt]="fav.nombre" class="avatar-img">
+        }
+        @else {
+          <div class="avatar-placeholder">
+            {{ fav.nombre.charAt(0) }}{{ fav.apellido.charAt(0) }}
+          </div>
+        }
         </div>
 
         <div class="header-info">
@@ -94,9 +101,22 @@
     </div>
     } @else {
     <div class="profile-header-modal">
-      <div class="avatar-large">
-        {{ especialistaSeleccionaCompleto()?.nombre ? especialistaSeleccionaCompleto()?.nombre?.charAt(0) : 'E' }}
-        {{ especialistaSeleccionaCompleto()?.apellido ? especialistaSeleccionaCompleto()?.apellido?.charAt(0) : '' }}
+      <div class="avatar-large-wrapper">
+
+        @if (especialistaSeleccionaCompleto()?.fotoUrl) {
+
+          <img [src]="especialistaSeleccionaCompleto()?.fotoUrl" class="avatar-img-large">
+
+        } @else {
+
+          <div class="avatar-initials-large fallback-orange">
+
+            {{ especialistaSeleccionaCompleto()?.nombre?.charAt(0) }}{{ especialistaSeleccionaCompleto()?.apellido?.charAt(0) }}
+
+          </div>
+
+        }
+
       </div>
       <h2>{{ especialistaSeleccionaCompleto()?.nombre }} {{ especialistaSeleccionaCompleto()?.apellido }}</h2>
       <p class="profile-city">📍 {{ especialistaSeleccionaCompleto()?.ciudad || 'Sin ciudad' }}</p>

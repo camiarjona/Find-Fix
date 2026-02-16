@@ -10,6 +10,8 @@ import { ActualizarOficios, PerfilEspecialista } from '../../../models/especiali
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { HttpClient } from '@angular/common/http';
+import { FotoPerfilService } from '../../../services/user/foto-perfil';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LocationService } from '../../../services/general/location.service';
 
 interface Barrio {
@@ -20,8 +22,8 @@ interface Barrio {
 
 @Component({
   selector: 'app-mi-perfil',
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent, ModalConfirmacionComponent, NgxDropzoneModule],
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalFeedbackComponent, ModalConfirmacionComponent],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
 })
@@ -41,6 +43,13 @@ export class MiPerfilEspecialista implements OnInit {
   public selectableOficios = signal<OficioModel[]>([]);
   public citySuggestions = signal<any[]>([]);
   public isLoading = signal(true);
+
+  private fotoService = inject(FotoPerfilService);
+  public isEditingPhoto = signal(false);
+  public isPhotoLoading = signal(false);
+  public tempPhotoUrl = signal<string | null>(null);
+  public files: File[] = [];
+  public fotoError = signal(false);
 
   public allBarrios: Barrio[] = [];
 
@@ -76,6 +85,91 @@ export class MiPerfilEspecialista implements OnInit {
     this.loadData();
     this.cargarBarriosDelBackend();
   }
+
+  // --- Lógica de Foto de Perfil ---
+  onSelect(event: any) {
+  console.log('Archivo seleccionado:', event.addedFiles);
+  this.files = [...event.addedFiles]; // Usamos spread para asegurar la asignación
+
+  if (this.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.tempPhotoUrl.set(reader.result as string);
+    };
+    reader.readAsDataURL(this.files[0]);
+  }
+}
+
+  onRemove(event: any) {
+    this.files = [];
+    this.tempPhotoUrl.set(null);
+  }
+
+  cancelarCambioFoto() {
+    this.isEditingPhoto.set(false);
+    this.files = [];
+    this.tempPhotoUrl.set(null);
+  }
+
+  guardarFoto() {
+  const perfilActual = this.perfil();
+  if (!perfilActual) {
+    console.error("El perfil es null, no se puede guardar la foto");
+    return;
+  }
+
+  const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+
+  if (this.files.length === 0 || !idFinal) {
+    console.error("No se encontró archivo o ID. ID detectado:", idFinal);
+    this.mostrarFeedback('Error', 'No se pudo identificar tu cuenta', 'error');
+    return;
+  }
+
+  this.isPhotoLoading.set(true);
+
+  this.fotoService.subirFoto(this.files[0], idFinal).subscribe({
+    next: (res) => {
+      this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);
+      this.mostrarFeedback('¡Éxito!', 'Foto actualizada.');
+      this.cancelarCambioFoto();
+      this.isPhotoLoading.set(false);
+    },
+    error: (err) => {
+      console.error('Error en la subida:', err);
+      this.mostrarFeedback('Error', 'Falló la subida a Cloudinary', 'error');
+      this.isPhotoLoading.set(false);
+    }
+  });
+}
+
+  eliminarFotoActual() {
+  const perfilActual = this.perfil();
+  if (!perfilActual) return;
+
+  const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+
+  if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
+    this.isPhotoLoading.set(true);
+
+    // IMPORTANTE: Ahora sí llamamos al servicio para impactar la BD y Cloudinary
+    this.fotoService.eliminarFoto(idFinal.toString()).subscribe({
+      next: () => {
+        // Actualizamos la interfaz solo si el backend respondió OK
+        this.perfil.update(p => p ? { ...p, fotoUrl: '' } : null);
+        this.isPhotoLoading.set(false);
+        this.cancelarCambioFoto();
+        this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
+      },
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        this.isPhotoLoading.set(false);
+        this.mostrarFeedback('Error', 'No se pudo eliminar la foto del servidor.', 'error');
+      }
+    });
+  }
+}
+
 
   cargarBarriosDelBackend() {
     this.http.get<Barrio[]>('http://localhost:8080/api/barrios?ciudad=mdp')

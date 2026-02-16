@@ -57,6 +57,8 @@ export interface ActualizarOficios{
 }
 
 export interface PerfilEspecialista {
+  id: number;
+  fotoUrl: string;
   nombre: string;
   apellido: string;
   email: string;
