@@ -7,7 +7,9 @@ public record BuscarEspecialistaDTO(
             Long dni,
             Long id,
             String email,
-            Double minCalificacion
+            Double minCalificacion,
+            Double latitudUsuario,
+            Double longitudUsuario
     ) {
         public boolean tieneOficio() { return oficio != null && !oficio.isEmpty(); }
         public boolean tieneCiudad() { return ciudad != null && !ciudad.isEmpty(); }
@@ -15,5 +17,6 @@ public record BuscarEspecialistaDTO(
         public boolean tieneId() { return id != null; }
         public boolean tieneEmail() { return email != null && !email.isEmpty(); }
         public boolean tieneCalificacionMinima() { return minCalificacion != null; }
+        public boolean tieneUbicacion() { return latitudUsuario != null && longitudUsuario != null; }
     }
 
