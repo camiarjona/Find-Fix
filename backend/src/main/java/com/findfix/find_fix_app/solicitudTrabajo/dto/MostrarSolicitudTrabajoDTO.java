@@ -13,6 +13,7 @@ public class MostrarSolicitudTrabajoDTO {
     String nombreEspecialista;
     String apellidoEspecialista;
     String descripcion;
+    String fotoUrlEspecialista;
 
     public MostrarSolicitudTrabajoDTO(SolicitudTrabajo solicitudTrabajo) {
         this.id = solicitudTrabajo.getSolicitudTrabajoId();
@@ -21,5 +22,6 @@ public class MostrarSolicitudTrabajoDTO {
         this.nombreEspecialista = solicitudTrabajo.getEspecialista() != null ? solicitudTrabajo.getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
         this.apellidoEspecialista = solicitudTrabajo.getEspecialista() !=null ? solicitudTrabajo.getEspecialista().getUsuario().getApellido() : "Especialista desvinculado";
         this.descripcion = solicitudTrabajo.getDescripcion();
+        this.fotoUrlEspecialista = solicitudTrabajo.getEspecialista().getUsuario().getFotoUrl();
     }
 }

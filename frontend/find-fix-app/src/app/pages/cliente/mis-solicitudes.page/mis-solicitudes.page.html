@@ -58,7 +58,16 @@
               <h3 class="titulo-solicitud">{{ solicitud.titulo || 'Solicitud de Servicio' }}</h3>
 
               <div class="info-especialista">
-                <div class="avatar-placeholder">{{ solicitud.especialista?.charAt(0) || 'E' }}</div>
+                <div class="avatar-card-wrapper">
+                  @if (solicitud.fotoUrl) {
+                    <img [src]="solicitud.fotoUrl" class="avatar-img-small" alt="Foto de {{ solicitud.especialista }}">
+                  } @else {
+                    <div class="avatar-initials-small fallback-orange">
+                      {{ solicitud.especialista?.charAt(0) || 'E' }}
+                    </div>
+                  }
+                </div>
+
                 <div>
                   <p class="etiqueta-rol">Especialista</p>
                   <p class="nombre-especialista">{{ solicitud.especialista || 'Desconocido' }}</p>

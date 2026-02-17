@@ -40,5 +40,4 @@ public class SolicitudTrabajo {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Especialista especialista;
-
 }
