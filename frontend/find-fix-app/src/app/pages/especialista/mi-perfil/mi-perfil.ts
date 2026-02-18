@@ -112,35 +112,45 @@ export class MiPerfilEspecialista implements OnInit {
   }
 
   guardarFoto() {
-  const perfilActual = this.perfil();
-  if (!perfilActual) {
-    console.error("El perfil es null, no se puede guardar la foto");
-    return;
-  }
+    const perfilActual = this.perfil();
+      if (!perfilActual) {
+        console.error("El perfil es null, no se puede guardar la foto");
+        return;
+      }
 
-  const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+      const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
 
-  if (this.files.length === 0 || !idFinal) {
-    console.error("No se encontró archivo o ID. ID detectado:", idFinal);
-    this.mostrarFeedback('Error', 'No se pudo identificar tu cuenta', 'error');
-    return;
-  }
+      if (this.files.length === 0 || !idFinal) {
+        console.error("No se encontró archivo o ID. ID detectado:", idFinal);
+        this.mostrarFeedback('Error', 'No se pudo identificar tu cuenta', 'error');
+        return;
+      }
 
-  this.isPhotoLoading.set(true);
+      this.isPhotoLoading.set(true);
 
-  this.fotoService.subirFoto(this.files[0], idFinal).subscribe({
-    next: (res) => {
-      this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);
-      this.mostrarFeedback('¡Éxito!', 'Foto actualizada.');
-      this.cancelarCambioFoto();
-      this.isPhotoLoading.set(false);
-    },
-    error: (err) => {
-      console.error('Error en la subida:', err);
-      this.mostrarFeedback('Error', 'Falló la subida a Cloudinary', 'error');
-      this.isPhotoLoading.set(false);
-    }
-  });
+    this.fotoService.subirFoto(this.files[0], idFinal).subscribe({
+        next: (res) => {
+          this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);
+          this.mostrarFeedback('¡Éxito!', 'Foto actualizada.');
+          this.cancelarCambioFoto();
+          this.isPhotoLoading.set(false);
+        },
+        error: (err) => {
+        this.isPhotoLoading.set(false);
+        console.error('Error en la subida:', err);
+
+        if (err.status === 400 && err.error?.error === 'IMAGEN_INAPROPIADA') {
+          this.files = [];
+          this.mostrarFeedback(
+            'Imagen rechazada',
+            'La IA ha detectado contenido inapropiado. Por favor, elige otra foto.',
+            'error'
+          );
+        } else {
+          this.mostrarFeedback('Error', 'Falló la subida a Cloudinary', 'error');
+        }
+      }
+      });
 }
 
   eliminarFotoActual() {

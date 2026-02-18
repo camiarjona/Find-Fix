@@ -1062,3 +1062,35 @@ ngx-dropzone-image-preview {
   transform: translateY(-50%) scale(1.2);
   color: #e66000;
 }
+
+/* Contenedor que apila la fila de botones y la nota */
+.action-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra la nota respecto al bloque de botones */
+  gap: 12px;
+}
+
+/* Fila de botones (mantiene tu diseño original) */
+.botones-row {
+  display: flex;
+  gap: 15px; /* Espacio entre Descartar y Guardar */
+}
+
+/* Estilo de la notita */
+.nota-resolucion {
+  font-size: 0.7rem;
+  color: #999;
+  margin: 0;
+  font-style: italic;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* Ajuste opcional: si el footer se ve muy apretado, dale un poco más de padding superior */
+.modal-footer {
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinea arriba para que la nota no tire el botón de borrar hacia abajo */
+}
