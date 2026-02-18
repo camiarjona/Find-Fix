@@ -449,6 +449,7 @@
   color: var(--text-main);
   border-bottom: 1px solid var(--border-color);
 }
+
 /* Foto */
 .profile-hero-section {
   display: flex;
@@ -458,12 +459,12 @@
 }
 
 .avatar-container {
-  text-align: center;
-  display: flex;
+   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin: 0 auto 20px;
 }
 
 .avatar-wrapper {
@@ -497,6 +498,13 @@
   background-color: #ffffff !important;
   position: relative;
   z-index: 1;
+}
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero-info h3 { margin: 0; font-size: 1.5rem; }
@@ -675,7 +683,7 @@
   background: var(--ff-orange-hover);
 }
 
-
+/* Etiquetas de columna (Sin que se corten) */
 .column-label {
   font-weight: 700;
   color: #333;
@@ -685,7 +693,7 @@
   letter-spacing: 1px;
 }
 
-
+/* Dropzone con toque naranja */
 .clean-dropzone-orange {
   border: 2px solid #eee !important;
   border-radius: 15px !important;
@@ -746,6 +754,7 @@
   border-color: #ddd;
 }
 
+/* Variables */
 :root {
   --ff-orange: #f36f21;
   --ff-orange-hover: #d95d1a;
@@ -762,6 +771,7 @@
   overflow: visible !important;
 }
 
+/* La Cruz Naranja - Ahora visible y centrada */
 .modal-close-btn {
   position: absolute;
   top: 10px;
@@ -789,7 +799,7 @@
   text-align: center;
 }
 
-
+/* Dropzone y centrado de imagen nueva */
 .clean-dropzone-orange {
   border: 2px dashed #ddd !important;
   background: #fdfdfd !important;
@@ -815,7 +825,7 @@ ngx-dropzone-image-preview {
   opacity: 1 !important;
 }
 
-
+/* Mas botones */
 .btn-save-new {
   background-color: #f36f21;
   color: white !important;
@@ -843,7 +853,7 @@ ngx-dropzone-image-preview {
   box-shadow: 0 8px 25px rgba(243, 111, 33, 0.3);
 }
 
-
+/* 3. EFECTOS EN BOTONES */
 .btn-save-new {
   transition: all 0.2s ease;
   display: flex;
@@ -911,7 +921,7 @@ ngx-dropzone-image-preview {
   align-items: center !important;
 }
 
-
+/* 2. La imagen ocupa todo el cuadrado punteado */
 .custom-preview {
   width: 100%;
   height: 100%;
@@ -925,7 +935,7 @@ ngx-dropzone-image-preview {
   display: block;
 }
 
-
+/* 3. Estilo de la cruz (Blanca con cruz negra) */
 .remove-btn-overlay {
   position: absolute;
   top: 10px;
@@ -946,7 +956,7 @@ ngx-dropzone-image-preview {
   transition: opacity 0.2s ease-in-out;
 }
 
-
+/* 4. Efecto HOVER */
 .custom-preview:hover .remove-btn-overlay {
   opacity: 1;
 }
@@ -1006,6 +1016,7 @@ ngx-dropzone-image-preview {
   display: block;
 }
 
+/* --- AJUSTE PARA TABLETS Y CELULARES --- */
 @media (max-width: 768px) {
   .avatar-wrapper {
     width: 140px;
@@ -1054,30 +1065,6 @@ ngx-dropzone-image-preview {
     margin: 0;
   }
 }
-
-.oficios-hero-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.role-badge {
-  display: inline-block;
-  background-color: #dcfce7;
-  color: #166534;
-  font-size: 0.7rem;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 8px;
-  text-transform: uppercase;
-  border: 1px solid #bbf7d0;
-  white-space: nowrap;
 
 /* Contenedor para alinear input y botón */
 .input-with-button {
@@ -1147,4 +1134,54 @@ ngx-dropzone-image-preview {
   color: #e66000;
 }
 
+.action-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.botones-row {
+  display: flex;
+  gap: 15px;
+}
+
+.nota-resolucion {
+  font-size: 0.7rem;
+  color: #999;
+  margin: 0;
+  font-style: italic;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.modal-footer {
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Contenedor para que los oficios fluyan bien */
+.oficios-hero-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 450px;
+}
+
+/* El estilo verde del badge (idéntico al del cliente) */
+.role-badge {
+  display: inline-block;
+  background-color: #dcfce7; /* Verde clarito */
+  color: #166534;            /* Verde oscuro */
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  border: 1px solid #bbf7d0;
+  white-space: nowrap;
 }
