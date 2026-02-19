@@ -29,24 +29,20 @@
         <tbody>
           @for (solicitud of solicitudes(); track solicitud.seId) {
             <tr>
-              <!-- FECHA -->
               <td data-label="Fecha">
                 {{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}
               </td>
 
-              <!-- EMAIL -->
               <td data-label="Email Cliente">
                 {{ solicitud.email }}
               </td>
 
-              <!-- ESTADO -->
               <td data-label="Estado">
                 <span class="status-badge status-{{ solicitud.estado | lowercase }}">
                   {{ solicitud.estado }}
                 </span>
               </td>
 
-              <!-- ACCIONES -->
               <td class="celda-acciones" data-label="Acciones">
                 <div class="botones-wrapper">
                   <button [routerLink]="['/admin/solicitudes/detalle', solicitud.seId]" class="btn-ver" title="Ver Detalle">
@@ -61,6 +57,26 @@
           }
         </tbody>
       </table>
+    </div>
+
+    <div class="pagination-bar">
+      <button (click)="cambiarPagina(-1)" [disabled]="currentPage() === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Anterior
+      </button>
+
+      <span class="pagination-info">
+        Página <strong>{{ currentPage() + 1 }}</strong> de <strong>{{ totalPages() }}</strong>
+      </span>
+
+      <button (click)="cambiarPagina(1)" [disabled]="currentPage() + 1 >= totalPages()">
+        Siguiente
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   }
 </div>

@@ -3,8 +3,10 @@ package com.findfix.find_fix_app.usuario.service;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
 import com.findfix.find_fix_app.auth.service.AuthService;
-import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.*;
+
+import jakarta.persistence.criteria.JoinType;
+
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.usuario.specifications.UsuarioSpecifications;
@@ -18,7 +20,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,12 +81,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuariosEncontrados;
     }
 
-    // metodo para obtener lista completa de usuarios
     @Override
     @Transactional(readOnly = true)
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioRepository.findAll();
-    }
+    public Page<VerPerfilUsuarioDTO> obtenerUsuarios(String nombreRol, Pageable pageable) {
+    Specification<Usuario> spec = (root, query, cb) -> {
+        if (nombreRol != null && !nombreRol.isEmpty()) {
+            return cb.equal(root.join("roles").get("nombre"), nombreRol);
+        }
+        return null;
+    };
+
+    Page<Usuario> usuariosPage = usuarioRepository.findAll(spec, pageable);
+    return usuariosPage.map(VerPerfilUsuarioDTO::new);
+}
 
     // metodo para actualizar la contraseña de un usuario
     @Override

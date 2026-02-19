@@ -10,13 +10,16 @@ import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialist
 import com.findfix.find_fix_app.solicitudEspecialista.service.SolicitudEspecialistaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/solicitud-especialista")
 @RequiredArgsConstructor
@@ -34,11 +37,12 @@ public class SolicitudEspecialistaController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<MostrarSolicitudEspecialistaAdminDTO>>> obtenerSolicitudes() throws SolicitudEspecialistaNotFoundException {
-        List<MostrarSolicitudEspecialistaAdminDTO> solicitudesEspecialista = solicitudEspecialistaService.obtenerSolicitudesEspecialista();
-
-        return ResponseEntity.ok(new ApiResponse<>("Lista de solicitudes encontrada☑️", solicitudesEspecialista));
-    }
+    public ResponseEntity<Page<MostrarSolicitudEspecialistaAdminDTO>> obtenerSolicitudes(
+        @PageableDefault(size = 10) Pageable pageable) 
+        throws SolicitudEspecialistaNotFoundException {
+    
+    return ResponseEntity.ok(solicitudEspecialistaService.obtenerSolicitudesEspecialista(pageable));
+}
 
     @GetMapping("/mis-solicitudes")
     @PreAuthorize("hasRole('CLIENTE')")

@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../../models/api-response/apiResponse.model';
+import { ApiResponse, PageResponse } from '../../models/api-response/apiResponse.model';
 import { MostrarSolicitud } from '../../models/cliente/solicitud-especialista.model';
 import { ActualizarSolicitudDTO, FichaCompletaSolicitud } from '../../models/cliente/solicitud-especialista.model';
 
@@ -14,8 +14,15 @@ export class SolicitudEspecialistaAdminService {
   private http = inject(HttpClient);
   private solicitudesUrl = `${this.apiUrl}/solicitud-especialista`;
 
-  getSolicitudesAdmin(): Observable<ApiResponse<MostrarSolicitud[]>> {
-    return this.http.get<ApiResponse<MostrarSolicitud[]>>(`${this.solicitudesUrl}`);
+  obtenerSolicitudesEspecialista(page: number, size: number): Observable<PageResponse<MostrarSolicitud>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PageResponse<MostrarSolicitud>>(
+      `${this.solicitudesUrl}`,
+      { params }
+    );
   }
 
   getFichaCompleta(id: number): Observable<ApiResponse<FichaCompletaSolicitud>> {

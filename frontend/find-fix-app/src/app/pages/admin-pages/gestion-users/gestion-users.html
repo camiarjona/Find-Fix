@@ -97,6 +97,24 @@
         }
       </tbody>
     </table>
+    <div class="pagination-bar" *ngIf="totalPages() > 0" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px; padding: 10px;">
+
+  <button
+    (click)="cambiarPagina(-1)"
+    [disabled]="currentPage() === 0">
+    Anterior
+  </button>
+
+  <span>
+    Página <strong>{{ currentPage() + 1 }}</strong> de <strong>{{ totalPages() }}</strong>
+  </span>
+
+  <button
+    (click)="cambiarPagina(1)"
+    [disabled]="currentPage() + 1 >= totalPages()">
+    Siguiente
+  </button>
+</div>
   </div>
   }
 </div>
