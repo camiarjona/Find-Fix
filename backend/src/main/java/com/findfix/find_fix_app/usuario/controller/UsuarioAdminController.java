@@ -2,6 +2,7 @@ package com.findfix.find_fix_app.usuario.controller;
 
 import com.findfix.find_fix_app.usuario.dto.ActualizarUsuarioDTO;
 import com.findfix.find_fix_app.usuario.dto.BuscarUsuarioDTO;
+import com.findfix.find_fix_app.usuario.dto.MostrarUsuarioDTO;
 import com.findfix.find_fix_app.usuario.dto.VerPerfilUsuarioDTO;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
@@ -12,6 +13,9 @@ import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,12 +33,11 @@ public class UsuarioAdminController {
     //metodo para ver la lista de usuarios registrados
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<List<VerPerfilUsuarioDTO>>> obtenerUsuarios() {
-        List<Usuario> usuarios = usuarioService.obtenerUsuarios();
-        return ResponseEntity.ok(new ApiResponse<>(
-                "Lista de usuarios☑️",
-                usuarios.stream().map(VerPerfilUsuarioDTO::new).toList()));
-    }
+    public ResponseEntity<Page<VerPerfilUsuarioDTO>> obtenerUsuarios(
+        @RequestParam(required = false) String rolId,
+        @PageableDefault(size = 10) Pageable pageable) {
+    return ResponseEntity.ok(usuarioService.obtenerUsuarios(rolId, pageable));
+}
 
     //metodo para modificar un usuario (desde admin)
     @PatchMapping("/modificar/{email}") //CHEQUEADO

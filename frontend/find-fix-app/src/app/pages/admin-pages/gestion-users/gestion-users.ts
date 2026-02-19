@@ -12,7 +12,9 @@ import { UI_ICONS } from '../../../models/general/ui-icons';
   templateUrl: './gestion-users.html',
   styleUrl: './gestion-users.css',
 })
+
 export class GestionUsers implements OnInit{
+
 
   private userService = inject(UserService);
 
@@ -32,20 +34,28 @@ export class GestionUsers implements OnInit{
     this.cargarUsuarios();
   }
 
+  /// señales para paginacion
+  public currentPage = signal(0);
+  public totalPages = signal(0);
+  public pageSize = 10;
+
+
   cargarUsuarios() {
-    this.isLoading.set(true);
-    this.userService.getUsers(true).subscribe({
-      next: (res) => {
-        const listaUsuarios = 'data' in res ? res.data : res;
-        this.usuarios.set(listaUsuarios);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Error cargando usuarios:', err);
-        this.isLoading.set(false);
-      }
-    });
-  }
+  this.isLoading.set(true);
+
+
+  this.userService.obtenerUsuarios(this.filtros.rol, this.currentPage(), this.pageSize).subscribe({
+    next: (res) => {
+      this.usuarios.set(res.content);
+      this.totalPages.set(res.totalPages);
+      this.isLoading.set(false);
+    },
+    error: (err) => {
+      console.error('Error al cargar usuarios:', err);
+      this.isLoading.set(false);
+    }
+  });
+}
 
   confirmarDesactivacion(user: UserProfile) {
     if (!user.activo) return;
@@ -102,39 +112,20 @@ export class GestionUsers implements OnInit{
     )
   }
 
-  // MÉTODO PARA FILTRAR
+  cambiarPagina(delta: number) {
+  this.currentPage.update(p => p + delta);
+  this.cargarUsuarios();
+}
+
   aplicarFiltros() {
-    // Si no hay nada escrito, recargamos todos
-    if (!this.filtros.email && !this.filtros.rol) {
-      this.cargarUsuarios();
-      return;
-    }
-
-    this.isLoading.set(true);
-
-    // Limpiamos el objeto para no enviar strings vacíos
-    const filtrosLimpios: UserSearchFilters = {
-      email: this.filtros.email || undefined,
-      rol: this.filtros.rol || undefined
-    };
-
-    this.userService.filterUsers(filtrosLimpios).subscribe({
-      next: (res) => {
-        this.usuarios.set(res.data); // Actualizamos la tabla con los resultados
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.isLoading.set(false);
-        alert('Error al filtrar');
-      }
-    });
+    this.currentPage.set(0);
+    this.cargarUsuarios();
   }
 
   // MÉTODO PARA LIMPIAR
   limpiarFiltros() {
-    this.filtros = { email: '', rol: '' }; // Reset variables
-    this.cargarUsuarios(); // Recargar lista completa
+    this.filtros = { email: '', rol: '' };
+    this.cargarUsuarios();
   }
 }
 
