@@ -83,6 +83,7 @@ export class MisSolicitudesPage implements OnInit {
         this.todasLasSolicitudes = response.data.map(s => ({
           id: s.id, // Asegúrate de que en tu DTO de respuesta se llame 'id'
           especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
+          fotoUrl: s.fotoUrlEspecialista,
           descripcion: s.descripcion,
           fechaSolicitud: s.fechaCreacion,
           estado: s.estado,

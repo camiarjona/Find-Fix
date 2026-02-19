@@ -33,8 +33,8 @@
     @for (oficio of perfil()?.oficios; track oficio.id) {
       <span class="role-badge">{{ oficio.nombre }}</span>
     } @empty {
-      <span class="role-badge" style="background-color: #fef3c7; color: #92400e;">
-        Sin oficios registrados
+      <span class="role-badge" style="background-color: #fef3c7; color: #92400e; border-color: #fde68a;">
+        Sin oficios
       </span>
     }
   </div>
@@ -80,24 +80,41 @@
       </div>
 
       <div class="modal-footer">
-        <div class="left-actions">
-          @if (perfil()?.fotoUrl) {
-            <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
-              <i class="fas fa-trash-alt"></i> Eliminar Foto
-            </button>
-          }
-          <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
-            Descartar
-          </button>
-        </div>
+  <div class="left-actions">
+    @if (perfil()?.fotoUrl) {
+      <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
+        <i class="fas fa-trash"></i> Eliminar Foto
+      </button>
+    }
+  </div>
 
-        <button class="btn-action btn-save-new"
-                [disabled]="files.length === 0 || isPhotoLoading()"
-                (click)="guardarFoto()">
-          <i class="fas fa-check" *ngIf="!isPhotoLoading()"></i>
-          {{ isPhotoLoading() ? 'Subiendo...' : 'Guardar Cambios' }}
+  <div class="action-buttons-container">
+    <div class="botones-row">
+      @if (files.length > 0) {
+        <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
+          Descartar
         </button>
-      </div>
+      }
+
+      <button class="btn-action btn-save-new"
+        [disabled]="files.length === 0 || isPhotoLoading()"
+        (click)="guardarFoto()">
+  @if (isPhotoLoading()) {
+    <div class="loading-wrapper">
+      <span class="spinner-small"></span>
+      <span class="loading-text">Subiendo...</span>
+    </div>
+  } @else {
+    Guardar Cambios
+  }
+</button>
+    </div>
+
+    <p class="nota-resolucion">
+      * Resolución máxima permitida: 1920x1080px
+    </p>
+  </div>
+  </div>
 
     </div>
   </div>

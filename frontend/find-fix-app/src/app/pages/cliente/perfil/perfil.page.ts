@@ -138,7 +138,17 @@ export class PerfilPage implements OnInit {
         },
         error: (err) => {
           this.isPhotoLoading.set(false);
-          this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
+
+          if (err.status === 400 && err.error?.error === 'IMAGEN_INAPROPIADA') {
+            this.files = [];
+            this.mostrarFeedback(
+              'Imagen rechazada',
+              'La IA ha detectado contenido inapropiado. Por favor, elige otra foto.',
+              'error'
+            );
+        } else {
+          this.mostrarFeedback('Error', 'No se pudo subir la foto', 'error');
+        }
         }
       });
     }

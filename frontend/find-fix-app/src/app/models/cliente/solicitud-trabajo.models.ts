@@ -5,6 +5,7 @@ export interface MostrarSolicitudTrabajoDTO {
   nombreEspecialista: string;
   apellidoEspecialista: string;
   descripcion: string;
+  fotoUrlEspecialista?: string;
 }
 
 export interface BuscarSolicitudDTO {
