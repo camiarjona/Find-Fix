@@ -7,6 +7,8 @@ import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialista
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
 public interface SolicitudEspecialistaService {
 
     void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException;
-    List<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista() throws SolicitudEspecialistaNotFoundException;
+    Page<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista(Pageable pageable) throws SolicitudEspecialistaNotFoundException;
     SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, RolNotFoundException, SolicitudEspecialistaException;
     void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException;
     List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException;

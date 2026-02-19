@@ -215,3 +215,113 @@ td::before {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.table-container {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f9fafb;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #edf2f7;
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* PAGINACIÓN MODERNA */
+.pagination-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.pagination-bar button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.pagination-bar button:not(:disabled):hover {
+     background-color: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.pagination-bar button:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.pagination-info {
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+/* --- MODO OSCURO (FindFix Adaptación) --- */
+:host-context(.dark-mode) .table-container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+:host-context(.dark-mode) th {
+    background-color: #2d2d2d;
+    color: #9ca3af;
+    border-bottom-color: #333;
+}
+
+:host-context(.dark-mode) td {
+    color: #e5e7eb;
+    border-bottom-color: #333;
+}
+
+:host-context(.dark-mode) .pagination-bar button {
+      background-color: #2d2d2d;
+    border-color: #444;
+    color: whitesmoke
+}
+
+:host-context(.dark-mode) .pagination-info {
+    color: #9ca3af;
+}
+
+:host-context(.dark-mode) .pagination-bar button:disabled {
+    background-color: gray;
+    color: #4b5563;
+    border-color: #374151;
+}
+
+:host-context(.dark-mode) .pagination-bar button:not(:disabled):hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}

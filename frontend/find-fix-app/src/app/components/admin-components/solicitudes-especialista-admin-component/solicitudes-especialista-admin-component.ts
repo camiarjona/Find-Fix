@@ -22,30 +22,38 @@ export class SolicitudesEspecialistaAdminComponent implements OnInit {
   public error = signal<string | null>(null);
 
   private router = inject(Router);
+  // Paginación
+  public currentPage = signal(0);
+  public totalPages = signal(0);
+  public pageSize = 5;
 
   ngOnInit(): void {
-    this.loadSolicitudes();
+    this.cargarSolicitudes();
   }
 
-  loadSolicitudes(): void {
+  cargarSolicitudes() {
     this.loading.set(true);
-    this.error.set(null);
-
-    this.solicitudService.getSolicitudesAdmin().subscribe({
-      next: (response) => {
-        if (response.data) {
-          this.solicitudes.set(response.data);
-        } else {
-          this.solicitudes.set([]);
-        }
+    this.solicitudService.obtenerSolicitudesEspecialista(this.currentPage(), this.pageSize).subscribe({
+      next: (res) => {
+        this.solicitudes.set(res.content);
+        this.totalPages.set(res.totalPages);
         this.loading.set(false);
       },
       error: (err) => {
-        console.error('Error al cargar solicitudes:', err);
-        this.error.set('Error al cargar las solicitudes. Verifique la conexión al backend.');
+        console.error('No se encontraron solicitudes:', err);
+        this.solicitudes.set([]); // Limpiamos la lista si tira el NotFoundException
+        this.totalPages.set(0);
         this.loading.set(false);
       }
     });
+  }
+
+  cambiarPagina(delta: number) {
+    const nuevaPagina = this.currentPage() + delta;
+    if (nuevaPagina >= 0 && nuevaPagina < this.totalPages()) {
+      this.currentPage.set(nuevaPagina);
+      this.cargarSolicitudes();
+    }
   }
 
   verDetalle(id: number): void {
