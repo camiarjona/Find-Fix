@@ -82,7 +82,7 @@
   @if (modoVista === 'tarjetas') {
   <div class="contenedor-cuadricula">
     @for (trabajo of trabajosVisibles(); track trabajo.id) {
-    <div class="tarjeta-trabajo">
+    <div class="tarjeta-trabajo" (click)="abrirModalDetalle(trabajo)">
 
       <div class="fila-encabezado-tarjeta">
         <span class="capsula-estado" [class]="obtenerClaseEstado(trabajo.estado)">
@@ -116,7 +116,7 @@
             ⭐ Calificar
           </button>
           }
-          <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
+          <button class="btn-ver">Ver Detalles</button>
         </div>
       </div>
 
@@ -184,6 +184,23 @@
     </table>
   </div>
   }
+
+  @if (totalPages() > 1) {
+    <div class="pagination-bar">
+      <button [disabled]="currentPage() === 0" (click)="cambiarPagina(currentPage() - 1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Anterior
+      </button>
+
+      <span class="pagination-info">Página {{ currentPage() + 1 }} de {{ totalPages() }}</span>
+
+      <button [disabled]="currentPage() + 1 >= totalPages()" (click)="cambiarPagina(currentPage() + 1)">
+        Siguiente
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  }
+
   }
   }
 </div>
