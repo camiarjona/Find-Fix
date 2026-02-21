@@ -26,17 +26,14 @@ export class MisTrabajosPage implements OnInit {
   public estaCargando = signal(true);
   public modoVista: 'tarjetas' | 'lista' = 'tarjetas';
 
-  // --- Paginación ---
   public currentPage = signal(0);
   public pageSize = 6;
   public totalPages = signal(0);
 
-  // --- Alertas ---
   public alertaVisible = signal(false);
   public mensajeAlerta = signal('');
   public tipoAlerta = signal<'success' | 'error'>('success');
 
-  // --- Filtros ---
   public filtros = {
     origen: '',
     id: '',
@@ -48,7 +45,6 @@ export class MisTrabajosPage implements OnInit {
 
   public estadosPosibles = ['CREADO', 'EN_PROCESO', 'FINALIZADO'];
 
-  // --- Modal Detalle/Edición ---
   public trabajoSeleccionado = signal<VisualizarTrabajoAppEspecialista | null>(null);
   public datosEdicion: any = {};
   public modoEdicion = {
@@ -59,7 +55,6 @@ export class MisTrabajosPage implements OnInit {
     descripcion: false
   };
 
-  // --- Modal Creación ---
   public modalCreacionVisible = signal(false);
   public nuevoTrabajo = {
     titulo: '',
@@ -118,7 +113,6 @@ export class MisTrabajosPage implements OnInit {
     });
   }
 
-  // --- Lógica de Filtrado y Paginación ---
   aplicarFiltros() {
     let resultado = this.todosLosTrabajos;
 
@@ -140,11 +134,9 @@ export class MisTrabajosPage implements OnInit {
       resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) <= h);
     }
 
-    // Guardar lista filtrada y calcular páginas
     this.trabajosFiltrados = resultado;
     this.totalPages.set(Math.ceil(this.trabajosFiltrados.length / this.pageSize));
 
-    // Resetear a la primera página al filtrar y actualizar lo que se ve
     this.currentPage.set(0);
     this.actualizarVistaPaginada();
   }
@@ -166,7 +158,6 @@ export class MisTrabajosPage implements OnInit {
     this.aplicarFiltros();
   }
 
-  // --- Helpers UI ---
   formatearTextoEstado(estado: string): string {
     if (!estado) return '';
     const texto = estado.replace(/_/g, ' ').toLowerCase();
@@ -188,7 +179,6 @@ export class MisTrabajosPage implements OnInit {
     return [...new Set(permitidos)];
   }
 
-  // --- Gestión de Estados y Edición ---
   cambiarEstadoRapido(trabajo: VisualizarTrabajoAppEspecialista, event: Event) {
     event.stopPropagation();
     const nuevoEstado = (event.target as HTMLSelectElement).value;
@@ -204,7 +194,6 @@ export class MisTrabajosPage implements OnInit {
 
     const serv = origen === 'APP' ? this.servicioTrabajoApp : this.servicioTrabajoExterno;
 
-    // Usamos métodos polimórficos asumiendo que ambos servicios tienen firmas similares para estados
     const observable = origen === 'APP'
       ? this.servicioTrabajoApp.actualizarEstadoTrabajo(titulo, estadoParaBackend)
       : this.servicioTrabajoExterno.actualizarEstado(titulo, estadoParaBackend);
@@ -258,7 +247,6 @@ export class MisTrabajosPage implements OnInit {
     return (value instanceof Date || typeof value === 'number') ? new Date(value).toISOString() : null;
   }
 
-  // --- Modal Detalle y Creación ---
   abrirModalDetalle(trabajo: VisualizarTrabajoAppEspecialista) {
     const origen = (trabajo as any).origen || 'APP';
     if (origen === 'APP') {
