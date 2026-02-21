@@ -16,23 +16,19 @@ export class MisTrabajos implements OnInit {
   private trabajoService = inject(TrabajoAppService);
   private router = inject(Router);
 
-  // --- Estado Principal ---
   public trabajos = signal<VisualizarTrabajoAppCliente[]>([]); // Data cruda del back
   public trabajosFiltrados = signal<VisualizarTrabajoAppCliente[]>([]); // Resultado de los filtros
   public trabajosVisibles = signal<VisualizarTrabajoAppCliente[]>([]); // Lo que se ve en la página actual
   public estaCargando = signal(true);
 
-  // --- Paginación ---
   public currentPage = signal(0);
   public pageSize = 6;
   public totalPages = signal(0);
 
-  // --- Filtros y Vistas ---
   public filtros: BuscarTrabajoApp = { titulo: '', estado: '', desde: '', hasta: '' };
   public modoVista: 'tarjetas' | 'lista' = 'tarjetas';
   public estadosPosibles = ['Creado', 'En proceso', 'En revision', 'Finalizado'];
 
-  // --- Modal Detalle ---
   public trabajoSeleccionado: WritableSignal<VisualizarTrabajoAppCliente | null> = signal(null);
 
   ngOnInit() {
@@ -55,11 +51,9 @@ export class MisTrabajos implements OnInit {
     });
   }
 
-  // --- Lógica de Filtrado y Paginación ---
   aplicarFiltros() {
     let lista = this.trabajos();
 
-    // 1. Filtro por Texto (Nombre especialista o descripción)
     if (this.filtros.titulo) {
       const term = this.filtros.titulo.toLowerCase();
       lista = lista.filter(t =>

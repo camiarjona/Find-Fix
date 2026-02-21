@@ -334,7 +334,6 @@
   text-transform: uppercase;
 }
 
-/* Ajuste del contenedor para alinear con la foto */
 .info-especialista {
   display: flex;
   align-items: center;
@@ -391,7 +390,6 @@
     color: #4b5563;
 }
 
-/* --- MODO OSCURO EXACTO --- */
 :host-context(.dark-mode) .pagination-bar button {
     background-color: #2d2d2d;
     border-color: #444;

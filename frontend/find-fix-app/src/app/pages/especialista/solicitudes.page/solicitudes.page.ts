@@ -16,18 +16,15 @@ export class SolicitudesPage implements OnInit {
   private servicioEspecialista = inject(EspecialistaService);
   private router = inject(Router);
 
-  // --- Estado de Datos ---
   todasLasSolicitudes: any[] = [];      // Datos brutos del back
   solicitudesFiltradas: any[] = [];    // Datos tras filtros de estado/texto
   solicitudesVisibles = signal<any[]>([]); // Lo que se ve en la página actual
   estaCargando = signal(true);
 
-  // --- Paginación ---
   currentPage = signal(0);
   pageSize = 6;
   totalPages = signal(0);
 
-  // --- Estado del Modal ---
   alertaVisible = signal(false);
   mensajeAlerta = signal('');
   tipoAlerta = signal<'success' | 'error'>('success');
@@ -65,18 +62,15 @@ export class SolicitudesPage implements OnInit {
     });
   }
 
-  // --- Lógica de Filtrado y Paginación ---
   aplicarFiltros() {
     let resultado = this.todasLasSolicitudes;
 
-    // 1. Filtro por Estado
     if (this.filtroEstado === 'PENDIENTE') {
       resultado = resultado.filter(s => s.estado === 'PENDIENTE');
     } else if (this.filtroEstado === 'FINALIZADA') {
       resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
     }
 
-    // 2. Filtro por Texto
     if (this.filtroTexto) {
       const texto = this.filtroTexto.toLowerCase();
       resultado = resultado.filter(s =>
@@ -85,11 +79,9 @@ export class SolicitudesPage implements OnInit {
       );
     }
 
-    // 3. Guardar lista filtrada y calcular páginas
     this.solicitudesFiltradas = resultado;
     this.totalPages.set(Math.ceil(this.solicitudesFiltradas.length / this.pageSize));
 
-    // 4. Resetear a la primera página al filtrar y actualizar vista
     this.currentPage.set(0);
     this.actualizarVistaPaginada();
   }
@@ -111,7 +103,6 @@ export class SolicitudesPage implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // --- Acciones del Especialista ---
   aceptarSolicitud(solicitud: any) {
     this.servicioEspecialista.responderSolicitud(solicitud.id, 'ACEPTADO').subscribe({
       next: () => {

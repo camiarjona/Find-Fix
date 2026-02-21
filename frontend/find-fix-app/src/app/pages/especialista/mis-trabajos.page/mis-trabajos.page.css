@@ -1291,7 +1291,6 @@
   }
 }
 
-/* --- Estilos de Paginación FindFix --- */
 .pagination-bar {
     display: flex;
     justify-content: center;
@@ -1341,7 +1340,6 @@
     text-align: center;
 }
 
-/* --- MODO OSCURO (DARK MODE) --- */
 :host-context(.dark-mode) .pagination-bar button {
     background-color: #2d2d2d;
     border-color: #444;

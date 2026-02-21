@@ -11,16 +11,18 @@ import { MostrarResenaClienteDTO } from '../../../models/reseña/reseña.model';
   styleUrls: ['./mis-resenas-enviadas-cliente.css'],
 })
 export class MisResenasEnviadasCliente implements OnInit {
-
   private resenaService = inject(ResenaService);
 
-  // Estado
-  public resenas = signal<MostrarResenaClienteDTO[]>([]);
+  public todasLasResenas: MostrarResenaClienteDTO[] = [];
+  public resenasVisibles = signal<MostrarResenaClienteDTO[]>([]);
   public isLoading = signal(true);
 
-  // Promedio de las calificaciones que has dado (opcional, pero queda bien)
+  public currentPage = signal(0);
+  public pageSize = 4;
+  public totalPages = signal(0);
+
   public promedio = computed(() => {
-    const lista = this.resenas();
+    const lista = this.todasLasResenas;
     if (lista.length === 0) return 0;
     const suma = lista.reduce((acc, curr) => acc + curr.puntuacion, 0);
     return (suma / lista.length).toFixed(1);
@@ -32,10 +34,10 @@ export class MisResenasEnviadasCliente implements OnInit {
 
   cargarResenasEnviadas(): void {
     this.isLoading.set(true);
-
     this.resenaService.obtenerResenasEnviadas().subscribe({
       next: (response) => {
-        this.resenas.set(response.data || []);
+        this.todasLasResenas = response.data || [];
+        this.calcularPaginacion();
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -45,7 +47,25 @@ export class MisResenasEnviadasCliente implements OnInit {
     });
   }
 
-  // Helper para estrellas
+  // --- Lógica de Paginación ---
+  calcularPaginacion() {
+    this.totalPages.set(Math.ceil(this.todasLasResenas.length / this.pageSize));
+    this.currentPage.set(0);
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.resenasVisibles.set(this.todasLasResenas.slice(inicio, fin));
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   getEstrellas(puntuacion: number): number[] {
     const estrellas = [];
     for (let i = 1; i <= 5; i++) {

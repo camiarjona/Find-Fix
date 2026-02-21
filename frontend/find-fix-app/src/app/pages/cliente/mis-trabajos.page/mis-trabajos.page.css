@@ -926,7 +926,6 @@
   font-size: 1.2rem;
 }
 
-/* --- ESTILOS NUEVOS: Botones de Acción de Reseña --- */
 .acciones-tarjeta {
   display: flex;
   gap: 8px;
@@ -949,7 +948,6 @@
   color: #78350f;
 }
 
-/* Para la tabla */
 .acciones-tabla {
   display: flex;
   justify-content: flex-end;
@@ -979,7 +977,6 @@
 }
 
 
-/* --- Estilos de Paginación FindFix --- */
 .pagination-bar {
     display: flex;
     justify-content: center;
@@ -1026,7 +1023,6 @@
     color: #4b5563;
 }
 
-/* --- MODO OSCURO (EXACTO) --- */
 :host-context(.dark-mode) .pagination-bar button {
     background-color: #2d2d2d;
     border-color: #444;

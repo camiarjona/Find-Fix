@@ -17,24 +17,20 @@ export class MisSolicitudesPage implements OnInit {
   private router = inject(Router);
   private solicitudTrabajoService = inject(SolicitudTrabajoService);
 
-  // --- Datos ---
-  todasLasSolicitudes: any[] = []; // Los datos crudos del back
-  solicitudesFiltradas: any[] = []; // Datos después de pasar por el filtro de estado/texto
-  solicitudesVisibles = signal<any[]>([]); // Lo que se ve en la página actual
+  todasLasSolicitudes: any[] = [];
+  solicitudesFiltradas: any[] = [];
+  solicitudesVisibles = signal<any[]>([]);
   estaCargando = signal(true);
 
-  // --- Paginación ---
   currentPage = signal(0);
   pageSize = 6;
   totalPages = signal(0);
 
-  // --- Estado del Modal ---
   alertaVisible = signal(false);
   mensajeAlerta = signal('');
   tipoAlerta = signal<'success' | 'error' | 'pregunta'>('success');
   solicitudAEliminar: any = null;
 
-  // --- Filtros ---
   filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
   filtroTexto = '';
 
@@ -66,7 +62,6 @@ export class MisSolicitudesPage implements OnInit {
   }
 
   aplicarFiltros() {
-    // 1. Filtrar la lista completa por Estado y Texto
     let resultado = this.todasLasSolicitudes;
 
     if (this.filtroEstado === 'PENDIENTE') {
@@ -83,11 +78,9 @@ export class MisSolicitudesPage implements OnInit {
       );
     }
 
-    // 2. Guardar la lista filtrada y calcular páginas
     this.solicitudesFiltradas = resultado;
     this.totalPages.set(Math.ceil(this.solicitudesFiltradas.length / this.pageSize));
 
-    // 3. Cortar la lista para la página actual
     this.actualizarVistaPaginada();
   }
 
@@ -109,7 +102,6 @@ export class MisSolicitudesPage implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Feedback visual de cambio
   }
 
-  // --- Helpers y Acciones ---
   formatearEstado(estado: string): string {
     if (!estado) return '';
     return estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase().replace(/_/g, ' ');
