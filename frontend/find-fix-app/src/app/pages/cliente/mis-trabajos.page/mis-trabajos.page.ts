@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal, computed } from '@angular/core';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { BuscarTrabajoApp, VisualizarTrabajoAppCliente } from '../../../models/trabajoApp-models/trabajo-app-model';
 import { FormsModule } from '@angular/forms';
@@ -14,25 +14,26 @@ import { Router } from '@angular/router';
 })
 export class MisTrabajos implements OnInit {
   private trabajoService = inject(TrabajoAppService);
-
-  // Estado Principal
-  public trabajos = signal<VisualizarTrabajoAppCliente[]>([]);
-  public trabajosVisibles = signal<VisualizarTrabajoAppCliente[]>([]);
-  public estaCargando = signal(true);
   private router = inject(Router);
 
-  // Filtros y Vistas
+  // --- Estado Principal ---
+  public trabajos = signal<VisualizarTrabajoAppCliente[]>([]); // Data cruda del back
+  public trabajosFiltrados = signal<VisualizarTrabajoAppCliente[]>([]); // Resultado de los filtros
+  public trabajosVisibles = signal<VisualizarTrabajoAppCliente[]>([]); // Lo que se ve en la página actual
+  public estaCargando = signal(true);
+
+  // --- Paginación ---
+  public currentPage = signal(0);
+  public pageSize = 6;
+  public totalPages = signal(0);
+
+  // --- Filtros y Vistas ---
   public filtros: BuscarTrabajoApp = { titulo: '', estado: '', desde: '', hasta: '' };
   public modoVista: 'tarjetas' | 'lista' = 'tarjetas';
   public estadosPosibles = ['Creado', 'En proceso', 'En revision', 'Finalizado'];
 
-  // Modal Detalle
+  // --- Modal Detalle ---
   public trabajoSeleccionado: WritableSignal<VisualizarTrabajoAppCliente | null> = signal(null);
-
-  irADejarResena(idTrabajo: number, event: Event) {
-    event.stopPropagation();
-    this.router.navigate(['/cliente/crear-resena', idTrabajo]);
-  }
 
   ngOnInit() {
     this.cargarTrabajos();
@@ -54,23 +55,43 @@ export class MisTrabajos implements OnInit {
     });
   }
 
-  // Lógica de Filtrado Local
+  // --- Lógica de Filtrado y Paginación ---
   aplicarFiltros() {
     let lista = this.trabajos();
 
+    // 1. Filtro por Texto (Nombre especialista o descripción)
     if (this.filtros.titulo) {
       const term = this.filtros.titulo.toLowerCase();
       lista = lista.filter(t =>
         t.nombreEspecialista.toLowerCase().includes(term) ||
-        t.descripcion.toLowerCase().includes(term)
+        (t.descripcion && t.descripcion.toLowerCase().includes(term))
       );
     }
 
+    // 2. Filtro por Estado
     if (this.filtros.estado) {
       lista = lista.filter(t => t.estado === this.filtros.estado);
     }
 
-    this.trabajosVisibles.set(lista);
+    // 3. Guardar resultado filtrado y calcular páginas
+    this.trabajosFiltrados.set(lista);
+    this.totalPages.set(Math.ceil(lista.length / this.pageSize));
+
+    // 4. Volver a la primera página al filtrar y actualizar vista
+    this.currentPage.set(0);
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.trabajosVisibles.set(this.trabajosFiltrados().slice(inicio, fin));
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   limpiarFiltros() {
@@ -80,6 +101,12 @@ export class MisTrabajos implements OnInit {
 
   establecerModoVista(modo: 'tarjetas' | 'lista') {
     this.modoVista = modo;
+  }
+
+  // --- Navegación ---
+  irADejarResena(idTrabajo: number, event: Event) {
+    event.stopPropagation();
+    this.router.navigate(['/cliente/crear-resena', idTrabajo]);
   }
 
   // --- MODAL ---
@@ -99,7 +126,6 @@ export class MisTrabajos implements OnInit {
   obtenerClaseEstado(estado: string): string {
     if (!estado) return '';
     const claseLimpia = estado.toLowerCase().replace(/\s+/g, '-').replace(/_/g, '-');
-
     return `status-${claseLimpia}`;
   }
 }
