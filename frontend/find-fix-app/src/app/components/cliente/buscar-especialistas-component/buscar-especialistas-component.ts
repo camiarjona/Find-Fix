@@ -1,4 +1,4 @@
-import { Component, inject, signal, AfterViewInit, effect, OnInit } from '@angular/core';
+import { Component, inject, signal, AfterViewInit, effect, OnInit, HostListener } from '@angular/core';
 import { FiltroEspecialistasDTO, EspecialistaDTO } from '../../../models/cliente/buscar-especialistas-models';
 import { BuscarEspecialistaService } from '../../../services/cliente/buscar-especialista-service';
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,7 @@ import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../../services/user/user.service';
 import { GeoUtils } from '../../general/geo/geo-utils/geo-utils';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 interface Barrio {
   nombre: string;
@@ -59,27 +60,45 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
   public descripcionTrabajo = '';
   public isSubmitting = signal(false);
   public isLoadingDetalle = signal(false);
+  public criterioOrden = signal<string>('distancia');
 
-  constructor() {
-    effect(() => {
-      let lista = [...this.especialistas()];
+  dropdownOpen: string | null = null;
 
-      if (this.userLat !== null && this.userLon !== null && lista.length > 0) {
-        lista.sort((a, b) => {
-          const distA = (a.latitud != null && a.longitud != null)
-            ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, a.latitud, a.longitud)
-            : 9999;
-          const distB = (b.latitud != null && b.longitud != null)
-            ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, b.latitud, b.longitud)
-            : 9999;
-          return distA - distB;
-        });
+constructor() {
+  effect(() => {
+          const base = this.especialistas();
+    const criterio = this.criterioOrden();
+    let lista = [...base];
+
+    if (lista.length > 0) {
+      switch (criterio) {
+        case 'calificacion':
+          lista = ordenarDinamicamente(lista, 'calificacionPromedio', 'desc');
+          break;
+        case 'nombre':
+          lista = ordenarDinamicamente(lista, 'nombre', 'asc');
+          break;
+        case 'distancia':
+        default:
+          if (this.userLat !== null && this.userLon !== null) {
+            lista.sort((a, b) => {
+              const distA = (a.latitud != null && a.longitud != null)
+                ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, a.latitud, a.longitud)
+                : 9999;
+              const distB = (b.latitud != null && b.longitud != null)
+                ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, b.latitud, b.longitud)
+                : 9999;
+              return distA - distB;
+            });
+          }
+          break;
       }
+    }
 
-      this.especialistasOrdenados.set(lista);
-      if (this.map) { this.actualizarMarcadoresAzules(lista); }
-    });
-  }
+    this.especialistasOrdenados.set(lista);
+    if (this.map) { this.actualizarMarcadoresAzules(lista); }
+  });
+}
 
   ngOnInit() {
     this.obtenerUbicacionGPS();
@@ -257,8 +276,12 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
     if (this.userLat && this.userLon) { f.latitud = this.userLat; f.longitud = this.userLon; }
     this.clienteService.filtrarEspecialistas(f);
   }
+limpiarFiltros() {
+    this.filtros = { ciudad: '', oficio: '', minCalificacion: 0 };
+    this.criterioOrden.set('distancia');
+    this.clienteService.obtenerEspecialistas();
+  }
 
-  limpiarFiltros() { this.filtros = { ciudad: '', oficio: '', minCalificacion: 0 }; this.clienteService.obtenerEspecialistas(); }
   toggleMap() { this.showMap.update(v => !v); if (this.showMap()) { setTimeout(() => this.inicializarMapa(), 200); } }
   cerrarFeedback() { this.feedbackData.visible = false; }
   cargarFavoritosDelUsuario() { this.favoritosService.obtenerFavoritosPorCliente().subscribe({ next: (resp) => this.favoritosSet.set(new Set((resp.data || []).map(f => f.email))) }); }
@@ -268,4 +291,33 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
     if (t.length < 1) { this.cityFilterSuggestions.set([]); return; }
     this.cityFilterSuggestions.set(this.allBarrios.filter(b => b.nombre.toLowerCase().includes(t)).slice(0, 5));
   }
+
+public cambiarOrden(event: any) {
+  const valor = event.target.value;
+  this.criterioOrden.set(valor || 'distancia');
+}
+
+toggleDropdown(menu: string, event: Event) {
+  event.stopPropagation();
+  this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+}
+
+seleccionarOficio(valor: string) {
+  this.filtros.oficio = valor;
+  this.dropdownOpen = null;
+  this.aplicarFiltros();
+}
+
+seleccionarOrden(valor: string) {
+  this.criterioOrden.set(valor || 'distancia');
+  this.dropdownOpen = null;
+}
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.custom-select-wrapper')) {
+    this.dropdownOpen = null;
+  }
+}
 }

@@ -1,10 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SolicitudEspecialistaService } from '../../../services/cliente/solicitud-especialista.service';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-trabajo.service';
+import { ordenarDinamicamente } from '../../../utils/sort-utils'; // Importamos tu helper
 
 @Component({
   selector: 'app-mis-solicitudes.page',
@@ -22,19 +22,19 @@ export class MisSolicitudesPage implements OnInit {
   solicitudesVisibles = signal<any[]>([]);
   todasLasSolicitudes: any[] = [];
   estaCargando = signal(true);
+  dropdownOpen: string | null = null;
 
   // Estado del Modal
   alertaVisible = signal(false);
   mensajeAlerta = signal('');
   tipoAlerta = signal<'success' | 'error' | 'pregunta'>('success');
 
-  // Para guardar la solicitud que se quiere eliminar temporalmente
   solicitudAEliminar: any = null;
 
-  // --- Filtros ---
+  // --- Filtros y Ordenamiento ---
   filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
   filtroTexto = '';
-
+  public criterioOrden = 'fecha';
   ngOnInit() {
     this.cargarDatosReales();
   }
@@ -54,7 +54,6 @@ export class MisSolicitudesPage implements OnInit {
     }
   }
 
-  // --- Manejo del Modal ---
   mostrarAlerta(mensaje: string, tipo: 'success' | 'error' | 'pregunta' = 'success') {
     this.mensajeAlerta.set(mensaje);
     this.tipoAlerta.set(tipo);
@@ -74,14 +73,12 @@ export class MisSolicitudesPage implements OnInit {
     }
   }
 
-  //  INTEGRACIÓN CON BACKEND
   cargarDatosReales() {
     this.estaCargando.set(true);
     this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
       next: (response) => {
-        // CORRECCIÓN: Agregar 'id' al mapeo
         this.todasLasSolicitudes = response.data.map(s => ({
-          id: s.id, // Asegúrate de que en tu DTO de respuesta se llame 'id'
+          id: s.id,
           especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
           fotoUrl: s.fotoUrlEspecialista,
           descripcion: s.descripcion,
@@ -99,35 +96,45 @@ export class MisSolicitudesPage implements OnInit {
     });
   }
 
-  // Filtros
-  aplicarFiltros() {
-    let resultado = this.todasLasSolicitudes;
+  cambiarOrden(event: any) {
+  this.criterioOrden = event.target.value;
+    this.aplicarFiltros();
+  }
 
-    //Filtro Estado
+  aplicarFiltros() {
+    let resultado = [...this.todasLasSolicitudes];
+
+    // 1. Filtro Estado
     if (this.filtroEstado === 'PENDIENTE') {
       resultado = resultado.filter(s => s.estado === 'PENDIENTE');
     } else if (this.filtroEstado === 'FINALIZADA') {
       resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
     }
 
-    // Filtro Texto
+    // 2. Filtro Texto
     if (this.filtroTexto) {
       const texto = this.filtroTexto.toLowerCase();
       resultado = resultado.filter(s =>
         (s.especialista && s.especialista.toLowerCase().includes(texto)) ||
-        (s.titulo && s.titulo.toLowerCase().includes(texto))
+        (s.descripcion && s.descripcion.toLowerCase().includes(texto))
       );
     }
 
-    this.solicitudesVisibles.set(resultado);
+    // ORDENAMIENTO
+  if (this.criterioOrden === 'especialista') {
+    resultado = ordenarDinamicamente(resultado, 'especialista', 'asc');
+  } else {
+    // Por defecto ordenamos por FECHA (más reciente primero)
+    resultado = ordenarDinamicamente(resultado, 'fechaSolicitud', 'desc');
+  }
+
+  this.solicitudesVisibles.set(resultado);
   }
 
   cambiarFiltroEstado(nuevoEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA') {
     this.filtroEstado = nuevoEstado;
     this.aplicarFiltros();
   }
-
-  // Acciones del Cliente
 
   prepararEliminacion(solicitud: any) {
     this.solicitudAEliminar = solicitud;
@@ -139,7 +146,6 @@ export class MisSolicitudesPage implements OnInit {
 
   procesarEliminacion(solicitud: any) {
     if (!solicitud.id) {
-        console.error("Error: Intentando eliminar solicitud sin ID");
         this.cerrarAlerta();
         this.mostrarAlerta("Error interno: No se encontró el ID de la solicitud", "error");
         return;
@@ -157,6 +163,32 @@ export class MisSolicitudesPage implements OnInit {
         this.mostrarAlerta('No se pudo eliminar la solicitud.', 'error');
       }
     });
-
   }
+
+  toggleDropdown(menu: string, event: Event) {
+  event.stopPropagation();
+  this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+}
+
+seleccionarOrden(valor: string) {
+  this.criterioOrden = valor;
+  this.dropdownOpen = null;
+  this.aplicarFiltros();
+}
+
+limpiarFiltros() {
+  this.filtroTexto = '';
+  this.filtroEstado = 'PENDIENTE';
+  this.criterioOrden = 'fecha';
+  this.dropdownOpen = null;
+  this.aplicarFiltros();
+}
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.custom-select-wrapper')) {
+    this.dropdownOpen = null;
+  }
+}
 }

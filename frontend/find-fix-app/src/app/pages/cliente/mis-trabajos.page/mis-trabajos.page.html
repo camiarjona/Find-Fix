@@ -1,5 +1,4 @@
 <div class="contenedor-pagina">
-
   <div class="encabezado-pagina">
     <div class="titulo-encabezado">
       <h1>Mis Trabajos</h1>
@@ -8,56 +7,68 @@
   </div>
 
   <div class="barra-filtros">
-
     <div class="grupo-filtro crecer">
-      <input type="text" placeholder="Buscar por especialista o descripción..." [(ngModel)]="filtros.titulo"
+      <label class="etiqueta-filtro">Buscar</label>
+      <input type="text" placeholder="Especialista o descripción..." [(ngModel)]="filtros.titulo"
         (keyup)="aplicarFiltros()" class="input-filtro">
     </div>
 
     <div class="grupo-filtro compacto">
-      <div class="contenedor-select-filtro">
-        <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
-          <option value="">Estado: Todos</option>
-          @for (est of estadosPosibles; track est) {
-          <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-          }
-        </select>
+      <label class="etiqueta-filtro">Estado</label>
+      <div class="custom-select-wrapper">
+        <div class="custom-select-trigger" (click)="toggleDropdown('estado', $event)">
+          <span>{{ filtros.estado || 'Todos' }}</span>
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
+        @if (dropdownOpen === 'estado') {
+          <ul class="suggestions-list custom-dropdown">
+            <li (click)="seleccionarEstado('')" class="suggestion-item">Todos</li>
+            @for (est of estadosPosibles; track est) {
+              <li (click)="seleccionarEstado(est)" class="suggestion-item">{{ est }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <div class="grupo-filtro compacto">
+      <label class="etiqueta-filtro">Ordenar por</label>
+      <div class="custom-select-wrapper">
+        <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+          <span>
+            {{ criterioOrden() === 'especialista' ? 'Especialista (A-Z)' :
+               criterioOrden() === 'estado' ? 'Estado' : 'Más recientes' }}
+          </span>
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
+        @if (dropdownOpen === 'orden') {
+          <ul class="suggestions-list custom-dropdown">
+            <li (click)="seleccionarOrden('fecha')" class="suggestion-item">Más recientes</li>
+            <li (click)="seleccionarOrden('especialista')" class="suggestion-item">Especialista (A-Z)</li>
+            <li (click)="seleccionarOrden('estado')" class="suggestion-item">Estado</li>
+          </ul>
+        }
       </div>
     </div>
 
     <button class="btn-icono-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 6h18"></path>
-        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
       </svg>
     </button>
 
     <div class="divisor-vertical"></div>
 
     <div class="alternador-vista">
-      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar"
-        title="Cuadrícula">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
+      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
       </button>
-      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar"
-        title="Lista">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <line x1="8" y1="6" x2="21" y2="6"></line>
-          <line x1="8" y1="12" x2="21" y2="12"></line>
-          <line x1="8" y1="18" x2="21" y2="18"></line>
-          <line x1="3" y1="6" x2="3.01" y2="6"></line>
-          <line x1="3" y1="12" x2="3.01" y2="12"></line>
-          <line x1="3" y1="18" x2="3.01" y2="18"></line>
-        </svg>
+      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
       </button>
     </div>
   </div>

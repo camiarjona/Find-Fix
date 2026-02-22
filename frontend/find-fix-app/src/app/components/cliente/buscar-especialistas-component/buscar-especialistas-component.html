@@ -3,14 +3,24 @@
     <h2>Encuentra a tu experto</h2>
     <div class="filters-grid">
       <div class="filter-group">
-        <label>Oficio</label>
-        <select [(ngModel)]="filtros.oficio">
-          <option value="">Todos</option>
-          @for (oficio of oficiosDisponibles(); track $index) {
-            <option [value]="oficio">{{oficio}}</option>
-          }
-        </select>
-      </div>
+  <label>Oficio</label>
+  <div class="custom-select-wrapper">
+    <div class="custom-select-trigger" (click)="toggleDropdown('oficio', $event)">
+      <span>{{ filtros.oficio || 'Todos' }}</span>
+      <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+      </svg>
+    </div>
+    @if (dropdownOpen === 'oficio') {
+      <ul class="suggestions-list custom-dropdown">
+        <li (click)="seleccionarOficio('')" class="suggestion-item">Todos</li>
+        @for (oficio of oficiosDisponibles(); track $index) {
+          <li (click)="seleccionarOficio(oficio)" class="suggestion-item">{{oficio}}</li>
+        }
+      </ul>
+    }
+  </div>
+</div>
 
       <div class="filter-group">
         <label>Barrio</label>
@@ -25,14 +35,39 @@
           }
         </div>
       </div>
+<div class="filter-group">
+  <label>Ordenar por</label>
+  <div class="custom-select-wrapper">
+    <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+      <span>
+        {{ criterioOrden() === 'calificacion' ? 'Mejor Calificación' :
+           criterioOrden() === 'nombre' ? 'Nombre (A-Z)' : 'Cercanía (Por defecto)' }}
+      </span>
+      <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+      </svg>
+    </div>
+
+    @if (dropdownOpen === 'orden') {
+      <ul class="suggestions-list custom-dropdown">
+        <li (click)="seleccionarOrden('')" class="suggestion-item">Cercanía (Por defecto)</li>
+        <li (click)="seleccionarOrden('calificacion')" class="suggestion-item">Mejor Calificación</li>
+        <li (click)="seleccionarOrden('nombre')" class="suggestion-item">Nombre (A-Z)</li>
+      </ul>
+    }
+  </div>
+</div>
 
       <div class="filter-actions">
-        <button (click)="obtenerUbicacionGPS()" class="btn-ubicacion">📍 Mi Ubicación</button>
-        <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
-        <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
-        <button class="map-toggle-btn" (click)="toggleMap()">
-          @if (showMap()) { <span>Ocultar Mapa</span> } @else { <span>Ver Mapa</span> }
-        </button>
+          <button (click)="obtenerUbicacionGPS()" class="btn-ubicacion">📍 Mi Ubicación</button>
+          <button class="map-toggle-btn" (click)="toggleMap()">
+             @if (showMap()) { <span>Ocultar Mapa</span> } @else { <span>Ver Mapa</span> }
+          </button>
+          <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
+
+
+
+          <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
       </div>
     </div>
   </div>

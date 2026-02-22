@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { BuscarTrabajoApp, VisualizarTrabajoAppCliente } from '../../../models/trabajoApp-models/trabajo-app-model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-trabajos.page',
@@ -28,6 +29,10 @@ export class MisTrabajos implements OnInit {
 
   // Modal Detalle
   public trabajoSeleccionado: WritableSignal<VisualizarTrabajoAppCliente | null> = signal(null);
+
+  //Propiedades para ordenamiento
+ public criterioOrden = signal<string>('fecha');
+  public dropdownOpen: string | null = null;
 
   irADejarResena(idTrabajo: number, event: Event) {
     event.stopPropagation();
@@ -54,9 +59,8 @@ export class MisTrabajos implements OnInit {
     });
   }
 
-  // Lógica de Filtrado Local
-  aplicarFiltros() {
-    let lista = this.trabajos();
+aplicarFiltros() {
+    let lista = [...this.trabajos()];
 
     if (this.filtros.titulo) {
       const term = this.filtros.titulo.toLowerCase();
@@ -70,13 +74,44 @@ export class MisTrabajos implements OnInit {
       lista = lista.filter(t => t.estado === this.filtros.estado);
     }
 
+    const criterio = this.criterioOrden();
+    if (criterio === 'especialista') {
+      lista = ordenarDinamicamente(lista, 'nombreEspecialista', 'asc');
+    } else if (criterio === 'estado') {
+      lista = ordenarDinamicamente(lista, 'estado', 'asc');
+    } else {
+      lista = ordenarDinamicamente(lista, 'id', 'desc');
+    }
+
     this.trabajosVisibles.set(lista);
   }
 
-  limpiarFiltros() {
-    this.filtros = { titulo: '', estado: '', desde: '', hasta: '' };
+  // --- MÉTODOS DEL DROPDOWN ---
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(valor: string) {
+    this.criterioOrden.set(valor);
+    this.dropdownOpen = null;
     this.aplicarFiltros();
   }
+
+  seleccionarEstado(valor: string) {
+    this.filtros.estado = valor;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+limpiarFiltros() {
+    this.filtros = { titulo: '', estado: '', desde: '', hasta: '' };
+    this.criterioOrden.set('fecha');
+    this.aplicarFiltros();
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() { this.dropdownOpen = null; }
 
   establecerModoVista(modo: 'tarjetas' | 'lista') {
     this.modoVista = modo;
