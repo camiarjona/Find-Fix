@@ -105,11 +105,11 @@
   @if (modoVista === 'tarjetas') {
   <div class="contenedor-cuadricula">
     @for (trabajo of trabajosVisibles(); track $any(trabajo).id + '_' + $any(trabajo).origen) {
-    <div class="tarjeta-trabajo">
+    <div class="tarjeta-trabajo" (click)="abrirModalDetalle(trabajo)">
       <div class="fila-encabezado-tarjeta">
         <div class="contenedor-insignia-estado">
           <select class="select-estado insignia" [ngClass]="obtenerClaseEstado(trabajo.estado)"
-            [ngModel]="trabajo.estado" (change)="cambiarEstadoRapido(trabajo, $event)">
+            [ngModel]="trabajo.estado" (change)="cambiarEstadoRapido(trabajo, $event)" (click)="$event.stopPropagation()">
             @for (est of obtenerEstadosPermitidos(trabajo.estado); track est) {
             <option [value]="est">{{ formatearTextoEstado(est) }}</option>
             }
@@ -142,7 +142,7 @@
       </div>
       <div class="pie-tarjeta">
         <span class="precio">{{ trabajo.presupuesto | currency }}</span>
-        <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
+        <button class="btn-ver">Ver Detalles</button>
       </div>
     </div>
     }
@@ -213,6 +213,22 @@
       </tbody>
     </table>
   </div>
+  }
+
+  @if (totalPages() > 1) {
+    <div class="pagination-bar">
+      <button [disabled]="currentPage() === 0" (click)="cambiarPagina(currentPage() - 1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Anterior
+      </button>
+
+      <span class="pagination-info">Página {{ currentPage() + 1 }} de {{ totalPages() }}</span>
+
+      <button [disabled]="currentPage() + 1 >= totalPages()" (click)="cambiarPagina(currentPage() + 1)">
+        Siguiente
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
   }
 
   }
@@ -340,15 +356,14 @@
 }
 
 @if(modalCreacionVisible()) {
-<div class="superposicion-modal" (click)="cerrarModalCreacion()">
+<div class="superposicion-modal" (click)="cerrarModal()">
   <div class="contenido-modal" (click)="$event.stopPropagation()">
     <div class="encabezado-modal">
       <div class="info-encabezado-modal">
         <h2>Nuevo Trabajo Externo</h2>
-        <p style="font-size: 0.85rem; color: #6b7280; margin: 0;">Registra un trabajo realizado fuera de la plataforma.
-        </p>
+        <p style="font-size: 0.85rem; color: #6b7280; margin: 0;">Registra un trabajo realizado fuera de la plataforma.</p>
       </div>
-      <button class="btn-cerrar" (click)="cerrarModalCreacion()">×</button>
+      <button class="btn-cerrar" (click)="cerrarModal()">×</button>
     </div>
     <div class="cuerpo-modal">
       <div class="grupo-editable ancho-completo">
@@ -380,7 +395,7 @@
       </div>
 
       <div class="acciones-modal-unificadas">
-        <button type="button" class="btn-cancelar" (click)="cerrarModalCreacion()">Cancelar</button>
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
         <button type="button" class="btn-guardar" (click)="guardarNuevoTrabajo()">Crear Trabajo</button>
       </div>
     </div>

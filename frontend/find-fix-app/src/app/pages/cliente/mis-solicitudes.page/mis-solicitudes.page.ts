@@ -1,10 +1,10 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-trabajo.service';
-import { ordenarDinamicamente } from '../../../utils/sort-utils'; // Importamos tu helper
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-solicitudes.page',
@@ -14,32 +14,150 @@ import { ordenarDinamicamente } from '../../../utils/sort-utils'; // Importamos 
   styleUrl: './mis-solicitudes.page.css',
 })
 export class MisSolicitudesPage implements OnInit {
-
   private router = inject(Router);
   private solicitudTrabajoService = inject(SolicitudTrabajoService);
 
-  // Señales y Estado
-  solicitudesVisibles = signal<any[]>([]);
+  // Datos Originales y Filtrados
   todasLasSolicitudes: any[] = [];
+  solicitudesFiltradas: any[] = [];
+
+  // Señales de Estado y UI
+  solicitudesVisibles = signal<any[]>([]);
   estaCargando = signal(true);
   dropdownOpen: string | null = null;
+  solicitudAEliminar: any = null;
 
-  // Estado del Modal
+  // Paginación
+  currentPage = signal(0);
+  pageSize = 6;
+  totalPages = signal(0);
+
+  // Filtros y Ordenamiento
+  filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
+  filtroTexto = '';
+  criterioOrden = 'fecha';
+
+  // Modales
   alertaVisible = signal(false);
   mensajeAlerta = signal('');
   tipoAlerta = signal<'success' | 'error' | 'pregunta'>('success');
 
-  solicitudAEliminar: any = null;
-
-  // --- Filtros y Ordenamiento ---
-  filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
-  filtroTexto = '';
-  public criterioOrden = 'fecha';
   ngOnInit() {
     this.cargarDatosReales();
   }
 
-  // --- Helpers de Formato ---
+  cargarDatosReales() {
+    this.estaCargando.set(true);
+    this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
+      next: (response) => {
+        this.todasLasSolicitudes = response.data.map((s: any) => ({
+          id: s.id,
+          especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
+          fotoUrl: s.fotoUrlEspecialista,
+          descripcion: s.descripcion,
+          fechaSolicitud: s.fechaCreacion,
+          estado: s.estado,
+        }));
+        this.aplicarFiltros();
+        this.estaCargando.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.mostrarAlerta('Error al cargar solicitudes', 'error');
+        this.estaCargando.set(false);
+      }
+    });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.todasLasSolicitudes];
+
+    // 1. Filtro por Estado
+    if (this.filtroEstado === 'PENDIENTE') {
+      resultado = resultado.filter(s => s.estado === 'PENDIENTE');
+    } else if (this.filtroEstado === 'FINALIZADA') {
+      resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
+    }
+
+    // 2. Filtro por Texto
+    if (this.filtroTexto) {
+      const texto = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(s =>
+        (s.especialista && s.especialista.toLowerCase().includes(texto)) ||
+        (s.descripcion && s.descripcion.toLowerCase().includes(texto))
+      );
+    }
+
+    // 3. Ordenamiento (Antes de paginar)
+    if (this.criterioOrden === 'especialista') {
+      resultado = ordenarDinamicamente(resultado, 'especialista', 'asc');
+    } else {
+      resultado = ordenarDinamicamente(resultado, 'fechaSolicitud', 'desc');
+    }
+
+    this.solicitudesFiltradas = resultado;
+    this.totalPages.set(Math.ceil(this.solicitudesFiltradas.length / this.pageSize));
+
+    // Si al filtrar la página actual queda fuera de rango, resetear a 0
+    if (this.currentPage() >= this.totalPages() && this.totalPages() > 0) {
+        this.currentPage.set(0);
+    }
+
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.solicitudesVisibles.set(this.solicitudesFiltradas.slice(inicio, fin));
+  }
+
+  // --- Acciones de UI ---
+
+  cambiarFiltroEstado(nuevoEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA') {
+    this.filtroEstado = nuevoEstado;
+    this.currentPage.set(0);
+    this.aplicarFiltros();
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  seleccionarOrden(valor: string) {
+    this.criterioOrden = valor;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.filtroEstado = 'PENDIENTE';
+    this.criterioOrden = 'fecha';
+    this.currentPage.set(0);
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  // --- Dropdown y Clics ---
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-select-wrapper')) {
+      this.dropdownOpen = null;
+    }
+  }
+
+  // --- Helpers de Formato y Modales ---
+
   formatearEstado(estado: string): string {
     if (!estado) return '';
     return estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase().replace(/_/g, ' ');
@@ -73,82 +191,19 @@ export class MisSolicitudesPage implements OnInit {
     }
   }
 
-  cargarDatosReales() {
-    this.estaCargando.set(true);
-    this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
-      next: (response) => {
-        this.todasLasSolicitudes = response.data.map(s => ({
-          id: s.id,
-          especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
-          fotoUrl: s.fotoUrlEspecialista,
-          descripcion: s.descripcion,
-          fechaSolicitud: s.fechaCreacion,
-          estado: s.estado,
-        }));
-        this.aplicarFiltros();
-        this.estaCargando.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.mostrarAlerta('Error al cargar solicitudes', 'error');
-        this.estaCargando.set(false);
-      }
-    });
-  }
-
-  cambiarOrden(event: any) {
-  this.criterioOrden = event.target.value;
-    this.aplicarFiltros();
-  }
-
-  aplicarFiltros() {
-    let resultado = [...this.todasLasSolicitudes];
-
-    // 1. Filtro Estado
-    if (this.filtroEstado === 'PENDIENTE') {
-      resultado = resultado.filter(s => s.estado === 'PENDIENTE');
-    } else if (this.filtroEstado === 'FINALIZADA') {
-      resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
-    }
-
-    // 2. Filtro Texto
-    if (this.filtroTexto) {
-      const texto = this.filtroTexto.toLowerCase();
-      resultado = resultado.filter(s =>
-        (s.especialista && s.especialista.toLowerCase().includes(texto)) ||
-        (s.descripcion && s.descripcion.toLowerCase().includes(texto))
-      );
-    }
-
-    // ORDENAMIENTO
-  if (this.criterioOrden === 'especialista') {
-    resultado = ordenarDinamicamente(resultado, 'especialista', 'asc');
-  } else {
-    // Por defecto ordenamos por FECHA (más reciente primero)
-    resultado = ordenarDinamicamente(resultado, 'fechaSolicitud', 'desc');
-  }
-
-  this.solicitudesVisibles.set(resultado);
-  }
-
-  cambiarFiltroEstado(nuevoEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA') {
-    this.filtroEstado = nuevoEstado;
-    this.aplicarFiltros();
-  }
-
   prepararEliminacion(solicitud: any) {
     this.solicitudAEliminar = solicitud;
     this.mostrarAlerta(
-      `¿Estás seguro de que deseas cancelar la solicitud enviada a ${solicitud.especialista}? Esta acción no se puede deshacer.`,
+      `¿Estás seguro de que deseas cancelar la solicitud enviada a ${solicitud.especialista}?`,
       'pregunta'
     );
   }
 
   procesarEliminacion(solicitud: any) {
     if (!solicitud.id) {
-        this.cerrarAlerta();
-        this.mostrarAlerta("Error interno: No se encontró el ID de la solicitud", "error");
-        return;
+      this.cerrarAlerta();
+      this.mostrarAlerta("Error interno: No se encontró el ID de la solicitud", "error");
+      return;
     }
 
     this.solicitudTrabajoService.eliminarSolicitud(solicitud.id).subscribe({
@@ -157,38 +212,10 @@ export class MisSolicitudesPage implements OnInit {
         this.cerrarAlerta();
         this.mostrarAlerta('Solicitud eliminada', 'success');
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.cerrarAlerta();
         this.mostrarAlerta('No se pudo eliminar la solicitud.', 'error');
       }
     });
   }
-
-  toggleDropdown(menu: string, event: Event) {
-  event.stopPropagation();
-  this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
-}
-
-seleccionarOrden(valor: string) {
-  this.criterioOrden = valor;
-  this.dropdownOpen = null;
-  this.aplicarFiltros();
-}
-
-limpiarFiltros() {
-  this.filtroTexto = '';
-  this.filtroEstado = 'PENDIENTE';
-  this.criterioOrden = 'fecha';
-  this.dropdownOpen = null;
-  this.aplicarFiltros();
-}
-
-@HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  if (!target.closest('.custom-select-wrapper')) {
-    this.dropdownOpen = null;
-  }
-}
 }
