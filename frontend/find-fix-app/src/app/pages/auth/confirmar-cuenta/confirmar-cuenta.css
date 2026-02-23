@@ -1,0 +1,105 @@
+.confirmar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20px;
+}
+
+.confirmar-card {
+  background: white;
+  max-width: 400px;
+  width: 100%;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.texto-secundario {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+/* Íconos vectoriales */
+.icono-exito, .icono-error {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px auto;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icono-exito {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.icono-error {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.icono-exito svg, .icono-error svg {
+  width: 35px;
+  height: 35px;
+}
+
+/* Animación del Spinner */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ffe0cc;
+  border-top-color: #ff6600;
+  border-radius: 50%;
+  margin: 0 auto 20px auto;
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+/* Botones */
+button {
+  cursor: pointer;
+  padding: 14px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-naranja {
+  background-color: #ff6600;
+  color: white;
+}
+
+.btn-naranja:hover {
+  background-color: #e65c00;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ccc;
+}
+
+.btn-outline:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
