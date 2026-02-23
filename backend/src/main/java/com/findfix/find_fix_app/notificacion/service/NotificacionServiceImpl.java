@@ -83,9 +83,9 @@ public class NotificacionServiceImpl implements NotificacionService {
             String htmlContent = generarHtmlLindo(subject, body);
             helper.setText(htmlContent, true);
             mailSender.send(message);
-            System.out.println("✅ Email HTML enviado a: " + to);
+            System.out.println("Email HTML enviado a: " + to);
         } catch (MessagingException e) {
-            System.err.println("❌ Error enviando email HTML: " + e.getMessage());
+            System.err.println("Error enviando email HTML: " + e.getMessage());
         }
     }
 

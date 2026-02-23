@@ -15,12 +15,6 @@ public class CloudinaryService {
     @Autowired
     private Cloudinary cloudinary;
 
-    /**
-     * Sube una imagen a Cloudinary
-     * @param archivo El archivo que viene del frontend (ngx-dropzone)
-     * @param carpeta Nombre de la carpeta en Cloudinary (ej: "usuarios_findfix")
-     * @param preset Nombre del Upload Preset (ej: "preset_findfix")
-     */
     public Map subirImagen(MultipartFile archivo, String carpeta, String preset) throws IOException {
         Map opciones = ObjectUtils.asMap(
             "folder", carpeta,

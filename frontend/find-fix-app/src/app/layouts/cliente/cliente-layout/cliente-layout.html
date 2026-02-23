@@ -212,28 +212,30 @@
 
         <app-notificacion-component [rolActual]="'CLIENTE'"></app-notificacion-component>
 
-       <button class="theme-toggle" aria-label="Cambiar tema"
-  title="Cambiar a tema {{ themeService.isDarkMode() ? 'claro' : 'oscuro' }}"
-  (click)="toggleTheme()">
+        <button class="theme-toggle" aria-label="Cambiar tema"
+          title="Cambiar a tema {{ themeService.isDarkMode() ? 'claro' : 'oscuro' }}" (click)="toggleTheme()">
 
-  @if (themeService.isDarkMode()) {
-    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
-    </svg>
-  } @else {
-    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="4.5" />
-      <path d="M12 2.5v2.5" />
-      <path d="M12 19v2.5" />
-      <path d="M4.5 12H2" />
-      <path d="M22 12h-2.5" />
-      <path d="M5.8 5.8l-1.8-1.8" />
-      <path d="M20 20l-1.8-1.8" />
-      <path d="M5.8 18.2l-1.8 1.8" />
-      <path d="M20 4l-1.8 1.8" />
-    </svg>
-  }
-</button>
+          @if (themeService.isDarkMode()) {
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-6.248Z" />
+          </svg>
+          } @else {
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4.5" />
+            <path d="M12 2.5v2.5" />
+            <path d="M12 19v2.5" />
+            <path d="M4.5 12H2" />
+            <path d="M22 12h-2.5" />
+            <path d="M5.8 5.8l-1.8-1.8" />
+            <path d="M20 20l-1.8-1.8" />
+            <path d="M5.8 18.2l-1.8 1.8" />
+            <path d="M20 4l-1.8 1.8" />
+          </svg>
+          }
+        </button>
       </div>
     </header>
 
@@ -243,25 +245,25 @@
 </div>
 
 @if (isInvitationModalOpen()) {
-  <div class="modal-overlay-custom" (click)="cerrarModalInvitacion()">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <div class="modal-icon">
-        <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
-                <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
-              </svg>
-      </div>
-      <h2>¡Conviértete en Especialista!</h2>
-      <p>Parece que aún no tienes perfil de especialista. <br> ¿Te gustaría ofrecer tus servicios en FindFix?</p>
+<div class="modal-overlay-custom" (click)="cerrarModalInvitacion()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-icon">
+      <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
+        <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
+      </svg>
+    </div>
+    <h2>¡Conviértete en Especialista!</h2>
+    <p>Parece que aún no tienes perfil de especialista. <br> ¿Te gustaría ofrecer tus servicios en FindFix?</p>
 
-      <div class="modal-actions">
-        <button class="btn-cancel" (click)="cerrarModalInvitacion()">Ahora no</button>
-        <button class="btn-confirm" (click)="irASolicitud()">Sí, quiero unirme</button>
-      </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModalInvitacion()">Ahora no</button>
+      <button class="btn-confirm" (click)="irASolicitud()">Sí, quiero unirme</button>
     </div>
   </div>
+</div>
 }

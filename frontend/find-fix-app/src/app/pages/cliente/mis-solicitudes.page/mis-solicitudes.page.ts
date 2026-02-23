@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SolicitudEspecialistaService } from '../../../services/cliente/solicitud-especialista.service';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-trabajo.service';
 
@@ -79,9 +78,8 @@ export class MisSolicitudesPage implements OnInit {
     this.estaCargando.set(true);
     this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
       next: (response) => {
-        // CORRECCIÓN: Agregar 'id' al mapeo
         this.todasLasSolicitudes = response.data.map(s => ({
-          id: s.id, // Asegúrate de que en tu DTO de respuesta se llame 'id'
+          id: s.id,
           especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
           descripcion: s.descripcion,
           fechaSolicitud: s.fechaCreacion,

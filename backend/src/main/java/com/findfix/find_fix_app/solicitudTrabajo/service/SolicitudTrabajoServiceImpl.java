@@ -104,16 +104,10 @@ public class SolicitudTrabajoServiceImpl implements SolicitudTrabajoService {
     @Override
     @Transactional(readOnly = true)
     public List<SolicitudTrabajo> obtenerSolicitudesDelCliente()
-            throws UsuarioNotFoundException, SolicitudTrabajoException {
+            throws UsuarioNotFoundException {
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
-        List<SolicitudTrabajo> solicitudesEnviadas = solicitudTrabajoRepository.findByUsuario(usuario);
-
-        if (solicitudesEnviadas.isEmpty()) {
-            throw new SolicitudTrabajoException("Usted no ha enviado ninguna solicitud.");
-        }
-
-        return solicitudesEnviadas;
+        return solicitudTrabajoRepository.findByUsuario(usuario);
     }
 
     // metodo para obtener las solicitudes recibidas (como especialista)

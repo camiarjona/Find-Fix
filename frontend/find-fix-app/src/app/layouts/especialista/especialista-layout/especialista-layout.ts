@@ -42,7 +42,7 @@ export class EspecialistaLayout {
     this.authService.logout();
   }
 
- toggleTheme() {
+  toggleTheme() {
     this.themeService.toggleTheme();
   }
 

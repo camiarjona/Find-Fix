@@ -2,8 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
-import { UserProfile } from '../../../models/user/user.model';
-import { FooterComponent } from "../../../components/general/footer-component/footer-component";
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { ThemeService } from '../../../services/tema/theme.service';
 import { NotificacionComponent } from "../../../components/notificacion/notificacion-component/notificacion-component";

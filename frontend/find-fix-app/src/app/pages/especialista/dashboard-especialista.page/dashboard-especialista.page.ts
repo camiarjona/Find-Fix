@@ -33,46 +33,11 @@ export class DashboardEspecialistaPage {
   ultimasResenas = signal<ResenaEspecialista[]>([]);
 
   ngOnInit() {
-    this.cargarDatosReales();
-    this.cargarDatosFalsos();
+    this.cargarResenas();
   }
 
-  cargarDatosFalsos() {
-    console.log('Cargando datos falsos para visualización...');
-    // Lista de reseñas falsas
-    this.ultimasResenas.set([
-      {
-        id: 1,
-        nombreCliente: 'Ana García',
-        puntuacion: 5,
-        comentario: 'Excelente trabajo, muy prolijo y puntual.',
-        fecha: new Date('2023-11-20')
-      },
-      {
-        id: 2,
-        nombreCliente: 'Carlos López',
-        puntuacion: 4,
-        comentario: 'Buen servicio, aunque llegó unos minutos tarde.',
-        fecha: new Date('2023-11-18')
-      },
-      {
-        id: 3,
-        nombreCliente: 'María Rodriguez',
-        puntuacion: 5,
-        comentario: 'Me salvó con la instalación eléctrica. Recomendado.',
-        fecha: new Date('2023-11-15')
-      },
-      {
-        id: 4,
-        nombreCliente: 'Juan Pérez',
-        puntuacion: 5,
-        comentario: 'Todo perfecto.',
-        fecha: new Date('2023-11-10')
-      }
-    ] as any[]);
-  }
 
-  cargarDatosReales() {
+  cargarResenas() {
     // 1. SOLICITUDES
     this.especialistaService.getSolicitudesRecibidas().subscribe({
       next: (solicitudes) => {
