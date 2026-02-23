@@ -30,6 +30,8 @@ import { AccessDeniedPage } from './pages/access-denied.page/access-denied.page'
 import { MisResenasPage } from './pages/especialista/mis-resenas-especialista/mis-resenas-especialista';
 import { MisResenasEnviadasCliente } from './pages/cliente/mis-resenas-enviadas-cliente/mis-resenas-enviadas-cliente';
 import { CrearResenaComponent } from './components/cliente/crear-resena/crear-resena';
+import { RevisaTuCorreo } from './pages/auth/revisa-tu-correo/revisa-tu-correo';
+import { ConfirmarCuenta } from './pages/auth/confirmar-cuenta/confirmar-cuenta';
 
 
 export const routes: Routes = [
@@ -40,6 +42,14 @@ export const routes: Routes = [
   {
     path: 'auth',
     component: AuthPage,
+  },
+  {
+    path: 'revisa-tu-correo',
+    component: RevisaTuCorreo
+  },
+  {
+    path: 'confirmar-cuenta',
+    component: ConfirmarCuenta
   },
   {
     path: 'seleccionar-rol',

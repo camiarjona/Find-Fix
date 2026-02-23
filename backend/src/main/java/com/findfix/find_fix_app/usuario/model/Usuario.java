@@ -50,7 +50,7 @@ public class Usuario {
     private String fotoId;  // public_id Cloudinary
 
 
-    @Column(columnDefinition = "boolean default true")
+    @Column
     private boolean activo = true;
 
     @Column(name = "latitud")
