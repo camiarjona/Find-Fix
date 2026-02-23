@@ -30,4 +30,5 @@ public interface NotificacionService {
     void notificarNuevaResenaRecibida(Usuario especialista, String nombreCliente, String rolDestinatario);
 
     void notificarTokenRegistro(Usuario usuario, String token);
+    void notificarRecuperacionPassword(Usuario usuario, String token);
 }
