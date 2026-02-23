@@ -2,11 +2,14 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResenaService } from '../../../services/reseña/reseñas.service';
 import { MostrarResenaClienteDTO } from '../../../models/reseña/reseña.model';
+import { FormsModule } from '@angular/forms';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-resenas-enviadas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mis-resenas-enviadas-cliente.html',
   styleUrls: ['./mis-resenas-enviadas-cliente.css'],
 })
@@ -14,8 +17,15 @@ export class MisResenasEnviadasCliente implements OnInit {
   private resenaService = inject(ResenaService);
 
   public todasLasResenas: MostrarResenaClienteDTO[] = [];
+  public resenasFiltradas: MostrarResenaClienteDTO[] = []; // Lista intermedia para filtros
   public resenasVisibles = signal<MostrarResenaClienteDTO[]>([]);
   public isLoading = signal(true);
+
+  // Variables de Filtro y Orden
+  public criterioOrden = 'puntuacion';
+  public direccionOrden: DireccionOrden = 'desc';
+  public filtroTexto = '';
+  public dropdownOpen: string | null = null;
 
   public currentPage = signal(0);
   public pageSize = 4;
@@ -37,14 +47,53 @@ export class MisResenasEnviadasCliente implements OnInit {
     this.resenaService.obtenerResenasEnviadas().subscribe({
       next: (response) => {
         this.todasLasResenas = response.data || [];
-        this.calcularPaginacion();
+        this.aplicarFiltros(); // Iniciamos con los filtros aplicados
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error al cargar las reseñas enviadas:', err);
+        console.error(err);
         this.isLoading.set(false);
       }
     });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.todasLasResenas];
+
+    if (this.filtroTexto) {
+      const busqueda = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(r =>
+        r.nombreEspecialista?.toLowerCase().includes(busqueda) ||
+        r.comentario?.toLowerCase().includes(busqueda)
+      );
+    }
+
+    this.direccionOrden = this.criterioOrden === 'puntuacion' ? 'desc' : 'asc';
+
+    this.resenasFiltradas = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.calcularPaginacion();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.criterioOrden = 'puntuacion';
+    this.aplicarFiltros();
   }
 
   // --- Lógica de Paginación ---

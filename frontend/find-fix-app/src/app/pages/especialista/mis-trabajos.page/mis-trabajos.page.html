@@ -16,70 +16,65 @@
     </button>
   </div>
 
-  <div class="barra-filtros">
-    <div class="grupo-filtro pequeno">
-      <div class="contenedor-select-filtro">
-        <select [(ngModel)]="filtros.origen" (change)="aplicarFiltros()" class="select-filtro texto-negrita">
-          <option value="">Origen: Todos</option>
-          <option value="APP">App</option>
-          <option value="EXTERNO">Externo</option>
-        </select>
+ <div class="barra-filtros-stack">
+    <div class="barra-filtros">
+      <div class="grupo-filtro pequeno">
+        <div class="contenedor-select-filtro">
+          <select [(ngModel)]="filtros.origen" (change)="aplicarFiltros()" class="select-filtro texto-negrita">
+            <option value="">Origen: Todos</option>
+            <option value="APP">App</option>
+            <option value="EXTERNO">Externo</option>
+          </select>
+        </div>
+      </div>
+      <div class="grupo-filtro compacto">
+        <div class="contenedor-select-filtro">
+          <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
+            <option value="">Estado: Todos</option>
+            @for (est of estadosPosibles; track est) {
+              <option [value]="est">{{ formatearTextoEstado(est) }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="grupo-filtro fechas">
+        <input type="date" [(ngModel)]="filtros.desde" (change)="aplicarFiltros()" class="fecha-filtro" title="Desde">
+        <span class="separador">-</span>
+        <input type="date" [(ngModel)]="filtros.hasta" (change)="aplicarFiltros()" class="fecha-filtro" title="Hasta">
       </div>
     </div>
-    <div class="grupo-filtro crecer">
-      <input type="text" placeholder="Buscar trabajo..." [(ngModel)]="filtros.titulo" (keyup)="aplicarFiltros()"
-        class="input-filtro">
-    </div>
-    <div class="grupo-filtro compacto">
-      <div class="contenedor-select-filtro">
-        <select [(ngModel)]="filtros.estado" (change)="aplicarFiltros()" class="select-filtro">
-          <option value="">Estado: Todos</option>
-          @for (est of estadosPosibles; track est) {
-          <option [value]="est">{{ formatearTextoEstado(est) }}</option>
-          }
-        </select>
+
+    <div class="barra-filtros">
+      <div class="grupo-filtro crecer">
+        <input type="text" placeholder="Buscar trabajo..." [(ngModel)]="filtros.titulo" (keyup)="aplicarFiltros()" class="input-filtro">
       </div>
-    </div>
-    <div class="grupo-filtro fechas">
-      <input type="date" [(ngModel)]="filtros.desde" (change)="aplicarFiltros()" class="fecha-filtro" title="Desde">
-      <span class="separador">-</span>
-      <input type="date" [(ngModel)]="filtros.hasta" (change)="aplicarFiltros()" class="fecha-filtro" title="Hasta">
-    </div>
-    <button class="btn-icono-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 6h18"></path>
-        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-      </svg>
-    </button>
-    <div class="divisor-vertical"></div>
-    <div class="alternador-vista">
-      <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar"
-        title="Cuadrícula">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
+
+      <div class="grupo-filtro compacto">
+        <div class="contenedor-select-filtro">
+          <select [(ngModel)]="criterioOrden" (change)="aplicarFiltros()" class="select-filtro">
+            <option value="fechaInicio">Ordenar: Recientes</option>
+            <option value="presupuesto">Ordenar: Presupuesto</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-icono-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
       </button>
-      <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar"
-        title="Lista">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <line x1="8" y1="6" x2="21" y2="6"></line>
-          <line x1="8" y1="12" x2="21" y2="12"></line>
-          <line x1="8" y1="18" x2="21" y2="18"></line>
-          <line x1="3" y1="6" x2="3.01" y2="6"></line>
-          <line x1="3" y1="12" x2="3.01" y2="12"></line>
-          <line x1="3" y1="18" x2="3.01" y2="18"></line>
-        </svg>
-      </button>
+
+      <div class="divisor-vertical"></div>
+
+      <div class="alternador-vista">
+        <button (click)="establecerModoVista('tarjetas')" [class.activo]="modoVista === 'tarjetas'" class="btn-alternar" title="Cuadrícula">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </button>
+        <button (click)="establecerModoVista('lista')" [class.activo]="modoVista === 'lista'" class="btn-alternar" title="Lista">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </button>
+      </div>
     </div>
   </div>
-
+  
   @if (estaCargando()) {
   <div class="contenedor-cargando">
     <div class="cargador"></div>

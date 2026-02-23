@@ -1,15 +1,17 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-// Importaciones necesarias
 import { SolicitudEspecialistaAdminService } from '../../../services/admin-services/solicitud-especialista-admin';
 import { MostrarSolicitud } from '../../../models/cliente/solicitud-especialista.model';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-solicitudes-especialista-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink, DatePipe],
+  imports: [CommonModule, RouterLink, DatePipe, FormsModule],
   templateUrl: './solicitudes-especialista-admin-component.html',
   styleUrl: './solicitudes-especialista-admin-component.css',
 })
@@ -27,6 +29,15 @@ export class SolicitudesEspecialistaAdminComponent implements OnInit {
   public totalPages = signal(0);
   public pageSize = 5;
 
+
+  // Variables para filtro y orden (Locales)
+  public criterioOrden = 'fechaSolicitud';
+  public direccionOrden: DireccionOrden = 'desc';
+  public dropdownOpen: string | null = null;
+  public filtroTexto = '';
+
+  private todasLasSolicitudes: MostrarSolicitud[] = [];
+
   ngOnInit(): void {
     this.cargarSolicitudes();
   }
@@ -35,17 +46,53 @@ export class SolicitudesEspecialistaAdminComponent implements OnInit {
     this.loading.set(true);
     this.solicitudService.obtenerSolicitudesEspecialista(this.currentPage(), this.pageSize).subscribe({
       next: (res) => {
-        this.solicitudes.set(res.content);
+        this.todasLasSolicitudes = res.content;
+        this.aplicarFiltrosYOrden();
         this.totalPages.set(res.totalPages);
         this.loading.set(false);
       },
       error: (err) => {
-        console.error('No se encontraron solicitudes:', err);
-        this.solicitudes.set([]); // Limpiamos la lista si tira el NotFoundException
-        this.totalPages.set(0);
+        console.error(err);
+        this.solicitudes.set([]);
         this.loading.set(false);
       }
     });
+  }
+
+  aplicarFiltrosYOrden() {
+    let resultado = [...this.todasLasSolicitudes];
+
+    if (this.filtroTexto) {
+      const busqueda = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(s => s.email.toLowerCase().includes(busqueda));
+    }
+
+    const listaOrdenada = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.solicitudes.set(listaOrdenada);
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.direccionOrden = criterio === 'fechaSolicitud' ? 'desc' : 'asc';
+    this.dropdownOpen = null;
+    this.aplicarFiltrosYOrden();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.criterioOrden = 'fechaSolicitud';
+    this.direccionOrden = 'desc';
+    this.aplicarFiltrosYOrden();
   }
 
   cambiarPagina(delta: number) {

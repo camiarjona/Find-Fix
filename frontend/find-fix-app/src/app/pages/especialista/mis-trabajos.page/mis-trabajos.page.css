@@ -61,14 +61,14 @@
 .barra-filtros {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   background: var(--bg-card);
   padding: 12px;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
   gap: 8px;
-  box-shadow: 0 1px 3px var(--shadow-color);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .grupo-filtro {
@@ -1359,4 +1359,20 @@
     background-color: gray;
     color: #4b5563;
     border-color: #374151;
+}
+
+.barra-filtros-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.alternador-vista {
+  display: flex;
+  background: var(--bg-app);
+  padding: 3px;
+  border-radius: 8px;
+  margin-left: auto; 
 }

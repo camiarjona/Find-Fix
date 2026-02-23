@@ -5,6 +5,8 @@ import { FichaCompletaSolicitud, FilterChip, MostrarSolicitud, SolicitudFilter }
 import { ModalAlertaComponent } from "../../../components/cliente/modal-alerta.component/modal-alerta.component";
 import { ModalDetalleSolicitud } from '../../../components/cliente/modal-detalle-solicitud.component/modal-detalle-solicitud.component';
 import { FormsModule } from '@angular/forms';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-historial-solicitudes-especialista.pages',
@@ -33,6 +35,11 @@ export class HistorialSolicitudesEspecialistaPages implements OnInit {
   public selectedState = '';
   public dateFrom = '';
   public dateTo = '';
+
+  // VARIABLES PARA ORDENAMIENTO
+  public criterioOrden = 'fechaSolicitud';
+  public direccionOrden: DireccionOrden = 'desc';
+  public dropdownOpen: string | null = null;
 
   // Señal para la lista de "Chips" (etiquetas) visibles
   public activeChips = signal<FilterChip[]>([]);
@@ -174,14 +181,43 @@ export class HistorialSolicitudesEspecialistaPages implements OnInit {
     this.aplicarCambios();
   }
 
-  private aplicarCambios() {
+ private aplicarCambios() {
     const filtrosDTO: SolicitudFilter = {};
-
     this.activeChips().forEach(chip => {
       (filtrosDTO as any)[chip.key] = chip.value;
     });
 
-    this.cargarSolicitudes(filtrosDTO);
+    this.isLoading.set(true);
+    const request = Object.values(filtrosDTO).some(v => v)
+      ? this.solicitudService.filtrarMisSolicitudes(filtrosDTO)
+      : this.solicitudService.obtenerMisSolicitudes();
+
+    request.subscribe({
+      next: (response) => {
+        this.direccionOrden = this.criterioOrden === 'fechaSolicitud' ? 'desc' : 'asc';
+
+        const listaOrdenada = ordenarDinamicamente(
+          response.data,
+          this.criterioOrden,
+          this.direccionOrden
+        );
+
+        this.misSolicitudes.set(listaOrdenada);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarCambios();
   }
 
 }

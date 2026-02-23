@@ -2,11 +2,14 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MostrarResenaEspecialistaDTO } from '../../../models/reseña/reseña.model';
 import { ResenaService } from '../../../services/reseña/reseñas.service';
+import { FormsModule } from '@angular/forms';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-resenas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mis-resenas-especialista.html',
   styleUrl: './mis-resenas-especialista.css',
 })
@@ -14,8 +17,15 @@ export class MisResenasPage implements OnInit {
   private resenaService = inject(ResenaService);
 
   public todasLasResenas: MostrarResenaEspecialistaDTO[] = [];
+  public resenasFiltradas: MostrarResenaEspecialistaDTO[] = []; // Lista intermedia
   public resenasVisibles = signal<MostrarResenaEspecialistaDTO[]>([]);
   public isLoading = signal(true);
+
+  // Variables de Filtro y Orden
+  public criterioOrden = 'puntuacion';
+  public direccionOrden: DireccionOrden = 'desc';
+  public filtroTexto = '';
+  public dropdownOpen: string | null = null;
 
   public currentPage = signal(0);
   public pageSize = 4;
@@ -37,7 +47,7 @@ export class MisResenasPage implements OnInit {
     this.resenaService.obtenerResenasRecibidas().subscribe({
       next: (response) => {
         this.todasLasResenas = response.data || [];
-        this.calcularPaginacion();
+        this.aplicarFiltros(); 
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -46,6 +56,46 @@ export class MisResenasPage implements OnInit {
       }
     });
   }
+
+  aplicarFiltros() {
+    let resultado = [...this.todasLasResenas];
+
+    if (this.filtroTexto) {
+      const busqueda = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(r =>
+        r.nombreCliente?.toLowerCase().includes(busqueda) ||
+        r.comentario?.toLowerCase().includes(busqueda)
+      );
+    }
+
+    this.direccionOrden = this.criterioOrden === 'puntuacion' ? 'desc' : 'asc';
+
+    this.resenasFiltradas = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.calcularPaginacion();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.criterioOrden = 'puntuacion';
+    this.aplicarFiltros();
+  }
+
 
   calcularPaginacion() {
     this.totalPages.set(Math.ceil(this.todasLasResenas.length / this.pageSize));
