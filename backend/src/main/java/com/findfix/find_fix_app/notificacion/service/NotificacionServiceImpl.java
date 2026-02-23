@@ -354,4 +354,19 @@ public class NotificacionServiceImpl implements NotificacionService {
 
         enviarEmail(usuario.getEmail(), titulo, mensaje);
     }
+
+    @Override
+    public void notificarRecuperacionPassword(Usuario usuario, String token) {
+        String urlRecuperacion = "http://localhost:4200/restablecer-password?token=" + token;
+
+        String titulo = "Recuperación de Contraseña - FindFix";
+
+        String mensaje = "Hola " + usuario.getNombre() + ", <br><br>" +
+                "Recibimos una solicitud para restablecer tu contraseña. " +
+                "Si no fuiste vos, ignorá este correo por tu seguridad.<br><br>" +
+                "Para cambiar tu contraseña, hacé clic en el siguiente enlace (válido por 15 minutos): <br><br>" +
+                "<a href='" + urlRecuperacion + "'>" + urlRecuperacion + "</a>";
+
+        enviarEmail(usuario.getEmail(), titulo, mensaje);
+    }
 }

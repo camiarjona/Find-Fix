@@ -147,6 +147,25 @@ export class AuthService {
     );
   }
 
+  // --- RECUPERACIÓN DE CONTRASEÑA ---
+
+  solicitarRecuperacionPassword(email: string) {
+    return this.http.post(`${this.apiUrl}/auth/solicitar-recuperacion`, null, {
+      params: { email: email },
+      responseType: 'text'
+    });
+  }
+
+  restablecerPassword(token: string, nuevaPassword: string) {
+    return this.http.post(`${this.apiUrl}/auth/restablecer-password`,
+      { nuevaPassword: nuevaPassword },
+      {
+        params: { token: token },
+        responseType: 'text'
+      }
+    );
+  }
+
   // --- UTILIDADES ---
 
   public setInitialRole(role: ActiveRole) {

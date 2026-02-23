@@ -4,10 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginCredentials } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { GoogleLoginButton } from '../../utils/google-login-button/google-login-button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
-  imports: [CommonModule, ReactiveFormsModule, GoogleLoginButton],
+  imports: [CommonModule, ReactiveFormsModule, GoogleLoginButton, RouterModule],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css',
 })
@@ -46,4 +47,5 @@ export class LoginForm {
   togglePassword() {
     this.showPassword.update(val => !val);
   }
+
 }

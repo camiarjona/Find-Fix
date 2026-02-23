@@ -46,10 +46,13 @@
   </div>
   }
 
-  <a href="#" class="forgot-pass-link">¿Olvidaste tu contraseña?</a>
+  <a routerLink="/solicitar-recuperacion" class="forgot-password-link">
+    ¿Olvidaste tu contraseña?
+  </a>
 
   <div class="mobile-cta-icon" aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+      aria-hidden="true">
       <rect x="3" y="11" width="18" height="10" rx="2" />
       <path d="M7 11V8a5 5 0 0 1 10 0v3" />
     </svg>
@@ -59,10 +62,10 @@
     Ingresar
   </button>
 
-    <div class="social-login-container">
-      <app-google-login-button></app-google-login-button>
-    </div>
-    
+  <div class="social-login-container">
+    <app-google-login-button></app-google-login-button>
+  </div>
+
   <p class="mobile-toggle-link">
     ¿No tienes una cuenta?
     <a (click)="onToggle()">Regístrate aquí</a>

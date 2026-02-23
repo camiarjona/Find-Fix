@@ -32,6 +32,8 @@ import { MisResenasEnviadasCliente } from './pages/cliente/mis-resenas-enviadas-
 import { CrearResenaComponent } from './components/cliente/crear-resena/crear-resena';
 import { RevisaTuCorreo } from './pages/auth/revisa-tu-correo/revisa-tu-correo';
 import { ConfirmarCuenta } from './pages/auth/confirmar-cuenta/confirmar-cuenta';
+import { SolicitarRecuperacion } from './pages/auth/solicitar-recuperacion/solicitar-recuperacion';
+import { RestablecerPassword } from './pages/auth/restablecer-password/restablecer-password';
 
 
 export const routes: Routes = [
@@ -50,6 +52,14 @@ export const routes: Routes = [
   {
     path: 'confirmar-cuenta',
     component: ConfirmarCuenta
+  },
+  {
+    path: 'solicitar-recuperacion',
+    component: SolicitarRecuperacion
+  },
+  {
+    path: 'restablecer-password',
+    component: RestablecerPassword
   },
   {
     path: 'seleccionar-rol',
