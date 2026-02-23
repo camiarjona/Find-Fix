@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../../services/user/user.service';
 import { GeoUtils } from '../../general/geo/geo-utils/geo-utils';
 import { ordenarDinamicamente } from '../../../utils/sort-utils';
+import { RouterLink } from '@angular/router';
 
 interface Barrio {
   nombre: string;
@@ -21,7 +22,7 @@ interface Barrio {
 @Component({
   selector: 'app-buscar-especialistas-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalFeedbackComponent],
+  imports: [CommonModule, FormsModule, ModalFeedbackComponent, RouterLink],
   templateUrl: './buscar-especialistas-component.html',
   styleUrl: './buscar-especialistas-component.css',
 })
@@ -35,6 +36,7 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
   // Señales de datos
   public especialistas = this.clienteService.especialistas;
   public especialistasOrdenados = signal<EspecialistaDTO[]>([]);
+  public especialistasVisibles = signal<EspecialistaDTO[]>([]);
   public ciudades = this.clienteService.ciudades;
   public oficiosDisponibles = this.clienteService.oficios;
   public favoritosSet = signal<Set<string>>(new Set());
@@ -51,6 +53,11 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
   private userLat: number | null = null;
   private userLon: number | null = null;
 
+  // Paginación
+  public currentPage = signal(0);
+  public pageSize = 6;
+  public totalPages = signal(0);
+
   public filtros: FiltroEspecialistasDTO = { ciudad: '', oficio: '', minCalificacion: 0 };
   public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
   public showModalContratar = signal(false);
@@ -64,41 +71,50 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
 
   dropdownOpen: string | null = null;
 
-constructor() {
-  effect(() => {
-          const base = this.especialistas();
-    const criterio = this.criterioOrden();
-    let lista = [...base];
+  constructor() {
+    effect(() => {
+      const base = this.especialistas();
+      const criterio = this.criterioOrden();
+      let lista = [...base];
 
-    if (lista.length > 0) {
-      switch (criterio) {
-        case 'calificacion':
-          lista = ordenarDinamicamente(lista, 'calificacionPromedio', 'desc');
-          break;
-        case 'nombre':
-          lista = ordenarDinamicamente(lista, 'nombre', 'asc');
-          break;
-        case 'distancia':
-        default:
-          if (this.userLat !== null && this.userLon !== null) {
-            lista.sort((a, b) => {
-              const distA = (a.latitud != null && a.longitud != null)
-                ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, a.latitud, a.longitud)
-                : 9999;
-              const distB = (b.latitud != null && b.longitud != null)
-                ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, b.latitud, b.longitud)
-                : 9999;
-              return distA - distB;
-            });
-          }
-          break;
+      if (lista.length > 0) {
+        switch (criterio) {
+          case 'calificacion':
+            lista = ordenarDinamicamente(lista, 'calificacionPromedio', 'desc');
+            break;
+          case 'nombre':
+            lista = ordenarDinamicamente(lista, 'nombre', 'asc');
+            break;
+          case 'distancia':
+          default:
+            if (this.userLat !== null && this.userLon !== null) {
+              lista.sort((a, b) => {
+                const distA = (a.latitud != null && a.longitud != null)
+                  ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, a.latitud, a.longitud)
+                  : 9999;
+                const distB = (b.latitud != null && b.longitud != null)
+                  ? GeoUtils.calcularDistancia(this.userLat!, this.userLon!, b.latitud, b.longitud)
+                  : 9999;
+                return distA - distB;
+              });
+            }
+            break;
+        }
       }
-    }
 
-    this.especialistasOrdenados.set(lista);
-    if (this.map) { this.actualizarMarcadoresAzules(lista); }
-  });
-}
+      this.especialistasOrdenados.set(lista);
+
+      // Lógica de Paginación Integrada
+      this.totalPages.set(Math.ceil(lista.length / this.pageSize));
+      if (this.currentPage() >= this.totalPages() && this.totalPages() > 0) {
+        this.currentPage.set(0);
+      }
+
+      this.actualizarVistaPaginada();
+
+      if (this.map) { this.actualizarMarcadoresAzules(lista); }
+    });
+  }
 
   ngOnInit() {
     this.obtenerUbicacionGPS();
@@ -110,6 +126,18 @@ constructor() {
   }
 
   ngAfterViewInit() { this.inicializarMapa(); }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.especialistasVisibles.set(this.especialistasOrdenados().slice(inicio, fin));
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   // --- MÉTODOS DE ACCIÓN ---
   public irAEspecialistaEnMapa(esp: EspecialistaDTO) {
@@ -255,7 +283,6 @@ constructor() {
     this.userMarker.bindPopup(`<b>${n}</b>`).openPopup();
   }
 
-  // --- FILTROS Y BARRIOS ---
   seleccionarCiudadFiltroManual(barrio: Barrio) {
     this.filtros.ciudad = barrio.nombre;
     this.cityFilterSuggestions.set([]);
@@ -269,6 +296,7 @@ constructor() {
   }
 
   aplicarFiltros() {
+    this.currentPage.set(0);
     const f: FiltroEspecialistasDTO = {};
     if (this.filtros.ciudad) f.ciudad = this.filtros.ciudad;
     if (this.filtros.oficio) f.oficio = this.filtros.oficio;
@@ -276,9 +304,11 @@ constructor() {
     if (this.userLat && this.userLon) { f.latitud = this.userLat; f.longitud = this.userLon; }
     this.clienteService.filtrarEspecialistas(f);
   }
-limpiarFiltros() {
+
+  limpiarFiltros() {
     this.filtros = { ciudad: '', oficio: '', minCalificacion: 0 };
     this.criterioOrden.set('distancia');
+    this.currentPage.set(0);
     this.clienteService.obtenerEspecialistas();
   }
 
@@ -292,32 +322,27 @@ limpiarFiltros() {
     this.cityFilterSuggestions.set(this.allBarrios.filter(b => b.nombre.toLowerCase().includes(t)).slice(0, 5));
   }
 
-public cambiarOrden(event: any) {
-  const valor = event.target.value;
-  this.criterioOrden.set(valor || 'distancia');
-}
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
 
-toggleDropdown(menu: string, event: Event) {
-  event.stopPropagation();
-  this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
-}
+  seleccionarOficio(valor: string) {
+    this.filtros.oficio = valor;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
 
-seleccionarOficio(valor: string) {
-  this.filtros.oficio = valor;
-  this.dropdownOpen = null;
-  this.aplicarFiltros();
-}
-
-seleccionarOrden(valor: string) {
-  this.criterioOrden.set(valor || 'distancia');
-  this.dropdownOpen = null;
-}
-
-@HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  if (!target.closest('.custom-select-wrapper')) {
+  seleccionarOrden(valor: string) {
+    this.criterioOrden.set(valor || 'distancia');
     this.dropdownOpen = null;
   }
-}
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-select-wrapper')) {
+      this.dropdownOpen = null;
+    }
+  }
 }
