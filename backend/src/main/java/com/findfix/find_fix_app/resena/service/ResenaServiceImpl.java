@@ -81,26 +81,18 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Resena> resenasDeMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException, ResenaException {
+    public List<Resena> resenasDeMisTrabajos() throws UsuarioNotFoundException, EspecialistaNotFoundException {
         Especialista especialista = especialistaService.obtenerEspecialistaAutenticado();
 
-        List<Resena> resenas = repository.findAllByTrabajoApp_Especialista(especialista);
-
-        if(resenas.isEmpty()) {
-            throw new ResenaException("Aún no ha recibido reseñas de sus trabajos.");
-        }
-
-        return resenas;
+        return repository.findAllByTrabajoApp_Especialista(especialista);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Resena> resenasHechasPorMi() throws UsuarioNotFoundException, ResenaException {
+    public List<Resena> resenasHechasPorMi() throws UsuarioNotFoundException {
         Usuario usuario = autorizacion.obtenerUsuarioAutenticado();
 
-        List<Resena> resenas = repository.findAllByTrabajoApp_Usuario(usuario);
-
-        return resenas;
+        return repository.findAllByTrabajoApp_Usuario(usuario);
     }
 
     @Override

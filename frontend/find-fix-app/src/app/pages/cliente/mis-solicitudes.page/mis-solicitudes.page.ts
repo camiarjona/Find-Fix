@@ -186,6 +186,59 @@ export class MisSolicitudesPage implements OnInit {
     }
   }
 
+  //  INTEGRACIÓN CON BACKEND
+  cargarDatosReales() {
+    this.estaCargando.set(true);
+    this.solicitudTrabajoService.obtenerMisSolicitudesEnviadas().subscribe({
+      next: (response) => {
+        this.todasLasSolicitudes = response.data.map(s => ({
+          id: s.id,
+          especialista: `${s.nombreEspecialista} ${s.apellidoEspecialista}`,
+          descripcion: s.descripcion,
+          fechaSolicitud: s.fechaCreacion,
+          estado: s.estado,
+        }));
+        this.aplicarFiltros();
+        this.estaCargando.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.mostrarAlerta('Error al cargar solicitudes', 'error');
+        this.estaCargando.set(false);
+      }
+    });
+  }
+
+  // Filtros
+  aplicarFiltros() {
+    let resultado = this.todasLasSolicitudes;
+
+    //Filtro Estado
+    if (this.filtroEstado === 'PENDIENTE') {
+      resultado = resultado.filter(s => s.estado === 'PENDIENTE');
+    } else if (this.filtroEstado === 'FINALIZADA') {
+      resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
+    }
+
+    // Filtro Texto
+    if (this.filtroTexto) {
+      const texto = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(s =>
+        (s.especialista && s.especialista.toLowerCase().includes(texto)) ||
+        (s.titulo && s.titulo.toLowerCase().includes(texto))
+      );
+    }
+
+    this.solicitudesVisibles.set(resultado);
+  }
+
+  cambiarFiltroEstado(nuevoEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA') {
+    this.filtroEstado = nuevoEstado;
+    this.aplicarFiltros();
+  }
+
+  // Acciones del Cliente
+
   prepararEliminacion(solicitud: any) {
     this.solicitudAEliminar = solicitud;
     this.mostrarAlerta(

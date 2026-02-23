@@ -102,18 +102,27 @@ export class PerfilPage implements OnInit {
     });
   }
 
+  // --- NUEVOS MÉTODOS PARA LA FOTO ---
   onSelect(event: any) {
     if (event.addedFiles && event.addedFiles.length > 0) {
+      // 1. Limpiamos y creamos una referencia nueva
+      // (Esto "resetea" visualmente el componente)
       this.files = [];
+
       const file = event.addedFiles[0];
+
+      // 2. Usamos un pequeño delay (setTimeout) para que Angular
+      // procese el vaciado antes de meter el nuevo archivo
       setTimeout(() => {
-        this.files = [file];
+        this.files = [file]; // Asignamos el nuevo archivo en un array nuevo
+
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.tempPhotoUrl.set(e.target.result);
           this.cd.detectChanges();
         };
         reader.readAsDataURL(file);
+
         this.cd.detectChanges();
       }, 0);
     }

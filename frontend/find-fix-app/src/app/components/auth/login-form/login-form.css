@@ -45,8 +45,14 @@
   }
 }
 
-
 .mobile-cta-icon {
   display: none;
+}
+
+.social-login-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 

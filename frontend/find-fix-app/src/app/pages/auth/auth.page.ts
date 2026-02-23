@@ -15,7 +15,7 @@ import { ModalFeedbackComponent } from "../../components/general/modal-feedback.
     RegisterForm,
     LoginForm,
     ModalFeedbackComponent
-],
+  ],
   templateUrl: './auth.page.html',
   styleUrl: './auth.page.css'
 })

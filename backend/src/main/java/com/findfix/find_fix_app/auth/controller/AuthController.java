@@ -1,17 +1,16 @@
 package com.findfix.find_fix_app.auth.controller;
 
+import com.findfix.find_fix_app.auth.dto.*;
+import com.findfix.find_fix_app.auth.service.GoogleAuthService;
 import com.findfix.find_fix_app.usuario.dto.VerPerfilUsuarioDTO;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.utils.apiResponse.ApiResponse;
 import com.findfix.find_fix_app.auth.CookieUtil;
-import com.findfix.find_fix_app.auth.dto.AuthResponseDTO;
-import com.findfix.find_fix_app.auth.dto.RegistroDTO;
-import com.findfix.find_fix_app.auth.dto.TokenRefreshResponseDTO;
-import com.findfix.find_fix_app.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.auth.service.AuthService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +28,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final CookieUtil  cookieUtil;
+    private final GoogleAuthService googleAuthService;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponseDTO>> login(@Valid @RequestBody UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException {
@@ -40,6 +40,21 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new ApiResponse<>("Login exitoso, bienvenido!", authResponse));
+    }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> loginGoogle(
+            @RequestBody GoogleTokenDTO request,
+            HttpServletResponse response // Necesario para la cookie
+    ) {
+        AuthResponseDTO authResponse = googleAuthService.loginWithGoogle(request.getToken());
+
+        ResponseCookie cookie = cookieUtil.crearCookieRefresh(authResponse.getRefreshToken());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        authResponse.setRefreshToken(null);
+
+        return ResponseEntity.ok(new ApiResponse<>("Login con Google exitoso", authResponse));
     }
 
     //metodo para que un usuario se registre en el sistema

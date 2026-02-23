@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Long> {
-    
-  
     List<Notificacion> findByUsuario_UsuarioIdAndRolDestinatarioOrderByFechaCreacionDesc(Long usuarioId, String rolDestinatario);
- 
     long countByUsuarioAndLeidaFalse(Usuario usuario);
 }
