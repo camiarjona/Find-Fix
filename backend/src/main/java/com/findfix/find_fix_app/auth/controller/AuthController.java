@@ -87,4 +87,17 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new ApiResponse<>("Sesión cerrada exitosamente", null));
     }
+
+    // confirmacion de cuenta
+    @GetMapping("/confirmar-cuenta")
+    public ResponseEntity<String> confirmarCuenta(@RequestParam("token") String token) {
+        String resultado = authService.confirmarCuenta(token);
+        return ResponseEntity.ok(resultado);
+    }
+
+    @PostMapping("/reenviar-token")
+    public ResponseEntity<String> reenviarToken(@RequestParam("email") String email) {
+        String resultado = authService.reenviarTokenConfirmacion(email);
+        return ResponseEntity.ok(resultado);
+    }
 }

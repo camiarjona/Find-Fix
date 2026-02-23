@@ -15,4 +15,6 @@ public interface AuthService {
     AuthResponseDTO login(UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException;
     Usuario registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException;
     TokenRefreshResponseDTO refrescarToken(String refreshTokenStr);
+    String confirmarCuenta(String token);
+    String reenviarTokenConfirmacion(String email);
 }

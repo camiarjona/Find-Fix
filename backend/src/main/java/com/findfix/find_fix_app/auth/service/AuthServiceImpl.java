@@ -1,5 +1,7 @@
 package com.findfix.find_fix_app.auth.service;
 
+import com.findfix.find_fix_app.auth.model.TokenConfirmacion;
+import com.findfix.find_fix_app.auth.repository.TokenConfirmacionRepository;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.rol.repository.RolRepository;
 import com.findfix.find_fix_app.auth.dto.AuthResponseDTO;
@@ -15,6 +17,7 @@ import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
 import com.findfix.find_fix_app.utils.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +25,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final NotificacionService notificacionService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final TokenConfirmacionRepository tokenConfirmacionRepository;
 
     @Override
     public String obtenerEmailUsuarioAutenticado() {
@@ -87,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
     public Usuario registrarNuevoUsuario(RegistroDTO registroDTO) throws RolException, UsuarioException {
 
         if (usuarioRepository.findByEmail(registroDTO.email()).isPresent()) {
-            throw new UsuarioException("❗Ya existe un usuario registrado con ese email.");
+            throw new UsuarioException("Ya existe un usuario registrado con ese email.");
         }
 
         Usuario usuario = new Usuario();
@@ -109,14 +115,81 @@ public class AuthServiceImpl implements AuthService {
         }
 
         usuario.setTelefono("No especificado.");
+        usuario.setActivo(false);
 
         Rol rol = rolRepository.findByNombre("CLIENTE")
-                .orElseThrow(() -> new RolException("❌Rol no encontrado❌"));
+                .orElseThrow(() -> new RolException("Rol no encontrado"));
 
         usuario.getRoles().add(rol);
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
-        notificacionService.notificarBienvenida(usuarioGuardado, "CLIENTE");
+
+        String tokenGenerado = java.util.UUID.randomUUID().toString();
+
+        TokenConfirmacion token = new TokenConfirmacion(
+                tokenGenerado,
+                java.time.LocalDateTime.now(),
+                java.time.LocalDateTime.now().plusMinutes(15), //expira en 15min
+                usuarioGuardado
+        );
+        tokenConfirmacionRepository.save(token);
+
+        notificacionService.notificarTokenRegistro(usuarioGuardado, tokenGenerado);
+
         return usuarioGuardado;
+    }
+
+    @Override
+    public String confirmarCuenta(String token) {
+            TokenConfirmacion tokenConfirmacion = tokenConfirmacionRepository.findByToken(token)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Token inválido o no encontrado."));
+
+            if (tokenConfirmacion.getFechaConfirmacion() != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Esta cuenta ya ha sido confirmada anteriormente.");
+            }
+
+            if (tokenConfirmacion.getFechaExpiracion().isBefore(LocalDateTime.now())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El enlace de confirmación ha expirado. Por favor, regístrate nuevamente o solicita un nuevo enlace.");
+            }
+
+            tokenConfirmacion.setFechaConfirmacion(LocalDateTime.now());
+            tokenConfirmacionRepository.save(tokenConfirmacion);
+
+            Usuario usuario = tokenConfirmacion.getUsuario();
+            usuario.setActivo(true);
+            usuarioRepository.save(usuario);
+
+            notificacionService.notificarBienvenida(usuario, "CLIENTE");
+
+            return "¡Cuenta confirmada exitosamente! Ya puedes iniciar sesión.";
+
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public String reenviarTokenConfirmacion(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se encontró un usuario con el email " + email + "."));
+
+        if (usuario.isActivo()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Esta cuenta ya está activada. Ya podés iniciar sesión.");
+        }
+
+        String tokenGenerado = java.util.UUID.randomUUID().toString();
+
+        TokenConfirmacion nuevoToken = new TokenConfirmacion(
+                tokenGenerado,
+                java.time.LocalDateTime.now(),
+                java.time.LocalDateTime.now().plusMinutes(15),
+                usuario
+        );
+
+        tokenConfirmacionRepository.save(nuevoToken);
+
+        notificacionService.notificarTokenRegistro(usuario, tokenGenerado);
+
+        return "Nuevo enlace de verificación enviado exitosamente a tu correo.";
     }
 
     @Override
