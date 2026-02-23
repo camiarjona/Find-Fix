@@ -89,16 +89,18 @@ public feedbackData = signal({
       });
   }
 
-  onRegister(credentials: RegisterCredentials): void {
+onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
 
     this.authService.register(credentials).subscribe({
       next: (response) => {
         console.log('Datos de registro:', credentials);
 
-        this.mostrarFeedback('Registro exitoso', 'Inicia sesión para continuar', 'success');
+        this.mostrarFeedback('¡Casi listo!', 'Te estamos redirigiendo...', 'success');
 
-        this.showLoginView();
+        this.router.navigate(['/revisa-tu-correo'], {
+          queryParams: { email: credentials.email }
+        });
       },
       error: (err) => {
         console.error('Error en el registro:', err);
@@ -109,6 +111,7 @@ public feedbackData = signal({
       }
     });
   }
+
   onToggleView(): void {
     this.isLoginView.set(!this.isLoginView());
     this.authError.set(null);

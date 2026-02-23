@@ -1,0 +1,41 @@
+<div class="revisa-correo-wrapper">
+  <div class="revisa-correo-card">
+
+    <div class="icono-contenedor">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+        <polyline points="22,6 12,13 2,6"></polyline>
+      </svg>
+    </div>
+
+    <h1>¡Revisa tu correo!</h1>
+
+    <p class="texto-principal">
+      Hemos enviado un enlace de confirmación a:
+    </p>
+    <div class="email-destacado">{{ email() }}</div>
+
+    <p class="texto-secundario">
+      Haz clic en el enlace del correo para activar tu cuenta en <b>FindFix</b>.
+      <br>Si no lo encuentras, por favor revisa tu carpeta de Spam.
+    </p>
+
+    <div *ngIf="mensajeExito()" class="alerta alerta-exito">
+      {{ mensajeExito() }}
+    </div>
+    <div *ngIf="mensajeError()" class="alerta alerta-error">
+      {{ mensajeError() }}
+    </div>
+
+    <div class="acciones">
+      <button class="btn-naranja" (click)="reenviarCorreo()" [disabled]="enviando()">
+        {{ enviando() ? 'Enviando nuevo código...' : 'Reenviar correo' }}
+      </button>
+
+      <button class="btn-outline" (click)="irAlLogin()">
+        Volver al inicio de sesión
+      </button>
+    </div>
+
+  </div>
+</div>

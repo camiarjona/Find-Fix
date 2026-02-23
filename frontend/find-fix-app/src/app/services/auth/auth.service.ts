@@ -119,6 +119,20 @@ export class AuthService {
     return this.http.post<ApiResponse<UserProfile>>(`${this.apiUrl}/auth/registrar`, register);
   }
 
+  reenviarCorreoActivacion(email: string) {
+    return this.http.post(`${this.apiUrl}/auth/reenviar-token`, null, {
+      params: { email: email },
+      responseType: 'text'
+    });
+  }
+
+  confirmarCuenta(token: string) {
+    return this.http.get(`${this.apiUrl}/auth/confirmar-cuenta`, {
+      params: { token: token },
+      responseType: 'text'
+    });
+  }
+
   refreshToken(): Observable<ApiResponse<{ accessToken: string }>> {
     return this.http.post<ApiResponse<{ accessToken: string }>>(
       `${this.apiUrl}/auth/refresh-token`,

@@ -1,0 +1,42 @@
+<div class="confirmar-wrapper">
+  <div class="confirmar-card">
+
+    <ng-container *ngIf="estado() === 'cargando'">
+      <div class="spinner"></div>
+      <h2>Verificando...</h2>
+      <p class="texto-secundario">{{ mensaje() }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="estado() === 'exito'">
+      <div class="icono-exito">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <h2>¡Cuenta Activada!</h2>
+      <p class="texto-secundario">{{ mensaje() }}</p>
+
+      <button class="btn-naranja" (click)="irAlLogin()">
+        Ir a Iniciar Sesión
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="estado() === 'error'">
+      <div class="icono-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      </div>
+      <h2>Ups, algo salió mal</h2>
+      <p class="texto-secundario">{{ mensaje() }}</p>
+
+      <button class="btn-outline" (click)="irAlLogin()">
+        Volver al Inicio
+      </button>
+    </ng-container>
+
+  </div>
+</div>
