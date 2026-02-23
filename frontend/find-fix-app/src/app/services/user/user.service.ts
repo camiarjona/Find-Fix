@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { UpdatePasswordRequest, UpdateUserRequest, UserProfile, UserSearchFilters } from '../../models/user/user.model';
 import { Observable, of, tap } from 'rxjs';
-import { ApiResponse } from '../../models/api-response/apiResponse.model';
+import { ApiResponse, PageResponse } from '../../models/api-response/apiResponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,23 +21,16 @@ export class UserService {
   constructor() { }
 
   // ADMIN METHODS
-  getUsers(forceReload: boolean = false): Observable<ApiResponse<UserProfile[]> | UserProfile[]> {
-    if (!forceReload && this.userState().length > 0) {
-      return of(this.userState());
-    }
-
-    return this.http.get<ApiResponse<UserProfile[]>>(`${this.apiUrlAdmin}`).pipe(
-      tap({
-        next: (response) => {
-          this.userState.set(response.data);
-          console.log('Usuarios cargados y guardados en el estado');
-        },
-        error: (error) => {
-          console.error('Error al cargar usuarios:', error);
-        }
-      })
-    )
+  obtenerUsuarios(rol: string | null | undefined, page: number, size: number): Observable<PageResponse<UserProfile>> {
+  let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+  if (rol) {
+    params = params.set('rolId', rol);
   }
+
+  return this.http.get<PageResponse<UserProfile>>(`${this.apiUrlAdmin}`, { params });
+}
 
   desactivarUsuario(email: string): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(`${this.apiUrlAdmin}/desactivar/${email}`, {},
@@ -67,7 +60,7 @@ export class UserService {
       { withCredentials: true }
     );
   }
-  
+
   // USER METHODS
   updateProfile(data: UpdateUserRequest): Observable<ApiResponse<string>> {
     return this.http.patch<ApiResponse<string>>(`${this.apiUrlUser}/modificar-datos`, data).pipe(

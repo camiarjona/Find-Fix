@@ -1,508 +1,188 @@
 <div class="page-container">
-
-
-
   <div class="filters-section">
-
     <h2>Encuentra a tu experto</h2>
-
-
-
     <div class="filters-grid">
+      <div class="filter-group">
+  <label>Oficio</label>
+  <div class="custom-select-wrapper">
+    <div class="custom-select-trigger" (click)="toggleDropdown('oficio', $event)">
+      <span>{{ filtros.oficio || 'Todos' }}</span>
+      <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+      </svg>
+    </div>
+    @if (dropdownOpen === 'oficio') {
+      <ul class="suggestions-list custom-dropdown">
+        <li (click)="seleccionarOficio('')" class="suggestion-item">Todos</li>
+        @for (oficio of oficiosDisponibles(); track $index) {
+          <li (click)="seleccionarOficio(oficio)" class="suggestion-item">{{oficio}}</li>
+        }
+      </ul>
+    }
+  </div>
+</div>
 
       <div class="filter-group">
-
-        <label>Oficio</label>
-
-        <select [(ngModel)]="filtros.oficio">
-
-          <option value="">Todos</option>
-
-          @for (oficio of oficiosDisponibles(); track $index) {
-
-          <option [value]="oficio">{{oficio}}</option>
-
-          }
-
-        </select>
-
-      </div>
-
-
-
-      <div class="filter-group">
-
         <label>Barrio</label>
-
-
-
         <div class="search-wrapper">
-
-          <input
-
-            type="text"
-
-            [(ngModel)]="filtros.ciudad"
-
-            (input)="buscarCiudades($event)"
-
-            placeholder="Escribe un barrio..."
-
-            class="input-filter"
-
-          >
-
-
-
+          <input type="text" [(ngModel)]="filtros.ciudad" (input)="buscarCiudades($event)" placeholder="Escribe un barrio..." class="input-filter">
           @if (cityFilterSuggestions().length > 0) {
-
             <ul class="suggestions-list">
-
               @for (barrio of cityFilterSuggestions(); track barrio.lat) {
-
-                <li (click)="seleccionarCiudadFiltro(barrio)" class="suggestion-item">
-
-                  {{ barrio.nombre }}
-
-                </li>
-
+                <li (click)="seleccionarCiudadFiltroManual(barrio)" class="suggestion-item">{{ barrio.nombre }}</li>
               }
-
             </ul>
-
           }
-
         </div>
-
       </div>
+<div class="filter-group">
+  <label>Ordenar por</label>
+  <div class="custom-select-wrapper">
+    <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+      <span>
+        {{ criterioOrden() === 'calificacion' ? 'Mejor Calificación' :
+           criterioOrden() === 'nombre' ? 'Nombre (A-Z)' : 'Cercanía (Por defecto)' }}
+      </span>
+      <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+      </svg>
+    </div>
 
-
-
-      <div class="filter-group">
-
-        <label>Calificación Mínima</label>
-
-        <select [(ngModel)]="filtros.minCalificacion">
-
-          <option [value]="0">Cualquiera</option>
-
-          <option [value]="3">3+ Estrellas</option>
-
-          <option [value]="4">4+ Estrellas</option>
-
-          <option [value]="5">5 Estrellas</option>
-
-        </select>
-
-      </div>
-
-
+    @if (dropdownOpen === 'orden') {
+      <ul class="suggestions-list custom-dropdown">
+        <li (click)="seleccionarOrden('')" class="suggestion-item">Cercanía (Por defecto)</li>
+        <li (click)="seleccionarOrden('calificacion')" class="suggestion-item">Mejor Calificación</li>
+        <li (click)="seleccionarOrden('nombre')" class="suggestion-item">Nombre (A-Z)</li>
+      </ul>
+    }
+  </div>
+</div>
 
       <div class="filter-actions">
+          <button (click)="obtenerUbicacionGPS()" class="btn-ubicacion">📍 Mi Ubicación</button>
+          <button class="map-toggle-btn" (click)="toggleMap()">
+             @if (showMap()) { <span>Ocultar Mapa</span> } @else { <span>Ver Mapa</span> }
+          </button>
+          <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
 
-        <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
-
-        <button class="cta-button-outline" (click)="limpiarFiltros()">Limpiar</button>
 
 
-
-        <button class="map-toggle-btn" (click)="toggleMap()" [title]="showMap() ? 'Ocultar Mapa' : 'Ver Mapa'">
-
-          @if (showMap()) {
-
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-
-            stroke="currentColor">
-
-            <path stroke-linecap="round" stroke-linejoin="round"
-
-              d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-
-          </svg>
-
-          <span class="btn-text">Ocultar Mapa</span>
-
-          } @else {
-
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-
-            stroke="currentColor">
-
-            <path stroke-linecap="round" stroke-linejoin="round"
-
-              d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" />
-
-          </svg>
-
-          <span class="btn-text">Ver Mapa</span>
-
-          }
-
-        </button>
-
+          <button class="cta-button" (click)="aplicarFiltros()">Buscar</button>
       </div>
-
     </div>
-
   </div>
-
-
 
   <div class="layout-grid" [class.map-hidden]="!showMap()">
-
-
-
     <div class="list-column">
-
-
-
-      @if (especialistas().length === 0) {
-
-      <div class="empty-state">
-
-        <p>No se encontraron especialistas con esos filtros.</p>
-
-      </div>
-
-      }
-
-
-
       <div class="especialistas-grid">
-
-        @for (esp of especialistas(); track esp.email) {
-
-        <article class="esp-card">
-
-          <div class="card-header">
-
-            <div class="avatar">{{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}</div>
-
-
-
-            <div class="header-info">
-
-              <h3>{{ esp.nombre }} {{ esp.apellido }}</h3>
-
-              <span class="city-badge">{{ esp.ciudad }}</span>
-
+        @for (esp of especialistasOrdenados(); track esp.email) {
+          <article class="esp-card" (click)="irAEspecialistaEnMapa(esp)" style="cursor: pointer;">
+            <div class="card-header">
+              <div class="avatar-card-wrapper">
+                @if (esp.fotoUrl) {
+                  <img [src]="esp.fotoUrl" class="avatar-img-small" alt="Foto de {{ esp.nombre }}">
+                } @else {
+                  <div class="avatar-initials-small fallback-orange">
+                    {{ esp.nombre.charAt(0) }}{{ esp.apellido.charAt(0) }}
+                  </div>
+                }
+              </div>
+              <div class="header-info">
+                <h3>{{ esp.nombre }} {{ esp.apellido }}</h3>
+                <span class="city-badge">{{ esp.ciudad }}</span>
+              </div>
+              <div class="header-actions">
+                <button class="icon-action-btn" [class.fav-active]="esFavorito(esp.email)" (click)="toggleFavorito(esp, $event)">
+                  @if (esFavorito(esp.email)) {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" /></svg>
+                  } @else {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+                  }
+                </button>
+                <button class="icon-action-btn" (click)="$event.stopPropagation(); abrirModalDetalle(esp)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
+              </div>
             </div>
-
-
-
-            <button class="icon-action-btn" [class.fav-active]="esFavorito(esp.email)"
-
-              (click)="toggleFavorito(esp, $event)"
-
-              [title]="esFavorito(esp.email) ? 'Quitar de Favoritos' : 'Agregar a Favoritos'">
-
-
-
-              @if (esFavorito(esp.email)) {
-
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-
-                <path
-
-                  d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-
-              </svg>
-
-              } @else {
-
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-
-                stroke="currentColor">
-
-                <path stroke-linecap="round" stroke-linejoin="round"
-
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-
-              </svg>
-
-              }
-
-            </button>
-
-
-
-            <button class="icon-action-btn" (click)="abrirModalDetalle(esp)" title="Ver Perfil Completo">
-
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-
-                stroke="currentColor">
-
-                <path stroke-linecap="round" stroke-linejoin="round"
-
-                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-
-              </svg>
-
-            </button>
-
-          </div>
-
-
-
-          <div class="card-body">
-
-            <div class="rating">
-
-              ⭐ {{ esp.calificacionPromedio }} <span class="rating-label">Promedio</span>
-
+            <div class="card-body">
+              <div class="rating">⭐ {{ esp.calificacionPromedio }}</div>
+              <div class="oficios-list">
+                @for (oficio of esp.oficios; track $index) {
+                  <span class="oficio-tag">{{ oficio }}</span>
+                }
+              </div>
             </div>
-
-            <div class="oficios-list">
-
-              @for (oficio of esp.oficios; track $index) {
-
-              <span class="oficio-tag">{{ oficio }}</span>
-
-              }
-
+            <div class="card-footer">
+              <button class="cta-button full-width" (click)="$event.stopPropagation(); abrirModalContratar(esp)">Contratar</button>
             </div>
-
-          </div>
-
-
-
-          <div class="card-footer">
-
-            <button class="cta-button full-width" (click)="abrirModalContratar(esp)">
-
-              Contratar
-
-            </button>
-
-          </div>
-
-        </article>
-
+          </article>
         }
-
       </div>
-
     </div>
-
-
-
     <aside class="map-column" [hidden]="!showMap()">
-
-      <div class="map-card-container">
-
-        <div class="map-header">
-
-          <h3>📍 Mapa Interactivo</h3>
-
-          <span class="pulse-badge">En vivo</span>
-
-        </div>
-
-        <div id="map"></div>
-
-      </div>
-
+      <div class="map-card-container"><div id="map"></div></div>
     </aside>
-
-
-
   </div>
-
 </div>
-
-
 
 @if (showModalDetalle()) {
-
-<div class="modal-overlay" (click)="cerrarModalDetalle()">
-
-  <div class="modal-card profile-modal" (click)="$event.stopPropagation()">
-
-
-
-    @if (isLoadingDetalle() || !especialistaSeleccionaCompleto()) {
-
-    <div class="loading-state">
-
-      <p>Cargando perfil...</p>
-
+  <div class="modal-overlay" (click)="cerrarModalDetalle()">
+    <div class="modal-card profile-modal" (click)="$event.stopPropagation()">
+      <button class="close-corner-btn" (click)="cerrarModalDetalle()">✕</button>
+      @if (isLoadingDetalle() || !especialistaSeleccionaCompleto()) {
+        <div class="loading-state"><p>Cargando perfil...</p></div>
+      } @else {
+        <div class="profile-header-modal">
+          <div class="avatar-large-wrapper">
+          @if (especialistaSeleccionaCompleto()?.fotoUrl) {
+            <img [src]="especialistaSeleccionaCompleto()?.fotoUrl" class="avatar-img-large" alt="Perfil">
+          } @else {
+            <div class="avatar-initials-large fallback-orange">
+              {{ especialistaSeleccionaCompleto()?.nombre?.charAt(0) }}{{ especialistaSeleccionaCompleto()?.apellido?.charAt(0) }}
+            </div>
+          }
+        </div>
+          <h2>{{ especialistaSeleccionaCompleto()?.nombre }} {{ especialistaSeleccionaCompleto()?.apellido }}</h2>
+          <p class="profile-city">📍 {{ especialistaSeleccionaCompleto()?.ciudad }}</p>
+          <div class="rating-large">⭐ {{ especialistaSeleccionaCompleto()?.calificacionPromedio }} <span class="rating-count">/ 5.0</span></div>
+        </div>
+        <div class="profile-body-modal">
+          <h4>Sobre mí</h4>
+          <p class="desc-text">{{ especialistaSeleccionaCompleto()?.descripcion || 'Sin descripción.' }}</p>
+          <div class="contact-info">
+            <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
+            <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
+          </div>
+        </div>
+        <div class="profile-actions-modal">
+          <button class="btn-secondary-icon" [class.fav-active]="esFavorito(especialistaSeleccionaCompleto()?.email)" (click)="toggleFavorito(especialistaSeleccionaCompleto())">
+            @if (esFavorito(especialistaSeleccionaCompleto()?.email)) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" /></svg>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+            }
+          </button>
+          <button class="cta-button grow" (click)="abrirModalContratar(especialistaSeleccionaCompleto())">Contratar Ahora</button>
+        </div>
+      }
     </div>
-
-    } @else {
-
-    <div class="profile-header-modal">
-
-      <div class="avatar-large">
-
-        {{ especialistaSeleccionaCompleto()?.nombre?.charAt(0) }}{{
-
-        especialistaSeleccionaCompleto()?.apellido?.charAt(0) }}
-
-      </div>
-
-      <h2>{{ especialistaSeleccionaCompleto()?.nombre }} {{ especialistaSeleccionaCompleto()?.apellido }}</h2>
-
-      <p class="profile-city">📍 {{ especialistaSeleccionaCompleto()?.ciudad }}</p>
-
-      <div class="rating-large">
-
-        ⭐ {{ especialistaSeleccionaCompleto()?.calificacionPromedio }} <span class="rating-count">/ 5.0</span>
-
-      </div>
-
     </div>
-
-
-
-    <div class="profile-body-modal">
-
-      <div class="about-section">
-
-        <h4>Sobre mí</h4>
-
-        <p class="desc-text">{{ especialistaSeleccionaCompleto()?.descripcion || 'Sin descripción.' }}</p>
-
-      </div>
-
-
-
-      <h4>Oficios</h4>
-
-      <div class="oficios-tags-large">
-
-        @for (oficio of especialistaSeleccionaCompleto()?.oficios; track $index) {
-
-        <span class="tag-large">{{ oficio.nombre }}</span>
-
-        }
-
-      </div>
-
-
-
-      <div class="contact-info">
-
-        <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
-
-        <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
-
-      </div>
-
-    </div>
-
-
-
-    <div class="profile-actions-modal">
-
-      <button class="btn-secondary-icon" [class.fav-active]="esFavorito(especialistaSeleccionaCompleto()?.email)"
-
-        (click)="toggleFavorito(especialistaSeleccionaCompleto())" title="Favoritos">
-
-
-
-        @if (esFavorito(especialistaSeleccionaCompleto()?.email)) {
-
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-
-          <path
-
-            d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-
-        </svg>
-
-        } @else {
-
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-
-          stroke="currentColor">
-
-          <path stroke-linecap="round" stroke-linejoin="round"
-
-            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-
-        </svg>
-
-        }
-
-      </button>
-
-
-
-      <button class="cta-button grow" (click)="abrirModalContratar(especialistaSeleccionaCompleto())">
-
-        Contratar Ahora
-
-      </button>
-
-    </div>
-
     }
 
-
-
-    <button class="close-corner-btn" (click)="cerrarModalDetalle()">✕</button>
-
-  </div>
-
-</div>
-
-}
-
-
-
 @if (showModalContratar()) {
-
-<div class="modal-overlay" (click)="cerrarModalContratar()">
-
-  <div class="modal-card" (click)="$event.stopPropagation()">
-
-    <h3>Solicitar Servicio</h3>
-
-    <p class="modal-desc">Para: <strong>{{ especialistaSeleccionado?.nombre }}</strong></p>
-
-
-
-    <div class="form-group">
-
-      <label>Describe el problema o trabajo a realizar:</label>
-
-      <textarea [(ngModel)]="descripcionTrabajo" rows="4"
-
-        placeholder="Ej: Necesito reparar una fuga de agua en la cocina..."></textarea>
-
+  <div class="modal-overlay" (click)="cerrarModalContratar()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3>Solicitar Servicio</h3>
+      <p class="modal-desc">Para: <strong>{{ especialistaSeleccionado?.nombre }}</strong></p>
+      <textarea [(ngModel)]="descripcionTrabajo" rows="4" placeholder="Describe tu problema..."></textarea>
+      <div class="modal-actions">
+        <button class="cta-button-outline" (click)="cerrarModalContratar()">Cancelar</button>
+        <button class="cta-button" (click)="enviarSolicitud()" [disabled]="isSubmitting() || !descripcionTrabajo">Enviar</button>
+      </div>
     </div>
-
-
-
-    <div class="modal-actions">
-
-      <button class="cta-button-outline" (click)="cerrarModalContratar()">Cancelar</button>
-
-      <button class="cta-button" (click)="enviarSolicitud()" [disabled]="!descripcionTrabajo || isSubmitting()">
-
-        {{ isSubmitting() ? 'Enviando...' : 'Enviar Solicitud' }}
-
-      </button>
-
-    </div>
-
   </div>
-
-</div>
-
 }
-
-
 
 @if (feedbackData.visible) {
-
-<app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
-
-  (cerrar)="cerrarFeedback()">
-
-</app-modal-feedback>
-
+  <app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo" (cerrar)="cerrarFeedback()"></app-modal-feedback>
 }
-

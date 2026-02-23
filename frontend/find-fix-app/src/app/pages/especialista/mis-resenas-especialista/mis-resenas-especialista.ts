@@ -2,26 +2,38 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MostrarResenaEspecialistaDTO } from '../../../models/reseña/reseña.model';
 import { ResenaService } from '../../../services/reseña/reseñas.service';
+import { FormsModule } from '@angular/forms';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-resenas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mis-resenas-especialista.html',
   styleUrl: './mis-resenas-especialista.css',
 })
 export class MisResenasPage implements OnInit {
-
   private resenaService = inject(ResenaService);
 
-  // Estado
-  public resenas = signal<MostrarResenaEspecialistaDTO[]>([]);
+  public todasLasResenas: MostrarResenaEspecialistaDTO[] = [];
+  public resenasFiltradas: MostrarResenaEspecialistaDTO[] = []; // Lista intermedia
+  public resenasVisibles = signal<MostrarResenaEspecialistaDTO[]>([]);
   public isLoading = signal(true);
 
-  public promedio = computed(() => {
-    const lista = this.resenas();
-    if (lista.length === 0) return 0;
+  // Variables de Filtro y Orden
+  public criterioOrden = 'puntuacion';
+  public direccionOrden: DireccionOrden = 'desc';
+  public filtroTexto = '';
+  public dropdownOpen: string | null = null;
 
+  public currentPage = signal(0);
+  public pageSize = 4;
+  public totalPages = signal(0);
+
+  public promedio = computed(() => {
+    const lista = this.todasLasResenas;
+    if (lista.length === 0) return 0;
     const suma = lista.reduce((acc, curr) => acc + curr.puntuacion, 0);
     return (suma / lista.length).toFixed(1);
   });
@@ -34,7 +46,8 @@ export class MisResenasPage implements OnInit {
     this.isLoading.set(true);
     this.resenaService.obtenerResenasRecibidas().subscribe({
       next: (response) => {
-        this.resenas.set(response.data || []);
+        this.todasLasResenas = response.data || [];
+        this.aplicarFiltros(); 
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -42,6 +55,64 @@ export class MisResenasPage implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.todasLasResenas];
+
+    if (this.filtroTexto) {
+      const busqueda = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(r =>
+        r.nombreCliente?.toLowerCase().includes(busqueda) ||
+        r.comentario?.toLowerCase().includes(busqueda)
+      );
+    }
+
+    this.direccionOrden = this.criterioOrden === 'puntuacion' ? 'desc' : 'asc';
+
+    this.resenasFiltradas = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.calcularPaginacion();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.criterioOrden = 'puntuacion';
+    this.aplicarFiltros();
+  }
+
+
+  calcularPaginacion() {
+    this.totalPages.set(Math.ceil(this.todasLasResenas.length / this.pageSize));
+    this.currentPage.set(0);
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.resenasVisibles.set(this.todasLasResenas.slice(inicio, fin));
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getEstrellas(puntuacion: number): number[] {

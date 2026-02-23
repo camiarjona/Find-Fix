@@ -9,11 +9,13 @@ public class MostrarResenaClienteDTO {
     private Double puntuacion;
     private String comentario;
     private String nombreEspecialista;
+    private String fotoUrlEspecialista;
 
     public MostrarResenaClienteDTO(Resena resena) {
         this.resenaId = resena.getResenaId();
         this.puntuacion = resena.getPuntuacion();
         this.comentario = resena.getComentario();
         this.nombreEspecialista = resena.getTrabajoApp().getEspecialista() != null ? resena.getTrabajoApp().getEspecialista().getUsuario().getNombre() : "Especialista desvinculado";
+        this.fotoUrlEspecialista = resena.getTrabajoApp().getEspecialista().getUsuario().getFotoUrl();
     }
 }

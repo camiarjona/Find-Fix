@@ -26,14 +26,18 @@ export class AuthPage implements OnInit {
   private route = inject(ActivatedRoute);
 
   // Feedback modal state
-  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
-
+public feedbackData = signal({
+    visible: false,
+    tipo: 'success' as 'success' | 'error',
+    titulo: '',
+    mensaje: ''
+  });
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
-    this.feedbackData = { visible: true, titulo, mensaje, tipo };
+    this.feedbackData.set({ visible: true, titulo, mensaje, tipo });
   }
 
   cerrarFeedback() {
-    this.feedbackData = { ...this.feedbackData, visible: false };
+    this.feedbackData.update(current => ({ ...current, visible: false }));
   }
 
   public isLoginView = signal<boolean>(true);
@@ -87,12 +91,24 @@ export class AuthPage implements OnInit {
 
   onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
-    this.authService.register(credentials).subscribe();
-    console.log('Datos de registro:', credentials);
-    this.mostrarFeedback('Registro exitoso', 'Inicia sesión para continuar')
-    this.showLoginView();
-  }
 
+    this.authService.register(credentials).subscribe({
+      next: (response) => {
+        console.log('Datos de registro:', credentials);
+
+        this.mostrarFeedback('Registro exitoso', 'Inicia sesión para continuar', 'success');
+
+        this.showLoginView();
+      },
+      error: (err) => {
+        console.error('Error en el registro:', err);
+
+        const mensajeError = err.error?.message || 'El email ingresado ya se encuentra registrado.';
+
+        this.mostrarFeedback('Error de Registro', mensajeError, 'error');
+      }
+    });
+  }
   onToggleView(): void {
     this.isLoginView.set(!this.isLoginView());
     this.authError.set(null);

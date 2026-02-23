@@ -1,3 +1,7 @@
+::ng-deep .modal-sin-boton button {
+  display: none !important;
+}
+
 .profile-page-container {
   padding: 2rem;
   max-width: 1200px;
@@ -137,7 +141,7 @@
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 12px;
-  margin-top: 4px;
+  margin-top: 12px;
 }
 
 .data-list {
@@ -384,7 +388,12 @@
 }
 
 .avatar-container {
-  text-align: center;
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 20px;
 }
 
 .avatar-wrapper {
@@ -418,6 +427,13 @@
   background-color: #ffffff !important;
   position: relative;
   z-index: 1;
+}
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero-info h3 { margin: 0; font-size: 1.5rem; }
@@ -977,4 +993,104 @@ ngx-dropzone-image-preview {
     width: 100%;
     margin: 0;
   }
+}
+
+/* Contenedor para alinear input y botón */
+.input-with-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-button input {
+  padding-right: 40px;
+  width: 100%;
+}
+
+/* Estilo del botón de GPS */
+.btn-icon-gps {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.btn-icon-gps:hover {
+  transform: scale(1.2);
+  color: #0056b3;
+}
+
+/* Wrapper para búsqueda con GPS en modo edición */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* Espacio en el input del perfil */
+.search-wrapper .input-inline {
+  padding-right: 40px !important;
+  width: 100%;
+}
+
+/* Botón GPS para el modo edición del perfil */
+.btn-inside-input-perfil {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #ff6b00;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.btn-inside-input-perfil:hover {
+  transform: translateY(-50%) scale(1.2);
+  color: #e66000;
+}
+
+/* Contenedor que apila la fila de botones y la nota */
+.action-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra la nota respecto al bloque de botones */
+  gap: 12px;
+}
+
+/* Fila de botones (mantiene tu diseño original) */
+.botones-row {
+  display: flex;
+  gap: 15px; /* Espacio entre Descartar y Guardar */
+}
+
+/* Estilo de la notita */
+.nota-resolucion {
+  font-size: 0.7rem;
+  color: #999;
+  margin: 0;
+  font-style: italic;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* Ajuste opcional: si el footer se ve muy apretado, dale un poco más de padding superior */
+.modal-footer {
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinea arriba para que la nota no tire el botón de borrar hacia abajo */
 }

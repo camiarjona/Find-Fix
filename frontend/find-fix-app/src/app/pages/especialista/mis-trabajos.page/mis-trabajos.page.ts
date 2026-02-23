@@ -1,10 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { VisualizarTrabajoAppEspecialista } from '../../../models/trabajoApp-models/trabajo-app-model';
 import { TrabajoExternoService } from '../../../services/trabajoExterno-services/trabajo-externo-service';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-trabajos.page',
@@ -14,24 +16,33 @@ import { TrabajoExternoService } from '../../../services/trabajoExterno-services
   styleUrl: './mis-trabajos.page.css',
 })
 export class MisTrabajosPage implements OnInit {
-  // --- Inyeccion de servicios
+
+  // --- Inyeccion de servicios ---
   private servicioTrabajoApp = inject(TrabajoAppService);
   private servicioTrabajoExterno = inject(TrabajoExternoService);
   private ruta = inject(ActivatedRoute);
 
+  // VARIABLES PARA ORDENAMIENTO
+  public criterioOrden = 'fechaInicio';
+  public direccionOrden: DireccionOrden = 'desc';
+  public dropdownOpen: string | null = null;
+
   // --- Datos Principales ---
-  trabajosVisibles = signal<VisualizarTrabajoAppEspecialista[]>([]);
-  todosLosTrabajos: VisualizarTrabajoAppEspecialista[] = [];
-  estaCargando = signal(true);
-  modoVista: 'tarjetas' | 'lista' = 'tarjetas';
+  public todosLosTrabajos: VisualizarTrabajoAppEspecialista[] = []; // Datos unificados brutos
+  public trabajosFiltrados: VisualizarTrabajoAppEspecialista[] = []; // Resultado de aplicar filtros
+  public trabajosVisibles = signal<VisualizarTrabajoAppEspecialista[]>([]); // Lo que se ve en la página actual
+  public estaCargando = signal(true);
+  public modoVista: 'tarjetas' | 'lista' = 'tarjetas';
 
-  // --- Alertas ---
-  alertaVisible = signal(false);
-  mensajeAlerta = signal('');
-  tipoAlerta = signal<'success' | 'error'>('success');
+  public currentPage = signal(0);
+  public pageSize = 6;
+  public totalPages = signal(0);
 
-  // --- Filtros ---
-  filtros = {
+  public alertaVisible = signal(false);
+  public mensajeAlerta = signal('');
+  public tipoAlerta = signal<'success' | 'error'>('success');
+
+  public filtros = {
     origen: '',
     id: '',
     titulo: '',
@@ -40,12 +51,11 @@ export class MisTrabajosPage implements OnInit {
     hasta: ''
   };
 
-  estadosPosibles = ['CREADO', 'EN_PROCESO', 'FINALIZADO'];
+  public estadosPosibles = ['CREADO', 'EN_PROCESO', 'FINALIZADO'];
 
-  // --- Modal Detalle/Edición ---
-  trabajoSeleccionado = signal<VisualizarTrabajoAppEspecialista | null>(null);
-  datosEdicion: any = {};
-  modoEdicion = {
+  public trabajoSeleccionado = signal<VisualizarTrabajoAppEspecialista | null>(null);
+  public datosEdicion: any = {};
+  public modoEdicion = {
     titulo: false,
     estado: false,
     fechaFin: false,
@@ -53,9 +63,8 @@ export class MisTrabajosPage implements OnInit {
     descripcion: false
   };
 
-  // --- Modal Creación ---
-  modalCreacionVisible = signal(false);
-  nuevoTrabajo = {
+  public modalCreacionVisible = signal(false);
+  public nuevoTrabajo = {
     titulo: '',
     nombreCliente: '',
     descripcion: '',
@@ -69,6 +78,111 @@ export class MisTrabajosPage implements OnInit {
 
   establecerModoVista(modo: 'tarjetas' | 'lista') {
     this.modoVista = modo;
+  }
+
+  // --- Lógica de Carga y Datos ---
+  cargarDatosReales() {
+    this.estaCargando.set(true);
+
+    this.servicioTrabajoApp.obtenerTrabajosEspecialista().subscribe({
+      next: (respApp) => {
+        const listaApp = (respApp.data || []).map(t => {
+          const item = { ...(t as any), origen: 'APP' } as any;
+          this.normalizeTrabajoDates(item);
+          return item;
+        });
+
+        this.servicioTrabajoExterno.obtenerMisTrabajos().subscribe({
+          next: (respExt) => {
+            const listaExt = (respExt.data || []).map((t: any) => {
+              const item = { ...(t as any), origen: 'EXTERNO' } as any;
+              this.normalizeTrabajoDates(item);
+              return item;
+            });
+
+            this.todosLosTrabajos = [...listaApp, ...listaExt];
+            this.aplicarFiltros();
+            this.estaCargando.set(false);
+          },
+          error: (err) => {
+            console.error('Error cargando trabajos externos', err);
+            this.todosLosTrabajos = [...listaApp];
+            this.aplicarFiltros();
+            this.estaCargando.set(false);
+            this.mostrarAlerta('Error al cargar trabajos externos', 'error');
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error cargando trabajos app', err);
+        this.estaCargando.set(false);
+        this.mostrarAlerta('Error al conectar con el servidor', 'error');
+      }
+    });
+  }
+
+  aplicarFiltros() {
+    let resultado = this.todosLosTrabajos;
+
+    if (this.filtros.origen) {
+      resultado = resultado.filter(t => (t as any).origen === this.filtros.origen);
+    }
+    if (this.filtros.titulo) {
+      resultado = resultado.filter(t => t.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()));
+    }
+    if (this.filtros.estado) {
+      resultado = resultado.filter(t => t.estado === this.filtros.estado);
+    }
+    if (this.filtros.desde) {
+      const d = new Date(this.filtros.desde); d.setHours(0, 0, 0, 0);
+      resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) >= d);
+    }
+    if (this.filtros.hasta) {
+      const h = new Date(this.filtros.hasta); h.setHours(23, 59, 59, 999);
+      resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) <= h);
+    }
+
+    this.direccionOrden = 'desc';
+
+    this.trabajosFiltrados = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.trabajosFiltrados = resultado;
+    this.totalPages.set(Math.ceil(this.trabajosFiltrados.length / this.pageSize));
+
+    this.currentPage.set(0);
+    this.actualizarVistaPaginada();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = this.currentPage() * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.trabajosVisibles.set(this.trabajosFiltrados.slice(inicio, fin));
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    this.currentPage.set(nuevaPagina);
+    this.actualizarVistaPaginada();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  limpiarFiltros() {
+    this.filtros = { origen: '', id: '', titulo: '', estado: '', desde: '', hasta: '' };
+    this.aplicarFiltros();
   }
 
   formatearTextoEstado(estado: string): string {
@@ -92,122 +206,11 @@ export class MisTrabajosPage implements OnInit {
     return [...new Set(permitidos)];
   }
 
-  mostrarAlerta(mensaje: string, tipo: 'success' | 'error' = 'success') {
-    this.mensajeAlerta.set(mensaje);
-    this.tipoAlerta.set(tipo);
-    this.alertaVisible.set(true);
-  }
-
-  cerrarAlerta() {
-    this.alertaVisible.set(false);
-  }
-
-  // --- MÉTODOS DE CONVERSIÓN ESTADO (NUEVOS) ---
-  private normalizarEstadoBackend(estado: string): string {
-    if (!estado) return '';
-    const mapaEstados: { [key: string]: string } = {
-      'Creado': 'CREADO',
-      'En proceso': 'EN_PROCESO',
-      'En revision': 'EN_REVISION',
-      'Finalizado': 'FINALIZADO',
-      'CREADO': 'CREADO',
-      'EN_PROCESO': 'EN_PROCESO',
-      'EN_REVISION': 'EN_REVISION',
-      'FINALIZADO': 'FINALIZADO',
-    };
-    return mapaEstados[estado] || estado.toUpperCase().replace(/\s+/g, '_');
-  }
-
-  private obtenerEstadoParaBackend(estadoFrontend: string): string {
-    const mapaBackend: { [key: string]: string } = {
-      'CREADO': 'Creado',
-      'EN_PROCESO': 'En proceso',
-      'EN_REVISION': 'En revision',
-      'FINALIZADO': 'Finalizado',
-    };
-    return mapaBackend[estadoFrontend] || estadoFrontend;
-  }
-
-  cargarDatosReales() {
-    this.estaCargando.set(true);
-
-    // Primero obtenemos los trabajos desde la app para el especialista
-    this.servicioTrabajoApp.obtenerTrabajosEspecialista().subscribe({
-      next: (respApp) => {
-        const listaApp = (respApp.data || []).map(t => {
-          const item = { ...(t as any), origen: 'APP' } as any;
-          this.normalizeTrabajoDates(item);
-          return item;
-        });
-
-        // Luego obtenemos trabajos externos
-        this.servicioTrabajoExterno.obtenerMisTrabajos().subscribe({
-          next: (respExt) => {
-            const listaExt = (respExt.data || []).map((t: any) => {
-              const item = { ...(t as any), origen: 'EXTERNO' } as any;
-              this.normalizeTrabajoDates(item);
-              return item;
-            });
-
-            // Unificamos listas
-            this.todosLosTrabajos = [...listaApp, ...listaExt];
-            this.aplicarFiltros();
-            this.estaCargando.set(false);
-          },
-          error: (err) => {
-            console.error('Error cargando trabajos externos', err);
-            this.todosLosTrabajos = [...listaApp];
-            this.aplicarFiltros();
-            this.estaCargando.set(false);
-            this.mostrarAlerta('Error al cargar trabajos externos', 'error');
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error cargando trabajos app', err);
-        this.estaCargando.set(false);
-        this.mostrarAlerta('Error al conectar con el servidor', 'error');
-      }
-    });
-  }
-
-  // Filtros
-  aplicarFiltros() {
-    let resultado = this.todosLosTrabajos;
-
-    if (this.filtros.origen) {
-      resultado = resultado.filter(t => (t as any).origen === this.filtros.origen);
-    }
-    if (this.filtros.titulo) {
-      resultado = resultado.filter(t => t.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()));
-    }
-    if (this.filtros.estado) {
-      resultado = resultado.filter(t => t.estado === this.filtros.estado);
-    }
-    if (this.filtros.desde) {
-      const d = new Date(this.filtros.desde); d.setHours(0, 0, 0, 0);
-      resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) >= d);
-    }
-    if (this.filtros.hasta) {
-      const h = new Date(this.filtros.hasta); h.setHours(23, 59, 59, 999);
-      resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) <= h);
-    }
-    this.trabajosVisibles.set(resultado);
-  }
-
-  limpiarFiltros() {
-    this.filtros = { origen: '', id: '', titulo: '', estado: '', desde: '', hasta: '' };
-    this.aplicarFiltros();
-  }
-
-  // --- ACTUALIZACIÓN DE ESTADOS Y EDICIÓN ---
-
   cambiarEstadoRapido(trabajo: VisualizarTrabajoAppEspecialista, event: Event) {
     event.stopPropagation();
     const nuevoEstado = (event.target as HTMLSelectElement).value;
     if (nuevoEstado === trabajo.estado) return;
 
-    // Logica local
     const estadoAnterior = trabajo.estado;
     trabajo.estado = nuevoEstado;
     this.actualizarFechasLogica(trabajo, nuevoEstado);
@@ -216,27 +219,20 @@ export class MisTrabajosPage implements OnInit {
     const origen = (trabajo as any).origen || 'APP';
     const titulo = (trabajo as any).titulo;
 
-    if (origen === 'APP') {
-      this.servicioTrabajoApp.actualizarEstadoTrabajo(titulo, estadoParaBackend).subscribe({
-        next: () => this.mostrarAlerta('Estado actualizado en servidor', 'success'),
-        error: (err) => {
-          console.error('Error actualizando estado APP', err);
-          trabajo.estado = estadoAnterior;
-          const serverMsg = err?.error?.message || err?.error?.mensaje || err?.message || `Error ${err?.status || ''}`;
-          this.mostrarAlerta(serverMsg, 'error');
-        }
-      });
-    } else {
-      this.servicioTrabajoExterno.actualizarEstado(titulo, estadoParaBackend).subscribe({
-        next: () => this.mostrarAlerta('Estado actualizado en servidor', 'success'),
-        error: (err) => {
-          console.error('Error actualizando estado EXTERNO', err);
-          trabajo.estado = estadoAnterior;
-          const serverMsg = err?.error?.message || err?.error?.mensaje || err?.message || `Error ${err?.status || ''}`;
-          this.mostrarAlerta(serverMsg, 'error');
-        }
-      });
-    }
+    const serv = origen === 'APP' ? this.servicioTrabajoApp : this.servicioTrabajoExterno;
+
+    const observable = origen === 'APP'
+      ? this.servicioTrabajoApp.actualizarEstadoTrabajo(titulo, estadoParaBackend)
+      : this.servicioTrabajoExterno.actualizarEstado(titulo, estadoParaBackend);
+
+    observable.subscribe({
+      next: () => this.mostrarAlerta('Estado actualizado', 'success'),
+      error: (err) => {
+        trabajo.estado = estadoAnterior;
+        const msg = err?.error?.message || 'Error al actualizar estado';
+        this.mostrarAlerta(msg, 'error');
+      }
+    });
   }
 
   actualizarFechasLogica(trabajo: any, estado: string) {
@@ -245,76 +241,68 @@ export class MisTrabajosPage implements OnInit {
     if (estado !== 'FINALIZADO') trabajo.fechaFin = null;
   }
 
-  // Normaliza valores de fecha que puedan venir en diferentes formatos
-  private parseBackendDate(value: any): string | null {
-    if (!value) return null;
-    if (typeof value === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value;
-      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
-      if (m) {
-        const d = Number(m[1]);
-        const mo = Number(m[2]) - 1;
-        const y = Number(m[3]);
-        return new Date(Date.UTC(y, mo, d)).toISOString();
-      }
-      return null;
-    }
-    if (value instanceof Date) return value.toISOString();
-    if (typeof value === 'number') return new Date(value).toISOString();
-    return null;
+  private normalizarEstadoBackend(estado: string): string {
+    if (!estado) return '';
+    const mapaEstados: { [key: string]: string } = {
+      'Creado': 'CREADO', 'En proceso': 'EN_PROCESO', 'En revision': 'EN_REVISION', 'Finalizado': 'FINALIZADO',
+      'CREADO': 'CREADO', 'EN_PROCESO': 'EN_PROCESO', 'EN_REVISION': 'EN_REVISION', 'FINALIZADO': 'FINALIZADO',
+    };
+    return mapaEstados[estado] || estado.toUpperCase().replace(/\s+/g, '_');
+  }
+
+  private obtenerEstadoParaBackend(estadoFrontend: string): string {
+    const mapaBackend: { [key: string]: string } = {
+      'CREADO': 'Creado', 'EN_PROCESO': 'En proceso', 'EN_REVISION': 'En revision', 'FINALIZADO': 'Finalizado',
+    };
+    return mapaBackend[estadoFrontend] || estadoFrontend;
   }
 
   private normalizeTrabajoDates(t: any) {
     t.fechaInicio = this.parseBackendDate(t.fechaInicio) || null;
     t.fechaFin = this.parseBackendDate(t.fechaFin) || null;
-    // AQUI USAMOS LA NORMALIZACIÓN PARA ASEGURARNOS DE TENER "EN_PROCESO"
     t.estado = this.normalizarEstadoBackend(t.estado || '');
   }
 
-  // --- Modal Detalle ---
-  abrirModalDetalle(trabajo: VisualizarTrabajoAppEspecialista) {
-    const origen = (trabajo as any).origen || 'APP';
-    if (origen === 'APP') {
-      // Obtener ficha detallada desde el backend para trabajos APP
-      const tituloBuscado = trabajo.titulo;
-      this.estaCargando.set(true);
-      this.servicioTrabajoApp.obtenerFichaEspecialista(tituloBuscado).subscribe({
-        next: (resp) => {
-          const detalle = { ...(resp.data as any), origen: 'APP' } as any;
-          // Normalize dates and ensure estado is present and normalized
-          this.normalizeTrabajoDates(detalle);
-          // Si por alguna razón la ficha no trae estado, usamos el de la lista
-          detalle.estado = detalle.estado || (trabajo as any).estado || '';
-
-          console.debug('Ficha recibida (APP):', detalle);
-          this.datosEdicion = {
-            titulo: detalle.titulo,
-            estado: detalle.estado,
-            fechaFin: detalle.fechaFin ? new Date(detalle.fechaFin).toISOString().split('T')[0] : '',
-            presupuesto: detalle.presupuesto,
-            descripcion: detalle.descripcion
-          };
-          this.modoEdicion = { titulo: false, estado: false, fechaFin: false, presupuesto: false, descripcion: false };
-          this.trabajoSeleccionado.set(detalle);
-          this.estaCargando.set(false);
-        },
-        error: (err) => {
-          console.error('Error obteniendo ficha del trabajo APP', err);
-          // Fallback: mostrar el trabajo que ya tenemos
-          this.prepararDatosEdicionFallback(trabajo);
-          this.trabajoSeleccionado.set(trabajo);
-          this.estaCargando.set(false);
-          this.mostrarAlerta('No se pudo obtener detalles completos del trabajo', 'error');
-        }
-      });
-    } else {
-      // Trabajo EXTERNO: usar los datos que ya tenemos
-      this.prepararDatosEdicionFallback(trabajo);
-      this.trabajoSeleccionado.set(trabajo);
+  private parseBackendDate(value: any): string | null {
+    if (!value) return null;
+    if (typeof value === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value;
+      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
+      if (m) return new Date(Date.UTC(Number(m[3]), Number(m[2]) - 1, Number(m[1]))).toISOString();
+      return null;
     }
+    return (value instanceof Date || typeof value === 'number') ? new Date(value).toISOString() : null;
   }
 
-  private prepararDatosEdicionFallback(trabajo: VisualizarTrabajoAppEspecialista) {
+  abrirModalDetalle(trabajo: VisualizarTrabajoAppEspecialista) {
+  const origen = (trabajo as any).origen || 'APP';
+
+  if (origen === 'APP') {
+    this.estaCargando.set(true);
+
+    this.servicioTrabajoApp.obtenerFichaEspecialista(trabajo.titulo).subscribe({
+      next: (resp) => {
+        const detalle = { ...(resp.data as any), origen: 'APP' };
+        this.normalizeTrabajoDates(detalle);
+        this.prepararDatosEdicionFallback(detalle);
+        this.trabajoSeleccionado.set(detalle);
+        this.estaCargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al obtener ficha:', err);
+        this.prepararDatosEdicionFallback(trabajo);
+        this.trabajoSeleccionado.set(trabajo);
+        this.estaCargando.set(false);
+      }
+    });
+  } else {
+    this.prepararDatosEdicionFallback(trabajo);
+    this.trabajoSeleccionado.set(trabajo);
+    this.estaCargando.set(false);
+  }
+}
+
+  private prepararDatosEdicionFallback(trabajo: any) {
     this.datosEdicion = {
       titulo: trabajo.titulo,
       estado: trabajo.estado,
@@ -325,140 +313,68 @@ export class MisTrabajosPage implements OnInit {
     this.modoEdicion = { titulo: false, estado: false, fechaFin: false, presupuesto: false, descripcion: false };
   }
 
-  cerrarModal() {
-    this.trabajoSeleccionado.set(null);
-  }
-
-  activarEdicionCampo(campo: keyof typeof this.modoEdicion) {
-    this.modoEdicion[campo] = true;
-  }
+  cerrarModal() { this.trabajoSeleccionado.set(null); }
+  activarEdicionCampo(campo: keyof typeof this.modoEdicion) { this.modoEdicion[campo] = true; }
 
   guardarEdicionModal() {
     const trabajo = this.trabajoSeleccionado();
-    if (trabajo) {
-      const estadoOriginal = (trabajo as any).estado;
+    if (!trabajo) return;
 
-      trabajo.titulo = this.datosEdicion.titulo;
-      trabajo.estado = this.datosEdicion.estado;
-      trabajo.presupuesto = this.datosEdicion.presupuesto;
-      trabajo.descripcion = this.datosEdicion.descripcion;
-      if (this.datosEdicion.fechaFin) {
-        trabajo.fechaFin = (this.datosEdicion.fechaFin);
-      } else {
-        trabajo.fechaFin = null as any;
-      }
-      this.actualizarFechasLogica(trabajo, trabajo.estado);
+    const origen = (trabajo as any).origen || 'APP';
+    const tituloOriginal = (trabajo as any).titulo;
+    const dto = {
+      titulo: this.datosEdicion.titulo,
+      descripcion: this.datosEdicion.descripcion,
+      presupuesto: this.datosEdicion.presupuesto
+    };
 
-      const estadoBackend = this.obtenerEstadoParaBackend(this.datosEdicion.estado);
+    const observable = origen === 'APP'
+      ? this.servicioTrabajoApp.actualizarDatosTrabajo(tituloOriginal, dto)
+      : this.servicioTrabajoExterno.modificarTrabajo(tituloOriginal, dto);
 
-      const dtoActualizarApp: any = {
-        titulo: this.datosEdicion.titulo,
-        descripcion: this.datosEdicion.descripcion,
-        presupuesto: this.datosEdicion.presupuesto,
-      };
+    observable.subscribe({
+      next: () => {
+        const estadoBackend = this.obtenerEstadoParaBackend(this.datosEdicion.estado);
+        const obsEstado = origen === 'APP'
+          ? this.servicioTrabajoApp.actualizarEstadoTrabajo(this.datosEdicion.titulo, estadoBackend)
+          : this.servicioTrabajoExterno.actualizarEstado(tituloOriginal, estadoBackend);
 
-      const dtoActualizarExt: any = {
-        titulo: this.datosEdicion.titulo,
-        descripcion: this.datosEdicion.descripcion,
-        presupuesto: this.datosEdicion.presupuesto,
-      };
-
-      const origen = (trabajo as any).origen || 'APP';
-      const tituloOriginal = (trabajo as any).titulo;
-
-      if (origen === 'APP') {
-        this.servicioTrabajoApp.actualizarDatosTrabajo(tituloOriginal, dtoActualizarApp).subscribe({
-          next: () => {
-            if (this.datosEdicion.estado !== (trabajo as any).estadoOriginal) {
-              this.servicioTrabajoApp.actualizarEstadoTrabajo(this.datosEdicion.titulo, estadoBackend).subscribe();
-            }
-            this.mostrarAlerta('Cambios guardados en servidor', 'success');
-            this.cargarDatosReales();
-          },
-          error: (err) => {
-            console.error('Error guardando cambios APP', err);
-            this.mostrarAlerta('Error al guardar cambios', 'error');
-          }
+        obsEstado.subscribe(() => {
+          this.mostrarAlerta('Cambios guardados', 'success');
+          this.cargarDatosReales();
         });
-      } else {
-        this.servicioTrabajoExterno.modificarTrabajo(tituloOriginal, dtoActualizarExt).subscribe({
-          next: () => {
-            if (this.datosEdicion.estado !== estadoOriginal) {
-              this.servicioTrabajoExterno.actualizarEstado(tituloOriginal, estadoBackend).subscribe({
-                next: () => {
-                  this.mostrarAlerta('Cambios y estado guardados', 'success');
-                  this.cargarDatosReales();
-                },
-                error: (e) => console.error("Error actualizando estado externo", e)
-              });
-            } else {
-              this.mostrarAlerta('Cambios guardados en servidor', 'success');
-              this.cargarDatosReales();
-            }
-          },
-          error: (err) => {
-            console.error('Error guardando cambios EXTERNO', err);
-            const msg = err.error?.message || 'Error al guardar cambios. Revisa los campos.';
-            this.mostrarAlerta(msg, 'error');
-          }
-        });
-      }
-
-      this.cerrarModal();
-      this.mostrarAlerta('Cambios guardados correctamente.', 'success');
-    }
+      },
+      error: () => this.mostrarAlerta('Error al guardar', 'error')
+    });
+    this.cerrarModal();
   }
 
-  //  NUEVO TRABAJO EXTERNO (MODAL CREACIÓN)
   agregarTrabajoExterno() {
-    this.nuevoTrabajo = {
-      titulo: '',
-      nombreCliente: '',
-      descripcion: '',
-      presupuesto: null,
-      fechaInicio: new Date().toISOString().split('T')[0]
-    };
+    this.nuevoTrabajo = { titulo: '', nombreCliente: '', descripcion: '', presupuesto: null, fechaInicio: new Date().toISOString().split('T')[0] };
     this.modalCreacionVisible.set(true);
   }
 
-  cerrarModalCreacion() {
-    this.modalCreacionVisible.set(false);
-  }
-
   guardarNuevoTrabajo() {
-    if (!this.nuevoTrabajo.titulo || !this.nuevoTrabajo.nombreCliente) {
-      this.mostrarAlerta('Por favor completa el título y el cliente.', 'error');
-      return;
-    }
-
-    // CONEXIÓN BACKEND REAL
-    const dtoCrear = {
+    if (!this.nuevoTrabajo.titulo || !this.nuevoTrabajo.nombreCliente) return;
+    this.servicioTrabajoExterno.crearTrabajo({
       titulo: this.nuevoTrabajo.titulo,
       nombreCliente: this.nuevoTrabajo.nombreCliente,
       descripcion: this.nuevoTrabajo.descripcion,
       presupuesto: this.nuevoTrabajo.presupuesto ?? 0
-    };
-    this.servicioTrabajoExterno.crearTrabajo(dtoCrear).subscribe({
-      next: (resp) => {
-        // Si el backend devuelve el trabajo, lo agregamos o recargamos
-        const creado = (resp && (resp as any).data) || null;
-        if (creado) {
-          const item = { ...creado, origen: 'EXTERNO' } as any;
-          this.normalizeTrabajoDates(item); // Normalizar el nuevo item también
-          // colocar al principio
-          this.todosLosTrabajos.unshift(item);
-          this.aplicarFiltros();
-        } else {
-          // si no devuelve, recargar la lista completa
-          this.cargarDatosReales();
-        }
-        this.mostrarAlerta('Trabajo creado con éxito', 'success');
-        this.cerrarModalCreacion();
+    }).subscribe({
+      next: () => {
+        this.mostrarAlerta('Trabajo creado', 'success');
+        this.cargarDatosReales();
+        this.modalCreacionVisible.set(false);
       },
-      error: (err) => {
-        console.error('Error creando trabajo externo', err);
-        this.mostrarAlerta('Error al crear trabajo', 'error');
-      }
+      error: () => this.mostrarAlerta('Error al crear', 'error')
     });
   }
+
+  mostrarAlerta(mensaje: string, tipo: 'success' | 'error' = 'success') {
+    this.mensajeAlerta.set(mensaje);
+    this.tipoAlerta.set(tipo);
+    this.alertaVisible.set(true);
+  }
+  cerrarAlerta() { this.alertaVisible.set(false); }
 }

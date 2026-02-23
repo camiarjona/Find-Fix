@@ -1,4 +1,5 @@
-< class="profile-page-container">
+
+<div class="profile-page-container">
   <div class="page-header">
     <h1>Configuración de Perfil</h1>
     <p>Gestiona tu información personal y la seguridad de tu cuenta</p>
@@ -8,118 +9,109 @@
   <div class="loading-state">Cargando perfil...</div>
   } @else {
 
-  <div class="profile-hero-section">
-    <div class="avatar-container">
-      <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)">
-
-  @if (usuario()?.fotoUrl && !fotoError()) {
-    <img [src]="usuario()?.fotoUrl"
-         class="main-avatar"
-         (error)="fotoError.set(true)">
-  }
-
-  @else {
-    <div class="avatar-initials">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 80px; height: 80px;">
-        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#CCCCCC"/>
-      </svg>
-    </div>
-  }
-
-  <div class="avatar-overlay">
-    <i class="fas fa-camera"></i>
-    <span>EDITAR</span>
-  </div>
-  <div class="edit-badge"><i class="fas fa-pencil-alt"></i></div>
-</div>
-
-      <div class="hero-info">
-        <h3>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</h3>
-        <span class="role-badge">{{ usuario()?.roles?.[0] }}</span>
+ <div class="profile-hero-section">
+  <div class="avatar-container">
+    <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)">
+      @if (usuario()?.fotoUrl && !fotoError()) {
+        <img [src]="usuario()?.fotoUrl" class="main-avatar" (error)="fotoError.set(true)">
+      } @else {
+        <div class="avatar-initials">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 80px; height: 80px;">
+            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#CCCCCC"/>
+          </svg>
+        </div>
+      }
+      <div class="avatar-overlay">
+        <i class="fas fa-camera"></i>
+        <span>EDITAR</span>
       </div>
+      <div class="edit-badge"><i class="fas fa-pencil-alt"></i></div>
     </div>
 
-    <div class="photo-editor-backdrop" *ngIf="isEditingPhoto()" (click)="cancelarCambioFoto()">
-      <div class="photo-editor-modal" (click)="$event.stopPropagation()">
-
-        <button class="modal-close-btn" (click)="cancelarCambioFoto()">
-          <span>&times;</span>
-        </button>
-
-    <div class="modal-content-layout">
-      <div class="editor-column">
-        <p class="column-label">Vista Previa</p>
-        <div class="large-circle-preview">
-  @if (tempPhotoUrl()) {
-    <img [src]="tempPhotoUrl()" alt="Vista previa">
-  } @else {
-    <i class="fas fa-user" style="font-size: 3rem; color: #eee;"></i>
-  }
-</div>
+    <div class="hero-info">
+      <h3>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</h3>
+      <span class="role-badge">{{ usuario()?.roles?.[0] }}</span>
     </div>
+  </div>
 
-          <div class="editor-column">
-            <p class="column-label">Nueva Imagen</p>
-            <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
-              <ngx-dropzone-label>
-                <div class="drop-instructions">
-                  <i class="fas fa-cloud-upload-alt"></i>
-                  <span>Seleccionar foto</span>
-                </div>
-              </ngx-dropzone-label>
-              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
-                [removable]="true" (removed)="onRemove(f)">
-              </ngx-dropzone-image-preview>
-            </ngx-dropzone>
+  <div class="photo-editor-backdrop" *ngIf="isEditingPhoto()" (click)="cancelarCambioFoto()">
+    <div class="photo-editor-modal" (click)="$event.stopPropagation()">
+
+      <button class="modal-close-btn" (click)="cancelarCambioFoto()">
+        <span>&times;</span>
+      </button>
+
+      <div class="modal-content-layout">
+        <div class="editor-column">
+          <p class="column-label">Vista Previa</p>
+          <div class="large-circle-preview">
+            @if (tempPhotoUrl()) {
+              <img [src]="tempPhotoUrl()" alt="Vista previa">
+            } @else {
+              <i class="fas fa-user" style="font-size: 3rem; color: #eee;"></i>
+            }
           </div>
         </div>
-      <div class="editor-column">
 
-        <div class="editor-column" *ngIf="isEditingPhoto()"> <p class="column-label">Nueva Imagen</p>
-
-        <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
-  <ngx-dropzone-label style="width: 100%; height: 100%;">
-
-    <div class="drop-instructions" *ngIf="!tempPhotoUrl()">
-      <i class="fas fa-cloud-upload-alt"></i>
-      <span>Seleccionar foto</span>
-    </div>
-
-    <div class="custom-preview" *ngIf="tempPhotoUrl()">
-      <img [src]="tempPhotoUrl()" class="preview-img">
-
-      <button class="remove-btn-overlay" (click)="$event.stopPropagation(); onRemove($event)">
-  <span>&times;</span> </button>
-    </div>
-
-  </ngx-dropzone-label>
-</ngx-dropzone>
-    </div>
+        <div class="editor-column">
+          <p class="column-label">Nueva Imagen</p>
+          <ngx-dropzone (change)="onSelect($event)" [multiple]="false" accept="image/*" class="clean-dropzone-orange">
+            <ngx-dropzone-label style="width: 100%; height: 100%;">
+              <div class="drop-instructions" *ngIf="!tempPhotoUrl()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Seleccionar foto</span>
+              </div>
+              <div class="custom-preview" *ngIf="tempPhotoUrl()">
+                <img [src]="tempPhotoUrl()" class="preview-img">
+                <button class="remove-btn-overlay" (click)="$event.stopPropagation(); onRemove(files[0])">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </ngx-dropzone-label>
+          </ngx-dropzone>
+        </div>
       </div>
-    </div>
 
-  <div class="modal-footer">
+      <div class="modal-footer">
   <div class="left-actions">
     @if (usuario()?.fotoUrl) {
       <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
-        <i class="fas fa-trash-alt"></i> Eliminar Foto
+        <i class="fas fa-trash"></i> Eliminar Foto
       </button>
     }
-    <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
-      Descartar
-    </button>
   </div>
 
-  <button class="btn-action btn-save-new"
-          [disabled]="files.length === 0 || isPhotoLoading()"
-          (click)="guardarFoto()">
-    <i class="fas fa-check" *ngIf="!isPhotoLoading()"></i>
-    {{ isPhotoLoading() ? 'Subiendo...' : 'Guardar Cambios' }}
-  </button>
+  <div class="action-buttons-container">
+    <div class="botones-row">
+      @if (files.length > 0) {
+        <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
+          Descartar
+        </button>
+      }
+
+      <button class="btn-action btn-save-new"
+        [disabled]="files.length === 0 || isPhotoLoading()"
+        (click)="guardarFoto()">
+  @if (isPhotoLoading()) {
+    <div class="loading-wrapper">
+      <span class="spinner-small"></span>
+      <span class="loading-text">Subiendo...</span>
+    </div>
+  } @else {
+    Guardar Cambios
+  }
+</button>
+    </div>
+
+    <p class="nota-resolucion">
+      * Resolución máxima permitida: 1920x1080px
+    </p>
+  </div>
 </div>
 
-</div>
+    </div>
   </div>
+</div>
 
 
   }
@@ -240,48 +232,52 @@
               </div>
             </li>
 
-            <li class="data-item">
-              <span class="label">Zona de trabajo</span>
-              <div class="value-container">
-                @if (editingField() === 'ciudad') {
-                <div class="edit-mode">
+           <li class="data-item">
+  <span class="label">Zona de trabajo</span>
+  <div class="value-container">
+    @if (editingField() === 'ciudad') {
+    <div class="edit-mode">
+      <div class="search-wrapper" style="display: flex; align-items: center; width: 100%; position: relative;">
+        <input type="text" [value]="tempValue" (input)="buscarCiudades($event)" class="input-inline"
+          placeholder="Ej: Los Troncos, Mar del Plata" style="flex: 1; padding-right: 40px;">
 
-                  <div class="search-wrapper">
-                    <input type="text" [value]="tempValue" (input)="buscarCiudades($event)" class="input-inline"
-                      placeholder="Ej: Los Troncos, Mar del Plata">
+        <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarUbicacion()" title="Usar GPS">
+          <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+           <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+          </svg>
+        </button>
 
-                    @if (citySuggestions().length > 0) {
-                    <ul class="suggestions-list">
-                      @for (sug of citySuggestions(); track sug.lat) {
-                      <li (click)="seleccionarCiudad(sug)" class="suggestion-item">
-                        {{ sug.nombreVisual }}
-                      </li>
-                      }
-                    </ul>
-                    }
-                  </div>
+        @if (citySuggestions().length > 0) {
+        <ul class="suggestions-list">
+          @for (sug of citySuggestions(); track sug.lat) {
+          <li (click)="seleccionarCiudad(sug)" class="suggestion-item">
+            {{ sug.nombreVisual }}
+          </li>
+          }
+        </ul>
+        }
+      </div>
 
-                  <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
-                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                      <path [attr.d]="icons.SAVE">
-                      </path>
-                    </svg></button>
-                  <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
-                      width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                      <path [attr.d]="icons.CANCEL">
-                      </path>
-                    </svg></button>
-                </div>
-                } @else {
-                <span class="value">{{ usuario()?.ciudad || 'No especificada' }}</span>
-                <button class="edit-pencil" (click)="startEdit('ciudad', usuario()?.ciudad)"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.EDIT">
-                    </path>
-                  </svg></button>
-                }
-              </div>
-            </li>
+      <button class="action-btn save" (click)="saveEdit('ciudad')"><svg xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+          <path [attr.d]="icons.SAVE"></path>
+        </svg></button>
+      <button class="action-btn cancel" (click)="cancelEdit()"><svg xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+          <path [attr.d]="icons.CANCEL">
+          </path>
+        </svg></button>
+    </div>
+    } @else {
+    <span class="value">{{ usuario()?.ciudad || 'No especificada' }}</span>
+    <button class="edit-pencil" (click)="startEdit('ciudad', usuario()?.ciudad)"><svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+        <path [attr.d]="icons.EDIT">
+        </path>
+      </svg></button>
+    }
+  </div>
+</li>
           </ul>
         </div>
       </section>
@@ -383,7 +379,12 @@
   </div>
 
   @if (feedbackData.visible) {
-  <app-modal-feedback [titulo]="feedbackData.titulo" [mensaje]="feedbackData.mensaje" [tipo]="feedbackData.tipo"
+  <app-modal-feedback
+    [class.modal-sin-boton]="feedbackData.titulo === 'Ubicando...'"
+    [titulo]="feedbackData.titulo"
+    [mensaje]="feedbackData.mensaje"
+    [tipo]="feedbackData.tipo"
     (cerrar)="cerrarFeedback()">
   </app-modal-feedback>
   }
+</div>

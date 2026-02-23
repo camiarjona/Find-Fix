@@ -8,6 +8,7 @@ export interface EspecialistaDTO {
   imagen?: string;
   latitud?: number;
   longitud?: number;
+  fotoUrl?: string;
 }
 
 export interface FiltroEspecialistasDTO {
@@ -15,6 +16,8 @@ export interface FiltroEspecialistasDTO {
   ciudad?: string;
   minCalificacion?: number;
   email?: string;
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface CrearSolicitudTrabajoDTO {

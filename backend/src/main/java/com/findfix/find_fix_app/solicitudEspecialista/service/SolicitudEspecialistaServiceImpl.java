@@ -19,7 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
+import org.hibernate.query.SortDirection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort; 
 import java.time.LocalDate;
 import java.util.List;
 
@@ -83,21 +87,18 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     /// Metodo para mostrar todas las solicitudes de especialistas, para el admin.
     @Override
     @Transactional(readOnly = true)
-    public List<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista() throws SolicitudEspecialistaNotFoundException {
-        List<SolicitudEspecialista> solicitudesEspecialistas = solicitudEspecialistaRepository.findAll();
+    public Page<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista(Pageable pageable) {
+    
+    // Llamamos al método con el orden personalizado
+    Page<SolicitudEspecialista> solicitudesPage = solicitudEspecialistaRepository.findAllCustomOrder(pageable);
 
-        if (solicitudesEspecialistas.isEmpty()) {
-            throw new SolicitudEspecialistaNotFoundException("⚠️No se encontraron solicitudes al momento.");
-        }
-
-        return solicitudesEspecialistas.stream()
-                .map(solicitud -> new MostrarSolicitudEspecialistaAdminDTO(
-                        solicitud.getSeId(),
-                        solicitud.getFechaSolicitud(),
-                        solicitud.getEstado().name(),
-                        solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado"
-                )).toList();
-    }
+    return solicitudesPage.map(solicitud -> new MostrarSolicitudEspecialistaAdminDTO(
+            solicitud.getSeId(),
+            solicitud.getFechaSolicitud(),
+            solicitud.getEstado().name(),
+            solicitud.getUsuario() != null ? solicitud.getUsuario().getEmail() : "Usuario desvinculado"
+    ));
+}
 
 
     /// Metodo para mostrar mis solicitudes

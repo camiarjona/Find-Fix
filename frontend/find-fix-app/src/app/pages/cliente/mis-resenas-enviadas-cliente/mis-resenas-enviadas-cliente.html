@@ -10,44 +10,96 @@
       <div class="stars-general">
         <span class="star-icon">⭐</span>
       </div>
-      <span class="count">{{ resenas().length }} reseñas dadas</span>
+      <span class="count">{{ todasLasResenas.length }} reseñas dadas</span>
     </div>
   </div>
 
-  @if (isLoading()) {
-  <div class="loading-container">
-    <div class="spinner"></div>
-    <p>Cargando tus opiniones...</p>
-  </div>
-  } @else {
-  <div class="resenas-grid">
-    @for (resena of resenas(); track resena.resenaId) {
-    <div class="resena-card">
-      <div class="top">
-        <div class="user">
-          <div class="avatar">
-            {{ resena.nombreEspecialista ? resena.nombreEspecialista.charAt(0).toUpperCase() : 'E' }}
-          </div>
-          <div class="user-info">
-            <span class="role-label">Para:</span>
-            <strong>{{ resena.nombreEspecialista || 'Especialista' }}</strong>
-          </div>
-        </div>
+  <div class="filters-section">
+    <div class="filters-grid">
 
-        <div class="stars-display">
-          @for (s of getEstrellas(resena.puntuacion); track $index) {
-          <span [class.filled]="s === 1">★</span>
+      <div class="filter-group group-search">
+        <label>Buscar Opinión</label>
+        <input type="text" placeholder="Especialista o palabra clave..." [(ngModel)]="filtroTexto" (keyup)="aplicarFiltros()" class="input-filter">
+      </div>
+
+      <div class="filter-group group-order">
+        <label>Ordenar por</label>
+        <div class="custom-select-wrapper">
+          <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+            <span>
+              {{ criterioOrden === 'puntuacion' ? 'Mejor Puntuación' : 'Especialista (A-Z)' }}
+            </span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+
+          @if (dropdownOpen === 'orden') {
+            <ul class="custom-dropdown">
+              <li (click)="seleccionarOrden('puntuacion')" class="suggestion-item">Mejor Puntuación</li>
+              <li (click)="seleccionarOrden('nombreEspecialista')" class="suggestion-item">Especialista (A-Z)</li>
+            </ul>
           }
         </div>
       </div>
 
-      <p class="texto">"{{ resena.comentario }}"</p>
+      <div class="filter-actions">
+        <button class="btn-height-fix btn-clear" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
     </div>
-    } @empty {
-    <div class="empty-state">
-      <p>Aún no has enviado ninguna reseña.</p>
-    </div>
-    }
   </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando tus opiniones...</p>
+    </div>
+  } @else {
+    <div class="resenas-grid">
+      @for (resena of resenasVisibles(); track resena.resenaId) {
+        <div class="resena-card">
+          <div class="top">
+            <div class="user">
+              <div class="avatar-resena-wrapper">
+                @if (resena.fotoUrlEspecialista) {
+                  <img [src]="resena.fotoUrlEspecialista" class="avatar-resena-img" alt="Foto">
+                } @else {
+                  <div class="avatar-resena-initials fallback-orange">
+                    {{ resena.nombreEspecialista ? resena.nombreEspecialista.charAt(0).toUpperCase() : 'E' }}
+                  </div>
+                }
+              </div>
+              <div class="user-info">
+                <span class="role-label">Para:</span>
+                <strong>{{ resena.nombreEspecialista || 'Especialista' }}</strong>
+              </div>
+            </div>
+
+            <div class="stars-display">
+              @for (s of getEstrellas(resena.puntuacion); track $index) {
+                <span [class.filled]="s === 1">★</span>
+              }
+            </div>
+          </div>
+          <p class="texto">"{{ resena.comentario }}"</p>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <p>No se encontraron reseñas con los filtros actuales.</p>
+        </div>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination-bar">
+        <button [disabled]="currentPage() === 0" (click)="cambiarPagina(currentPage() - 1)">
+          Anterior
+        </button>
+        <span class="pagination-info">Página {{ currentPage() + 1 }} de {{ totalPages() }}</span>
+        <button [disabled]="currentPage() + 1 >= totalPages()" (click)="cambiarPagina(currentPage() + 1)">
+          Siguiente
+        </button>
+      </div>
+    }
   }
 </div>

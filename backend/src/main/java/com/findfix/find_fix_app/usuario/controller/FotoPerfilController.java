@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios/foto")
-@CrossOrigin(origins = "*") // Ajustar según tu configuración de Angular
+@CrossOrigin(origins = "*")
 public class FotoPerfilController {
 
     @Autowired
@@ -30,56 +30,69 @@ public class FotoPerfilController {
     @Value("${cloudinary.preset_name}")
     private String presetName;
 
-    @PostMapping("/subir/{id}")
-    @Transactional
-    public ResponseEntity<?> subirFoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
-        // 1. Buscamos al usuario en Neon
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+@PostMapping("/subir/{id}")
+@Transactional
+public ResponseEntity<?> subirFoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
 
-        // 2. Si ya tenía una foto, la borramos de Cloudinary para no ocupar espacio
-        if (usuario.getFotoId() != null) {
-            cloudinaryService.eliminarImagen(usuario.getFotoId());
-        }
-
-        // 3. Subimos la nueva imagen
-        Map resultado = cloudinaryService.subirImagen(file, folderName, presetName);
-
-        // 4. Actualizamos el usuario con la nueva URL e ID
-        usuario.setFotoUrl(resultado.get("secure_url").toString());
-        usuario.setFotoId(resultado.get("public_id").toString());
-
-        // Forzamos el guardado y capturamos el retorno
-        Usuario resultadoFinal = usuarioRepository.saveAndFlush(usuario); 
-
-        System.out.println(">>> Intentando persistir ID: " + usuario.getUsuarioId());
-        System.out.println(">>> URL a guardar: " + usuario.getFotoUrl());
-
-        System.out.println("DEBUG: ¿Se guardó en BD? URL final: " + resultadoFinal.getFotoUrl());
-
-        usuarioRepository.flush(); // Esto obliga a que si hay un error de base de datos, salte YA.
-
-        return ResponseEntity.ok(Map.of("url", usuario.getFotoUrl(), "message", "Foto actualizada con éxito"));
-    }
-
-    @DeleteMapping("/eliminar/{id}")
-    @Transactional
-    public ResponseEntity<?> eliminarFoto(@PathVariable Long id) throws IOException {
-    // 1. Buscamos al usuario
     Usuario usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    // 2. Si tiene fotoId, la borramos de Cloudinary
+    // 1. Subimos la imagen con el parámetro de moderación
+    Map resultado = cloudinaryService.subirImagen(file, folderName, presetName);
+
+    // 2. Extraemos el estado de la moderación de la IA
+    // Cloudinary devuelve una lista de moderaciones, buscamos la de aws_rek
+    java.util.List<Map> moderations = (java.util.List<Map>) resultado.get("moderation");
+    
+    if (moderations != null && !moderations.isEmpty()) {
+        String status = (String) moderations.get(0).get("status");
+        
+        if ("rejected".equalsIgnoreCase(status)) {
+            // Si la IA la rechaza, la borramos de Cloudinary inmediatamente para no ocupar espacio
+            cloudinaryService.eliminarImagen(resultado.get("public_id").toString());
+            
+            // Retornamos un error 400 avisando al usuario
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "IMAGEN_INAPROPIADA",
+                "message", "La imagen contiene contenido inapropiado y no puede ser utilizada."
+            ));
+        }
+    }
+
+    // 3. Si pasó la moderación (status approved o pending), procedemos normal
     if (usuario.getFotoId() != null) {
         cloudinaryService.eliminarImagen(usuario.getFotoId());
     }
 
-    // 3. Limpiamos los campos en la base de datos
+    usuario.setFotoUrl(resultado.get("secure_url").toString());
+    usuario.setFotoId(resultado.get("public_id").toString());
+    usuarioRepository.saveAndFlush(usuario);
+
+    return ResponseEntity.ok(Map.of("url", usuario.getFotoUrl(), "message", "Foto actualizada con éxito"));
+
+    }
+
+@DeleteMapping("/eliminar/{id}")
+@Transactional
+public ResponseEntity<?> eliminarFoto(@PathVariable Long id) throws IOException {
+    Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+    // Solo intentamos borrar de Cloudinary si el ID no es nulo ni está vacío
+    if (usuario.getFotoId() != null && !usuario.getFotoId().isBlank()) {
+        try {
+            cloudinaryService.eliminarImagen(usuario.getFotoId());
+        } catch (Exception e) {
+            // Logueamos el error pero permitimos que siga para limpiar la DB
+            System.out.println("Error al borrar en Cloudinary (quizás ya no existía): " + e.getMessage());
+        }
+    }
+
+    // Limpiamos los campos en la base de datos sí o sí
     usuario.setFotoUrl(null);
     usuario.setFotoId(null);
-
-    usuarioRepository.save(usuario);
+    usuarioRepository.saveAndFlush(usuario);
 
     return ResponseEntity.ok(Map.of("message", "Foto eliminada con éxito"));
 }
-}
+}    

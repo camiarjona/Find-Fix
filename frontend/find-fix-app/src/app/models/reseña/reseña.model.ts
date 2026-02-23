@@ -10,6 +10,7 @@ export interface MostrarResenaClienteDTO {
   puntuacion: number;
   comentario: string;
   nombreEspecialista: string;
+  fotoUrlEspecialista?: string;
 }
 
 export interface MostrarResenaEspecialistaDTO {
@@ -17,6 +18,7 @@ export interface MostrarResenaEspecialistaDTO {
   puntuacion: number;
   comentario: string;
   nombreCliente: string;
+  fotoUrlCliente?: string;
 }
 
 export interface MostrarResenaDTO {
@@ -28,4 +30,5 @@ export interface MostrarResenaDTO {
   estado: String;
   descripcion: String;
   presupuesto: number;
+  fotoUrlCliente?: string;
 }

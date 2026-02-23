@@ -1,107 +1,124 @@
 <div class="admin-container">
-
   <header class="page-header">
     <h1>Gestión de Usuarios</h1>
     <p>Administra el acceso y roles de los usuarios registrados.</p>
   </header>
 
-  <div class="filters-bar">
+  <div class="filters-section">
+    <div class="filters-grid">
 
-    <div class="filter-group">
-      <label>Rol:</label>
-      <select [(ngModel)]="filtros.rol" class="filter-select" (change)="aplicarFiltros()">
-        <option value="">Todos</option>
-        <option value="ADMIN">Admin</option>
-        <option value="CLIENTE">Cliente</option>
-        <option value="ESPECIALISTA">Especialista</option>
-      </select>
+      <div class="filter-group group-tabs-admin">
+        <label>Rol</label>
+        <div class="contenedor-tabs-moderno">
+          <button class="tab-btn-m" [class.activo]="filtros.rol === ''" (click)="filtros.rol = ''; aplicarFiltros()">Todos</button>
+          <button class="tab-btn-m" [class.activo]="filtros.rol === 'CLIENTE'" (click)="filtros.rol = 'CLIENTE'; aplicarFiltros()">Clientes</button>
+          <button class="tab-btn-m" [class.activo]="filtros.rol === 'ESPECIALISTA'" (click)="filtros.rol = 'ESPECIALISTA'; aplicarFiltros()">Especialistas</button>
+        </div>
+      </div>
+
+      <div class="filter-group group-search">
+        <label>Buscar Email</label>
+        <input type="text" placeholder="ejemplo@correo.com" [(ngModel)]="filtros.email" (keyup.enter)="aplicarFiltros()" class="input-filter">
+      </div>
+
+      <div class="filter-group group-order">
+        <label>Ordenar por</label>
+        <div class="custom-select-wrapper">
+          <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+            <span>
+              @if (criterioOrden === 'email') { Email (A-Z) }
+              @else if (criterioOrden === 'roles') { Rol }
+              @else { Estado (Activo) }
+            </span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+
+          @if (dropdownOpen === 'orden') {
+            <ul class="custom-dropdown">
+              <li (click)="seleccionarOrden('email')" class="suggestion-item">Email (A-Z)</li>
+              <li (click)="seleccionarOrden('roles')" class="suggestion-item">Rol</li>
+              <li (click)="seleccionarOrden('activo')" class="suggestion-item">Estado (Activos primero)</li>
+            </ul>
+          }
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-height-fix btn-clear" (click)="limpiarFiltros()">Limpiar</button>
+        <button class="btn-height-fix btn-search" (click)="aplicarFiltros()">Filtrar</button>
+      </div>
     </div>
-
-    <div class="filter-actions">
-      <button class="btn-filter search" (click)="aplicarFiltros()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-          stroke="currentColor" width="15" heigth="15">
-          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.SEARCH" />
-        </svg> Buscar
-      </button>
-
-      @if (filtros.rol) {
-      <button class="btn-filter clear" (click)="limpiarFiltros()">
-        ✕ Limpiar
-      </button>
-      }
-    </div>
-
   </div>
 
   @if (isLoading()) {
-  <div class="loading-state">Cargando usuarios...</div>
+    <div class="loading-state">Cargando usuarios...</div>
   } @else {
-  <div class="table-container">
-    <table class="users-table">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Roles</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (user of usuarios(); track user.email) {
-        <tr [class.disabled-row]="!user.activo">
+    <div class="table-container">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Roles</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of usuarios(); track user.email) {
+            <tr [class.disabled-row]="!user.activo">
+              <td>
+                <div class="user-profile">
+                  <div class="avatar-placeholder">{{ user.nombre.charAt(0) }}</div>
+                  <div class="user-names">
+                    <span class="fullname">{{ user.nombre }} {{ user.apellido }}</span>
+                    <span class="text-muted">{{ user.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="roles-list">
+                  @for (rol of user.roles; track rol) {
+                    <span class="badge role" [class.admin]="rol === 'ADMIN'">{{ rol }}</span>
+                  }
+                </div>
+              </td>
+              <td>
+                <div class="status-cell">
+                  <label class="switch">
+                    <input type="checkbox" [checked]="user.activo" (change)="toggleEstadoUsuario(user, $event)">
+                    <span class="slider"></span>
+                  </label>
+                  <span class="status-text" [class.active]="user.activo">
+                    {{ user.activo ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-icon view" (click)="verDetalle(user)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 9a3 3 0 1 0 0 6 3 3 0 1 0 0-6"></path>
+                      <path d="M12 19c7.63 0 9.93-6.62 9.95-6.68.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
 
-          <td>
-            <div class="user-profile">
-              <div class="avatar-placeholder">{{ user.nombre.charAt(0) }}</div>
-              <div class="user-names">
-                <span class="fullname">{{ user.nombre }} {{ user.apellido }}</span>
-              </div>
-            </div>
-          </td>
-
-          <td>
-            <div class="roles-list">
-              @for (rol of user.roles; track rol) {
-              <span class="badge role" [class.admin]="rol === 'ADMIN'">{{ rol }}</span>
-              }
-            </div>
-          </td>
-
-          <td>
-            <div class="status-cell">
-              <label class="switch" title="Click para activar/desactivar">
-                <input type="checkbox" [checked]="user.activo" (change)="toggleEstadoUsuario(user, $event)">
-                <span class="slider"></span>
-              </label>
-
-              <span class="status-text" [class.active]="user.activo">
-                {{ user.activo ? 'Activo' : 'Inactivo' }}
-              </span>
-            </div>
-          </td>
-
-          <td>
-            <div class="actions">
-              <button class="btn-icon view" title="Ver y Editar" (click)="verDetalle(user)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path d="M12 9a3 3 0 1 0 0 6 3 3 0 1 0 0-6"></path>
-                  <path
-                    d="M12 19c7.63 0 9.93-6.62 9.95-6.68.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5">
-                  </path>
-                </svg>
-              </button>
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+      <div class="pagination-bar" *ngIf="totalPages() > 0">
+        <button (click)="cambiarPagina(-1)" [disabled]="currentPage() === 0">Anterior</button>
+        <span class="pagination-info">Página <strong>{{ currentPage() + 1 }}</strong> de <strong>{{ totalPages() }}</strong></span>
+        <button (click)="cambiarPagina(1)" [disabled]="currentPage() + 1 >= totalPages()">Siguiente</button>
+      </div>
+    </div>
   }
 </div>
 
 @if (usuarioSeleccionado()) {
-<app-modal-detalle-usuario [usuario]="usuarioSeleccionado()!" (cerrar)="cerrarDetalle()">
-</app-modal-detalle-usuario>
+  <app-modal-detalle-usuario [usuario]="usuarioSeleccionado()!" (cerrar)="cerrarDetalle()"></app-modal-detalle-usuario>
 }

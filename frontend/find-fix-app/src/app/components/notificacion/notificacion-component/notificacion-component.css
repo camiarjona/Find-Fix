@@ -143,3 +143,66 @@
   text-align: center;
   color: #999;
 }
+
+:host-context(.dark-mode) .bell-btn {
+    color: #e0e0e0; /* Blanco suave */
+}
+
+:host-context(.dark-mode) .bell-btn:hover,
+:host-context(.dark-mode) .bell-btn.active {
+    color: #ff8533;
+}
+
+
+:host-context(.dark-mode) .dropdown-menu {
+    background-color: #1f1f1f;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+
+:host-context(.dark-mode) .dropdown-header {
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #333;
+}
+
+:host-context(.dark-mode) .dropdown-header h3 {
+    color: #f5f5f5;
+}
+
+
+:host-context(.dark-mode) .noti-item {
+    border-bottom: 1px solid #333;
+    background-color: #1f1f1f;
+}
+
+:host-context(.dark-mode) .noti-item:hover {
+    background-color: #2a2a2a;
+}
+
+
+:host-context(.dark-mode) .noti-content h4 {
+    color: #e0e0e0;
+}
+
+:host-context(.dark-mode) .noti-content p {
+    color: #b0b0b0;
+}
+
+:host-context(.dark-mode) .noti-date {
+    color: #777;
+}
+
+:host-context(.dark-mode) .noti-item.unread {
+    background-color: #332218;
+    border-left: 4px solid #ff6600;
+
+
+:host-context(.dark-mode) .empty-state {
+    color: #888;
+}
+
+:host-context(.dark-mode) .dropdown-body::-webkit-scrollbar-thumb {
+    background-color: #444;
+}
+}

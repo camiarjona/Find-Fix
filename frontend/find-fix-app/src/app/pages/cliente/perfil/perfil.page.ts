@@ -9,6 +9,7 @@ import { FotoPerfilService } from '../../../services/user/foto-perfil';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { LocationService } from '../../../services/general/location.service';
 
 interface Barrio {
   nombre: string;
@@ -29,21 +30,19 @@ export class PerfilPage implements OnInit {
   private fotoService = inject(FotoPerfilService);
   private cd = inject(ChangeDetectorRef);
   private http = inject(HttpClient);
+  private locationService = inject(LocationService);
 
   public icons = UI_ICONS;
 
   public usuario = signal<UserProfile | null>(null);
   public isLoading = signal(true);
 
-  // --- LÓGICA DE FOTO DE PERFIL ---
-  public files: File[] = []; //
+  public files: File[] = [];
   public isPhotoLoading = signal(false);
   public isEditingPhoto = signal(false);
   public tempPhotoUrl = signal<string | null>(null);
   public fotoError = signal(false);
 
-  // --- LÓGICA DE EDICIÓN (DATOS PERSONALES) ---
-  // --- VARIABLES PARA BARRIOS (JSON) ---
   public allBarrios: Barrio[] = [];
   public citySuggestions = signal<any[]>([]);
 
@@ -68,10 +67,12 @@ export class PerfilPage implements OnInit {
 
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData = { visible: true, titulo, mensaje, tipo };
+    this.cd.detectChanges(); // Forzamos que se vea
   }
 
   cerrarFeedback() {
     this.feedbackData = { ...this.feedbackData, visible: false };
+    this.cd.detectChanges(); // Forzamos que se oculte
   }
 
   ngOnInit() {
@@ -136,20 +137,27 @@ export class PerfilPage implements OnInit {
     const user = this.usuario();
     if (user && this.files.length > 0) {
       this.isPhotoLoading.set(true);
-
       this.fotoService.subirFoto(this.files[0], user.usuarioId).subscribe({
         next: (res) => {
           this.usuario.set({ ...user, fotoUrl: res.url });
           this.isPhotoLoading.set(false);
-
-          // --- MEJORAS ESTÉTICAS ---
-          this.cancelarCambioFoto(); // Limpia archivos y cierra el modal
-          this.tempPhotoUrl.set(null); // Limpia la previsualización temporal
+          this.cancelarCambioFoto();
+          this.tempPhotoUrl.set(null);
           this.mostrarFeedback('¡Éxito!', 'Foto de perfil actualizada correctamente.');
         },
         error: (err) => {
           this.isPhotoLoading.set(false);
-          this.mostrarFeedback('Error', 'No se pudo subir la foto.', 'error');
+
+          if (err.status === 400 && err.error?.error === 'IMAGEN_INAPROPIADA') {
+            this.files = [];
+            this.mostrarFeedback(
+              'Imagen rechazada',
+              'La IA ha detectado contenido inapropiado. Por favor, elige otra foto.',
+              'error'
+            );
+        } else {
+          this.mostrarFeedback('Error', 'No se pudo subir la foto', 'error');
+        }
         }
       });
     }
@@ -164,14 +172,10 @@ export class PerfilPage implements OnInit {
   eliminarFotoActual() {
     const user = this.usuario();
     if (!user) return;
-
     if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
       this.isPhotoLoading.set(true);
-
-      // Convertimos el ID a string para que no chille el TS
       this.fotoService.eliminarFoto(user.usuarioId.toString()).subscribe({
         next: () => {
-          // Usamos undefined en lugar de null para respetar el modelo
           this.usuario.set({ ...user, fotoUrl: undefined });
           this.isPhotoLoading.set(false);
           this.cancelarCambioFoto();
@@ -185,7 +189,6 @@ export class PerfilPage implements OnInit {
     }
   }
 
-  // --- MÉTODOS DE EDICIÓN EN LÍNEA ---
   startEdit(field: string, currentValue: string | undefined) {
     this.editingField.set(field);
     this.tempValue = currentValue || '';
@@ -204,16 +207,13 @@ export class PerfilPage implements OnInit {
     const input = event.target as HTMLInputElement;
     const termino = input.value.toLowerCase();
     this.tempValue = input.value;
-
     if (termino.length < 1) {
       this.citySuggestions.set([]);
       return;
     }
-
     const filtrados = this.allBarrios
       .filter(b => b.nombre.toLowerCase().includes(termino))
       .slice(0, 5);
-
     this.citySuggestions.set(filtrados.map(b => ({
       nombreVisual: b.nombre,
       lat: b.lat,
@@ -230,22 +230,18 @@ export class PerfilPage implements OnInit {
 
   saveEdit(field: string) {
     if (!this.tempValue.trim()) return;
-
     let updateData: any = { [field]: this.tempValue };
-
     if (field === 'ciudad') {
       if (this.tempLat && this.tempLon) {
         updateData.latitud = this.tempLat;
         updateData.longitud = this.tempLon;
       }
     }
-
     this.userService.updateProfile(updateData).subscribe({
       next: (res) => {
         const currentUser = this.usuario();
         if (currentUser) {
           (currentUser as any)[field] = this.tempValue;
-
           if (field === 'ciudad' && updateData.latitud) {
             (currentUser as any).latitud = updateData.latitud;
             (currentUser as any).longitud = updateData.longitud;
@@ -253,8 +249,6 @@ export class PerfilPage implements OnInit {
           this.usuario.set({ ...currentUser });
         }
         this.editingField.set(null);
-
-        // MENSAJE PERSONALIZADO
         const mensaje = field === 'ciudad' ? 'Barrio actualizado correctamente' : 'Dato actualizado correctamente';
         this.mostrarFeedback('¡Actualizado!', mensaje);
       },
@@ -275,7 +269,6 @@ export class PerfilPage implements OnInit {
     }
     this.isPasswordLoading.set(true);
     const { confirmacion, ...requestData } = this.passwordData;
-
     this.userService.updatePassword(requestData).subscribe({
       next: (res) => {
         this.mostrarFeedback('¡Actualizado!', 'Contraseña actualizada con éxito.');
@@ -287,5 +280,35 @@ export class PerfilPage implements OnInit {
         this.isPasswordLoading.set(false);
       }
     });
+  }
+
+  async detectarYGuardarUbicacion() {
+    try {
+      this.mostrarFeedback('Ubicando...', 'Identificando tu barrio...', 'success');
+
+      // 1. Buscamos coordenadas
+      const coords = await this.locationService.obtenerCoordenadasGPS();
+
+      // 2. Buscamos barrio
+      const barrioEncontrado = this.locationService.obtenerBarrioMasCercano(
+        coords.lat,
+        coords.lon,
+        this.allBarrios
+      );
+
+      if (barrioEncontrado) {
+        this.tempLat = barrioEncontrado.lat;
+        this.tempLon = barrioEncontrado.lon;
+        this.tempValue = barrioEncontrado.nombre;
+      }
+
+      // 3. Pequeño delay y CIERRE FORZADO
+      setTimeout(() => {
+        this.cerrarFeedback();
+      }, 600);
+
+    } catch (err) {
+      this.mostrarFeedback('Error', 'No se pudo acceder al GPS', 'error');
+    }
   }
 }

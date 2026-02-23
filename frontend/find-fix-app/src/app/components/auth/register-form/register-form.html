@@ -1,94 +1,87 @@
 <form class="app-form-content" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <h1 class="form-title">Crear Cuenta</h1>
+  <span class="form-subtitle">Usa tu email para registrarte</span>
 
-  <h1>Crear Cuenta</h1>
-  <span>Usa tu email para registrarte</span>
+  <div class="form-grid">
+    <div class="form-field">
+      <input id="reg-nombre" formControlName="nombre" type="text" placeholder=" " />
+      <label for="reg-nombre">Nombre</label>
+      @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
+        <small class="error-message">El nombre es obligatorio.</small>
+      }
+    </div>
 
-  <div class="form-field">
-    <input id="reg-nombre" formControlName="nombre" type="text" placeholder=" " />
-    <label for="reg-nombre">Nombre</label>
-  </div>
-  @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
-  <small class="error-message">El nombre es obligatorio.</small>
-  }
+    <div class="form-field">
+      <input id="reg-apellido" formControlName="apellido" type="text" placeholder=" " />
+      <label for="reg-apellido">Apellido</label>
+      @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
+        <small class="error-message">El apellido es obligatorio.</small>
+      }
+    </div>
 
-  <div class="form-field">
-    <input id="reg-apellido" formControlName="apellido" type="text" placeholder=" " />
-    <label for="reg-apellido">Apellido</label>
-  </div>
-  @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
-  <small class="error-message">El apellido es obligatorio.</small>
-  }
+    <div class="form-field barrio-container">
+      <div class="input-with-gps-wrapper" [class.is-loading]="cargandoGps()">
+        <input
+          id="reg-ciudad"
+          formControlName="ciudad"
+          type="text"
+          [placeholder]="cargandoGps() ? 'Obteniendo ubicación...' : ' '"
+          autocomplete="off"
+          (input)="onInputManual($event)"
+        />
+        <label for="reg-ciudad">Barrio</label>
 
-  <div class="form-field barrio-container">
-    <input id="reg-ciudad" formControlName="ciudad" type="text" placeholder=" " autocomplete="off"/>
-    <label for="reg-ciudad">Barrio</label>
+        <button type="button" class="btn-gps" (click)="usarUbicacionActual()" [disabled]="cargandoGps()">
+          @if (cargandoGps()) {
+            <span class="spinner"></span>
+          } @else {
+            <svg viewBox="0 0 16 16" fill="currentColor" height="14" width="14">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+            </svg>
+          }
+        </button>
+      </div>
 
-    @if (mostrandoResultados() && resultadosBusqueda().length > 0) {
-      <ul class="resultados-busqueda">
-        @for (barrio of resultadosBusqueda(); track $index) {
-          <li (click)="seleccionarLocalidad(barrio)">
-            {{ barrio.nombre }}
-          </li>
-        }
-      </ul>
-    }
-  </div>
-  @if (registerForm.get('ciudad')?.invalid && registerForm.get('ciudad')?.touched) {
-    <small class="error-message">Debes seleccionar un barrio.</small>
-  }
+      @if (mostrandoResultados() && resultadosBusqueda().length > 0) {
+        <ul class="resultados-busqueda">
+          @for (barrio of resultadosBusqueda(); track barrio.nombre) {
+            <li (mousedown)="seleccionarLocalidad(barrio)">
+              {{ barrio.nombre }}
+            </li>
+          }
+        </ul>
+      }
+      @if (registerForm.get('ciudad')?.invalid && registerForm.get('ciudad')?.touched) {
+        <small class="error-message">Debes seleccionar un barrio.</small>
+      }
+    </div>
 
-  <div class="form-field">
-    <input id="reg-email" formControlName="email" type="email" placeholder=" " />
-    <label for="reg-email">Email</label>
-  </div>
-  @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-  <small class="error-message">Ingresa un email válido.</small>
-  }
+    <div class="form-field">
+      <input id="reg-email" formControlName="email" type="email" placeholder=" " />
+      <label for="reg-email">Email</label>
+      @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+        <small class="error-message">Ingresa un email válido.</small>
+      }
+    </div>
 
-  <div class="form-field">
-    <div class="password-wrapper">
-      <input id="reg-password" formControlName="password" [type]="showPassword() ? 'text' : 'password'"
-        placeholder=" " />
-      <label for="reg-password">Contraseña</label>
-      <button type="button" class="toggle-btn" (click)="togglePassword()" tabindex="-1">
-        @if (showPassword()) {
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_OPEN" />
-        </svg>
-        } @else {
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.EYE_CLOSED" />
-        </svg>
-        }
-      </button>
+    <div class="form-field">
+      <div class="password-wrapper">
+        <input id="reg-password" formControlName="password" [type]="showPassword() ? 'text' : 'password'" placeholder=" " />
+        <label for="reg-password">Contraseña</label>
+        <button type="button" class="toggle-btn" (click)="togglePassword()" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="showPassword() ? icons.EYE_OPEN : icons.EYE_CLOSED" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
-  @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-  <small class="error-message">La contraseña debe tener al menos 6 caracteres.</small>
-  }
-
-  @if (registerError) {
-  <div class="server-error-message">
-    {{ registerError }}
-  </div>
-  }
 
   <button class="cta-button" type="submit" [disabled]="registerForm.invalid">
     Registrarse
   </button>
 
-  <div class="mobile-cta-icon" aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-      <circle cx="9" cy="8" r="3" />
-      <path d="M2 20c1.5-4 6-6 12-6s10.5 2 12 6" />
-      <path d="M20 8v4" />
-      <path d="M22 10h-4" />
-    </svg>
-  </div>
-
   <p class="mobile-toggle-link">
-    ¿Ya tienes una cuenta?
-    <a (click)="onToggle()">Inicia sesión aquí</a>
+    ¿Ya tienes una cuenta? <a (click)="onToggle()">Inicia sesión</a>
   </p>
-
 </form>

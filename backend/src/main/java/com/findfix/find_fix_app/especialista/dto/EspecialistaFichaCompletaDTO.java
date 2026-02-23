@@ -18,6 +18,7 @@ public class EspecialistaFichaCompletaDTO implements DatosEspecialista {
     private Double calificacionPromedio;
     private Double latitud;
     private Double longitud;
+    private String fotoUrl;
 
 
     public EspecialistaFichaCompletaDTO(Especialista especialista) {
@@ -41,6 +42,7 @@ public class EspecialistaFichaCompletaDTO implements DatosEspecialista {
 
             this.latitud = especialista.getUsuario().getLatitud();
             this.longitud = especialista.getUsuario().getLongitud();
+            this.fotoUrl = (especialista.getUsuario() != null) ? especialista.getUsuario().getFotoUrl() : null;
         }
 
 }
