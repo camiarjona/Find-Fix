@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { TrabajoAppService } from '../../../services/trabajoApp-services/trabajo-app-service';
 import { VisualizarTrabajoAppEspecialista } from '../../../models/trabajoApp-models/trabajo-app-model';
 import { TrabajoExternoService } from '../../../services/trabajoExterno-services/trabajo-externo-service';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-trabajos.page',
@@ -14,10 +16,16 @@ import { TrabajoExternoService } from '../../../services/trabajoExterno-services
   styleUrl: './mis-trabajos.page.css',
 })
 export class MisTrabajosPage implements OnInit {
+
   // --- Inyeccion de servicios ---
   private servicioTrabajoApp = inject(TrabajoAppService);
   private servicioTrabajoExterno = inject(TrabajoExternoService);
   private ruta = inject(ActivatedRoute);
+
+  // VARIABLES PARA ORDENAMIENTO
+  public criterioOrden = 'fechaInicio';
+  public direccionOrden: DireccionOrden = 'desc';
+  public dropdownOpen: string | null = null;
 
   // --- Datos Principales ---
   public todosLosTrabajos: VisualizarTrabajoAppEspecialista[] = []; // Datos unificados brutos
@@ -134,11 +142,30 @@ export class MisTrabajosPage implements OnInit {
       resultado = resultado.filter(t => t.fechaInicio && new Date(t.fechaInicio) <= h);
     }
 
+    this.direccionOrden = 'desc';
+
+    this.trabajosFiltrados = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
     this.trabajosFiltrados = resultado;
     this.totalPages.set(Math.ceil(this.trabajosFiltrados.length / this.pageSize));
 
     this.currentPage.set(0);
     this.actualizarVistaPaginada();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltros();
   }
 
   actualizarVistaPaginada() {
@@ -248,28 +275,32 @@ export class MisTrabajosPage implements OnInit {
   }
 
   abrirModalDetalle(trabajo: VisualizarTrabajoAppEspecialista) {
-    const origen = (trabajo as any).origen || 'APP';
-    if (origen === 'APP') {
-      this.estaCargando.set(true);
-      this.servicioTrabajoApp.obtenerFichaEspecialista(trabajo.titulo).subscribe({
-        next: (resp) => {
-          const detalle = { ...(resp.data as any), origen: 'APP' };
-          this.normalizeTrabajoDates(detalle);
-          this.prepararDatosEdicionFallback(detalle);
-          this.trabajoSeleccionado.set(detalle);
-          this.estaCargando.set(false);
-        },
-        error: () => {
-          this.prepararDatosEdicionFallback(trabajo);
-          this.trabajoSeleccionado.set(trabajo);
-          this.estaCargando.set(false);
-        }
-      });
-    } else {
-      this.prepararDatosEdicionFallback(trabajo);
-      this.trabajoSeleccionado.set(trabajo);
-    }
+  const origen = (trabajo as any).origen || 'APP';
+
+  if (origen === 'APP') {
+    this.estaCargando.set(true);
+
+    this.servicioTrabajoApp.obtenerFichaEspecialista(trabajo.titulo).subscribe({
+      next: (resp) => {
+        const detalle = { ...(resp.data as any), origen: 'APP' };
+        this.normalizeTrabajoDates(detalle);
+        this.prepararDatosEdicionFallback(detalle);
+        this.trabajoSeleccionado.set(detalle);
+        this.estaCargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al obtener ficha:', err);
+        this.prepararDatosEdicionFallback(trabajo);
+        this.trabajoSeleccionado.set(trabajo);
+        this.estaCargando.set(false);
+      }
+    });
+  } else {
+    this.prepararDatosEdicionFallback(trabajo);
+    this.trabajoSeleccionado.set(trabajo);
+    this.estaCargando.set(false);
   }
+}
 
   private prepararDatosEdicionFallback(trabajo: any) {
     this.datosEdicion = {

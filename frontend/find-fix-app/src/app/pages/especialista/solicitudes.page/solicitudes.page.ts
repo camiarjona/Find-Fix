@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { EspecialistaService } from '../../../services/especialista/especialista.service';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { Router } from '@angular/router';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-solicitudes.page',
@@ -42,6 +44,11 @@ export class SolicitudesPage implements OnInit {
   filtroEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA' = 'PENDIENTE';
   filtroTexto = '';
 
+  // variables para el orden
+  criterioOrden = 'fechaSolicitud';
+  direccionOrden: DireccionOrden = 'desc';
+  dropdownOpen: string | null = null;
+
   ngOnInit() {
     this.cargarDatosReales();
   }
@@ -79,6 +86,12 @@ export class SolicitudesPage implements OnInit {
       );
     }
 
+  this.solicitudesFiltradas = ordenarDinamicamente(
+    resultado,
+    this.criterioOrden,
+    this.direccionOrden
+  );
+
     this.solicitudesFiltradas = resultado;
     this.totalPages.set(Math.ceil(this.solicitudesFiltradas.length / this.pageSize));
 
@@ -86,16 +99,46 @@ export class SolicitudesPage implements OnInit {
     this.actualizarVistaPaginada();
   }
 
+
   actualizarVistaPaginada() {
     const inicio = this.currentPage() * this.pageSize;
     const fin = inicio + this.pageSize;
     this.solicitudesVisibles.set(this.solicitudesFiltradas.slice(inicio, fin));
   }
 
+cambiarOrden(columna: string) {
+  if (this.criterioOrden === columna) {
+    this.direccionOrden = this.direccionOrden === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.criterioOrden = columna;
+    this.direccionOrden = 'asc';
+  }
+  this.aplicarFiltros();
+}
+
+toggleDropdown(menu: string, event: Event) {
+  event.stopPropagation();
+  this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+}
+
+seleccionarOrden(criterio: string) {
+  this.criterioOrden = criterio;
+  this.direccionOrden = criterio === 'fechaSolicitud' ? 'desc' : 'asc';
+  this.dropdownOpen = null;
+  this.aplicarFiltros();
+}
+
   cambiarFiltroEstado(nuevoEstado: 'TODAS' | 'PENDIENTE' | 'FINALIZADA') {
     this.filtroEstado = nuevoEstado;
     this.aplicarFiltros();
   }
+
+  limpiarFiltros() {
+  this.filtroTexto = '';
+  this.filtroEstado = 'PENDIENTE';
+  this.criterioOrden = 'fechaSolicitud';
+  this.aplicarFiltros();
+}
 
   cambiarPagina(nuevaPagina: number) {
     this.currentPage.set(nuevaPagina);
@@ -161,3 +204,5 @@ export class SolicitudesPage implements OnInit {
     this.router.navigate(['/especialista/dashboard']);
   }
 }
+
+

@@ -9,64 +9,47 @@
   }
 
   <div class="filter-container">
-
-    <div class="filter-controls">
-
-      <div class="search-box">
-        <input type="text" placeholder="Buscar por motivo..." [(ngModel)]="searchText"
-          (keyup.enter)="addFilter('motivo', searchText)">
-        <button class="btn-search" (click)="addFilter('motivo', searchText)">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>
-        </button>
-      </div>
-
-      <select [(ngModel)]="selectedState" (change)="addFilter('estado', selectedState)" class="filter-select">
-        <option value="" disabled selected>Estado</option>
-        <option value="PENDIENTE">Pendiente</option>
-        <option value="ACEPTADO">Aceptada</option>
-        <option value="RECHAZADO">Rechazada</option>
-      </select>
-
-      <div class="date-range-wrapper">
-
-        <input type="date" class="filter-date" [(ngModel)]="dateFrom" (change)="addFilter('fechaDesde', dateFrom)"
-          title="Fecha Desde">
-
-        <span class="separator">-</span>
-
-        <input type="date" class="filter-date" [(ngModel)]="dateTo" (change)="addFilter('fechaHasta', dateTo)"
-          title="Fecha Hasta">
-      </div>
-
+  <div class="filter-controls">
+    <div class="search-box">
+      <input type="text" placeholder="Buscar por motivo..." [(ngModel)]="searchText" (keyup.enter)="addFilter('motivo', searchText)">
+      <button class="btn-search" (click)="addFilter('motivo', searchText)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+      </button>
     </div>
 
-    @if (activeChips().length > 0) {
-    <div class="active-filters-area">
+    <select [(ngModel)]="selectedState" (change)="addFilter('estado', selectedState)" class="filter-select">
+      <option value="" disabled selected>Estado</option>
+      <option value="PENDIENTE">Pendiente</option>
+      <option value="ACEPTADO">Aceptada</option>
+      <option value="RECHAZADO">Rechazada</option>
+    </select>
 
-      <span class="filters-label">Filtros activos:</span>
-
-      <div class="chips-wrapper">
-        @for (chip of activeChips(); track chip.label) {
-        <div class="chip">
-          <span>{{ chip.label }}</span>
-          <button (click)="removeFilter(chip)" class="chip-close">×</button>
-        </div>
-        }
-
-        <button class="clear-all-btn" (click)="clearAllFilters()">
-          Borrar todos
-        </button>
-      </div>
-
+    <div class="date-range-wrapper">
+      <input type="date" class="filter-date" [(ngModel)]="dateFrom" (change)="addFilter('fechaDesde', dateFrom)" title="Fecha Desde">
+      <span class="separator">-</span>
+      <input type="date" class="filter-date" [(ngModel)]="dateTo" (change)="addFilter('fechaHasta', dateTo)" title="Fecha Hasta">
     </div>
-    }
 
+    <div class="custom-select-wrapper" style="width: 180px;">
+      <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+        <span>{{ criterioOrden === 'fechaSolicitud' ? 'Más recientes' : 'Estado' }}</span>
+        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </div>
+      @if (dropdownOpen === 'orden') {
+        <ul class="custom-dropdown">
+          <li (click)="seleccionarOrden('fechaSolicitud')" class="suggestion-item">Más recientes</li>
+          <li (click)="seleccionarOrden('estado')" class="suggestion-item">Estado</li>
+        </ul>
+      }
+    </div>
   </div>
 
+  </div>
+  
   @if (isLoading()) {
   <p>Cargando historial...</p>
   } @else {

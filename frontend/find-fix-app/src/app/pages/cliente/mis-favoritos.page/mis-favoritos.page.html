@@ -1,23 +1,45 @@
-<div class="page-container">
-
+  <div class="page-container">
   <div class="header-section">
     <h1 class="page-title">⭐Mis Especialistas Favoritos⭐</h1>
     <p class="subtitle">Gestiona a los profesionales que has guardado.</p>
   </div>
 
-  @if (isLoading()) {
-  <div class="loading-message">Cargando favoritos...</div>
-  }
-  @if (errorMessage()) {
-  <div class="error-message">{{ errorMessage() }}</div>
-  }
+  <div class="filters-section">
+    <div class="filters-grid">
 
-  @if (!isLoading() && favoritos().length === 0) {
-  <div class="empty-state">
-    <p>Aún no tienes especialistas guardados.</p>
-    <a routerLink="/cliente/buscar-especialistas" class="cta-button-outline">Buscar especialistas</a>
+      <div class="filter-group group-search">
+        <label>Buscar Especialista</label>
+        <input type="text" placeholder="Nombre o apellido..." [(ngModel)]="filtroTexto" (keyup)="aplicarFiltrosYOrden()" class="input-filter">
+      </div>
+
+      <div class="filter-group group-order">
+        <label>Ordenar por</label>
+        <div class="custom-select-wrapper">
+          <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+            <span>
+              {{ criterioOrden === 'calificacionPromedio' ? 'Mejor Valorados' : 'Nombre (A-Z)' }}
+            </span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+
+          @if (dropdownOpen === 'orden') {
+            <ul class="custom-dropdown">
+              <li (click)="seleccionarOrden('nombre')" class="suggestion-item">Nombre (A-Z)</li>
+              <li (click)="seleccionarOrden('calificacionPromedio')" class="suggestion-item">Mejor Valorados</li>
+            </ul>
+          }
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-height-fix btn-clear" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </div>
   </div>
-  }
+
+  </div>
 
   <div class="especialistas-grid">
     @for (fav of favoritos(); track $index) {
@@ -89,7 +111,6 @@
     </article>
     }
   </div>
-</div>
 
 @if (showModalDetalle()) {
 <div class="modal-overlay" (click)="cerrarModalDetalle()">

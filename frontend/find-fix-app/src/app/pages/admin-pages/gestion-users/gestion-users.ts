@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ModalDetalleUsuario } from '../../../components/admin-components/modal-detalle-usuario/modal-detalle-usuario';
 import { FormsModule } from '@angular/forms';
 import { UI_ICONS } from '../../../models/general/ui-icons';
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-gestion-users',
@@ -30,6 +32,11 @@ export class GestionUsers implements OnInit{
     rol: ''
   };
 
+  // Variables para el ordenamiento
+  criterioOrden = 'email'; // Criterio inicial
+  direccionOrden: DireccionOrden = 'asc';
+  dropdownOpen: string | null = null;
+
   ngOnInit(): void {
     this.cargarUsuarios();
   }
@@ -46,9 +53,16 @@ export class GestionUsers implements OnInit{
 
   this.userService.obtenerUsuarios(this.filtros.rol, this.currentPage(), this.pageSize).subscribe({
     next: (res) => {
-      this.usuarios.set(res.content);
-      this.totalPages.set(res.totalPages);
-      this.isLoading.set(false);
+      let listaUsuarios = res.content;
+
+      const usuariosOrdenados = ordenarDinamicamente(
+          listaUsuarios,
+          this.criterioOrden,
+          this.direccionOrden);
+
+        this.usuarios.set(usuariosOrdenados);
+        this.totalPages.set(res.totalPages);
+        this.isLoading.set(false);
     },
     error: (err) => {
       console.error('Error al cargar usuarios:', err);
@@ -75,7 +89,6 @@ export class GestionUsers implements OnInit{
     }
   }
 
-  // Abre el modal con el usuario clickeado
   verDetalle(user: UserProfile) {
     this.usuarioSeleccionado.set(user);
   }
@@ -122,9 +135,24 @@ export class GestionUsers implements OnInit{
     this.cargarUsuarios();
   }
 
-  // MÉTODO PARA LIMPIAR
-  limpiarFiltros() {
+limpiarFiltros() {
     this.filtros = { email: '', rol: '' };
+    this.criterioOrden = 'email';
+    this.direccionOrden = 'asc';
+    this.currentPage.set(0);
+    this.cargarUsuarios();
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.direccionOrden = criterio === 'activo' ? 'desc' : 'asc';
+
+    this.dropdownOpen = null;
     this.cargarUsuarios();
   }
 }

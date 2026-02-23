@@ -1,5 +1,4 @@
 <div class="contenedor-pagina">
-
   <div class="encabezado-pagina">
     <div class="titulo-encabezado">
       <h1>Solicitudes</h1>
@@ -7,28 +6,47 @@
     </div>
   </div>
 
-  <div class="barra-control">
-    <div class="contenedor-tabs">
-      <button class="tab-btn" [class.activo]="filtroEstado === 'PENDIENTE'" (click)="cambiarFiltroEstado('PENDIENTE')">
-        Pendientes
-      </button>
-      <button class="tab-btn" [class.activo]="filtroEstado === 'FINALIZADA'"
-        (click)="cambiarFiltroEstado('FINALIZADA')">
-        Historial
-      </button>
-      <button class="tab-btn" [class.activo]="filtroEstado === 'TODAS'" (click)="cambiarFiltroEstado('TODAS')">
-        Todas
-      </button>
-    </div>
+  <div class="filters-section">
+    <div class="filters-grid">
 
-    <div class="buscador-wrapper">
-      <input type="text" placeholder="Buscar por cliente o título..." [(ngModel)]="filtroTexto"
-        (keyup)="aplicarFiltros()" class="input-buscador">
-      <svg class="icono-lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
+      <div class="filter-group group-tabs">
+        <label>Estado</label>
+        <div class="contenedor-tabs-moderno">
+          <button class="tab-btn-m" [class.activo]="filtroEstado === 'PENDIENTE'" (click)="cambiarFiltroEstado('PENDIENTE')">Pendientes</button>
+          <button class="tab-btn-m" [class.activo]="filtroEstado === 'FINALIZADA'" (click)="cambiarFiltroEstado('FINALIZADA')">Historial</button>
+          <button class="tab-btn-m" [class.activo]="filtroEstado === 'TODAS'" (click)="cambiarFiltroEstado('TODAS')">Todas</button>
+        </div>
+      </div>
+
+      <div class="filter-group group-search">
+        <label>Buscar</label>
+        <div class="search-wrapper">
+          <input type="text" placeholder="Cliente o título..." [(ngModel)]="filtroTexto" (keyup)="aplicarFiltros()" class="input-filter">
+        </div>
+      </div>
+
+      <div class="filter-group group-order">
+        <label>Ordenar por</label>
+        <div class="custom-select-wrapper">
+          <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+            <span>{{ criterioOrden === 'cliente' ? 'Cliente (A-Z)' : 'Fecha (Más recientes)' }}</span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+          @if (dropdownOpen === 'orden') {
+            <ul class="suggestions-list custom-dropdown">
+              <li (click)="seleccionarOrden('fechaSolicitud')" class="suggestion-item">Fecha (Más recientes)</li>
+              <li (click)="seleccionarOrden('cliente')" class="suggestion-item">Cliente (A-Z)</li>
+            </ul>
+          }
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-height-fix btn-clear" (click)="limpiarFiltros()">Limpiar</button>
+        <button class="btn-height-fix btn-search" (click)="aplicarFiltros()">Filtrar</button>
+      </div>
     </div>
   </div>
 

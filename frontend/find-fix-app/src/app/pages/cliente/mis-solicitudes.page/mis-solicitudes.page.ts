@@ -1,10 +1,10 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { SolicitudTrabajoService } from '../../../services/cliente/solicitud-trabajo.service';
 import { ordenarDinamicamente } from '../../../utils/sort-utils';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 
 @Component({
   selector: 'app-mis-solicitudes.page',
@@ -72,14 +72,11 @@ export class MisSolicitudesPage implements OnInit {
   aplicarFiltros() {
     let resultado = [...this.todasLasSolicitudes];
 
-    // 1. Filtro por Estado
     if (this.filtroEstado === 'PENDIENTE') {
       resultado = resultado.filter(s => s.estado === 'PENDIENTE');
     } else if (this.filtroEstado === 'FINALIZADA') {
       resultado = resultado.filter(s => s.estado === 'ACEPTADO' || s.estado === 'RECHAZADO');
     }
-
-    // 2. Filtro por Texto
     if (this.filtroTexto) {
       const texto = this.filtroTexto.toLowerCase();
       resultado = resultado.filter(s =>
@@ -88,7 +85,6 @@ export class MisSolicitudesPage implements OnInit {
       );
     }
 
-    // 3. Ordenamiento (Antes de paginar)
     if (this.criterioOrden === 'especialista') {
       resultado = ordenarDinamicamente(resultado, 'especialista', 'asc');
     } else {
@@ -98,7 +94,6 @@ export class MisSolicitudesPage implements OnInit {
     this.solicitudesFiltradas = resultado;
     this.totalPages.set(Math.ceil(this.solicitudesFiltradas.length / this.pageSize));
 
-    // Si al filtrar la página actual queda fuera de rango, resetear a 0
     if (this.currentPage() >= this.totalPages() && this.totalPages() > 0) {
         this.currentPage.set(0);
     }

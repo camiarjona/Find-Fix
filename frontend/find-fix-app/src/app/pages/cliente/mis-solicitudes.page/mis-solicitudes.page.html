@@ -133,13 +133,13 @@
   }
 </div>
 
-<app-modal-confirmacion
-  @if (alertaVisible()) {
+@if (alertaVisible()) {
+  <app-modal-confirmacion
     [titulo]="tipoAlerta() === 'pregunta' ? '¿Cancelar Solicitud?' : (tipoAlerta() === 'error' ? '¡Ups!' : '¡Listo!')"
     [mensaje]="mensajeAlerta()"
     [textoConfirmar]="tipoAlerta() === 'pregunta' ? 'Sí, cancelar' : 'Entendido'"
     [mostrarBotonCancelar]="tipoAlerta() === 'pregunta'"
     (confirmar)="confirmarAccion()"
     (cancelar)="cerrarAlerta()"
-  }
-></app-modal-confirmacion>
+  ></app-modal-confirmacion>
+}

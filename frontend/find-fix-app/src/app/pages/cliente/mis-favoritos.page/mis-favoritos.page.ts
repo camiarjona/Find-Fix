@@ -12,6 +12,8 @@ import { FavoritoService } from '../../../services/favoritos/lista-favs.service'
 import { BuscarEspecialistaService } from '../../../services/cliente/buscar-especialista-service';
 import { ModalConfirmacionComponent } from '../../../components/cliente/modal-confirmacion.component/modal-confirmacion.component';
 import { ModalFeedbackComponent } from "../../../components/general/modal-feedback.component/modal-feedback.component";
+import { DireccionOrden } from '../../../models/enums/enums.model';
+import { ordenarDinamicamente } from '../../../utils/sort-utils';
 
 @Component({
   selector: 'app-mis-favoritos',
@@ -30,7 +32,7 @@ export class MisFavoritosPage implements OnInit {
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
 
-  // --- Lógica de Modales (Igual que en BuscarEspecialistas) ---
+  // --- Lógica de Modales  ---
   public showModalContratar = signal(false);
   public showModalDetalle = signal(false);
 
@@ -50,6 +52,15 @@ export class MisFavoritosPage implements OnInit {
   // Feedback modal state
   public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
 
+  // Variables para el ordenamiento
+  public criterioOrden = 'nombre';
+  public direccionOrden: DireccionOrden = 'asc';
+  public dropdownOpen: string | null = null;
+  public filtroTexto = '';
+
+  // Lista auxiliar para no perder datos al filtrar
+  private todosLosFavoritos: FavoritoModel[] = [];
+
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData = { visible: true, titulo, mensaje, tipo };
   }
@@ -67,16 +78,54 @@ export class MisFavoritosPage implements OnInit {
 
     this.favoritoService.obtenerFavoritosPorCliente().subscribe({
       next: (response) => {
-        console.log('Favoritos recibidos:', response.data);
-        this.favoritos.set(response.data || []);
+        this.todosLosFavoritos = response.data || [];
+        this.aplicarFiltrosYOrden();
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error al cargar favoritos:', err);
-        this.errorMessage.set('No se pudo cargar la lista. Por favor, verifica tu sesión.');
+        this.errorMessage.set('No se pudo cargar la lista.');
         this.isLoading.set(false);
       }
     });
+  }
+
+  aplicarFiltrosYOrden() {
+    let resultado = [...this.todosLosFavoritos];
+
+    // 1. Filtro local por nombre/apellido
+    if (this.filtroTexto) {
+      const busqueda = this.filtroTexto.toLowerCase();
+      resultado = resultado.filter(f =>
+        f.nombre.toLowerCase().includes(busqueda) ||
+        f.apellido.toLowerCase().includes(busqueda)
+      );
+    }
+    this.direccionOrden = this.criterioOrden === 'calificacionPromedio' ? 'desc' : 'asc';
+
+    const listaOrdenada = ordenarDinamicamente(
+      resultado,
+      this.criterioOrden,
+      this.direccionOrden
+    );
+
+    this.favoritos.set(listaOrdenada);
+  }
+
+  toggleDropdown(menu: string, event: Event) {
+    event.stopPropagation();
+    this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  seleccionarOrden(criterio: string) {
+    this.criterioOrden = criterio;
+    this.dropdownOpen = null;
+    this.aplicarFiltrosYOrden();
+  }
+
+  limpiarFiltros() {
+    this.filtroTexto = '';
+    this.criterioOrden = 'nombre';
+    this.aplicarFiltrosYOrden();
   }
 
   // --- Lógica Ver Perfil (Reutilizada) ---
