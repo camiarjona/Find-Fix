@@ -341,4 +341,17 @@ public class NotificacionServiceImpl implements NotificacionService {
                 + " te dejó una calificación en tu trabajo! Ingresa a la app y dirigite a la seccion de tus reseñas para mas detalles.",
                 rolDestinatario);
     }
+
+    @Override
+    public void notificarTokenRegistro(Usuario usuario, String token) {
+        String urlActivacion = "http://localhost:4200/confirmar-cuenta?token=" + token;
+
+        String titulo = "Activa tu cuenta de FindFix";
+
+        String mensaje = "Hola " + usuario.getNombre() + ", estás a un solo paso de unirte a FindFix. <br><br>" +
+                "Por favor, copia y pega el siguiente enlace en tu navegador para activar tu cuenta: <br><br>" +
+                "<a href='" + urlActivacion + "'>" + urlActivacion + "</a>";
+
+        enviarEmail(usuario.getEmail(), titulo, mensaje);
+    }
 }
