@@ -1,0 +1,56 @@
+<div class="recuperacion-wrapper">
+  <div class="recuperacion-card">
+
+    <div class="icono-contenedor">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff6600"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </div>
+
+    <h1>Recuperar contraseña</h1>
+    <p class="texto-secundario">
+      Ingresá tu correo electrónico y te enviaremos un enlace para que puedas crear una nueva contraseña.
+    </p>
+
+    @if (mensajeExito()) {
+    <div class="alerta alerta-exito">
+      {{ mensajeExito() }}
+    </div>
+    }
+
+    @if (mensajeError()) {
+    <div class="alerta alerta-error">
+      {{ mensajeError() }}
+    </div>
+    }
+
+    @if (!mensajeExito()) {
+    <form [formGroup]="recuperacionForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email" placeholder="ejemplo@correo.com"
+          [class.input-error]="recuperacionForm.get('email')?.invalid && recuperacionForm.get('email')?.touched">
+
+        @if (recuperacionForm.get('email')?.invalid && recuperacionForm.get('email')?.touched) {
+        <small class="error-text">
+          Por favor, ingresá un correo válido.
+        </small>
+        }
+      </div>
+
+      <button type="submit" class="cta-button" [disabled]="enviando()">
+        {{ enviando() ? 'Enviando enlace...' : 'Enviar enlace de recuperación' }}
+      </button>
+
+    </form>
+    }
+
+    <button class="btn-outline" (click)="volverAlLogin()">
+      Volver al inicio de sesión
+    </button>
+
+  </div>
+</div>
