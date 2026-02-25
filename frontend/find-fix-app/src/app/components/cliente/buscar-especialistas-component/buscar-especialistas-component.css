@@ -47,18 +47,21 @@
   margin-bottom:12px;
 }
 
-/* grid filtros - FIX: Espaciado corregido para que no se peguen las 3 barras */
+/* grid filtros - FIX: minmax(0, 1fr) evita el desborde cuando hay gaps grandes */
 .filters-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px; /* Aumentado para asegurar separación visual */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px; /* Reducido un poco para que sea armonioso, pero minmax evita el error */
   align-items: end;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0; /* Permite que el contenido del grupo se encoja si es necesario */
 }
 
 .filter-group label{
@@ -79,6 +82,7 @@
   transition:.2s;
   display:flex;
   align-items:center;
+  box-sizing: border-box; /* Asegura que el padding no agrande el input */
 }
 
 .input-filter:focus,
@@ -144,7 +148,7 @@
   justify-content:flex-start;
   grid-column: 1 / -1;
   gap:14px;
-  margin-top: 20px; /* Más espacio respecto a las barras de arriba */
+  margin-top: 20px;
 }
 
 .filter-actions button{
@@ -191,7 +195,7 @@
   flex-direction:column;
   gap:10px;
   transition:.2s;
-  position: relative; /* FIX: Necesario para que los iconos no se muevan */
+  position: relative;
 }
 
 .esp-card:hover{
@@ -204,17 +208,18 @@
   display:flex;
   align-items:center;
   gap:15px;
-  justify-content: space-between; /* Para separar info de iconos */
+  justify-content: space-between;
 }
 
 .header-info{
   flex:1;
 }
 
-/* FIX: Iconos de Corazón y Ojo posicionados correctamente a la derecha */
+/* FIX ICONOS: Aseguramos que el maletín y acciones no se solapen */
 .header-actions {
   display: flex;
   gap: 8px;
+  flex-shrink: 0; /* Evita que los botones se achiquen y pisen el texto */
 }
 
 .icon-action-btn {
@@ -497,7 +502,7 @@ textarea {
     color: #ffffff;
     border-color: var(--primary-color);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3); /* Ajustado al naranja de FindFix */
+    box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3);
 }
 
 .pagination-bar button:disabled {
