@@ -194,7 +194,15 @@
 .contenedor-cuadricula { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 .tarjeta-trabajo { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
 .tarjeta-trabajo:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--shadow-color); border-color: #fed7aa; }
-.icono-tarjeta { background: #fff7ed; color: var(--primary-color); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icono-tarjeta {
+  background: #fff7ed;
+  color: var(--primary-color);
+  width: 40px; height: 40px;
+  border-radius: 10px; display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
 .titulo-tarjeta { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 1rem 0 0.5rem; }
 .cliente-tarjeta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 500; }
 .fechas-tarjeta { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 5px; }
