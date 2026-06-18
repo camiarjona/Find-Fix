@@ -13,9 +13,8 @@ export class SolicitudEspecialistaService {
 
   constructor(private http: HttpClient) { }
 
-  enviarSolicitud(dto: MandarSolicitud): Observable<ApiResponse<MandarSolicitud>> {
-    return this.http.post<ApiResponse<MandarSolicitud>>(`${this.apiURL}/enviar`, dto, { withCredentials: true })
-
+  enviarSolicitud(formData: FormData): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiURL}/enviar`, formData, { withCredentials: true });
   }
 
   obtenerMisSolicitudes(): Observable<ApiResponse<MostrarSolicitud[]>> {

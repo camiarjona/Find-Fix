@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { FotoPerfilService } from '../../../services/user/foto-perfil';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LocationService } from '../../../services/general/location.service';
+import { FotoTrabajoService } from '../../../services/especialista/foto-trabajo';
 
 interface Barrio {
   nombre: string;
@@ -35,21 +36,26 @@ export class MiPerfilEspecialista implements OnInit {
   private http = inject(HttpClient);
   private cd = inject(ChangeDetectorRef);
   private locationService = inject(LocationService);
+  private fotoService = inject(FotoPerfilService);
+  private fotoTrabajoService = inject(FotoTrabajoService);
 
   public icons = UI_ICONS;
 
   public perfil = signal<PerfilEspecialista | null>(null);
+  public perfilEspecialista = this.perfil;
   public allOficios = signal<OficioModel[]>([]);
   public selectableOficios = signal<OficioModel[]>([]);
   public citySuggestions = signal<any[]>([]);
   public isLoading = signal(true);
 
-  private fotoService = inject(FotoPerfilService);
   public isEditingPhoto = signal(false);
   public isPhotoLoading = signal(false);
   public tempPhotoUrl = signal<string | null>(null);
   public files: File[] = [];
   public fotoError = signal(false);
+  public galeriaFiles = signal<File[]>([]);
+  public isGaleriaLoading = signal(false);
+  public galeriaPreviews = signal<{ id: string, url: string, file: File }[]>([]);
 
   public allBarrios: Barrio[] = [];
 
@@ -89,7 +95,7 @@ export class MiPerfilEspecialista implements OnInit {
   // --- Lógica de Foto de Perfil ---
   onSelect(event: any) {
   console.log('Archivo seleccionado:', event.addedFiles);
-  this.files = [...event.addedFiles]; // Usamos spread para asegurar la asignación
+  this.files = [...event.addedFiles];
 
   if (this.files.length > 0) {
     const reader = new FileReader();
@@ -408,4 +414,87 @@ export class MiPerfilEspecialista implements OnInit {
       this.mostrarFeedback('Error', 'No se pudo obtener la ubicación', 'error');
     }
   }
+
+  // --- Lógica de la galeria ---
+
+  onSelectGaleria(event: any) {
+    const archivosActuales = this.galeriaFiles();
+
+    if (archivosActuales.length + event.addedFiles.length > 5) {
+      this.mostrarFeedback('Límite excedido', 'Solo podés subir hasta 5 fotos para tu galería simultáneamente.', 'error');
+      return;
+    }
+
+    this.galeriaFiles.set([...archivosActuales, ...event.addedFiles]);
+
+    const nuevosPreviews = event.addedFiles.map((file: File) => ({
+      id: Math.random().toString(36).substring(2),
+      url: URL.createObjectURL(file),
+      file: file
+    }));
+
+    this.galeriaPreviews.set([...this.galeriaPreviews(), ...nuevosPreviews]);
+
+    this.cd.detectChanges();
+  }
+
+  onRemoveGaleria(idPreview: string) {
+
+    const itemABorrar = this.galeriaPreviews().find(p => p.id === idPreview);
+
+    if (itemABorrar) {
+      URL.revokeObjectURL(itemABorrar.url);
+
+      this.galeriaPreviews.set(this.galeriaPreviews().filter(p => p.id !== idPreview));
+      this.galeriaFiles.set(this.galeriaFiles().filter(f => f !== itemABorrar.file));
+    }
+
+    this.cd.detectChanges();
+  }
+
+  guardarGaleria() {
+    const archivos = this.galeriaFiles();
+    if (archivos.length === 0) return;
+
+    this.isGaleriaLoading.set(true);
+    this.mostrarFeedback('Subiendo...', 'Estamos procesando y optimizando tus fotos en la nube...', 'success');
+
+    this.fotoTrabajoService.subirFotos(archivos).subscribe({
+      next: (res) => {
+        this.isGaleriaLoading.set(false);
+
+        this.galeriaPreviews().forEach(p => URL.revokeObjectURL(p.url));
+
+        this.galeriaFiles.set([]);
+        this.galeriaPreviews.set([]);
+
+        this.mostrarFeedback('¡Éxito!', 'Tu galería de trabajos anteriores fue actualizada correctamente.');
+        this.reloadProfile();
+      },
+      error: (err) => {
+        this.isGaleriaLoading.set(false);
+        console.error('Error al subir la galería:', err);
+        this.mostrarFeedback('Error', 'No se pudieron subir las fotos de tus trabajos.', 'error');
+      }
+    });
+  }
+
+  eliminarFotoPersistida(idFoto: number): void {
+    if (confirm('¿Estás seguro de que querés eliminar esta foto de tu galería de forma permanente?')) {
+      this.fotoTrabajoService.eliminarFoto(idFoto).subscribe({
+        next: (response) => {
+          this.mostrarFeedback('¡Éxito!', 'La foto fue borrada de tu galería.');
+
+          // Buscá el método de tu componente que hace el fetch inicial al backend
+          // para actualizar el Signal 'this.perfil' y que impacte en la pantalla.
+          this.loadData(); // 👈 Cambialo por el nombre exacto de tu función de carga
+        },
+        error: (err) => {
+          console.error('Error al intentar borrar la foto:', err);
+          this.mostrarFeedback('Error', 'No se pudo eliminar la imagen.', 'error');
+        }
+      });
+    }
+  }
+
 }

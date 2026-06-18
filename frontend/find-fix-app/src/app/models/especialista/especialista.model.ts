@@ -70,6 +70,7 @@ export interface PerfilEspecialista {
   dni : number;
   latitud?: number;
   longitud?: number;
+  galeria: { id: number; url: string }[];
 }
 
 export interface ResenaEspecialista {

@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -27,12 +29,16 @@ import org.springframework.data.domain.Page;
 public class SolicitudEspecialistaController {
     private final SolicitudEspecialistaService solicitudEspecialistaService;
 
-    @PostMapping("/enviar")
-    @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<ApiResponse<MandarSolicitudEspecialistaDTO>> mandarSolicitud (@Valid @RequestBody MandarSolicitudEspecialistaDTO solicitudEspecialistaDTO) throws UsuarioNotFoundException, SolicitudEspecialistaException {
-        solicitudEspecialistaService.mandarSolicitud(solicitudEspecialistaDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Solicitud generada exitosamente✅", solicitudEspecialistaDTO));
+    @PostMapping(value = "/enviar", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> enviarSolicitud(
+            @RequestPart("datos") @Valid MandarSolicitudEspecialistaDTO dto,
+            @RequestPart("fotos") List<MultipartFile> fotos) throws Exception {
+        
+        solicitudEspecialistaService.mandarSolicitud(dto, fotos);
+        
+        return ResponseEntity.ok(java.util.Map.of(
+            "mensaje", "¡Solicitud enviada con éxito! Tus documentos han sido adjuntados."
+        ));
     }
 
     @GetMapping

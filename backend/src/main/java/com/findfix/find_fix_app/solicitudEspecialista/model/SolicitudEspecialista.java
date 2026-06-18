@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "solicitudes_especialistas")
@@ -35,5 +37,10 @@ public class SolicitudEspecialista {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<FotoRequisito> fotosRequisitos = new ArrayList<>();
 
 }

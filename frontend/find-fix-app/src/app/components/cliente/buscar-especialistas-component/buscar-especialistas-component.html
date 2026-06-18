@@ -180,9 +180,38 @@
         <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
         <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
       </div>
+
+      @if (especialistaSeleccionaCompleto()?.galeria && especialistaSeleccionaCompleto()!.galeria.length > 0) {
+        <div class="gallery-public-section" style="margin-top: 20px;">
+          <h4 style="margin-bottom: 12px; font-size: 1.1rem; font-weight: 600;">Portfolio de Trabajos</h4>
+
+          <div class="gallery-public-scroll">
+            @for (foto of especialistaSeleccionaCompleto()?.galeria; track foto.id) {
+              <div class="gallery-public-card">
+                <img [src]="foto.url" alt="Trabajo anterior" class="gallery-public-img" (click)="abrirImagenCompleta(foto.url)">
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
-    <div class="profile-actions-modal">
-      <button class="btn-secondary-icon" [class.fav-active]="esFavorito(especialistaSeleccionaCompleto()?.email)" (click)="toggleFavorito(especialistaSeleccionaCompleto())">
+
+
+
+@if (fotoLightboxUrl()) {
+  <div class="lightbox-overlay" (click)="cerrarLightbox()">
+    <div class="lightbox-content" (click)="$event.stopPropagation()">
+      <button class="lightbox-close" (click)="cerrarLightbox()">✕</button>
+      <img [src]="fotoLightboxUrl()" class="lightbox-img" alt="Trabajo ampliado">
+    </div>
+  </div>
+}
+    <div class="profile-actions-modal" style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 50px; margin-top: 20px;">
+
+      <button class="btn-secondary-icon"
+              style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); margin: 0;"
+              [class.fav-active]="esFavorito(especialistaSeleccionaCompleto()?.email)"
+              (click)="toggleFavorito(especialistaSeleccionaCompleto())">
         @if (esFavorito(especialistaSeleccionaCompleto()?.email)) {
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
           <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
@@ -193,7 +222,13 @@
         </svg>
         }
       </button>
-      <button class="cta-button grow" (click)="abrirModalContratar(especialistaSeleccionaCompleto())">Contratar Ahora</button>
+
+      <button class="cta-button"
+              style="width: auto; min-width: 200px; padding: 12px 30px; justify-content: center; align-self: center;"
+              (click)="abrirModalContratar(especialistaSeleccionaCompleto())">
+        Contratar Ahora
+      </button>
+
     </div>
     }
   </div>

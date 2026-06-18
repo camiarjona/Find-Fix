@@ -1,15 +1,19 @@
 package com.findfix.find_fix_app.solicitudEspecialista.service;
 
+import java.io.IOException;
+import java.util.Map;
 import com.findfix.find_fix_app.solicitudEspecialista.dto.*;
 import com.findfix.find_fix_app.auth.service.AuthServiceImpl;
 import com.findfix.find_fix_app.utils.enums.EstadosSolicitudes;
 import com.findfix.find_fix_app.especialista.service.EspecialistaService;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
+import com.findfix.find_fix_app.servicesGenerales.CloudinaryService;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.SolicitudEspecialistaNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.solicitudEspecialista.Specifications.SolicitudEspecialistaSpecifications;
+import com.findfix.find_fix_app.solicitudEspecialista.model.FotoRequisito;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import com.findfix.find_fix_app.solicitudEspecialista.repository.SolicitudEspecialistaRepository;
 import com.findfix.find_fix_app.usuario.model.Usuario;
@@ -19,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Pageable;
 import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.Page;
@@ -26,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort; 
 import java.time.LocalDate;
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -36,13 +42,15 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
     private final UsuarioService usuarioService;
     private final NotificacionService notificacionService; 
     private final UsuarioRepository usuarioRepository;
+    private final CloudinaryService cloudinaryService;
 
     /// Metodo para que el usuario mande una solicitud para ser especialista
-    @Override
+   @Override
     @Transactional(rollbackFor = Exception.class)
-    public void mandarSolicitud(MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException {
+    public void mandarSolicitud(MandarSolicitudEspecialistaDTO dto, List<MultipartFile> fotos) 
+            throws UsuarioNotFoundException, SolicitudEspecialistaException, IOException {
+        
         SolicitudEspecialista solicitudEspecialista = new SolicitudEspecialista();
-
         Usuario usuario = authServiceImpl.obtenerUsuarioAutenticado();
 
         verificarUsuario(usuario);
@@ -52,18 +60,40 @@ public class SolicitudEspecialistaServiceImpl implements SolicitudEspecialistaSe
         solicitudEspecialista.setMotivo(dto.motivo());
         solicitudEspecialista.setEstado(EstadosSolicitudes.PENDIENTE);
 
+        // 👈 2. PROCESAMOS LA SUBIDA DE CADA FOTO A CLOUDINARY
+        if (fotos != null && !fotos.isEmpty()) {
+            for (MultipartFile foto : fotos) {
+                if (!foto.isEmpty()) {
+                    // Subimos el archivo binario a Cloudinary
+                    Map<?, ?> resultado = cloudinaryService.subirImagen(foto, null);
+                    String url = (String) resultado.get("secure_url");
+                    String publicId = (String) resultado.get("public_id");
+
+                    // Construimos la entidad de la foto asociada a esta solicitud
+                    FotoRequisito fotoRequisito = FotoRequisito.builder()
+                            .url(url)
+                            .publicId(publicId)
+                            .solicitud(solicitudEspecialista)
+                            .build();
+
+                    // La colgamos de la lista bidireccional (Hibernate se encarga del cascade en el save)
+                    solicitudEspecialista.getFotosRequisitos().add(fotoRequisito);
+                }
+            }
+        }
+
+        // Al guardar la solicitud, se guardan en cascada automática todas sus fotos requisitos en Neon
         solicitudEspecialistaRepository.save(solicitudEspecialista);
+
         Usuario admin = usuarioRepository.findByEmail("findfixapp.utn@gmail.com") 
                 .orElseThrow(() -> new UsuarioNotFoundException("No se encontró al admin para notificar"));
         notificacionService.notificarAdminNuevaSolicitudEspecialista(admin, solicitudEspecialista.getUsuario().getNombre(),"ADMIN");
         notificacionService.notificarConfirmacionSolicitudEspecialistaEnviada(solicitudEspecialista.getUsuario(),"CLIENTE");
     }
 
-    /// Metodo para controlar y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
+    /// Metodo optimizado para delegar el conteo directamente a la base de datos de Neon y verificar la cantidad de solicitudes en un estado especifico de un usuario especifico
     private Long contarSolicitudesPorUsuarioYEstado(Usuario usuario, EstadosSolicitudes estado) {
-        return solicitudEspecialistaRepository.findAll().stream()
-                .filter(s -> s.getUsuario().equals(usuario) && s.getEstado().equals(estado))
-                .count();
+        return solicitudEspecialistaRepository.countByUsuarioAndEstado(usuario, estado);
     }
 
     /// Metodo para verificar si un usuario puede hacer una solicitud nueva para ser especialista
