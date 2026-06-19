@@ -47,6 +47,34 @@
       </div>
     </li>
 
+   @if (solicitud && solicitud.urlsFotos && solicitud.urlsFotos.length > 0) {
+  <div class="detalle-fotos-container" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color, #e5e7eb);">
+
+    <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-main, #1f2937); margin-bottom: 4px;">
+      📸 Documentación de Respaldo Enviada
+    </h4>
+
+    <p style="font-size: 0.85rem; color: var(--text-muted, #4b5563); margin-bottom: 15px;">
+      Frente/dorso de tu DNI y muestras de tus trabajos cargados.
+    </p>
+
+    <div class="fotos-historial-grid" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-start; margin-bottom: 35px;">
+      @for (url of solicitud.urlsFotos; track url) {
+        <div class="foto-historial-card" style="width: 95px; height: 95px; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.15);">
+          <a [href]="url" target="_blank" title="Ver en pantalla completa">
+            <img [src]="url" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform 0.2s; border: 1px solid var(--border-color, #d1d5db); border-radius: 8px;"
+                 onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" alt="Requisito">
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color, #e5e7eb); font-size: 0.85rem; color: var(--text-muted, #6b7280); font-style: italic; margin-bottom: 25px;">
+    Esta solicitud no contiene imágenes de respaldo adjuntas.
+  </div>
+}
+
     <li>
       <strong>Respuesta Admin:</strong>
       <div class="detalle-texto">

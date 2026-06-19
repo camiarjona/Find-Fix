@@ -20,6 +20,7 @@ export interface FichaCompletaSolicitud{
   motivo: string;
   email: string;
   respuesta: string;
+  urlsFotos?: string[];
 }
 
 export interface ActualizarSolicitudDTO {

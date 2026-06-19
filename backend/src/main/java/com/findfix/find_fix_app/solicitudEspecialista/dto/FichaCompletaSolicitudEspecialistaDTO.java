@@ -1,11 +1,13 @@
 package com.findfix.find_fix_app.solicitudEspecialista.dto;
 
+import com.findfix.find_fix_app.solicitudEspecialista.model.FotoRequisito;
 import com.findfix.find_fix_app.solicitudEspecialista.model.SolicitudEspecialista;
 import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Data
@@ -18,6 +20,7 @@ public class FichaCompletaSolicitudEspecialistaDTO {
         private String motivo;
         private String respuesta;
         private String email;
+        private List<String> urlsFotos;
 
     private static final DateTimeFormatter formatoAmigable = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -29,6 +32,9 @@ public class FichaCompletaSolicitudEspecialistaDTO {
         this.motivo = solicitudEspecialista.getMotivo();
         this.respuesta = (solicitudEspecialista.getRespuesta() == null) ? "No se ha respondido a la solicitud" : solicitudEspecialista.getRespuesta();
         this.email = solicitudEspecialista.getUsuario() != null ? solicitudEspecialista.getUsuario().getEmail() : "Usuario desvinculado";
+        this.urlsFotos = solicitudEspecialista.getFotosRequisitos() != null 
+            ? solicitudEspecialista.getFotosRequisitos().stream().map(FotoRequisito::getUrl).toList()
+            : List.of();
     }
 
 }

@@ -334,7 +334,11 @@ hr {
   border-radius: 10px;
   font-family: inherit;
   font-size: 1rem;
-  color: var(--text-main);
+
+  /* 🌟 CLAVE: Forzamos a que tanto el texto como el fondo usen las variables adaptativas del sistema */
+  color: var(--text-main) !important;
+  background-color: var(--bg-card, #ffffff) !important; /* Cambia a oscuro o claro según el tema */
+
   transition: all 0.2s;
   box-sizing: border-box;
   resize: vertical;
@@ -345,6 +349,10 @@ hr {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(245, 134, 52, 0.15);
+
+  /* 🌟 Mantenemos las propiedades de color y fondo en el foco por si las moscas */
+  color: var(--text-main) !important;
+  background-color: var(--bg-card, #ffffff) !important;
 }
 
 .validation-error {
