@@ -8,7 +8,9 @@ import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,5 @@ public interface EspecialistaService {
     Optional<Especialista> buscarPorEmail(String email);
     VerPerfilEspecialistaDTO verPerfilEspecialista() throws UsuarioNotFoundException, EspecialistaNotFoundException;
     List<EspecialistaFichaCompletaDTO> filtrarEspecialistas(BuscarEspecialistaDTO filtro) throws EspecialistaExcepcion, UsuarioNotFoundException;
+    void guardarFotosGaleria(String email, List<MultipartFile> fotos) throws IOException, EspecialistaNotFoundException;
 }

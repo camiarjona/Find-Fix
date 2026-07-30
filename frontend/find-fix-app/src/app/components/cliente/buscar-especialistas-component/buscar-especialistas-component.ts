@@ -40,6 +40,7 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
   public ciudades = this.clienteService.ciudades;
   public oficiosDisponibles = this.clienteService.oficios;
   public favoritosSet = signal<Set<string>>(new Set());
+  public fotoLightboxUrl = signal<string | null>(null);
 
   public allBarrios: Barrio[] = [];
   public cityFilterSuggestions = signal<Barrio[]>([]);
@@ -344,5 +345,13 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
     if (!target.closest('.custom-select-wrapper')) {
       this.dropdownOpen = null;
     }
+  }
+
+  abrirImagenCompleta(url: string) {
+    this.fotoLightboxUrl.set(url);
+  }
+
+  cerrarLightbox() {
+    this.fotoLightboxUrl.set(null);
   }
 }

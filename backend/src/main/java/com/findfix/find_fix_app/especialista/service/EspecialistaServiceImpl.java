@@ -11,13 +11,18 @@ import com.findfix.find_fix_app.utils.exception.exceptions.RolNotFoundException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.oficio.model.Oficio;
 import com.findfix.find_fix_app.oficio.repository.OficioRepository;
+import com.findfix.find_fix_app.servicesGenerales.CloudinaryService;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import com.findfix.find_fix_app.trabajo.fotoTrabajo.model.FotoTrabajo;
+import com.findfix.find_fix_app.trabajo.fotoTrabajo.repository.FotoTrabajoRepository;
 
+import java.io.IOException;
 import java.util.*;
 import com.findfix.find_fix_app.utils.geo.GeoUtils;
 
@@ -30,6 +35,8 @@ public class EspecialistaServiceImpl implements EspecialistaService {
     private final UsuarioService usuarioService;
     private final AuthServiceImpl authServiceImpl;
     private final EspecialistaDesvinculacionService especialistaDesvinculacionService;
+    private final FotoTrabajoRepository fotoTrabajoRepository;
+    private final CloudinaryService cloudinaryService;
 
     /// Metodo para guardar un usuario como especialista
     @Override
@@ -348,4 +355,28 @@ public class EspecialistaServiceImpl implements EspecialistaService {
                     .map(EspecialistaFichaCompletaDTO::new)
                     .toList();
         }
+
+        @Override
+        @Transactional // Importante: o se guardan todas o ninguna
+        public void guardarFotosGaleria(String email, List<MultipartFile> fotos) throws IOException, EspecialistaNotFoundException {
+        // Buscamos al especialista por el email del token
+        Especialista especialista = especialistaRepository.findByUsuarioEmail(email)
+            .orElseThrow(() -> new EspecialistaNotFoundException("Especialista no encontrado"));
+
+        // Cloudinary devuelve un Map, vamos a recorrer la lista de fotos que viene del Front
+        for (MultipartFile file : fotos) {
+        // Subimos a Cloudinary en una carpeta específica
+        // En el bucle de guardarFotosGaleria
+        Map result = cloudinaryService.subirImagen(file, "findfix/galeria");
+        
+        // Creamos el objeto FotoTrabajo con los datos de la nube
+        FotoTrabajo foto = new FotoTrabajo();
+        foto.setUrl(result.get("url").toString());
+        foto.setPublicId(result.get("public_id").toString());
+        foto.setEspecialista(especialista); // Vinculamos la foto con el especialista
+
+        // Guardamos en la base de datos (Neon)
+        fotoTrabajoRepository.save(foto);
+    }
+}
     }

@@ -6,6 +6,7 @@ import com.findfix.find_fix_app.oficio.model.Oficio;
 import lombok.Data;
 
 import java.util.Set;
+import java.util.List;
 
 @Data
 public class VerPerfilEspecialistaDTO implements DatosEspecialista {
@@ -21,6 +22,9 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
     private Long dni;
     private String fotoUrl;
     private Long id;
+    private List<FotoTrabajoRespuestaDTO> galeria;
+
+    public static record FotoTrabajoRespuestaDTO(Long id, String url) {}
 
     public VerPerfilEspecialistaDTO(Especialista especialista) {
 
@@ -51,6 +55,14 @@ public class VerPerfilEspecialistaDTO implements DatosEspecialista {
         this.dni = (especialista.getDni() != null)
                 ? especialista.getDni()
                 : 0;
+
+        this.id = especialista.getUsuario().getUsuarioId();
+
+        this.galeria = (especialista.getGaleria() != null)
+            ? especialista.getGaleria().stream()
+                .map(foto -> new FotoTrabajoRespuestaDTO(foto.getId(), foto.getUrl()))
+                .toList()
+            : List.of();
 
         this.id = especialista.getUsuario().getUsuarioId();
     }

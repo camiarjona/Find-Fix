@@ -17,17 +17,39 @@
         @if (solicitudForm.get('motivo')?.invalid && (solicitudForm.get('motivo')?.touched ||
         solicitudForm.get('motivo')?.dirty)) {
         <div class="form-error" role="alert">
-          @if (solicitudForm.get('motivo')?.hasError('required')) {
-          El motivo es requerido.
-          }
-          @if (solicitudForm.get('motivo')?.hasError('minlength')) {
-          El motivo debe tener al menos 10 caracteres.
-          }
+          @if (solicitudForm.get('motivo')?.hasError('required')) { El motivo es requerido. }
+          @if (solicitudForm.get('motivo')?.hasError('minlength')) { El motivo debe tener al menos 10 caracteres. }
         </div>
         }
       </div>
 
-      <button class="cta-button" type="submit" [disabled]="solicitudForm.invalid">
+      <div class="seccion-documentos">
+        <label class="label-principal">Documentación Obligatoria (Máx. 5 fotos)</label>
+        <p class="sub-label-ayuda">Subí una foto del frente y dorso de tu DNI, más 3 fotos de tus trabajos.</p>
+
+        <ngx-dropzone (change)="onSelectFotosRequisitos($event)" [accept]="'image/*'" [maxFileSize]="5242880" class="custom-dropzone">
+
+          <ngx-dropzone-label class="label-dropzone-custom">
+            <p class="main-text">Arrastrá tus fotos aquí o hacé click para buscarlas</p>
+          </ngx-dropzone-label>
+
+          @for (item of fotosRequisitos(); track item) {
+            <div class="requisito-preview-item">
+
+              <img [src]="item.url" class="requisito-img-element" alt="Preview requisito">
+
+              <button type="button" class="remove-btn-requisito" (click)="onRemoveFotoRequisito(item); $event.stopPropagation()" title="Quitar imagen">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+            </div>
+          }
+        </ngx-dropzone>
+      </div>
+
+      <button class="cta-button" type="submit" [disabled]="solicitudForm.invalid || fotosRequisitos().length === 0">
         Enviar Solicitud
       </button>
     </form>

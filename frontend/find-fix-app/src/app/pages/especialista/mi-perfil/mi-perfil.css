@@ -1162,7 +1162,6 @@ ngx-dropzone-image-preview {
   align-items: flex-start;
 }
 
-/* Contenedor para que los oficios fluyan bien */
 .oficios-hero-container {
   display: flex;
   flex-wrap: wrap;
@@ -1172,11 +1171,10 @@ ngx-dropzone-image-preview {
   max-width: 450px;
 }
 
-/* El estilo verde del badge (idéntico al del cliente) */
 .role-badge {
   display: inline-block;
-  background-color: #dcfce7; /* Verde clarito */
-  color: #166534;            /* Verde oscuro */
+  background-color: #dcfce7;
+  color: #166534;
   font-size: 0.75rem;
   font-weight: 500;
   padding: 4px 12px;
@@ -1185,3 +1183,101 @@ ngx-dropzone-image-preview {
   border: 1px solid #bbf7d0;
   white-space: nowrap;
 }
+
+/* Fuerza a que el recuadro punteado ocupe todo el ancho y no cambie de color */
+.galeria-dropzone-custom {
+  width: 100% !important;
+  min-height: 130px !important;
+  border: 2px dashed #ea580c !important; /* Estilo punteado naranja */
+  background-color: #1a1a1a !important;   /* Tu color oscuro de fondo */
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: none !important;            /* Evita animaciones que cambien el fondo */
+}
+
+/* Evita que ngx-dropzone cambie a color blanco o claro al interactuar */
+.galeria-dropzone-custom:not(.disabled):hover,
+.galeria-dropzone-custom:focus {
+  background-color: #1a1a1a !important;   /* Mantiene el fondo oscuro fijo */
+  border-color: #ea580c !important;
+}
+
+/* Contenedor que ordena las imágenes en fila horizontal de centro a izquierda */
+.galeria-previews-container {
+  display: flex;
+  flex-direction: row-reverse;  /* Las fotos se van posicionando hacia la izquierda */
+  justify-content: center;      /* Arrancan alineadas desde el centro */
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #111111;    /* Fondo oscuro independiente para el portfolio */
+  border-radius: 8px;
+}
+
+/* Caja de cada miniatura individual */
+.custom-preview-item {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 8px;
+  overflow: visible; /* Cambiado a visible para que la cruz pueda sobresalir o verse arriba */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* La imagen dentro de la miniatura */
+.preview-img-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+.custom-preview-item:hover .preview-img-element {
+  transform: scale(1.05); /* Efecto zoom sutil al pasar el mouse */
+}
+
+/* Botón de la cruz flotante específico para la galería */
+.remove-btn-gallery {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 24px;
+  height: 24px;
+  background-color: #ef4444; /* Rojo de bootstrap/alerta */
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 999; /* Máxima prioridad para que se superponga a la imagen */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.remove-btn-gallery:hover {
+  background-color: #dc2626;
+  transform: scale(1.1); /* Efecto pop sutil al apoyar el mouse en la X */
+}
+
+.galeria-previews-inline {
+  display: flex;
+  flex-direction: row-reverse;  /* Ordena las fotos de centro para la izquierda */
+  justify-content: center;      /* Arrancan alineadas desde el centro del recuadro */
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 15px;
+}
+

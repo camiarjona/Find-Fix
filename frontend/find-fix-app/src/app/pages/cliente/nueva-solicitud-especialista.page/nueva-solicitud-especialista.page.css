@@ -179,7 +179,6 @@ form textarea:focus {
 }
 
 
-
 .exito, .error {
   padding: 1rem;
   border-radius: 8px;
@@ -189,6 +188,122 @@ form textarea:focus {
 .exito { color: #0f5132; background-color: #d1e7dd; border: 1px solid #badbcc; }
 .error { color: #842029; background-color: #f8d7da; border: 1px solid #f5c2c7; }
 
+
+
+.seccion-documentos {
+    margin: 25px 0;
+}
+
+.label-principal {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color, #f3f4f6);
+    margin-bottom: 5px;
+}
+
+.sub-label-ayuda {
+    color: var(--text-muted, #9ca3af);
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+::ng-deep .custom-dropzone {
+    background-color: transparent !important;
+    border: 2px dashed var(--border-color, #e5e7eb) !important;
+    border-radius: 12px !important;
+    min-height: 180px !important;
+    display: flex !important;
+
+    /* 🔥 CAMBIO CLAVE AQUÍ: Forzamos el alineamiento de los ítems al centro */
+    justify-content: center !important;
+    align-items: center !important;
+    align-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 15px !important;
+    position: relative !important; /* Para poder controlar el texto flotante de fondo */
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+::ng-deep .custom-dropzone:has(.requisito-preview-item) .label-dropzone-custom {
+    position: absolute !important;
+    opacity: 0; /* Lo vuelve un texto fantasma muy sutil de fondo */
+    z-index: 1;
+    pointer-events: none; /* Evita que moleste al hacer click */
+}
+
+::ng-deep .custom-dropzone:hover {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+    border-color: var(--primary-color, #9ca3af) !important;
+    cursor: pointer;
+}
+
+.label-dropzone-custom .main-text {
+    color: var(--text-color, #6b7280) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+::ng-deep .requisito-preview-item {
+    background-color: transparent !important;
+    border-radius: 8px !important;
+    height: 100px !important;
+    width: 100px !important;
+    min-height: 100px !important;
+    margin: 10px !important;
+    position: relative !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+
+    /* 🔥 ASEGURAMOS QUE LA MINIATURA QUEDE PARADA EN EL CENTRO */
+    z-index: 10;
+}
+
+::ng-deep .requisito-preview-item ::ng-deep .ngx-dz-image {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+
+::ng-deep .requisito-preview-item img,
+::ng-deep .requisito-img-element {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--border-color, #374151) !important;
+}
+
+
+.remove-btn-requisito {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    padding: 0;
+}
+
+.remove-btn-requisito svg {
+    width: 12px;
+    height: 12px;
+}
+
+.remove-btn-requisito:hover {
+    background-color: #dc2626;
+    transform: scale(1.1);
+}
 
 
 @media (max-width: 900px) {
@@ -210,3 +325,5 @@ form textarea:focus {
     border-radius: 0 0 12px 12px;
   }
 }
+
+

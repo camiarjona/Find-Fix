@@ -1,6 +1,7 @@
 package com.findfix.find_fix_app.especialista.model;
 
 import com.findfix.find_fix_app.oficio.model.Oficio;
+import com.findfix.find_fix_app.trabajo.fotoTrabajo.model.FotoTrabajo;
 import com.findfix.find_fix_app.trabajo.trabajoApp.model.TrabajoApp;
 import com.findfix.find_fix_app.trabajo.trabajoExterno.model.TrabajoExterno;
 import com.findfix.find_fix_app.usuario.model.Usuario;
@@ -58,6 +59,11 @@ public class Especialista {
 
     @Transient
     private Double calificacionPromedio;
+
+    // Dentro de la clase Especialista (backend/src/main/java/com/findfix/find_fix_app/especialista/model/Especialista.java)
+
+    @OneToMany(mappedBy = "especialista", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FotoTrabajo> galeria = new ArrayList<>();
 
 
 

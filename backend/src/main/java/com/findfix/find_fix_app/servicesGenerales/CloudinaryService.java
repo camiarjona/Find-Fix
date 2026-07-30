@@ -33,6 +33,20 @@ public class CloudinaryService {
     }
 
     /**
+     * Sube una imagen a Cloudinary sin necesidad de preset
+    * @param archivo El archivo que viene del frontend
+    * @param carpeta Nombre de la carpeta en Cloudinary (ej: "findfix/galeria")
+     */
+    public Map subirImagen(MultipartFile archivo, String carpeta) throws IOException {
+    Map opciones = ObjectUtils.asMap(
+        "folder", carpeta,
+        "resource_type", "image"
+    );
+
+    return cloudinary.uploader().upload(archivo.getBytes(), opciones);
+}
+
+    /**
      * @param publicId
      */
     public Map eliminarImagen(String publicId) throws IOException {

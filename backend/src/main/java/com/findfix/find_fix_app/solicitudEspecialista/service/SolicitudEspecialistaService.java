@@ -15,8 +15,7 @@ import java.util.List;
 @Service
 public interface SolicitudEspecialistaService {
 
-    void mandarSolicitud (MandarSolicitudEspecialistaDTO dto) throws UsuarioNotFoundException, SolicitudEspecialistaException;
-    Page<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista(Pageable pageable) throws SolicitudEspecialistaNotFoundException;
+    void mandarSolicitud(MandarSolicitudEspecialistaDTO dto, List<org.springframework.web.multipart.MultipartFile> fotos) throws UsuarioNotFoundException, SolicitudEspecialistaException, java.io.IOException;    Page<MostrarSolicitudEspecialistaAdminDTO> obtenerSolicitudesEspecialista(Pageable pageable) throws SolicitudEspecialistaNotFoundException;
     SolicitudEspecialista actualizarSolicitudEspecialistaAdmin(ActualizarSolicitudEspecialistaDTO dto, Long id) throws SolicitudEspecialistaNotFoundException, UsuarioNotFoundException, RolNotFoundException, SolicitudEspecialistaException;
     void eliminarPorId(Long id) throws SolicitudEspecialistaNotFoundException, SolicitudEspecialistaException;
     List<SolicitudEspecialista> obtenerMisSolicitudesEspecialista() throws SolicitudEspecialistaException, SolicitudEspecialistaNotFoundException, UsuarioNotFoundException;

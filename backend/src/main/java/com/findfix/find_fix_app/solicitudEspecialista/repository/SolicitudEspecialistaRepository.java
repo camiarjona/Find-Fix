@@ -17,4 +17,5 @@ public interface SolicitudEspecialistaRepository extends JpaRepository<Solicitud
            "CASE WHEN str(s.estado) = 'PENDIENTE' THEN 1 ELSE 2 END ASC, " +
            "s.fechaSolicitud DESC")
     Page<SolicitudEspecialista> findAllCustomOrder(Pageable pageable);
+    long countByUsuarioAndEstado(com.findfix.find_fix_app.usuario.model.Usuario usuario, com.findfix.find_fix_app.utils.enums.EstadosSolicitudes estado);
 }
