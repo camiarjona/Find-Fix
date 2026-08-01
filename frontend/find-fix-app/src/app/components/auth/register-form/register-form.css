@@ -6,19 +6,19 @@
   width: 100%;
   max-width: 380px;
   margin: 0 auto;
-  padding: 25px 20px;
+  padding: 12px 20px; /* Reducido de 25px a 12px arriba/abajo */
   box-sizing: border-box;
 }
 
 .form-title {
   font-size: 1.5rem !important;
-  margin: 0 0 5px 0 !important;
+  margin: 0 0 2px 0 !important;
   text-align: center;
 }
 
 .form-subtitle {
   font-size: 0.8rem;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Reducido de 20px a 10px */
   color: #666;
   text-align: center;
 }
@@ -26,7 +26,7 @@
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px; /* Reducido de 12px a 8px */
   width: 100%;
 }
 
@@ -45,8 +45,8 @@
 
 .form-field input {
   width: 100% !important;
-  height: 40px !important;
-  padding: 8px 12px !important;
+  height: 36px !important; /* Reducido de 40px a 36px */
+  padding: 6px 12px !important;
   font-size: 0.9rem !important;
   box-sizing: border-box !important;
   transition: background-color 0.3s ease;
@@ -108,15 +108,25 @@
 
 .cta-button {
   width: 100%;
-  margin-top: 25px;
-  height: 42px !important;
+  margin-top: 14px; /* Reducido de 25px a 14px */
+  height: 38px !important; /* Reducido de 42px a 38px */
 }
 
 .mobile-toggle-link {
-  margin-top: 15px;
   text-align: center;
   font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: 5px;
 }
+
+.final-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-top: 8px; /* Ajuste para separar del botón sin pasarse de alto */
+}
+
 
 .form-field label {
   position: absolute;
