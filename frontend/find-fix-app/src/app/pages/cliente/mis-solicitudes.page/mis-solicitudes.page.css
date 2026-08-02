@@ -531,3 +531,12 @@
     color: #4b5563;
     border-color: #374151;
 }
+:host-context(.dark-mode) .btn-clear {
+  background: var(--bg-input, #2d2d2d) !important;
+  border-color: var(--border-color, #444) !important;
+  color: var(--text-main, whitesmoke) !important;
+}
+
+:host-context(.dark-mode) .btn-clear:hover {
+  background: #383838 !important;
+}

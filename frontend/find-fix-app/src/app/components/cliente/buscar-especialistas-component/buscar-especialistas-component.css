@@ -627,3 +627,80 @@ textarea {
 .lightbox-close:hover {
   transform: scale(1.2);
 }
+
+
+:host-context(.dark-mode) .filter-actions button {
+  background: var(--bg-input);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+:host-context(.dark-mode) .filter-actions button:hover {
+  background: #383838;
+}
+
+:host-context(.dark-mode) .filter-actions .cta-button {
+  background: var(--primary-color) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+:host-context(.dark-mode) .filter-actions .cta-button:hover {
+  background: #df7325 !important;
+}
+
+:host-context(.dark-mode) .icon-action-btn {
+  background: rgba(255, 255, 255, 0.08); /* O un gris tipo #2d2d2d */
+  color: #e0e0e0;
+}
+
+:host-context(.dark-mode) .icon-action-btn svg {
+  stroke: #e0e0e0; /* Asegura que el contorno del vector sea claro */
+}
+
+:host-context(.dark-mode) .icon-action-btn:hover {
+  background: rgba(255, 255, 255, 0.18); /* Hover sutil */
+}
+
+/* Cuando el corazón está activo en modo oscuro */
+:host-context(.dark-mode) .icon-action-btn.fav-active {
+  background: rgba(245, 134, 52, 0.2); /* Fondo naranja sutil */
+}
+
+:host-context(.dark-mode) .icon-action-btn.fav-active svg {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+}
+
+:host-context(.dark-mode) .btn-secondary-icon {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: #e0e0e0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+:host-context(.dark-mode) .btn-secondary-icon svg {
+  stroke: #e0e0e0;
+}
+
+:host-context(.dark-mode) .btn-secondary-icon:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+:host-context(.dark-mode) .btn-secondary-icon.fav-active {
+  background: rgba(245, 134, 52, 0.2);
+  border-color: var(--primary-color);
+}
+
+:host-context(.dark-mode) .btn-secondary-icon.fav-active svg {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+}
+
+:host-context(.dark-mode) .oficio-tag {
+  background: rgba(2, 132, 199, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+

@@ -46,7 +46,7 @@
 .form-field input {
   width: 100% !important;
   height: 36px !important; /* Reducido de 40px a 36px */
-  padding: 6px 12px !important;
+  padding: 10px 12px 2px 12px !important;
   font-size: 0.9rem !important;
   box-sizing: border-box !important;
   transition: background-color 0.3s ease;
@@ -140,7 +140,7 @@
 
 .form-field input:focus ~ label,
 .form-field input:not(:placeholder-shown) ~ label {
-  top: 0 !important;
+  top: -4px !important;
   background: white;
   padding: 0 4px;
   font-size: 0.75rem !important;
