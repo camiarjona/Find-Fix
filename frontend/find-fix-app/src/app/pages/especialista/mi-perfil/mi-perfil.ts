@@ -94,17 +94,17 @@ export class MiPerfilEspecialista implements OnInit {
 
   // --- Lógica de Foto de Perfil ---
   onSelect(event: any) {
-  console.log('Archivo seleccionado:', event.addedFiles);
-  this.files = [...event.addedFiles];
+    console.log('Archivo seleccionado:', event.addedFiles);
+    this.files = [...event.addedFiles];
 
-  if (this.files.length > 0) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.tempPhotoUrl.set(reader.result as string);
-    };
-    reader.readAsDataURL(this.files[0]);
+    if (this.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.tempPhotoUrl.set(reader.result as string);
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
   }
-}
 
   onRemove(event: any) {
     this.files = [];
@@ -119,29 +119,29 @@ export class MiPerfilEspecialista implements OnInit {
 
   guardarFoto() {
     const perfilActual = this.perfil();
-      if (!perfilActual) {
-        console.error("El perfil es null, no se puede guardar la foto");
-        return;
-      }
+    if (!perfilActual) {
+      console.error("El perfil es null, no se puede guardar la foto");
+      return;
+    }
 
-      const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+    const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
 
-      if (this.files.length === 0 || !idFinal) {
-        console.error("No se encontró archivo o ID. ID detectado:", idFinal);
-        this.mostrarFeedback('Error', 'No se pudo identificar tu cuenta', 'error');
-        return;
-      }
+    if (this.files.length === 0 || !idFinal) {
+      console.error("No se encontró archivo o ID. ID detectado:", idFinal);
+      this.mostrarFeedback('Error', 'No se pudo identificar tu cuenta', 'error');
+      return;
+    }
 
-      this.isPhotoLoading.set(true);
+    this.isPhotoLoading.set(true);
 
     this.fotoService.subirFoto(this.files[0], idFinal).subscribe({
-        next: (res) => {
-          this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);
-          this.mostrarFeedback('¡Éxito!', 'Foto actualizada.');
-          this.cancelarCambioFoto();
-          this.isPhotoLoading.set(false);
-        },
-        error: (err) => {
+      next: (res) => {
+        this.perfil.update(p => p ? { ...p, fotoUrl: res.url } : null);
+        this.mostrarFeedback('¡Éxito!', 'Foto actualizada.');
+        this.cancelarCambioFoto();
+        this.isPhotoLoading.set(false);
+      },
+      error: (err) => {
         this.isPhotoLoading.set(false);
         console.error('Error en la subida:', err);
 
@@ -156,36 +156,33 @@ export class MiPerfilEspecialista implements OnInit {
           this.mostrarFeedback('Error', 'Falló la subida a Cloudinary', 'error');
         }
       }
-      });
-}
-
-  eliminarFotoActual() {
-  const perfilActual = this.perfil();
-  if (!perfilActual) return;
-
-  const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
-
-  if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
-    this.isPhotoLoading.set(true);
-
-    // IMPORTANTE: Ahora sí llamamos al servicio para impactar la BD y Cloudinary
-    this.fotoService.eliminarFoto(idFinal.toString()).subscribe({
-      next: () => {
-        // Actualizamos la interfaz solo si el backend respondió OK
-        this.perfil.update(p => p ? { ...p, fotoUrl: '' } : null);
-        this.isPhotoLoading.set(false);
-        this.cancelarCambioFoto();
-        this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
-      },
-      error: (err) => {
-        console.error('Error al eliminar:', err);
-        this.isPhotoLoading.set(false);
-        this.mostrarFeedback('Error', 'No se pudo eliminar la foto del servidor.', 'error');
-      }
     });
   }
-}
 
+  eliminarFotoActual() {
+    const perfilActual = this.perfil();
+    if (!perfilActual) return;
+
+    const idFinal = perfilActual.id || (perfilActual as any).usuarioId;
+
+    if (confirm('¿Estás seguro de que querés eliminar tu foto de perfil?')) {
+      this.isPhotoLoading.set(true);
+
+      this.fotoService.eliminarFoto(idFinal.toString()).subscribe({
+        next: () => {
+          this.perfil.update(p => p ? { ...p, fotoUrl: '' } : null);
+          this.isPhotoLoading.set(false);
+          this.cancelarCambioFoto();
+          this.mostrarFeedback('¡Listo!', 'Foto eliminada correctamente.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          this.isPhotoLoading.set(false);
+          this.mostrarFeedback('Error', 'No se pudo eliminar la foto del servidor.', 'error');
+        }
+      });
+    }
+  }
 
   cargarBarriosDelBackend() {
     this.http.get<Barrio[]>('http://localhost:8080/api/barrios?ciudad=mdp')
@@ -229,7 +226,7 @@ export class MiPerfilEspecialista implements OnInit {
 
   startEdit(field: string, value: any) {
     this.editingField.set(field);
-    this.tempValue = value || '';
+    this.tempValue = value ? String(value) : '';
     this.citySuggestions.set([]);
     this.tempLat = null;
     this.tempLon = null;
@@ -241,26 +238,73 @@ export class MiPerfilEspecialista implements OnInit {
     this.citySuggestions.set([]);
   }
 
-  buscarZona(event: Event) {
+  // --- Métodos Sanitizadores y Validaciones de Perfil ---
+  soloNumerosInput(event: Event) {
     const input = event.target as HTMLInputElement;
-    const termino = input.value.toLowerCase();
+    input.value = input.value.replace(/\D/g, '');
     this.tempValue = input.value;
+  }
 
-    if (termino.length < 1) {
-      this.citySuggestions.set([]);
-      return;
+  private validarCampoPerfil(field: string, valor: string): { valido: boolean; mensaje: string } {
+    const val = valor.trim();
+
+    switch (field) {
+      case 'dni':
+        if (!/^\d{7,8}$/.test(val)) {
+          return { valido: false, mensaje: 'El DNI debe tener entre 7 y 8 números, sin puntos ni espacios.' };
+        }
+        break;
+
+      case 'telefono':
+        if (!/^\d{8,15}$/.test(val)) {
+          return { valido: false, mensaje: 'El teléfono debe tener entre 8 y 15 dígitos numéricos.' };
+        }
+        break;
+
+      case 'descripcion':
+        if (val.length < 10) {
+          return { valido: false, mensaje: 'La descripción debe tener al menos 10 caracteres.' };
+        }
+        if (val.length > 500) {
+          return { valido: false, mensaje: 'La descripción no puede superar los 500 caracteres.' };
+        }
+        break;
+
+      case 'ciudad':
+        if (val.length < 3) {
+          return { valido: false, mensaje: 'Escribe o selecciona una zona de trabajo válida.' };
+        }
+        break;
     }
 
-    const filtrados = this.allBarrios
-      .filter(b => b.nombre.toLowerCase().includes(termino))
-      .slice(0, 5);
-
-    this.citySuggestions.set(filtrados.map(b => ({
-      nombreVisual: b.nombre,
-      lat: b.lat,
-      lon: b.lon
-    })));
+    return { valido: true, mensaje: '' };
   }
+
+ buscarZona(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  // Elimina números y símbolos, dejando solo letras (con acentos/ñ) y espacios
+  const limpio = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+
+  input.value = limpio;
+  this.tempValue = limpio;
+  const termino = limpio.toLowerCase().trim();
+
+  if (termino.length < 1) {
+    this.citySuggestions.set([]);
+    return;
+  }
+
+  const filtrados = this.allBarrios
+    .filter(b => b.nombre.toLowerCase().includes(termino))
+    .slice(0, 5);
+
+  this.citySuggestions.set(filtrados.map(b => ({
+    nombreVisual: b.nombre,
+    lat: b.lat,
+    lon: b.lon
+  })));
+}
 
   seleccionarZona(sugerencia: any) {
     this.tempValue = sugerencia.nombreVisual;
@@ -270,23 +314,31 @@ export class MiPerfilEspecialista implements OnInit {
   }
 
   saveEdit(field: string) {
-    const valorTexto = String(this.tempValue);
-    if (!valorTexto.trim()) return;
+    const valorTexto = String(this.tempValue || '').trim();
 
-    const data: any = { [field]: this.tempValue };
+    if (!valorTexto) {
+      this.mostrarFeedback('Campo requerido', 'Este campo no puede estar vacío.', 'error');
+      return;
+    }
 
-    if (field === 'ciudad') {
-      if (this.tempLat && this.tempLon) {
-        data.latitud = this.tempLat;
-        data.longitud = this.tempLon;
-      }
+    const validacion = this.validarCampoPerfil(field, valorTexto);
+    if (!validacion.valido) {
+      this.mostrarFeedback('Dato inválido', validacion.mensaje, 'error');
+      return;
+    }
+
+    const data: any = { [field]: valorTexto };
+
+    if (field === 'ciudad' && this.tempLat && this.tempLon) {
+      data.latitud = this.tempLat;
+      data.longitud = this.tempLon;
     }
 
     this.especialistaService.actualizarDatos(data).subscribe({
       next: () => {
         this.perfil.update(p => {
           if (!p) return null;
-          const updated = { ...p, [field]: this.tempValue };
+          const updated = { ...p, [field]: valorTexto };
 
           if (field === 'ciudad' && this.tempLat && this.tempLon) {
             (updated as any).latitud = this.tempLat;
@@ -296,12 +348,11 @@ export class MiPerfilEspecialista implements OnInit {
         });
 
         this.editingField.set(null);
-
         const nombreCampo = field === 'ciudad' ? 'Barrio' : field;
-        this.mostrarFeedback('¡Actualizado!', `Tu ${nombreCampo} se ha guardado correctamente.`);
+        this.mostrarFeedback('¡Actualizado!', `Tu ${nombreCampo} se guardó correctamente.`);
       },
       error: (err) => {
-        this.mostrarFeedback('Error', 'No se pudieron guardar los cambios.', 'error');
+        this.mostrarFeedback('Error', err?.error?.mensaje || 'No se pudieron guardar los cambios.', 'error');
       }
     });
   }
@@ -369,7 +420,8 @@ export class MiPerfilEspecialista implements OnInit {
 
   changePassword() {
     if (this.passwordData.passwordNuevo !== this.passwordData.confirmacion) {
-      alert('Las contraseñas no coinciden'); return;
+      this.mostrarFeedback('Error', 'Las contraseñas no coinciden', 'error');
+      return;
     }
     this.isPasswordLoading.set(true);
     const { confirmacion, ...data } = this.passwordData;
@@ -404,7 +456,6 @@ export class MiPerfilEspecialista implements OnInit {
         this.tempValue = barrioEncontrado.nombre;
       }
 
-      // Cierre automático con delay de seguridad
       setTimeout(() => {
         this.cerrarFeedback();
       }, 600);
@@ -415,8 +466,7 @@ export class MiPerfilEspecialista implements OnInit {
     }
   }
 
-  // --- Lógica de la galeria ---
-
+  // --- Lógica de Galería ---
   onSelectGaleria(event: any) {
     const archivosActuales = this.galeriaFiles();
 
@@ -439,7 +489,6 @@ export class MiPerfilEspecialista implements OnInit {
   }
 
   onRemoveGaleria(idPreview: string) {
-
     const itemABorrar = this.galeriaPreviews().find(p => p.id === idPreview);
 
     if (itemABorrar) {
@@ -484,10 +533,7 @@ export class MiPerfilEspecialista implements OnInit {
       this.fotoTrabajoService.eliminarFoto(idFoto).subscribe({
         next: (response) => {
           this.mostrarFeedback('¡Éxito!', 'La foto fue borrada de tu galería.');
-
-          // Buscá el método de tu componente que hace el fetch inicial al backend
-          // para actualizar el Signal 'this.perfil' y que impacte en la pantalla.
-          this.loadData(); // 👈 Cambialo por el nombre exacto de tu función de carga
+          this.loadData();
         },
         error: (err) => {
           console.error('Error al intentar borrar la foto:', err);

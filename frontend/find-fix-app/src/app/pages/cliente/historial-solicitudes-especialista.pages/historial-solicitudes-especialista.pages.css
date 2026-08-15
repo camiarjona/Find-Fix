@@ -60,6 +60,7 @@ h2 {
   flex: 1;
   min-width: 200px;
 }
+
 .search-box input {
   border: none;
   background: transparent;
@@ -67,15 +68,46 @@ h2 {
   outline: none;
   color: inherit;
 }
-.btn-search { background: none; border: none; color: var(--text-secondary); cursor: pointer; }
 
-.filter-select { padding: 0 10px; cursor: pointer; min-width: 120px; }
-.date-range-wrapper { display: flex; align-items: center; padding: 0 8px; gap: 5px; }
-.filter-date { border: none; background: transparent; font-size: 0.8rem; color: inherit; outline: none; }
-.separator { color: var(--text-secondary); font-weight: bold; }
+.btn-search {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.filter-select {
+  padding: 0 10px;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.date-range-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 5px;
+}
+
+.filter-date {
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  color: inherit;
+  outline: none;
+}
+
+.separator {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
 
 /* Dropdown de Ordenamiento */
-.custom-select-wrapper { position: relative; width: 180px; }
+.custom-select-wrapper {
+  position: relative;
+  width: 180px;
+}
+
 .custom-select-trigger {
   display: flex;
   align-items: center;
@@ -83,7 +115,11 @@ h2 {
   padding: 0 10px;
   cursor: pointer;
 }
-.arrow-icon { width: 14px; color: var(--primary-color); }
+
+.arrow-icon {
+  width: 14px;
+  color: var(--primary-color);
+}
 
 .custom-dropdown {
   position: absolute;
@@ -99,8 +135,17 @@ h2 {
   list-style: none;
   overflow: hidden;
 }
-.suggestion-item { padding: 10px; cursor: pointer; font-size: 0.85rem; }
-.suggestion-item:hover { background-color: var(--bg-app); color: var(--primary-color); }
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.suggestion-item:hover {
+  background-color: var(--bg-app);
+  color: var(--primary-color);
+}
 
 /* Chips de Filtros Activos */
 .active-filters-area {
@@ -112,7 +157,14 @@ h2 {
   margin-top: 10px;
   flex-wrap: wrap;
 }
-.filters-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
+
+.filters-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -125,13 +177,43 @@ h2 {
   font-size: 0.8rem;
   font-weight: 600;
 }
-.chip-close { background: none; border: none; cursor: pointer; color: inherit; font-weight: bold; font-size: 1.1rem; }
-.clear-all-btn { background: none; border: none; color: #ef4444; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+
+.chip-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.clear-all-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 /* --- TABLA --- */
-.table-container { width: 100%; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-thead { background-color: var(--bg-app); }
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: var(--bg-app);
+}
+
 th {
   padding: 1rem;
   text-align: left;
@@ -141,14 +223,75 @@ th {
   text-transform: uppercase;
   border-bottom: 1px solid var(--border-color);
 }
-td { padding: 1rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.9rem; }
-tbody tr:hover { background-color: var(--bg-app); }
 
-/* --- BADGES Y BOTONES --- */
-.status { padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
-.status.pendiente { color: #a16207; background-color: #fef9c3; }
-.status.aceptado { color: #166534; background-color: #dcfce7; }
-.status.rechazado { color: #991b1b; background-color: #fee2e2; }
+td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+tbody tr:hover {
+  background-color: var(--bg-app);
+}
+
+/* --- BADGES Y ESTADOS --- */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.status.pendiente {
+  color: #a16207;
+  background-color: #fef9c3;
+}
+
+.status.aceptado {
+  color: #166534;
+  background-color: #dcfce7;
+}
+
+.status.rechazado {
+  color: #991b1b;
+  background-color: #fee2e2;
+}
+
+/* --- BOTONES Y ALINEACIÓN --- */
+.botones-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-ver svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.btn-ver:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: rgba(245, 134, 52, 0.05);
+}
 
 .btn-eliminar {
   padding: 6px 12px;
@@ -161,30 +304,92 @@ tbody tr:hover { background-color: var(--bg-app); }
   cursor: pointer;
   transition: 0.2s;
 }
-.btn-eliminar:hover { background-color: #d93025; color: white; }
 
-.btn-ver {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  padding: 6px;
-  border-radius: 50%;
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: 0.2s;
+.btn-eliminar:hover {
+  background-color: #d93025;
+  color: white;
 }
-.btn-ver:hover { color: var(--primary-color); border-color: var(--primary-color); }
 
 /* --- RESPONSIVE (MÓVIL) --- */
 @media (max-width: 900px) {
-  .filter-controls { flex-wrap: wrap; }
-  thead { display: none; }
-  tbody tr { display: block; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; }
-  td { display: flex; justify-content: space-between; border: none; padding: 8px 0; text-align: right; }
-  td::before { content: attr(data-label); font-weight: 700; color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; }
-  .celda-acciones { border-top: 1px dashed var(--border-color); margin-top: 5px; padding-top: 10px; }
+  .filter-controls {
+    flex-wrap: wrap;
+  }
+  thead {
+    display: none;
+  }
+  tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  td {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    padding: 8px 0;
+    text-align: right;
+  }
+  td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+  .celda-acciones {
+    border-top: 1px dashed var(--border-color);
+    margin-top: 5px;
+    padding-top: 10px;
+  }
 }
 
 /* Mensajes */
-.exito, .error { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 600; text-align: center; }
-.exito { color: #0f5132; background-color: #d1e7dd; border: 1px solid #badbcc; }
-.error { color: #842029; background-color: #f8d7da; border: 1px solid #f5c2c7; }
+.exito, .error {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.exito {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+}
+
+.error {
+  color: #842029;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+}
+
+/* ==========================================
+   MODO OSCURO - ACCIONES DE TABLA
+   ========================================== */
+
+:host-context(.dark-mode) .btn-ver {
+  border-color: var(--border-color);
+  color: var(--text-main);
+  background-color: var(--bg-card);
+}
+
+:host-context(.dark-mode) .btn-ver:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: rgba(245, 134, 52, 0.15);
+}
+
+:host-context(.dark-mode) .btn-eliminar {
+  background-color: rgba(217, 48, 37, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+:host-context(.dark-mode) .btn-eliminar:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}

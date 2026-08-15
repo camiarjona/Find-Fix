@@ -9,47 +9,46 @@
   }
 
   <div class="filter-container">
-  <div class="filter-controls">
-    <div class="search-box">
-      <input type="text" placeholder="Buscar por motivo..." [(ngModel)]="searchText" (keyup.enter)="addFilter('motivo', searchText)">
-      <button class="btn-search" (click)="addFilter('motivo', searchText)">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-        </svg>
-      </button>
-    </div>
-
-    <select [(ngModel)]="selectedState" (change)="addFilter('estado', selectedState)" class="filter-select">
-      <option value="" disabled selected>Estado</option>
-      <option value="PENDIENTE">Pendiente</option>
-      <option value="ACEPTADO">Aceptada</option>
-      <option value="RECHAZADO">Rechazada</option>
-    </select>
-
-    <div class="date-range-wrapper">
-      <input type="date" class="filter-date" [(ngModel)]="dateFrom" (change)="addFilter('fechaDesde', dateFrom)" title="Fecha Desde">
-      <span class="separator">-</span>
-      <input type="date" class="filter-date" [(ngModel)]="dateTo" (change)="addFilter('fechaHasta', dateTo)" title="Fecha Hasta">
-    </div>
-
-    <div class="custom-select-wrapper" style="width: 180px;">
-      <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
-        <span>{{ criterioOrden === 'fechaSolicitud' ? 'Más recientes' : 'Estado' }}</span>
-        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
+    <div class="filter-controls">
+      <div class="search-box">
+        <input type="text" placeholder="Buscar por motivo..." [(ngModel)]="searchText" (keyup.enter)="addFilter('motivo', searchText)">
+        <button class="btn-search" (click)="addFilter('motivo', searchText)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+        </button>
       </div>
-      @if (dropdownOpen === 'orden') {
-        <ul class="custom-dropdown">
-          <li (click)="seleccionarOrden('fechaSolicitud')" class="suggestion-item">Más recientes</li>
-          <li (click)="seleccionarOrden('estado')" class="suggestion-item">Estado</li>
-        </ul>
-      }
+
+      <select [(ngModel)]="selectedState" (change)="addFilter('estado', selectedState)" class="filter-select">
+        <option value="" disabled selected>Estado</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="ACEPTADO">Aceptada</option>
+        <option value="RECHAZADO">Rechazada</option>
+      </select>
+
+      <div class="date-range-wrapper">
+        <input type="date" class="filter-date" [(ngModel)]="dateFrom" (change)="addFilter('fechaDesde', dateFrom)" title="Fecha Desde">
+        <span class="separator">-</span>
+        <input type="date" class="filter-date" [(ngModel)]="dateTo" (change)="addFilter('fechaHasta', dateTo)" title="Fecha Hasta">
+      </div>
+
+      <div class="custom-select-wrapper" style="width: 180px;">
+        <div class="custom-select-trigger" (click)="toggleDropdown('orden', $event)">
+          <span>{{ criterioOrden === 'fechaSolicitud' ? 'Más recientes' : 'Estado' }}</span>
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
+        @if (dropdownOpen === 'orden') {
+          <ul class="custom-dropdown">
+            <li (click)="seleccionarOrden('fechaSolicitud')" class="suggestion-item">Más recientes</li>
+            <li (click)="seleccionarOrden('estado')" class="suggestion-item">Estado</li>
+          </ul>
+        }
+      </div>
     </div>
   </div>
 
-  </div>
-  
   @if (isLoading()) {
   <p>Cargando historial...</p>
   } @else {
@@ -84,12 +83,11 @@
           <td class="celda-acciones" data-label="Acciones">
             <div class="botones-wrapper">
               <button class="btn-ver" (click)="abrirModalDetalle(sol.seId)">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
+                <span>Ver Detalle</span>
               </button>
 
               @if (sol.estado === 'Pendiente') {
