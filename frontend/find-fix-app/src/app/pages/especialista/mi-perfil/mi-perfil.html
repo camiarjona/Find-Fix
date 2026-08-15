@@ -1,13 +1,13 @@
-  <div class="page-header">
-    <h1>Configuración de Perfil</h1>
-    <p>Gestiona tu información personal y la seguridad de tu cuenta</p>
-  </div>
+<div class="page-header">
+  <h1>Configuración de Perfil</h1>
+  <p>Gestiona tu información personal y la seguridad de tu cuenta</p>
+</div>
 
-  @if (isLoading()) {
-  <div class="loading-state">Cargando perfil...</div>
-  } @else {
+@if (isLoading()) {
+<div class="loading-state">Cargando perfil...</div>
+} @else {
 
- <div class="profile-hero-section">
+<div class="profile-hero-section">
   <div class="avatar-container">
     <div class="avatar-wrapper" (click)="isEditingPhoto.set(true)">
       @if (perfil()?.fotoUrl && !fotoError()) {
@@ -27,18 +27,18 @@
     </div>
 
     <div class="hero-info">
-  <h3>{{ perfil()?.nombre }} {{ perfil()?.apellido }}</h3>
+      <h3>{{ perfil()?.nombre }} {{ perfil()?.apellido }}</h3>
 
-  <div class="oficios-hero-container">
-    @for (oficio of perfil()?.oficios; track oficio.id) {
-      <span class="role-badge">{{ oficio.nombre }}</span>
-    } @empty {
-      <span class="role-badge" style="background-color: #fef3c7; color: #92400e; border-color: #fde68a;">
-        Sin oficios
-      </span>
-    }
-  </div>
-</div>
+      <div class="oficios-hero-container">
+        @for (oficio of perfil()?.oficios; track oficio.id) {
+          <span class="role-badge">{{ oficio.nombre }}</span>
+        } @empty {
+          <span class="role-badge" style="background-color: #fef3c7; color: #92400e; border-color: #fde68a;">
+            Sin oficios
+          </span>
+        }
+      </div>
+    </div>
   </div>
 
   <div class="photo-editor-backdrop" *ngIf="isEditingPhoto()" (click)="cancelarCambioFoto()">
@@ -80,375 +80,395 @@
       </div>
 
       <div class="modal-footer">
-  <div class="left-actions">
-    @if (perfil()?.fotoUrl) {
-      <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
-        <i class="fas fa-trash"></i> Eliminar Foto
-      </button>
-    }
-  </div>
+        <div class="left-actions">
+          @if (perfil()?.fotoUrl) {
+            <button class="btn-action btn-delete-photo" (click)="eliminarFotoActual()">
+              <i class="fas fa-trash"></i> Eliminar Foto
+            </button>
+          }
+        </div>
 
-  <div class="action-buttons-container">
-    <div class="botones-row">
-      @if (files.length > 0) {
-        <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
-          Descartar
-        </button>
-      }
+        <div class="action-buttons-container">
+          <div class="botones-row">
+            @if (files.length > 0) {
+              <button class="btn-action btn-discard-new" (click)="cancelarCambioFoto()">
+                Descartar
+              </button>
+            }
 
-      <button class="btn-action btn-save-new"
-        [disabled]="files.length === 0 || isPhotoLoading()"
-        (click)="guardarFoto()">
-  @if (isPhotoLoading()) {
-    <div class="loading-wrapper">
-      <span class="spinner-small"></span>
-      <span class="loading-text">Subiendo...</span>
-    </div>
-  } @else {
-    Guardar Cambios
-  }
-</button>
-    </div>
+            <button class="btn-action btn-save-new"
+              [disabled]="files.length === 0 || isPhotoLoading()"
+              (click)="guardarFoto()">
+              @if (isPhotoLoading()) {
+                <div class="loading-wrapper">
+                  <span class="spinner-small"></span>
+                  <span class="loading-text">Subiendo...</span>
+                </div>
+              } @else {
+                Guardar Cambios
+              }
+            </button>
+          </div>
 
-    <p class="nota-resolucion">
-      * Resolución máxima permitida: 1920x1080px
-    </p>
-  </div>
-  </div>
+          <p class="nota-resolucion">
+            * Resolución máxima permitida: 1920x1080px
+          </p>
+        </div>
+      </div>
 
     </div>
   </div>
 </div>
 }
 
-  <div class="profile-grid">
+<div class="profile-grid">
 
-    <section class="card personal-info-card">
-      <div class="card-header">
-        <div class="header-icon">
-          <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
-            width="40" height="40" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
-            <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
-          </svg>
-        </div>
-        <h2>Información Profesional</h2>
+  <section class="card personal-info-card">
+    <div class="card-header">
+      <div class="header-icon">
+        <svg class="sol-esp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+          width="40" height="40" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8l-1-3a4 4 0 0 0-6 0l-1 3z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v2" />
+          <circle cx="12" cy="13" r="2.5" stroke="currentColor" stroke-width="1.2" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.2h-.5m6 0h-.5" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 20c1-3 3-5 5-5s4 2 5 5" />
+        </svg>
       </div>
+      <h2>Información Profesional</h2>
+    </div>
 
-      <div class="card-body">
-        <ul class="data-list">
+    <div class="card-body">
+      <ul class="data-list">
 
-          <li class="data-item bio-item">
-            <div class="label-row">
-              <span class="label">Sobre Mí</span>
-              @if (editingField() !== 'descripcion') {
-              <button class="edit-pencil" (click)="startEdit('descripcion', perfil()?.descripcion)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.EDIT"></path>
-                </svg>
-              </button>
-              }
+        <li class="data-item bio-item">
+          <div class="label-row">
+            <span class="label">Sobre Mí</span>
+            @if (editingField() !== 'descripcion') {
+            <button class="edit-pencil" (click)="startEdit('descripcion', perfil()?.descripcion)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                <path [attr.d]="icons.EDIT"></path>
+              </svg>
+            </button>
+            }
+          </div>
+          <div class="value-container full-width">
+            @if (editingField() === 'descripcion') {
+            <div class="edit-mode column-mode">
+              <textarea
+                [(ngModel)]="tempValue"
+                maxlength="500"
+                class="input-inline textarea-bio"
+                rows="4"
+                placeholder="Cuéntale a los clientes sobre tu experiencia...">
+              </textarea>
+              <small style="color: #6b7280; font-size: 0.8rem; align-self: flex-end; margin-top: 4px;">
+                {{ tempValue?.length || 0 }}/500 caracteres
+              </small>
+              <div class="actions-row">
+                <button class="action-btn save" (click)="saveEdit('descripcion')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.SAVE"></path>
+                  </svg>
+                </button>
+                <button class="action-btn cancel" (click)="cancelEdit()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                    <path [attr.d]="icons.CANCEL"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div class="value-container full-width">
-              @if (editingField() === 'descripcion') {
-              <div class="edit-mode column-mode">
-                <textarea [(ngModel)]="tempValue" class="input-inline textarea-bio" rows="4"
-                  placeholder="Cuéntale a los clientes sobre tu experiencia..."></textarea>
-                <div class="actions-row">
-                  <button class="action-btn save" (click)="saveEdit('descripcion')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                      <path [attr.d]="icons.SAVE"></path>
+            } @else {
+            <p class="bio-text">{{ perfil()?.descripcion || 'Agrega una descripción para destacar tu perfil.' }}</p>
+            }
+          </div>
+        </li>
+
+        <li class="data-item oficios-item">
+          <div class="label-row">
+            <span class="label">Mis Oficios</span>
+            @if (!isAddingOficio()) {
+            <button class="add-btn" (click)="isAddingOficio.set(true)">+ Agregar</button>
+            }
+          </div>
+          <div class="oficios-list">
+            @for (oficio of perfil()?.oficios; track oficio.id) {
+            <span class="oficio-chip">
+              {{ oficio.nombre }}
+              <button class="chip-remove" (click)="promptRemoveOficio(oficio.nombre)" title="Eliminar">×</button>
+            </span>
+            }
+          </div>
+          @if (isAddingOficio()) {
+          <div class="add-oficio-form">
+            <select [(ngModel)]="selectedOficioToAdd" class="input-inline">
+              <option value="" disabled selected>Selecciona un oficio</option>
+              @for (opcion of selectableOficios(); track opcion.id) {
+              <option [value]="opcion.nombre">{{ opcion.nombre }}</option>
+              }
+            </select>
+            <button class="action-btn save" (click)="addOficio()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                <path [attr.d]="icons.SAVE"></path>
+              </svg>
+            </button>
+            <button class="action-btn cancel" (click)="isAddingOficio.set(false)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                <path [attr.d]="icons.CANCEL"></path>
+              </svg>
+            </button>
+          </div>
+          }
+        </li>
+
+        <li class="data-item">
+          <span class="label">Email</span>
+          <div class="value-container">
+            <span class="value locked">{{ perfil()?.email }} <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="#000000" viewBox="0 0 24 24">
+                <path [attr.d]="icons.LOCK"></path>
+              </svg></span>
+          </div>
+        </li>
+
+        <li class="data-item">
+          <span class="label">DNI</span>
+          <div class="value-container">
+            @if (editingField() === 'dni') {
+            <div class="edit-mode">
+              <input
+                type="text"
+                [value]="tempValue"
+                (input)="soloNumerosInput($event)"
+                maxlength="8"
+                class="input-inline"
+                placeholder="Sin puntos (ej: 38123456)">
+              <button class="action-btn save" (click)="saveEdit('dni')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
+              </button>
+              <button class="action-btn cancel" (click)="cancelEdit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
+              </button>
+            </div>
+            } @else {
+            <span class="value">{{ perfil()?.dni || 'No registrado' }}</span>
+            <button class="edit-pencil" (click)="startEdit('dni', perfil()?.dni)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
+            </button>
+            }
+          </div>
+        </li>
+
+        <li class="data-item">
+          <span class="label">Teléfono</span>
+          <div class="value-container">
+            @if (editingField() === 'telefono') {
+            <div class="edit-mode">
+              <input
+                type="text"
+                [value]="tempValue"
+                (input)="soloNumerosInput($event)"
+                maxlength="15"
+                class="input-inline"
+                placeholder="Ej: 2235123456">
+              <button class="action-btn save" (click)="saveEdit('telefono')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
+              </button>
+              <button class="action-btn cancel" (click)="cancelEdit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
+              </button>
+            </div>
+            } @else {
+            <span class="value">{{ perfil()?.telefono }}</span>
+            <button class="edit-pencil" (click)="startEdit('telefono', perfil()?.telefono)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
+            </button>
+            }
+          </div>
+        </li>
+
+        <li class="data-item">
+          <span class="label">Zona de Trabajo</span>
+          <div class="value-container">
+            @if (editingField() === 'ciudad') {
+            <div class="edit-mode">
+              <div class="horizontal-group" style="display: flex; align-items: center; gap: 5px; width: 100%;">
+                <div class="search-wrapper" style="position: relative; flex: 1; display: flex; align-items: center;">
+                  <input
+                    type="text"
+                    [value]="tempValue"
+                    (input)="buscarZona($event)"
+                    class="input-inline"
+                    placeholder="Ej: Los Troncos, Mar del Plata"
+                    style="flex: 1; padding-right: 35px;"
+                  >
+
+                  <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarZona()" title="Usar GPS">
+                    <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
                     </svg>
                   </button>
+
+                  @if (citySuggestions().length > 0) {
+                  <ul class="suggestions-list">
+                    @for (sug of citySuggestions(); track sug.lat) {
+                    <li (click)="seleccionarZona(sug)" class="suggestion-item">
+                      {{ sug.nombreVisual }}
+                    </li>
+                    }
+                  </ul>
+                  }
+                </div>
+
+                <div class="actions" style="display: flex; gap: 5px;">
+                  <button class="action-btn save" (click)="saveEdit('ciudad')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
+                  </button>
                   <button class="action-btn cancel" (click)="cancelEdit()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                      <path [attr.d]="icons.CANCEL"></path>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
                   </button>
                 </div>
               </div>
-              } @else {
-              <p class="bio-text">{{ perfil()?.descripcion || 'Agrega una descripción para destacar tu perfil.' }}</p>
-              }
             </div>
-          </li>
+            } @else {
+            <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
+            <button class="edit-pencil" (click)="startEdit('ciudad', perfil()?.ciudad)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
+            </button>
+            }
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-          <li class="data-item oficios-item">
-            <div class="label-row">
-              <span class="label">Mis Oficios</span>
-              @if (!isAddingOficio()) {
-              <button class="add-btn" (click)="isAddingOficio.set(true)">+ Agregar</button>
-              }
-            </div>
-            <div class="oficios-list">
-              @for (oficio of perfil()?.oficios; track oficio.id) {
-              <span class="oficio-chip">
-                {{ oficio.nombre }}
-                <button class="chip-remove" (click)="promptRemoveOficio(oficio.nombre)" title="Eliminar">×</button>
-              </span>
-              }
-            </div>
-            @if (isAddingOficio()) {
-            <div class="add-oficio-form">
-              <select [(ngModel)]="selectedOficioToAdd" class="input-inline">
-                <option value="" disabled selected>Selecciona un oficio</option>
-                @for (opcion of selectableOficios(); track opcion.id) {
-                <option [value]="opcion.nombre">{{ opcion.nombre }}</option>
-                }
-              </select>
-              <button class="action-btn save" (click)="addOficio()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.SAVE"></path>
+  <section class="card galeria-card">
+    <div class="card-header">
+      <div class="header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3" stroke="currentColor" width="30" height="30">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+      </div>
+      <h2>Galería de Trabajos Anteriores</h2>
+    </div>
+
+    <div class="card-body">
+      <p class="nota-resolucion" style="margin-bottom: 15px; color: #6b7280;">
+        Sube fotos de tus trabajos reales para que los potenciales clientes puedan ver la calidad de tu servicio (Máx. 5 fotos).
+      </p>
+
+      @if (perfilEspecialista()?.galeria && perfilEspecialista()!.galeria.length > 0) {
+      <div class="galeria-actual-container" style="margin-bottom: 25px;">
+        <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: #4b5563;">
+          Tu Galería Actual ({{ perfilEspecialista()?.galeria?.length }} fotos)
+        </h4>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; background-color: #f3f4f6; padding: 15px; border-radius: 12px; border: 1px solid #e5e7eb;">
+          @for (foto of perfilEspecialista()?.galeria; track foto.id) {
+            <div class="foto-galeria-item" style="position: relative; width: 110px; height: 110px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
+              <img [src]="foto.url" alt="Trabajo anterior" style="width: 100%; height: 100%; object-fit: cover;">
+
+              <button type="button"
+                      (click)="eliminarFotoPersistida(foto.id)"
+                      style="position: absolute; top: 6px; right: 6px; background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"
+                      onmouseover="this.style.transform='scale(1.1)'"
+                      onmouseout="this.style.transform='scale(1)'"
+                      title="Eliminar foto permanentemente">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
-              <button class="action-btn cancel" (click)="isAddingOficio.set(false)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
-                  <path [attr.d]="icons.CANCEL"></path>
-                </svg>
-              </button>
             </div>
-            }
-          </li>
-
-          <li class="data-item">
-            <span class="label">Email</span>
-            <div class="value-container">
-              <span class="value locked">{{ perfil()?.email }} <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" fill="#000000" viewBox="0 0 24 24">
-                    <path [attr.d]="icons.LOCK"></path>
-                  </svg></span>
-            </div>
-          </li>
-
-          <li class="data-item">
-            <span class="label">DNI</span>
-            <div class="value-container">
-              @if (editingField() === 'dni') {
-              <div class="edit-mode">
-                <input type="number" [(ngModel)]="tempValue" class="input-inline" placeholder="Sin puntos">
-                <button class="action-btn save" (click)="saveEdit('dni')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
-                </button>
-                <button class="action-btn cancel" (click)="cancelEdit()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
-                </button>
-              </div>
-              } @else {
-              <span class="value">{{ perfil()?.dni || 'No registrado' }}</span>
-              <button class="edit-pencil" (click)="startEdit('dni', perfil()?.dni)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
-              </button>
-              }
-            </div>
-          </li>
-
-          <li class="data-item">
-            <span class="label">Teléfono</span>
-            <div class="value-container">
-              @if (editingField() === 'telefono') {
-              <div class="edit-mode">
-                <input type="text" [(ngModel)]="tempValue" class="input-inline">
-                <button class="action-btn save" (click)="saveEdit('telefono')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
-                </button>
-                <button class="action-btn cancel" (click)="cancelEdit()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
-                </button>
-              </div>
-              } @else {
-              <span class="value">{{ perfil()?.telefono }}</span>
-              <button class="edit-pencil" (click)="startEdit('telefono', perfil()?.telefono)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
-              </button>
-              }
-            </div>
-          </li>
-
-<li class="data-item">
-  <span class="label">Zona de Trabajo</span>
-  <div class="value-container">
-    @if (editingField() === 'ciudad') {
-    <div class="edit-mode">
-      <div class="horizontal-group" style="display: flex; align-items: center; gap: 5px; width: 100%;">
-        <div class="search-wrapper" style="position: relative; flex: 1; display: flex; align-items: center;">
-          <input
-            type="text"
-            [value]="tempValue"
-            (input)="buscarZona($event)"
-            class="input-inline"
-            placeholder="Ej: Los Troncos, Mar del Plata"
-            style="flex: 1; padding-right: 35px;"
-           >
-
-          <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarZona()" title="Usar GPS">
-            <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-             <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-            </svg>
-          </button>
-
-          @if (citySuggestions().length > 0) {
-          <ul class="suggestions-list">
-            @for (sug of citySuggestions(); track sug.lat) {
-            <li (click)="seleccionarZona(sug)" class="suggestion-item">
-              {{ sug.nombreVisual }}
-            </li>
-            }
-          </ul>
           }
         </div>
-
-        <div class="actions" style="display: flex; gap: 5px;">
-          <button class="action-btn save" (click)="saveEdit('ciudad')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
-          </button>
-          <button class="action-btn cancel" (click)="cancelEdit()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
-          </button>
-        </div>
       </div>
-    </div>
-    } @else {
-    <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
-    <button class="edit-pencil" (click)="startEdit('ciudad', perfil()?.ciudad)">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
-    </button>
-    }
-  </div>
-</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="card galeria-card">
-      <div class="card-header">
-        <div class="header-icon"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3" stroke="currentColor" width="30" height="30">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-          </svg>
-        </div>
-        <h2>Galería de Trabajos Anteriores</h2>
-      </div>
-
-      <div class="card-body">
-        <p class="nota-resolucion" style="margin-bottom: 15px; color: #6b7280;">
-          Sube fotos de tus trabajos reales para que los potenciales clientes puedan ver la calidad de tu servicio (Máx. 5 fotos).
-        </p>
-
-        @if (perfilEspecialista()?.galeria && perfilEspecialista()!.galeria.length > 0) {
-  <div class="galeria-actual-container" style="margin-bottom: 25px;">
-    <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: #4b5563;">
-      Tu Galería Actual ({{ perfilEspecialista()?.galeria?.length }} fotos)
-    </h4>
-
-    <div style="display: flex; gap: 16px; flex-wrap: wrap; background-color: #f3f4f6; padding: 15px; border-radius: 12px; border: 1px solid #e5e7eb;">
-      @for (foto of perfilEspecialista()?.galeria; track foto.id) {
-        <div class="foto-galeria-item" style="position: relative; width: 110px; height: 110px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
-          <img [src]="foto.url" alt="Trabajo anterior" style="width: 100%; height: 100%; object-fit: cover;">
-
-          <button type="button"
-                  (click)="eliminarFotoPersistida(foto.id)"
-                  style="position: absolute; top: 6px; right: 6px; background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"
-                  onmouseover="this.style.transform='scale(1.1)'"
-                  onmouseout="this.style.transform='scale(1)'"
-                  title="Eliminar foto permanentemente">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        </div>
       }
+
+      <ngx-dropzone (change)="onSelectGaleria($event)" [multiple]="true" accept="image/*" class="clean-dropzone-orange" style="width: 100% !important; min-height: 160px !important;">
+        <ngx-dropzone-label style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+          @if (galeriaPreviews().length === 0) {
+            <div class="drop-instructions">
+              <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #ea580c; margin-bottom: 8px;"></i>
+              <span>Arrastrá tus fotos aquí o hacé click para buscarlas</span>
+            </div>
+          } @else {
+            <div class="galeria-previews-inline">
+              @for (item of galeriaPreviews(); track item.id) {
+                <div class="custom-preview-item" (click)="$event.stopPropagation()">
+                  <img [src]="item.url" class="preview-img-element">
+                  <button class="remove-btn-gallery" (click)="$event.stopPropagation(); onRemoveGaleria(item.id)" title="Quitar imagen">
+                    &times;
+                  </button>
+                </div>
+              }
+            </div>
+          }
+
+        </ngx-dropzone-label>
+      </ngx-dropzone>
+
+      <button type="button" class="btn-full-width" [disabled]="galeriaFiles().length === 0 || isGaleriaLoading()" (click)="guardarGaleria()">
+        @if (isGaleriaLoading()) {
+          <div class="loading-wrapper">
+            <span class="spinner-small"></span>
+            <span class="loading-text">Subiendo Portfolio...</span>
+          </div>
+        } @else {
+          <i class="fas fa-cloud-upload-alt"></i> Subir Imágenes a mi Galería
+        }
+      </button>
     </div>
-  </div>
-}
+  </section>
 
-        <ngx-dropzone (change)="onSelectGaleria($event)" [multiple]="true" accept="image/*" class="clean-dropzone-orange" style="width: 100% !important; min-height: 160px !important;">
-          <ngx-dropzone-label style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-
-            @if (galeriaPreviews().length === 0) {
-              <div class="drop-instructions">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #ea580c; margin-bottom: 8px;"></i>
-                <span>Arrastrá tus fotos aquí o hacé click para buscarlas</span>
-              </div>
-            } @else {
-              <div class="galeria-previews-inline">
-                @for (item of galeriaPreviews(); track item.id) {
-                  <div class="custom-preview-item" (click)="$event.stopPropagation()">
-                    <img [src]="item.url" class="preview-img-element">
-                    <button class="remove-btn-gallery" (click)="$event.stopPropagation(); onRemoveGaleria(item.id)" title="Quitar imagen">
-                      &times;
-                    </button>
-                  </div>
-                }
-              </div>
-            }
-
-          </ngx-dropzone-label>
-        </ngx-dropzone>
-
-        <button type="button" class="btn-full-width" [disabled]="galeriaFiles().length === 0 || isGaleriaLoading()" (click)="guardarGaleria()">
-  @if (isGaleriaLoading()) {
-    <div class="loading-wrapper">
-      <span class="spinner-small"></span>
-      <span class="loading-text">Subiendo Portfolio...</span>
-    </div>
-  } @else {
-    <i class="fas fa-cloud-upload-alt"></i> Subir Imágenes a mi Galería
-  }
-
-</button>
+  <section class="card security-card">
+    <div class="card-header">
+      <div class="header-icon locked-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="30" height="30" stroke-width="1.3" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.ESCUDO" />
+        </svg>
       </div>
-    </section>
+      <h2>Seguridad</h2>
+    </div>
 
-    <section class="card security-card">
-      <div class="card-header">
-        <div class="header-icon locked-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="30" height="30" stroke-width="1.3" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="icons.ESCUDO" />
-          </svg>
+    <div class="card-body">
+      <form (ngSubmit)="changePassword()" class="security-form">
+        <div class="form-group">
+          <label>Contraseña Actual</label>
+          <div class="password-wrapper">
+            <input [type]="showCurrentPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordActual" name="curr" placeholder="••••••" required>
+            <button type="button" class="toggle-btn" (click)="togglePass('curr')">
+              <svg *ngIf="showCurrentPass()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+              <svg *ngIf="!showCurrentPass()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+            </button>
+          </div>
         </div>
-        <h2>Seguridad</h2>
-      </div>
+        <div class="form-group">
+          <label>Nueva Contraseña</label>
+          <div class="password-wrapper">
+            <input [type]="showNewPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordNuevo" name="new" placeholder="Mínimo 6 caracteres" required>
+            <button type="button" class="toggle-btn" (click)="togglePass('new')">
+                👁️
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirmar Nueva</label>
+          <div class="password-wrapper">
+            <input [type]="showConfirmPass() ? 'text' : 'password'" [(ngModel)]="passwordData.confirmacion" name="conf" placeholder="Repítela" required>
+            <button type="button" class="toggle-btn" (click)="togglePass('conf')">
+                👁️
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn-full-width" [disabled]="isPasswordLoading()">
+          {{ isPasswordLoading() ? 'Actualizando...' : 'Cambiar Contraseña' }}
+        </button>
+      </form>
+    </div>
+  </section>
 
-      <div class="card-body">
-        <form (ngSubmit)="changePassword()" class="security-form">
-          <div class="form-group">
-            <label>Contraseña Actual</label>
-            <div class="password-wrapper">
-              <input [type]="showCurrentPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordActual" name="curr" placeholder="••••••" required>
-              <button type="button" class="toggle-btn" (click)="togglePass('curr')">
-                <svg *ngIf="showCurrentPass()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
-                <svg *ngIf="!showCurrentPass()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
-              </button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Nueva Contraseña</label>
-            <div class="password-wrapper">
-              <input [type]="showNewPass() ? 'text' : 'password'" [(ngModel)]="passwordData.passwordNuevo" name="new" placeholder="Mínimo 6 caracteres" required>
-              <button type="button" class="toggle-btn" (click)="togglePass('new')">
-                  👁️
-              </button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Confirmar Nueva</label>
-            <div class="password-wrapper">
-              <input [type]="showConfirmPass() ? 'text' : 'password'" [(ngModel)]="passwordData.confirmacion" name="conf" placeholder="Repítela" required>
-              <button type="button" class="toggle-btn" (click)="togglePass('conf')">
-                  👁️
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="btn-full-width" [disabled]="isPasswordLoading()">
-            {{ isPasswordLoading() ? 'Actualizando...' : 'Cambiar Contraseña' }}
-          </button>
-        </form>
-      </div>
-    </section>
-
-  </div>
+</div>
 
 @if (feedbackData.visible) {
 <app-modal-feedback

@@ -67,12 +67,12 @@ export class PerfilPage implements OnInit {
 
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData = { visible: true, titulo, mensaje, tipo };
-    this.cd.detectChanges(); // Forzamos que se vea
+    this.cd.detectChanges();
   }
 
   cerrarFeedback() {
     this.feedbackData = { ...this.feedbackData, visible: false };
-    this.cd.detectChanges(); // Forzamos que se oculte
+    this.cd.detectChanges();
   }
 
   ngOnInit() {
@@ -102,19 +102,14 @@ export class PerfilPage implements OnInit {
     });
   }
 
-  // --- NUEVOS MÉTODOS PARA LA FOTO ---
+  // --- Lógica de Foto de Perfil ---
   onSelect(event: any) {
     if (event.addedFiles && event.addedFiles.length > 0) {
-      // 1. Limpiamos y creamos una referencia nueva
-      // (Esto "resetea" visualmente el componente)
       this.files = [];
-
       const file = event.addedFiles[0];
 
-      // 2. Usamos un pequeño delay (setTimeout) para que Angular
-      // procese el vaciado antes de meter el nuevo archivo
       setTimeout(() => {
-        this.files = [file]; // Asignamos el nuevo archivo en un array nuevo
+        this.files = [file];
 
         const reader = new FileReader();
         reader.onload = (e: any) => {
@@ -155,9 +150,9 @@ export class PerfilPage implements OnInit {
               'La IA ha detectado contenido inapropiado. Por favor, elige otra foto.',
               'error'
             );
-        } else {
-          this.mostrarFeedback('Error', 'No se pudo subir la foto', 'error');
-        }
+          } else {
+            this.mostrarFeedback('Error', 'No se pudo subir la foto', 'error');
+          }
         }
       });
     }
@@ -191,7 +186,7 @@ export class PerfilPage implements OnInit {
 
   startEdit(field: string, currentValue: string | undefined) {
     this.editingField.set(field);
-    this.tempValue = currentValue || '';
+    this.tempValue = currentValue ? String(currentValue) : '';
     this.citySuggestions.set([]);
     this.tempLat = null;
     this.tempLon = null;
@@ -203,17 +198,76 @@ export class PerfilPage implements OnInit {
     this.citySuggestions.set([]);
   }
 
+  // --- Sanitizadores y Validaciones del Perfil del Cliente ---
+  soloNumerosKeydown(event: KeyboardEvent) {
+    const teclasPermitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+    if (teclasPermitidas.includes(event.key)) return;
+
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  onInputSoloNumeros(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const limpio = input.value.replace(/\D/g, '');
+    this.tempValue = limpio;
+    input.value = limpio;
+  }
+
+  soloLetrasKeydown(event: KeyboardEvent) {
+    const teclasPermitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End', ' '];
+    if (teclasPermitidas.includes(event.key)) return;
+
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  private validarCampoPerfil(field: string, valor: string): { valido: boolean; mensaje: string } {
+    const val = valor.trim();
+
+    switch (field) {
+      case 'nombre':
+      case 'apellido':
+        if (val.length < 2 || val.length > 50) {
+          return { valido: false, mensaje: 'El nombre/apellido debe contener entre 2 y 50 caracteres.' };
+        }
+        break;
+
+      case 'telefono':
+        if (!/^\d{8,15}$/.test(val)) {
+          return { valido: false, mensaje: 'El teléfono debe contener entre 8 y 15 dígitos numéricos.' };
+        }
+        break;
+
+      case 'ciudad':
+        if (val.length < 3) {
+          return { valido: false, mensaje: 'La zona de trabajo debe contener al menos 3 caracteres.' };
+        }
+        break;
+    }
+
+    return { valido: true, mensaje: '' };
+  }
+
   buscarCiudades(event: Event) {
     const input = event.target as HTMLInputElement;
-    const termino = input.value.toLowerCase();
-    this.tempValue = input.value;
+    const limpio = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+
+    input.value = limpio;
+    this.tempValue = limpio;
+    const termino = limpio.toLowerCase().trim();
+
     if (termino.length < 1) {
       this.citySuggestions.set([]);
       return;
     }
+
     const filtrados = this.allBarrios
       .filter(b => b.nombre.toLowerCase().includes(termino))
       .slice(0, 5);
+
     this.citySuggestions.set(filtrados.map(b => ({
       nombreVisual: b.nombre,
       lat: b.lat,
@@ -229,19 +283,31 @@ export class PerfilPage implements OnInit {
   }
 
   saveEdit(field: string) {
-    if (!this.tempValue.trim()) return;
-    let updateData: any = { [field]: this.tempValue };
-    if (field === 'ciudad') {
-      if (this.tempLat && this.tempLon) {
-        updateData.latitud = this.tempLat;
-        updateData.longitud = this.tempLon;
-      }
+    const valorTexto = String(this.tempValue || '').trim();
+
+    if (!valorTexto) {
+      this.mostrarFeedback('Campo requerido', 'Este campo no puede estar vacío.', 'error');
+      return;
     }
+
+    const validacion = this.validarCampoPerfil(field, valorTexto);
+    if (!validacion.valido) {
+      this.mostrarFeedback('Dato inválido', validacion.mensaje, 'error');
+      return;
+    }
+
+    let updateData: any = { [field]: valorTexto };
+
+    if (field === 'ciudad' && this.tempLat && this.tempLon) {
+      updateData.latitud = this.tempLat;
+      updateData.longitud = this.tempLon;
+    }
+
     this.userService.updateProfile(updateData).subscribe({
       next: (res) => {
         const currentUser = this.usuario();
         if (currentUser) {
-          (currentUser as any)[field] = this.tempValue;
+          (currentUser as any)[field] = valorTexto;
           if (field === 'ciudad' && updateData.latitud) {
             (currentUser as any).latitud = updateData.latitud;
             (currentUser as any).longitud = updateData.longitud;
@@ -286,10 +352,8 @@ export class PerfilPage implements OnInit {
     try {
       this.mostrarFeedback('Ubicando...', 'Identificando tu barrio...', 'success');
 
-      // 1. Buscamos coordenadas
       const coords = await this.locationService.obtenerCoordenadasGPS();
 
-      // 2. Buscamos barrio
       const barrioEncontrado = this.locationService.obtenerBarrioMasCercano(
         coords.lat,
         coords.lon,
@@ -302,7 +366,6 @@ export class PerfilPage implements OnInit {
         this.tempValue = barrioEncontrado.nombre;
       }
 
-      // 3. Pequeño delay y CIERRE FORZADO
       setTimeout(() => {
         this.cerrarFeedback();
       }, 600);
