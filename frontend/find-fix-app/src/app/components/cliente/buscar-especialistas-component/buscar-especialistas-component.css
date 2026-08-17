@@ -252,31 +252,39 @@
 }
 
 /* avatar */
-.avatar-card-wrapper{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  overflow:hidden;
-  flex-shrink:0;
+.avatar-card-wrapper {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.avatar-img-small{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.avatar-img-small {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* 🌟 Evita que la foto se estire o se deforme */
+  object-position: center !important;
+  display: block;
 }
 
-.avatar-initials-small{
-  width:100%;
-  height:100%;
-  background:var(--primary-color);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
+.avatar-initials-small {
+  width: 100% !important;
+  height: 100% !important;
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1 !important;
+  text-align: center;
 }
-
 .header-info h3{
   margin:0;
   font-size:1.05rem;
@@ -381,8 +389,36 @@
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 15px;
-  border: 4px solid white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border: 4px solid var(--bg-card, #ffffff);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatar-img-large {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* 🌟 Mantiene la resolución exacta rellenando el círculo */
+  object-position: center !important;
+  display: block;
+}
+
+/* Iniciales por defecto dentro de la modal (El cuadrado naranja con 'FF') */
+.avatar-initials-large {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: var(--primary-color, #f97316) !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700;
+  font-size: 2rem !important; /* Tamaño proporcional para las iniciales grandes */
+  line-height: 1 !important;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .profile-header-modal h2 {
