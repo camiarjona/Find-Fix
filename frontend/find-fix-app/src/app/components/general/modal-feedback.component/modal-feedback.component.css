@@ -112,3 +112,39 @@ h2 {
   background-color: #e07024;
   transform: translateY(-1px);
 }
+/* ==========================================
+   MODO OSCURO - MODAL FEEDBACK
+   ========================================== */
+
+/* Fondo del Overlay (Capacidad oscura semi-transparente) */
+:host-context(.dark-mode) .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Tarjeta principal del modal */
+:host-context(.dark-mode) .modal-content {
+  background-color: #2d2d2d;
+  border: 1px solid #444444;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Título */
+:host-context(.dark-mode) .modal-header h2 {
+  color: #ffffff;
+}
+
+/* Mensaje descriptivo */
+:host-context(.dark-mode) .modal-body p {
+  color: #9ca3af;
+}
+
+/* Botón principal */
+:host-context(.dark-mode) .modal-actions .btn-primary {
+  background-color: #f36f21;
+  color: #ffffff;
+  border: none;
+}
+
+:host-context(.dark-mode) .modal-actions .btn-primary:hover {
+  background-color: #df7325;
+}
