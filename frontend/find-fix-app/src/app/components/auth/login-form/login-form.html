@@ -42,7 +42,12 @@
 
   @if (loginError) {
   <div class="server-error-message">
-    {{ loginError }}
+    <span>{{ loginError }}</span>
+    @if (cuentaInactiva) {
+      <button type="button" class="btn-resend" (click)="solicitarReenvio()" [disabled]="cargandoReenvio()">
+        {{ cargandoReenvio() ? 'Enviando...' : 'Reenviar mail de activación' }}
+      </button>
+    }
   </div>
   }
 

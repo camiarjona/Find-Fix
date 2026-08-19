@@ -85,15 +85,9 @@
                 </div>
               </td>
               <td>
-                <div class="status-cell">
-                  <label class="switch">
-                    <input type="checkbox" [checked]="user.activo" (change)="toggleEstadoUsuario(user, $event)">
-                    <span class="slider"></span>
-                  </label>
-                  <span class="status-text" [class.active]="user.activo">
-                    {{ user.activo ? 'Activo' : 'Inactivo' }}
-                  </span>
-                </div>
+                <span class="badge status" [class.active]="user.activo" [class.inactive]="!user.activo">
+                  {{ user.activo ? 'Activo' : 'Inactivo' }}
+                </span>
               </td>
               <td>
                 <div class="actions">

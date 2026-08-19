@@ -30,7 +30,6 @@
     border-radius: 8px;
   }
 
-
   .mobile-cta-icon {
     display: flex;
     justify-content: center;
@@ -50,9 +49,58 @@
 }
 
 .social-login-container {
-  margin-top: 20px;
+  margin-top: 10px;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
+/* Arreglo de posición de los mensajes de validación */
+.error-message {
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  color: #dc2626;
+}
+
+.server-error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+  padding: 5px 8px;
+  margin: 4px 0;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+
+.btn-resend {
+  margin-top: 2px;
+  background-color: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-resend:hover {
+  background-color: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}
+
+.btn-resend:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.forgot-password-link {
+  margin: 4px 0 8px 0;
+  font-size: 0.8rem;
+}
