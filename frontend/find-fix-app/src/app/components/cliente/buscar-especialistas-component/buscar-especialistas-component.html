@@ -25,7 +25,7 @@
       <div class="filter-group">
         <label>Barrio</label>
         <div class="search-wrapper">
-          <input type="text" [(ngModel)]="filtros.ciudad" (input)="buscarCiudades($event)" placeholder="Escribe un barrio..." class="input-filter">
+          <input type="text" [(ngModel)]="filtros.ciudad" (keydown)="soloLetrasKeydown($event)" (input)="buscarCiudades($event)" placeholder="Escribe un barrio..." class="input-filter">
           @if (cityFilterSuggestions().length > 0) {
           <ul class="suggestions-list">
             @for (barrio of cityFilterSuggestions(); track barrio.lat) {

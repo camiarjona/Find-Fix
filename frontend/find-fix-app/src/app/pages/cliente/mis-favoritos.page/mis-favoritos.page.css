@@ -258,23 +258,88 @@
 .loading-message { text-align: center; padding: 40px; color: var(--text-secondary); }
 
 /* --- MODALES --- */
+/* --- MODALES Y ACCIONES CORREGIDAS --- */
 .modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; padding: 20px; backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
 }
 
 .modal-card {
   background: var(--bg-card);
+  padding: 30px;
   border-radius: 16px;
-  width: 100%; max-width: 450px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  box-sizing: border-box;
   position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.profile-modal { text-align: center; }
+/* Alineación idéntica al modal de Buscar Especialistas */
+.modal-actions {
+  display: flex;
+  justify-content: center; /* Centra los botones perfectamente */
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.modal-actions button {
+  flex: 1; /* Misma proporción para ambos botones */
+  max-width: 150px;
+  height: 46px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+/* Textarea prolijo dentro del modal */
+.modal-card textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.profile-modal { 
+  max-width: 450px;
+  width: 90%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+  padding: 0;
+}
+
+.profile-body-modal {
+  padding: 20px;
+  overflow-y: auto; 
+  max-height: calc(85vh - 180px); 
+  flex-grow: 1;
+}
+
 .profile-header-modal {
   background-color: var(--bg-app);
   padding: 30px;

@@ -48,6 +48,7 @@ export class PerfilPage implements OnInit {
 
   public editingField = signal<string | null>(null);
   public tempValue = '';
+  hasTyped: boolean = false;
 
   public tempLat: number | null = null;
   public tempLon: number | null = null;
@@ -188,6 +189,7 @@ export class PerfilPage implements OnInit {
     this.editingField.set(field);
     this.tempValue = currentValue ? String(currentValue) : '';
     this.citySuggestions.set([]);
+    this.hasTyped = false;
     this.tempLat = null;
     this.tempLon = null;
   }
@@ -228,22 +230,44 @@ export class PerfilPage implements OnInit {
     const val = valor.trim();
 
     switch (field) {
-      case 'nombre':
+     case 'nombre':
       case 'apellido':
         if (val.length < 2 || val.length > 50) {
           return { valido: false, mensaje: 'El nombre/apellido debe contener entre 2 y 50 caracteres.' };
         }
+
+        //Evita letras repetidas 4 o más veces seguidas (ej: "aaaa", "pppp")
+        if (/(.)\1{3,}/i.test(val)) {
+          return { valido: false, mensaje: 'El campo contiene caracteres repetidos en exceso.' };
+        }
+
+        // Evita secuencias de 6 o más consonantes seguidas sin vocales (ej: "ghvjbk")
+        const sinEspacios = val.replace(/\s/g, '');
+        if (/[bcdfghjklmnpqrstvwxyz]{6,}/i.test(sinEspacios)) {
+          return { valido: false, mensaje: 'Por favor, ingresa un nombre o apellido válido.' };
+        }
         break;
 
-      case 'telefono':
-        if (!/^\d{8,15}$/.test(val)) {
-          return { valido: false, mensaje: 'El teléfono debe contener entre 8 y 15 dígitos numéricos.' };
+case 'telefono':
+        if (!/^\d{10}$/.test(val)) {
+          return { valido: false, mensaje: 'El teléfono debe contener exactamente 10 dígitos numéricos.' };
         }
         break;
 
       case 'ciudad':
         if (val.length < 3) {
           return { valido: false, mensaje: 'La zona de trabajo debe contener al menos 3 caracteres.' };
+        }
+
+        const barrioValido = this.allBarrios.some(
+          (b: any) => b.nombre.toLowerCase() === val.trim().toLowerCase()
+        );
+
+        if (!barrioValido) {
+          return { 
+            valido: false, 
+            mensaje: 'El barrio ingresado no se encuentra en la lista oficial. Por favor, selecciona uno válido de las sugerencias o utiliza el botón de GPS.' 
+          };
         }
         break;
     }
@@ -280,6 +304,7 @@ export class PerfilPage implements OnInit {
     this.tempLat = sugerencia.lat;
     this.tempLon = sugerencia.lon;
     this.citySuggestions.set([]);
+    this.hasTyped = false;
   }
 
   saveEdit(field: string) {
@@ -366,12 +391,23 @@ export class PerfilPage implements OnInit {
         this.tempValue = barrioEncontrado.nombre;
       }
 
+    } catch (err) {
+      console.error(err);
+      this.mostrarFeedback('Error', 'No se pudo acceder al GPS', 'error');
+      
       setTimeout(() => {
         this.cerrarFeedback();
-      }, 600);
+      }, 2000);
+      return;
 
-    } catch (err) {
-      this.mostrarFeedback('Error', 'No se pudo acceder al GPS', 'error');
-    }
+    } 
+
+    // Si todo fue exitoso:
+    setTimeout(() => {
+      this.cerrarFeedback();
+    }, 600);
+
+    this.citySuggestions.set([]);
+  this.hasTyped = false;
   }
 }

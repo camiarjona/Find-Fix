@@ -155,6 +155,9 @@ export class MisFavoritosPage implements OnInit {
   // --- Lógica Contratar (Desde el modal de perfil) ---
   abrirModalContratar(especialista: PerfilEspecialista | null) {
     if (!especialista) return;
+
+    this.cerrarModalDetalle();
+    
     this.especialistaParaContratar = {
       nombre: especialista.nombre + ' ' + especialista.apellido,
       email: especialista.email

@@ -79,10 +79,16 @@
   padding:0 16px;
   font-size:.95rem;
   background:var(--bg-input);
+  color: #ffffff;
   transition:.2s;
   display:flex;
   align-items:center;
   box-sizing: border-box; /* Asegura que el padding no agrande el input */
+}
+
+.input-filter::placeholder {
+  color: #888888;
+  opacity: 1;
 }
 
 .input-filter:focus,
@@ -740,3 +746,28 @@ textarea {
   border: 1px solid rgba(56, 189, 248, 0.2);
 }
 
+.cta-button-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-color, #ccc);
+  color: var(--text-main, #333);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cta-button-outline:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+:host-context(.dark-mode) .cta-button-outline {
+  background-color: var(--bg-input, #2d2d2d);
+  border-color: var(--border-color, #444);
+  color: #ffffff; 
+}
+
+:host-context(.dark-mode) .cta-button-outline:hover {
+  background-color: #383838; 
+  border-color: var(--primary-color);
+}

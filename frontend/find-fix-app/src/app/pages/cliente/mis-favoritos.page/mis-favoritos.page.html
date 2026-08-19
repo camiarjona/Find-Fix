@@ -182,18 +182,10 @@
   <div class="modal-card" (click)="$event.stopPropagation()">
     <h3>Solicitar Servicio</h3>
     <p class="modal-desc">Para: <strong>{{ especialistaParaContratar?.nombre }}</strong></p>
-
-    <div class="form-group">
-      <label>Describe el problema o trabajo a realizar:</label>
-      <textarea [(ngModel)]="descripcionTrabajo" rows="4"
-        placeholder="Ej: Necesito reparar una fuga de agua en la cocina..."></textarea>
-    </div>
-
+    <textarea [(ngModel)]="descripcionTrabajo" rows="4" placeholder="Describe tu problema..."></textarea>
     <div class="modal-actions">
       <button class="cta-button-outline" (click)="cerrarModalContratar()">Cancelar</button>
-      <button class="cta-button" (click)="enviarSolicitud()" [disabled]="!descripcionTrabajo || isSubmitting()">
-        {{ isSubmitting() ? 'Enviando...' : 'Enviar Solicitud' }}
-      </button>
+      <button class="cta-button" (click)="enviarSolicitud()" [disabled]="isSubmitting() || !descripcionTrabajo">Enviar</button>
     </div>
   </div>
 </div>
