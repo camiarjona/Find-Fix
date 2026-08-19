@@ -396,37 +396,12 @@
   margin: 0 auto 20px;
 }
 
-.avatar-wrapper {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  overflow: hidden;
-  margin-bottom: 15px;
-  background: #ffffff;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 .avatar-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
-}
-
-.avatar-initials {
-  width: 100%;
-  height: 100%;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background-color: #ffffff !important;
-  position: relative;
-  z-index: 1;
 }
 
 .hero-info {
@@ -507,7 +482,8 @@
   height: 190px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid #f0f0f0;
+  border: 4px solid var(--border-color, #374151) !important;
+  background: var(--bg-input, #222222) !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -690,33 +666,43 @@
 }
 
 .photo-editor-modal {
-  background: white;
-  padding: 50px 40px 40px;
+  background: var(--bg-card, #1a1a1a) !important;
+  color: var(--text-main, #f3f4f6) !important;
+  padding: 40px;
   border-radius: 20px;
   position: relative;
   max-width: 600px;
   width: 90%;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color, #374151) !important;
   overflow: visible !important;
 }
 
 /* La Cruz Naranja - Ahora visible y centrada */
 .modal-close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: var(--ff-orange) !important;
-  color: #555 !important;
-  border:none;
-  width: 45px;
-  height: 45px;
-  border-radius: 40%;
+  top: 15px;
+  right: 15px;
+  background: var(--bg-input, #2a2a2a) !important;
+  color: var(--text-main, #ffffff) !important;
+  border: 1px solid var(--border-color, #374151) !important;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 1.2rem;
   cursor: pointer;
   z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-close-btn span {
+  line-height: 1;
+  display: block;
+  margin-top: -2px;
 }
 
 .column-label {
@@ -826,9 +812,9 @@ ngx-dropzone-image-preview {
 }
 
 .clean-dropzone-orange {
-  border: 2px dashed #ddd !important;
+  border: 2px dashed var(--border-color, #4b5563) !important;
   border-radius: 15px !important;
-  background: var(--ff-bg-gray) !important;
+  background: var(--bg-input, #222222) !important;
   width: 190px !important;
   height: 190px !important;
   padding: 0 !important;
@@ -848,6 +834,11 @@ ngx-dropzone-image-preview {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+}
+
+.clean-dropzone-orange:hover {
+  border-color: var(--ff-orange, #f36f21) !important;
+  background: var(--bg-card, #1a1a1a) !important;
 }
 
 /* 2. La imagen ocupa todo el cuadrado punteado */
@@ -879,7 +870,7 @@ ngx-dropzone-image-preview {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(199, 182, 182, 0.3);
   font-size: 1.1rem;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -900,19 +891,20 @@ ngx-dropzone-image-preview {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #888;
+  color: var(--text-muted, #9ca3af) !important;
   gap: 8px;
 }
 
 .drop-instructions i {
   font-size: 1.8rem;
-  color: var(--ff-orange);
+  color: var(--ff-orange, #f36f21);
 }
 
 .drop-instructions span {
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
+  color: var(--text-muted, #9ca3af) !important;
 }
 
 .modal-footer {
@@ -1077,7 +1069,7 @@ ngx-dropzone-image-preview {
 
 .nota-resolucion {
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-muted, #9ca3af) !important;
   margin: 0;
   font-style: italic;
   text-align: center;
@@ -1105,4 +1097,73 @@ ngx-dropzone-image-preview {
   border-radius: 6px;
   margin-top: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+.photo-editor-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.column-label {
+  font-weight: 700;
+  color: var(--text-main, #f3f4f6) !important;
+  margin-bottom: 25px !important;
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+/* --- AVATAR POR DEFECTO ADAPTABLE A MODO CLARO / OSCURO --- */
+
+/* Contenedor circular externo del avatar */
+.avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  /* 🌟 Borde y fondo adaptativos con las variables del proyecto */
+  border: 4px solid var(--border-color, #374151) !important;
+  background-color: var(--bg-input, #2a2a2a) !important;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-bottom: 15px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Contenedor interno de las iniciales / icono SVG por defecto */
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  /* 🌟 Reemplazamos el #ffffff !important por la variable de fondo de input */
+  background-color: var(--bg-input, #2a2a2a) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Color del vector SVG genérico dentro del círculo */
+.avatar-initials svg path {
+  /* 🌟 Cambiamos el #CCCCCC fijo por el color secundario de texto del tema */
+  fill: var(--text-secondary, #9ca3af) !important;
+}
+
+/* Mantenemos el fondo de la imagen real en caso de tener foto */
+.main-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: var(--bg-card, #1a1a1a);
+  display: block;
 }
