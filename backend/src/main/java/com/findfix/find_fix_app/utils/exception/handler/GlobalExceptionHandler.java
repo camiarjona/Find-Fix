@@ -24,6 +24,22 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    // 🚨 NUEVO HANDLER: Maneja cuando el usuario intenta loguearse sin activar la cuenta (HTTP 403)
+    @ExceptionHandler(CuentaInactivaException.class)
+    public ResponseEntity<ErrorResponse> handleCuentaInactiva(CuentaInactivaException ex) {
+        log.warn("Intento de acceso con cuenta inactiva: {}", ex.getMessage());
+
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error("Forbidden")
+                .message(ex.getMessage())
+                .path(getCurrentPath())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(DataIntegrityViolationException ex) {
         ErrorResponse error = ErrorResponse.builder()
@@ -120,7 +136,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    /// maneje de errores para notificaciones
+    /// manejo de errores para notificaciones
     @ExceptionHandler(NotificacionException.class)
     public ResponseEntity<ErrorResponse> handleNotificacionError(NotificacionException ex) {
         ErrorResponse error = ErrorResponse.builder()

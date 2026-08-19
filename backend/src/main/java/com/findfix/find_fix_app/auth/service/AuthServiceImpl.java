@@ -10,6 +10,7 @@ import com.findfix.find_fix_app.auth.dto.TokenRefreshResponseDTO;
 import com.findfix.find_fix_app.auth.dto.UsuarioLoginDTO;
 import com.findfix.find_fix_app.auth.model.RefreshToken;
 import com.findfix.find_fix_app.notificacion.service.NotificacionService;
+import com.findfix.find_fix_app.utils.exception.exceptions.CuentaInactivaException;
 import com.findfix.find_fix_app.utils.exception.exceptions.RolException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioException;
 import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
@@ -57,36 +58,39 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // LOGIN: Autentica y devuelve el Usuario
-    @Override
-    public AuthResponseDTO login(UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
-        );
+@Override
+public AuthResponseDTO login(UsuarioLoginDTO loginDTO) throws UsuarioNotFoundException {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
+    );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Usuario usuario = usuarioRepository.findByEmail(loginDTO.getEmail())
-                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
+    Usuario usuario = usuarioRepository.findByEmail(loginDTO.getEmail())
+            .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
 
-        String accessToken = jwtService.generateToken(usuario);
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(usuario.getUsuarioId());
+   if (!usuario.isActivo()) {
+    throw new CuentaInactivaException("La cuenta aún no ha sido verificada. Revisa tu correo electrónico.");
+}
 
-        List<String> rolesNombres = usuario.getRoles().stream()
-                .map(Rol::getNombre)
-                .toList();
+    String accessToken = jwtService.generateToken(usuario);
+    RefreshToken refreshToken = refreshTokenService.createRefreshToken(usuario.getUsuarioId());
 
-        return AuthResponseDTO.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken.getToken())
-                .email(usuario.getEmail())
-                .nombre(usuario.getNombre())
-                .apellido(usuario.getApellido())
-                .activo(usuario.isActivo())
-                .id(usuario.getUsuarioId())
-                .roles(rolesNombres)
-                .build();
-    }
+    List<String> rolesNombres = usuario.getRoles().stream()
+            .map(Rol::getNombre)
+            .toList();
 
+    return AuthResponseDTO.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken.getToken())
+            .email(usuario.getEmail())
+            .nombre(usuario.getNombre())
+            .apellido(usuario.getApellido())
+            .activo(usuario.isActivo())
+            .id(usuario.getUsuarioId())
+            .roles(rolesNombres)
+            .build();
+}
     // metodo para registrar un nuevo user
     @Transactional(rollbackFor = Exception.class)
     @Override

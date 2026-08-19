@@ -26,12 +26,13 @@ export class AuthPage implements OnInit {
   private route = inject(ActivatedRoute);
 
   // Feedback modal state
-public feedbackData = signal({
+  public feedbackData = signal({
     visible: false,
     tipo: 'success' as 'success' | 'error',
     titulo: '',
     mensaje: ''
   });
+
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData.set({ visible: true, titulo, mensaje, tipo });
   }
@@ -42,6 +43,7 @@ public feedbackData = signal({
 
   public isLoginView = signal<boolean>(true);
   public authError = signal<string | null>(null);
+  public cuentaInactiva = signal<boolean>(false);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -57,15 +59,18 @@ public feedbackData = signal({
   showLoginView(): void {
     this.isLoginView.set(true);
     this.authError.set(null);
+    this.cuentaInactiva.set(false);
   }
 
   showRegisterView(): void {
     this.isLoginView.set(false);
     this.authError.set(null);
+    this.cuentaInactiva.set(false);
   }
 
   onLogin(credentials: LoginCredentials): void {
     this.authError.set(null);
+    this.cuentaInactiva.set(false);
 
     this.authService.login(credentials)
       .subscribe({
@@ -84,12 +89,20 @@ public feedbackData = signal({
           }
         },
         error: (err) => {
-          this.authError.set('Email o contraseña incorrectos.');
+          console.log("STATUS DEL ERROR:", err.status);
+          console.log("ERROR COMPLETO:", err);
+          if (err.status === 403) {
+            this.cuentaInactiva.set(true);
+            this.authError.set('Tu cuenta aún no ha sido verificada. Revisa tu casilla de correo.');
+          } else {
+            this.cuentaInactiva.set(false);
+            this.authError.set('Email o contraseña incorrectos.');
+          }
         }
       });
   }
 
-onRegister(credentials: RegisterCredentials): void {
+  onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
 
     this.authService.register(credentials).subscribe({
@@ -115,5 +128,6 @@ onRegister(credentials: RegisterCredentials): void {
   onToggleView(): void {
     this.isLoginView.set(!this.isLoginView());
     this.authError.set(null);
+    this.cuentaInactiva.set(false);
   }
 }

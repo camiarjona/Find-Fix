@@ -15,8 +15,7 @@ import { ordenarDinamicamente } from '../../../utils/sort-utils';
   styleUrl: './gestion-users.css',
 })
 
-export class GestionUsers implements OnInit{
-
+export class GestionUsers implements OnInit {
 
   private userService = inject(UserService);
 
@@ -46,16 +45,14 @@ export class GestionUsers implements OnInit{
   public totalPages = signal(0);
   public pageSize = 10;
 
-
   cargarUsuarios() {
-  this.isLoading.set(true);
+    this.isLoading.set(true);
 
+    this.userService.obtenerUsuarios(this.filtros.rol, this.currentPage(), this.pageSize).subscribe({
+      next: (res) => {
+        let listaUsuarios = res.content;
 
-  this.userService.obtenerUsuarios(this.filtros.rol, this.currentPage(), this.pageSize).subscribe({
-    next: (res) => {
-      let listaUsuarios = res.content;
-
-      const usuariosOrdenados = ordenarDinamicamente(
+        const usuariosOrdenados = ordenarDinamicamente(
           listaUsuarios,
           this.criterioOrden,
           this.direccionOrden);
@@ -63,30 +60,12 @@ export class GestionUsers implements OnInit{
         this.usuarios.set(usuariosOrdenados);
         this.totalPages.set(res.totalPages);
         this.isLoading.set(false);
-    },
-    error: (err) => {
-      console.error('Error al cargar usuarios:', err);
-      this.isLoading.set(false);
-    }
-  });
-}
-
-  confirmarDesactivacion(user: UserProfile) {
-    if (!user.activo) return;
-
-    const confirmar = confirm(`¿Estás seguro de que deseas desactivar a ${user.nombre}? El usuario perderá acceso al sistema.`);
-
-    if (confirmar) {
-      this.userService.desactivarUsuario(user.email).subscribe({
-        next: () => {
-          alert('Usuario desactivado correctamente.');
-          this.usuarios.update(lista =>
-            lista.map(u => u.email === user.email ? { ...u, activo: false } : u)
-          );
-        },
-        error: (err) => alert('Ocurrió un error al desactivar.')
-      });
-    }
+      },
+      error: (err) => {
+        console.error('Error al cargar usuarios:', err);
+        this.isLoading.set(false);
+      }
+    });
   }
 
   verDetalle(user: UserProfile) {
@@ -103,39 +82,17 @@ export class GestionUsers implements OnInit{
     this.cargarUsuarios();
   }
 
-  toggleEstadoUsuario(user: UserProfile, event: Event){
-    const checkbox = event.target as HTMLInputElement;
-    const nuevoEstado = checkbox.checked;
-
-    const accion = nuevoEstado ? this.userService.activarUsuario(user.email) : this.userService.desactivarUsuario(user.email);
-
-    accion.subscribe(
-      {
-        next: () => {
-          this.usuarios.update(lista =>
-            lista.map(u => u.email === user.email ? {...u, activo: nuevoEstado} : u)
-          )
-        },
-        error: (err) => {
-        checkbox.checked = !nuevoEstado;
-        alert('Error al cambiar el estado del usuario');
-        console.error(err);
-      }
-      }
-    )
-  }
-
   cambiarPagina(delta: number) {
-  this.currentPage.update(p => p + delta);
-  this.cargarUsuarios();
-}
+    this.currentPage.update(p => p + delta);
+    this.cargarUsuarios();
+  }
 
   aplicarFiltros() {
     this.currentPage.set(0);
     this.cargarUsuarios();
   }
 
-limpiarFiltros() {
+  limpiarFiltros() {
     this.filtros = { email: '', rol: '' };
     this.criterioOrden = 'email';
     this.direccionOrden = 'asc';
@@ -156,4 +113,3 @@ limpiarFiltros() {
     this.cargarUsuarios();
   }
 }
-

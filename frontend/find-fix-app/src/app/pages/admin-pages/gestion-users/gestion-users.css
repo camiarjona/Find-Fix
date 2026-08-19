@@ -110,27 +110,14 @@
 .fullname { font-weight: 600; font-size: 0.95rem; }
 .text-muted { font-size: 0.8rem; color: var(--text-secondary); }
 
-/* Badges y Switches */
-.badge { padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; }
+/* Badges */
+.badge { padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
 .badge.role { background-color: var(--bg-app); color: var(--text-main); margin-right: 4px; border: 1px solid var(--border-color); }
 .badge.role.admin { background-color: #fff7ed; color: #c2410c; border-color: #fed7aa; }
 
-.status-cell { display: flex; align-items: center; gap: 10px; }
-.status-text { font-size: 0.85rem; font-weight: 600; color: #991b1b; }
-.status-text.active { color: #166534; }
-
-.switch { position: relative; display: inline-block; width: 36px; height: 20px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
-  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc; transition: .4s; border-radius: 20px;
-}
-.slider:before {
-  position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
-  background-color: white; transition: .4s; border-radius: 50%;
-}
-input:checked + .slider { background-color: #16a34a; }
-input:checked + .slider:before { transform: translateX(16px); }
+.badge.status { border: 1px solid transparent; }
+.badge.status.active { background-color: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.badge.status.inactive { background-color: #fef2f2; color: #991b1b; border-color: #fecaca; }
 
 .btn-icon {
   background: transparent; border: 1px solid var(--border-color);
