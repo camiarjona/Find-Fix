@@ -205,7 +205,10 @@
               @if (editingField() === 'telefono') {
               <div class="edit-mode">
                 <input type="text" inputmode="numeric" [(ngModel)]="tempValue" (keydown)="soloNumerosKeydown($event)"
-                  (input)="onInputSoloNumeros($event)" maxlength="15" class="input-inline" placeholder="Ej: 2235123456">
+                  (input)="onInputSoloNumeros($event)" maxlength="10" class="input-inline" placeholder="Ej: 2235123456">
+                  <small style="color: #666; display: block; margin-top: 5px;">
+  Formato: Código de área + número local (10 dígitos). No incluir el 0 ni el 15.
+</small>
                 <button class="action-btn save" (click)="saveEdit('telefono')"> <svg xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="#000000" viewBox="0 0 24 24">
                     <path [attr.d]="icons.SAVE"></path>
@@ -236,7 +239,7 @@
                 <div class="search-wrapper"
                   style="display: flex; align-items: center; width: 100%; position: relative;">
                   <input type="text" [value]="tempValue" (keydown)="soloLetrasKeydown($event)"
-                    (input)="buscarCiudades($event)" class="input-inline" placeholder="Ej: Los Troncos, Mar del Plata"
+                    (input)="hasTyped = true;buscarCiudades($event)" class="input-inline" placeholder="Ej: Los Troncos, Mar del Plata"
                     style="flex: 1; padding-right: 40px;">
 
                   <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarUbicacion()"
@@ -255,7 +258,12 @@
                     </li>
                     }
                   </ul>
-                  }
+                  }@else if (hasTyped && tempValue && tempValue.trim().length > 2) {
+<!-- Mensaje de aviso solo cuando el usuario escribe y no hay resultados -->
+<div class="no-suggestions-msg">
+  💡 No encontramos ese barrio exacto. Por favor, selecciona uno de los alrededores o usa el botón de GPS.
+</div>
+}
                 </div>
 
                 <button class="action-btn save" (click)="saveEdit('ciudad')">

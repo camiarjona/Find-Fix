@@ -140,6 +140,15 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  soloLetrasKeydown(event: KeyboardEvent) {
+    const teclasPermitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End', ' '];
+    if (teclasPermitidas.includes(event.key)) return;
+
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   // --- MÉTODOS DE ACCIÓN ---
   public irAEspecialistaEnMapa(esp: EspecialistaDTO) {
     if (this.map && esp.latitud && esp.longitud) {
@@ -174,6 +183,51 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
 
   enviarSolicitud() {
     if (!this.especialistaSeleccionado || !this.descripcionTrabajo.trim()) return;
+
+    const texto = this.descripcionTrabajo.trim();
+
+    if (texto.length < 10) {
+      this.feedbackData = { 
+        visible: true, 
+        titulo: 'Descripción muy corta', 
+        mensaje: 'Por favor, describe tu problema con un poco más de detalle (mínimo 10 caracteres).', 
+        tipo: 'error' 
+      };
+      return;
+    }
+
+    const esSoloNumeros = /^\d+$/.test(texto.replace(/\s/g, ''));
+    if (esSoloNumeros) {
+      this.feedbackData = { 
+        visible: true, 
+        titulo: 'Descripción inválida', 
+        mensaje: 'La descripción no puede contener únicamente números. Explica qué servicio necesitas.', 
+        tipo: 'error' 
+      };
+      return;
+    }
+
+    if (/(.)\1{4,}/i.test(texto)) {
+      this.feedbackData = { 
+        visible: true, 
+        titulo: 'Descripción inválida', 
+        mensaje: 'El texto ingresado contiene caracteres repetidos en exceso o no parece una descripción válida.', 
+        tipo: 'error' 
+      };
+      return;
+    }
+
+    const sinEspacios = texto.replace(/\s/g, '');
+    if (/[bcdfghjklmnpqrstvwxyz]{6,}/i.test(sinEspacios)) {
+      this.feedbackData = { 
+        visible: true, 
+        titulo: 'Descripción inválida', 
+        mensaje: 'Por favor, ingresa una descripción real del problema que deseas resolver.', 
+        tipo: 'error' 
+      };
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.clienteService.contratarEspecialista({
       emailEspecialista: this.especialistaSeleccionado.email,
@@ -297,6 +351,25 @@ export class BuscarEspecialistasComponent implements OnInit, AfterViewInit {
   }
 
   aplicarFiltros() {
+    const barrioIngresado = String(this.filtros.ciudad || '').trim();
+
+    // Si escribió algo en el input de barrio, validamos que exista en la lista oficial
+    if (barrioIngresado.length > 0) {
+      const barrioValido = this.allBarrios.some(
+        (b: any) => b.nombre.toLowerCase() === barrioIngresado.toLowerCase()
+      );
+
+      if (!barrioValido) {
+        this.feedbackData = { 
+          visible: true, 
+          titulo: 'Barrio no válido', 
+          mensaje: 'El barrio ingresado no figura en la lista oficial. Selecciona una opción del desplegable.', 
+          tipo: 'error' 
+        };
+        return; // Frenamos la aplicación de filtros para que no busque texto inválido
+      }
+    }
+
     this.currentPage.set(0);
     const f: FiltroEspecialistasDTO = {};
     if (this.filtros.ciudad) f.ciudad = this.filtros.ciudad;
