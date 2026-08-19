@@ -106,21 +106,36 @@ export class PerfilPage implements OnInit {
   // --- Lógica de Foto de Perfil ---
   onSelect(event: any) {
     if (event.addedFiles && event.addedFiles.length > 0) {
-      this.files = [];
-      const file = event.addedFiles[0];
+      const file: File = event.addedFiles[0];
 
-      setTimeout(() => {
-        this.files = [file];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.src = e.target.result;
 
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
+        img.onload = () => {
+          // 🛑 VALIDACIÓN DE DIMENSIONES MÁXIMAS (1920x1080)
+          if (img.width > 1920 || img.height > 1080) {
+            this.files = [];
+            this.tempPhotoUrl.set(null);
+
+            // Disparamos la ventana de feedback avisando el error puntual
+            this.mostrarFeedback(
+              'Resolución no permitida',
+              `La imagen elegida supera la resolución máxima permitida de 1920x1080px (Tu foto mide ${img.width}x${img.height}px). Por favor, selecciona una foto más pequeña.`,
+              'error'
+            );
+            return;
+          }
+
+          // Si la imagen cumple con el tamaño, la asignamos normalmente
+          this.files = [file];
           this.tempPhotoUrl.set(e.target.result);
           this.cd.detectChanges();
         };
-        reader.readAsDataURL(file);
+      };
 
-        this.cd.detectChanges();
-      }, 0);
+      reader.readAsDataURL(file);
     }
   }
 
@@ -264,9 +279,9 @@ case 'telefono':
         );
 
         if (!barrioValido) {
-          return { 
-            valido: false, 
-            mensaje: 'El barrio ingresado no se encuentra en la lista oficial. Por favor, selecciona uno válido de las sugerencias o utiliza el botón de GPS.' 
+          return {
+            valido: false,
+            mensaje: 'El barrio ingresado no se encuentra en la lista oficial. Por favor, selecciona uno válido de las sugerencias o utiliza el botón de GPS.'
           };
         }
         break;
@@ -394,13 +409,13 @@ case 'telefono':
     } catch (err) {
       console.error(err);
       this.mostrarFeedback('Error', 'No se pudo acceder al GPS', 'error');
-      
+
       setTimeout(() => {
         this.cerrarFeedback();
       }, 2000);
       return;
 
-    } 
+    }
 
     // Si todo fue exitoso:
     setTimeout(() => {

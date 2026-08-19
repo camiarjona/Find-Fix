@@ -14,7 +14,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
   styleUrl: './nueva-solicitud-especialista.page.css',
 })
 export class NuevaSolicitudEspecialistaPage {
-private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private solicitudService = inject(SolicitudEspecialistaService);
   private router = inject(Router);
 
@@ -29,7 +29,7 @@ private fb = inject(FormBuilder);
 
   onSelectFotosRequisitos(event: any): void {
     const totalActual = this.fotosRequisitos().length;
-    const nuevosArchivos = event.addedFiles;
+    const nuevosArchivos: File[] = event.addedFiles;
 
     if (totalActual + nuevosArchivos.length > 5) {
       this.mensajeError.set('⚠️ Solo podés subir un máximo de 5 fotos (DNI + 3 trabajos).');
@@ -38,13 +38,26 @@ private fb = inject(FormBuilder);
 
     this.mensajeError.set(null);
 
-    // Mapeamos cada archivo generando su URL local instantánea con URL.createObjectURL
-    const nuevosConPreview = nuevosArchivos.map((file: File) => ({
-      file: file,
-      url: URL.createObjectURL(file) // 👈 Esto salta el lag de carga al toque
-    }));
+    nuevosArchivos.forEach((file: File) => {
+      const tempUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = tempUrl;
 
-    this.fotosRequisitos.update(current => [...current, ...nuevosConPreview]);
+      img.onload = () => {
+        // 🛑 VALIDACIÓN DE DIMENSIONES MAXIMAS (1920x1080)
+        if (img.width > 1920 || img.height > 1080) {
+          URL.revokeObjectURL(tempUrl); // Liberamos la memoria del preview rechazado
+          this.mensajeError.set(`⚠️ La imagen "${file.name}" supera la resolución máxima permitida (1920x1080px). Tu imagen es de ${img.width}x${img.height}px.`);
+          return;
+        }
+
+        // Si pasa la validación, la agregamos normalmente a la señal
+        this.fotosRequisitos.update(current => [
+          ...current,
+          { file: file, url: tempUrl }
+        ]);
+      };
+    });
   }
 
   onRemoveFotoRequisito(item: { file: File, url: string }): void {
@@ -65,7 +78,7 @@ private fb = inject(FormBuilder);
     const datosDTO = { motivo: this.solicitudForm.value.motivo };
     formData.append('datos', new Blob([JSON.stringify(datosDTO)], { type: 'application/json' }));
 
-    // 👈 Enviamos la propiedad .file al backend
+    // Enviamos la propiedad .file al backend
     this.fotosRequisitos().forEach(item => {
       formData.append('fotos', item.file);
     });

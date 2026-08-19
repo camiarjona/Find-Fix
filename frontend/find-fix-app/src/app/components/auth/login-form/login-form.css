@@ -56,3 +56,14 @@
   justify-content: center;
 }
 
+.app-form-content h1 {
+  color: #1a1a1a !important;
+}
+
+.app-form-content span {
+  color: #666666 !important;
+}
+
+.forgot-password-link {
+  color: #555555 !important;
+}

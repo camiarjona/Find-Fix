@@ -8,6 +8,7 @@
   margin: 0 auto;
   padding: 12px 20px; /* Reducido de 25px a 12px arriba/abajo */
   box-sizing: border-box;
+  color: #333333 !important;
 }
 
 .form-title {

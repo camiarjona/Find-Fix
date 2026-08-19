@@ -127,6 +127,7 @@ form textarea {
   font-size: 1rem;
   resize: vertical;
   min-height: 120px;
+  max-height: 380px !important;
   box-sizing: border-box;
   background-color: var(--bg-input);
   color: var(--text-main);
