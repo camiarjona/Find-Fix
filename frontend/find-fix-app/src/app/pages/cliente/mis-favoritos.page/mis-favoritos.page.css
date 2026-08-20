@@ -323,20 +323,20 @@
   resize: vertical;
 }
 
-.profile-modal { 
+.profile-modal {
   max-width: 450px;
   width: 90%;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; 
+  overflow: hidden;
   padding: 0;
 }
 
 .profile-body-modal {
   padding: 20px;
-  overflow-y: auto; 
-  max-height: calc(85vh - 180px); 
+  overflow-y: auto;
+  max-height: calc(85vh - 180px);
   flex-grow: 1;
 }
 
@@ -438,4 +438,95 @@
 .fallback-orange {
   background-color: #f97316 !important;
   color: white !important;
+}
+
+/* ==========================================================================
+   GALERÍA PÚBLICA Y LIGHTBOX EN FAVORITOS (IGUAL A BUSCAR ESPECIALISTA)
+   ========================================================================== */
+
+/* Contenedor del scroll horizontal */
+.gallery-public-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+.gallery-public-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery-public-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(234, 88, 12, 0.3);
+  border-radius: 10px;
+}
+
+/* Tarjeta de cada foto */
+.gallery-public-card {
+  flex: 0 0 140px;
+  height: 110px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: zoom-in;
+}
+
+.gallery-public-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gallery-public-img:hover {
+  transform: scale(1.06);
+}
+
+/* Lightbox / Zoom Pantalla Completa */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 85%;
+  max-height: 85%;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.2);
 }

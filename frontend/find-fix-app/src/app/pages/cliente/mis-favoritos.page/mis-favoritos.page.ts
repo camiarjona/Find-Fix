@@ -39,6 +39,7 @@ export class MisFavoritosPage implements OnInit {
   // Para el modal de detalle (perfil completo)
   public especialistaSeleccionaCompleto = signal<PerfilEspecialista | null>(null);
   public isLoadingDetalle = signal(false);
+  public fotoLightboxUrl = signal<string | null>(null);
 
   // Para el modal de contratar
   public especialistaParaContratar: { nombre: string, email: string } | null = null;
@@ -157,7 +158,7 @@ export class MisFavoritosPage implements OnInit {
     if (!especialista) return;
 
     this.cerrarModalDetalle();
-    
+
     this.especialistaParaContratar = {
       nombre: especialista.nombre + ' ' + especialista.apellido,
       email: especialista.email
@@ -223,4 +224,13 @@ export class MisFavoritosPage implements OnInit {
     this.showModalConfirmacion.set(false);
     this.emailParaEliminar.set(null);
   }
+
+  abrirImagenCompleta(url: string) {
+    this.fotoLightboxUrl.set(url);
+  }
+
+  cerrarLightbox() {
+    this.fotoLightboxUrl.set(null);
+  }
+
 }

@@ -94,15 +94,36 @@ export class MiPerfilEspecialista implements OnInit {
 
   // --- Lógica de Foto de Perfil ---
   onSelect(event: any) {
-    console.log('Archivo seleccionado:', event.addedFiles);
-    this.files = [...event.addedFiles];
+    if (event.addedFiles && event.addedFiles.length > 0) {
+      const file: File = event.addedFiles[0];
 
-    if (this.files.length > 0) {
       const reader = new FileReader();
-      reader.onload = () => {
-        this.tempPhotoUrl.set(reader.result as string);
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.src = e.target.result;
+
+        img.onload = () => {
+          // 🛑 VALIDACIÓN DE DIMENSIONES MÁXIMAS (1920x1080)
+          if (img.width > 1920 || img.height > 1080) {
+            this.files = [];
+            this.tempPhotoUrl.set(null);
+
+            this.mostrarFeedback(
+              'Resolución no permitida',
+              `La foto de perfil supera la resolución máxima permitida de 1920x1080px (Tu foto mide ${img.width}x${img.height}px). Por favor, selecciona una más pequeña.`,
+              'error'
+            );
+            return;
+          }
+
+          // ✅ Si cumple, asignamos la imagen
+          this.files = [file];
+          this.tempPhotoUrl.set(e.target.result);
+          this.cd.detectChanges();
+        };
       };
-      reader.readAsDataURL(this.files[0]);
+
+      reader.readAsDataURL(file);
     }
   }
 
@@ -469,23 +490,46 @@ export class MiPerfilEspecialista implements OnInit {
   // --- Lógica de Galería ---
   onSelectGaleria(event: any) {
     const archivosActuales = this.galeriaFiles();
+    const nuevosArchivos: File[] = event.addedFiles;
 
-    if (archivosActuales.length + event.addedFiles.length > 5) {
+    if (archivosActuales.length + nuevosArchivos.length > 5) {
       this.mostrarFeedback('Límite excedido', 'Solo podés subir hasta 5 fotos para tu galería simultáneamente.', 'error');
       return;
     }
 
-    this.galeriaFiles.set([...archivosActuales, ...event.addedFiles]);
+    nuevosArchivos.forEach((file: File) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.src = e.target.result;
 
-    const nuevosPreviews = event.addedFiles.map((file: File) => ({
-      id: Math.random().toString(36).substring(2),
-      url: URL.createObjectURL(file),
-      file: file
-    }));
+        img.onload = () => {
+          // 🛑 VALIDACIÓN DE DIMENSIONES MÁXIMAS (1920x1080)
+          if (img.width > 1920 || img.height > 1080) {
+            this.mostrarFeedback(
+              'Resolución no permitida',
+              `La imagen "${file.name}" supera los 1920x1080px (${img.width}x${img.height}px). No fue agregada.`,
+              'error'
+            );
+            return;
+          }
 
-    this.galeriaPreviews.set([...this.galeriaPreviews(), ...nuevosPreviews]);
+          // ✅ Si cumple, agregamos el archivo y creamos su preview
+          this.galeriaFiles.set([...this.galeriaFiles(), file]);
 
-    this.cd.detectChanges();
+          const nuevoPreview = {
+            id: Math.random().toString(36).substring(2),
+            url: URL.createObjectURL(file),
+            file: file
+          };
+
+          this.galeriaPreviews.set([...this.galeriaPreviews(), nuevoPreview]);
+          this.cd.detectChanges();
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
   }
 
   onRemoveGaleria(idPreview: string) {
