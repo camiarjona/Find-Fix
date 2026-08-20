@@ -1420,15 +1420,6 @@ ngx-dropzone-image-preview {
   display: block;
 }
 
-/* ==========================================================================
-   ESTILO EXACTO Y HOVER SUTIL PARA BOTONES GRANDES (CAMBIAR CONTRASEÑA / GALERÍA)
-   ========================================================================== */
-
-/* Estado base del botón (Gris claro tenue con texto oscuro) */
-/* ==========================================================================
-   ESTILO ORIGINAL RESTAURADO PARA BOTÓN PRINCIPAL
-   ========================================================================== */
-
 .btn-full-width {
   margin-top: 1rem;
   background-color: var(--text-main) !important;
@@ -1455,3 +1446,4 @@ ngx-dropzone-image-preview {
   cursor: not-allowed;
   opacity: 0.7;
 }
+
