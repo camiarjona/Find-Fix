@@ -20,11 +20,11 @@ public record ActualizarEspecialistaDTO(
         )
         String apellido,
 
-        @NotBlank(message = "El teléfono es obligatorio.")
+
         @Pattern(regexp = "^[0-9]{10}$", message = "El teléfono debe tener exactamente 10 dígitos.")
         String telefono,
 
-        @NotBlank(message = "La zona de trabajo es obligatoria.")
+
         String ciudad,
         Double latitud,
         Double longitud,
