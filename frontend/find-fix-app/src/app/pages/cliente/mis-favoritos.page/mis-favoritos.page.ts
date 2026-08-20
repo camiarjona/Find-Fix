@@ -182,14 +182,15 @@ export class MisFavoritosPage implements OnInit {
       descripcion: this.descripcionTrabajo
     }).subscribe({
       next: () => {
-        alert('Solicitud enviada con éxito!');
         this.isSubmitting.set(false);
         this.cerrarModalContratar();
         this.cerrarModalDetalle();
+        this.mostrarFeedback('¡Éxito!', 'Solicitud enviada correctamente', 'success');
       },
       error: (err) => {
-        alert('Error al enviar solicitud: ' + (err.error?.mensaje || 'Intente nuevamente'));
         this.isSubmitting.set(false);
+        const mensajeError = err.error?.mensaje || err.error?.message || 'Intente nuevamente';
+        this.mostrarFeedback('Atención', 'Error al enviar solicitud: ' + mensajeError, 'error');
       }
     });
   }
