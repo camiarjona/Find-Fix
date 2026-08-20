@@ -6,8 +6,13 @@
   </div>
 
   <div class="form-container sign-in">
-    <app-login-form (loginSubmit)="onLogin($event)" [loginError]="authError()"
-      (toggleView)="onToggleView()"></app-login-form>
+    <app-login-form
+      (loginSubmit)="onLogin($event)"
+      [loginError]="authError()"
+      [cuentaInactiva]="cuentaInactiva()"
+      (toggleView)="onToggleView()"
+      (showFeedback)="mostrarFeedback($event.titulo, $event.mensaje, $event.tipo)">
+    </app-login-form>
   </div>
 
   <div class="toggle-container">

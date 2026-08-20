@@ -126,6 +126,11 @@ export class AuthService {
     });
   }
 
+  // Alias para mantener la coherencia con la llamada de reenvío
+  reenviarTokenConfirmacion(email: string) {
+    return this.reenviarCorreoActivacion(email);
+  }
+
   confirmarCuenta(token: string) {
     return this.http.get(`${this.apiUrl}/auth/confirmar-cuenta`, {
       params: { token: token },

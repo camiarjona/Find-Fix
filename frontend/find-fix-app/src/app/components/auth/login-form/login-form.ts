@@ -5,6 +5,7 @@ import { LoginCredentials } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { GoogleLoginButton } from '../../utils/google-login-button/google-login-button';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -15,14 +16,17 @@ import { RouterModule } from '@angular/router';
 export class LoginForm {
 
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   public showPassword = signal(false);
+  public cargandoReenvio = signal(false);
 
   @Input() loginError: string | null = null;
+  @Input() cuentaInactiva: boolean = false;
 
   @Output() loginSubmit = new EventEmitter<LoginCredentials>();
-
   @Output() toggleView = new EventEmitter<void>();
+  @Output() showFeedback = new EventEmitter<{ titulo: string; mensaje: string; tipo: 'success' | 'error' }>();
 
   public icons = UI_ICONS;
 
@@ -46,6 +50,32 @@ export class LoginForm {
 
   togglePassword() {
     this.showPassword.update(val => !val);
+  }
+
+  solicitarReenvio(): void {
+    const email = this.loginForm.get('email')?.value;
+    if (!email) return;
+
+    this.cargandoReenvio.set(true);
+
+    this.authService.reenviarTokenConfirmacion(email).subscribe({
+      next: (mensaje) => {
+        this.cargandoReenvio.set(false);
+        this.showFeedback.emit({
+          titulo: '¡Correo enviado!',
+          mensaje: mensaje || 'Revisá tu casilla de correo para activar la cuenta.',
+          tipo: 'success'
+        });
+      },
+      error: (err) => {
+        this.cargandoReenvio.set(false);
+        this.showFeedback.emit({
+          titulo: 'Error al reenviar',
+          mensaje: err.error || 'Ocurrió un error al intentar reenviar el enlace.',
+          tipo: 'error'
+        });
+      }
+    });
   }
 
 }
