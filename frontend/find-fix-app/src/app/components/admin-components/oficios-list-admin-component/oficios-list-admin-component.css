@@ -165,6 +165,19 @@
   transform: scale(1.1);
 }
 
+/* Estado deshabilitado para botones de acción dentro de las tarjetas */
+.action-btn:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.action-btn:disabled:hover {
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+  transform: none !important;
+}
+
 .action-btn svg {
   width: 20px;
   height: 20px;
