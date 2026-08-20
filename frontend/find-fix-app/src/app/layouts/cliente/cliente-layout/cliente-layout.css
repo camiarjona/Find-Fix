@@ -3,9 +3,8 @@
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  /* Fondo principal variable */
   background-color: var(--bg-color);
-  color: var(--text-main); /* Color de texto base */
+  color: var(--text-main); 
 }
 
 /* ESTILOS MÓVIL */
@@ -334,34 +333,40 @@
 
 .header-controls {
   display: flex;
-  align-items: center;
+  align-items: center;     /* 🌟 Asegura que todos los elementos (switch, divisor, campana y sol) estén alineados al medio */
   gap: 0.75rem;
-  background-color: var(--bg-card); /* Variable */
-  padding: 4px 6px;
+  background-color: var(--bg-card);
+  padding: 6px;
   border-radius: 99px;
-  border: 1px solid var(--border-color); /* Variable */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .theme-toggle {
-  background-color: var(--bg-color); /* Variable */
+  background-color: var(--bg-app);
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center;    /* 🌟 Centra verticalmente el ícono */
+  justify-content: center; /* 🌟 Centra horizontalmente el ícono */
   cursor: pointer;
-  color: var(--text-secondary); /* Variable */
+  color: var(--text-secondary);
   transition: all 0.2s ease;
+  margin: auto 0;          /* 🌟 Fuerza el centrado absoluto si el contenedor padre usa flex */
 }
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;          /* Evita desalineaciones por espacios inline */
+}
+
 .theme-toggle:hover {
   background-color: var(--border-color); /* Variable */
   color: var(--text-main);
 }
-.theme-toggle svg { width: 16px; height: 16px; }
 
 .header-divider {
   width: 1px;
@@ -374,64 +379,74 @@
   position: relative;
   display: flex;
   align-items: center;
-  background-color: var(--bg-color); /* Variable */
+  background-color: var(--bg-input);
   border-radius: 99px;
   padding: 4px;
   cursor: pointer;
-  width: 64px;
-  height: 32px;
+  width: 68px; /* Ancho fijo uniforme */
+  height: 34px; /* Alto fijo uniforme */
   box-sizing: border-box;
   border: 1px solid var(--border-color);
 }
 
-.toggle-checkbox { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
 
 .toggle-icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 2px;
+  padding: 0 6px;
+  box-sizing: border-box;
 }
+
+/* Forzamos dimensiones idénticas y escalado limpio para ambos íconos */
 .toggle-icons svg {
-  width: 18px;
-  height: 18px;
-  color: var(--text-secondary); /* Variable */
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--text-secondary);
   z-index: 1;
   position: relative;
-  transform: scale(0.9);
-  transition: color 0.3s ease, transform 0.3 ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
+
 .toggle-icons .icon-cliente svg {
   color: var(--primary-color);
-  transform: scale(1.15);
+  transform: scale(1.1);
 }
 
 .toggle-slider {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 24px;
-  height: 24px;
-  background-color: var(--text-main); /* Cambia color del slider según tema */
+  width: 26px;
+  height: 26px;
+  background-color: var(--bg-card);
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  opacity: 0.1; /* Slider sutil */
+  box-shadow: 0 1px 3px var(--shadow-color);
+  transition: transform 0.3s ease;
+  z-index: 0;
 }
-/* Reajuste visual del slider para que se vea bien en ambos temas */
-[data-theme="dark"] .toggle-slider { background-color: #fff; opacity: 0.2; }
 
-.toggle-checkbox:checked+.toggle-icons .icon-cliente svg {
+/* Comportamiento al alternar el switch */
+.toggle-checkbox:checked + .toggle-icons .icon-cliente svg {
   color: var(--text-secondary);
-  transform: scale(0.9);
+  transform: scale(1);
 }
-.toggle-checkbox:checked+.toggle-icons .icon-especialista svg {
-  color: var(--primary-color);
-  transform: scale(1.50);
-}
-.toggle-checkbox:checked~.toggle-slider { transform: translateX(32px); }
 
+.toggle-checkbox:checked + .toggle-icons .icon-especialista svg {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.toggle-checkbox:checked ~ .toggle-slider {
+  transform: translateX(34px); /* Desplazamiento exacto para el ancho de la caja */
+}
 
 @media (min-width: 900px) {
   .mobile-header, .sidebar-overlay { display: none; }
