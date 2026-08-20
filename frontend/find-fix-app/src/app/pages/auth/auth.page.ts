@@ -25,7 +25,6 @@ export class AuthPage implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  // Feedback modal state
   public feedbackData = signal({
     visible: false,
     tipo: 'success' as 'success' | 'error',
@@ -53,7 +52,7 @@ export class AuthPage implements OnInit {
       } else {
         this.showLoginView();
       }
-    })
+    });
   }
 
   showLoginView(): void {
@@ -72,54 +71,43 @@ export class AuthPage implements OnInit {
     this.authError.set(null);
     this.cuentaInactiva.set(false);
 
-    this.authService.login(credentials)
-      .subscribe({
-        next: () => {
-          const user = this.authService.currentUser();
-          if (user?.roles.includes('ADMIN')) {
-            this.authService.setInitialRole('admin');
-            this.router.navigateByUrl('/admin/dashboard');
-
-          } else if (user?.roles.includes('CLIENTE') && user?.roles.includes('ESPECIALISTA')) {
-            this.router.navigateByUrl('/seleccionar-rol');
-
-          } else {
-            this.authService.setInitialRole('cliente');
-            this.router.navigateByUrl('/cliente/dashboard');
-          }
-        },
-        error: (err) => {
-          console.log("STATUS DEL ERROR:", err.status);
-          console.log("ERROR COMPLETO:", err);
-          if (err.status === 403) {
-            this.cuentaInactiva.set(true);
-            this.authError.set('Tu cuenta aún no ha sido verificada. Revisa tu casilla de correo.');
-          } else {
-            this.cuentaInactiva.set(false);
-            this.authError.set('Email o contraseña incorrectos.');
-          }
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        const user = this.authService.currentUser();
+        if (user?.roles.includes('ADMIN')) {
+          this.authService.setInitialRole('admin');
+          this.router.navigateByUrl('/admin/dashboard');
+        } else if (user?.roles.includes('CLIENTE') && user?.roles.includes('ESPECIALISTA')) {
+          this.router.navigateByUrl('/seleccionar-rol');
+        } else {
+          this.authService.setInitialRole('cliente');
+          this.router.navigateByUrl('/cliente/dashboard');
         }
-      });
+      },
+      error: (err) => {
+        if (err.status === 403) {
+          this.cuentaInactiva.set(true);
+          this.authError.set('Tu cuenta aún no ha sido verificada. Revisa tu casilla de correo.');
+        } else {
+          this.cuentaInactiva.set(false);
+          this.authError.set('Email o contraseña incorrectos.');
+        }
+      }
+    });
   }
 
   onRegister(credentials: RegisterCredentials): void {
     this.authError.set(null);
 
     this.authService.register(credentials).subscribe({
-      next: (response) => {
-        console.log('Datos de registro:', credentials);
-
+      next: () => {
         this.mostrarFeedback('¡Casi listo!', 'Te estamos redirigiendo...', 'success');
-
         this.router.navigate(['/revisa-tu-correo'], {
           queryParams: { email: credentials.email }
         });
       },
       error: (err) => {
-        console.error('Error en el registro:', err);
-
         const mensajeError = err.error?.message || 'El email ingresado ya se encuentra registrado.';
-
         this.mostrarFeedback('Error de Registro', mensajeError, 'error');
       }
     });
