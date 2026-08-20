@@ -164,15 +164,42 @@
   background: none;
   border: none;
   cursor: pointer;
-  opacity: 0.5;
-  transition: 0.2s;
-  color: var(--text-secondary);
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  color: var(--text-main, #ffffff) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .edit-pencil:hover {
   opacity: 1;
-  transform: scale(1.1);
-  color: var(--text-main);
+  transform: scale(1.15);
+  color: var(--primary-color, #f36f21) !important;
+}
+
+.edit-pencil svg,
+.lock-icon svg {
+  fill: var(--text-main, #ffffff) !important;
+  width: 20px;
+  height: 20px;
+}
+
+.edit-pencil:hover svg {
+  fill: var(--primary-color, #f36f21) !important;
+}
+
+/* Icono de Candado (Email bloqueado) */
+.lock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  color: var(--text-muted, #9ca3af) !important;
+}
+
+.lock-icon svg {
+  fill: var(--text-muted, #9ca3af) !important;
 }
 
 .value-container {
@@ -185,6 +212,15 @@
 
 .value-container.full-width {
   display: block;
+}
+
+.value.locked svg {
+  fill: var(--text-secondary, #9ca3af) !important;
+  opacity: 0.7;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-left: 6px;
 }
 
 .input-inline {
@@ -1382,5 +1418,32 @@ ngx-dropzone-image-preview {
   object-fit: cover;
   background-color: var(--bg-card, #1a1a1a);
   display: block;
+}
+
+.btn-full-width {
+  margin-top: 1rem;
+  background-color: var(--text-main) !important;
+  color: var(--bg-card) !important;
+  padding: 0.8rem;
+  border: none !important;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+/* Hover original suave mediante opacidad */
+.btn-full-width:hover:not(:disabled) {
+  opacity: 0.9 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Estado deshabilitado original */
+.btn-full-width:disabled {
+  background-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
