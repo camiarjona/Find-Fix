@@ -6,16 +6,24 @@
     <div class="form-field">
       <input id="reg-nombre" formControlName="nombre" type="text" placeholder=" " />
       <label for="reg-nombre">Nombre</label>
-      @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
-        <small class="error-message">El nombre es obligatorio.</small>
+      @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.invalid) {
+        @if (registerForm.get('nombre')?.hasError('required')) {
+          <small class="error-message">El nombre es obligatorio.</small>
+        } @else {
+          <small class="error-message">Ingresa un nombre válido (sin números ni caracteres repetidos).</small>
+        }
       }
     </div>
 
     <div class="form-field">
       <input id="reg-apellido" formControlName="apellido" type="text" placeholder=" " />
       <label for="reg-apellido">Apellido</label>
-      @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
-        <small class="error-message">El apellido es obligatorio.</small>
+      @if (registerForm.get('apellido')?.touched && registerForm.get('apellido')?.invalid) {
+        @if (registerForm.get('apellido')?.hasError('required')) {
+          <small class="error-message">El apellido es obligatorio.</small>
+        } @else {
+          <small class="error-message">Ingresa un apellido válido (sin números ni caracteres repetidos).</small>
+        }
       }
     </div>
 
@@ -45,14 +53,14 @@
       @if (mostrandoResultados() && resultadosBusqueda().length > 0) {
         <ul class="resultados-busqueda">
           @for (barrio of resultadosBusqueda(); track barrio.nombre) {
-            <li (mousedown)="seleccionarLocalidad(barrio)">
+            <li (click)="seleccionarLocalidad(barrio)">
               {{ barrio.nombre }}
             </li>
           }
         </ul>
       }
-      @if (registerForm.get('ciudad')?.invalid && registerForm.get('ciudad')?.touched) {
-        <small class="error-message">Debes seleccionar un barrio.</small>
+     @if (registerForm.get('ciudad')?.touched && registerForm.get('ciudad')?.invalid) {
+        <small class="error-message">Debes seleccionar un barrio válido de la lista o usar GPS.</small>
       }
     </div>
 
@@ -74,6 +82,9 @@
           </svg>
         </button>
       </div>
+      @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+        <small class="error-message">La contraseña debe tener entre 6 y 12 caracteres.</small>
+      }
     </div>
   </div>
 

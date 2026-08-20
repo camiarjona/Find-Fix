@@ -264,80 +264,86 @@
           <div class="value-container">
             @if (editingField() === 'telefono') {
             <div class="edit-mode">
-              <input
-                type="text"
-                [value]="tempValue"
-                (input)="soloNumerosInput($event)"
-                maxlength="15"
-                class="input-inline"
-                placeholder="Ej: 2235123456">
+              <input type="text" inputmode="numeric" [(ngModel)]="tempValue" (keydown)="soloNumerosKeydown($event)"
+                (input)="soloNumerosInput($event)" maxlength="10" class="input-inline" placeholder="Ej: 2235123456">
+                <small style="color: #666; display: block; margin-top: 5px;">
+                  Formato: Código de área + número local (10 dígitos). No incluir el 0 ni el 15.
+                </small>
               <button class="action-btn save" (click)="saveEdit('telefono')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                  <path [attr.d]="icons.SAVE"></path>
+                </svg>
               </button>
               <button class="action-btn cancel" (click)="cancelEdit()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                  <path [attr.d]="icons.CANCEL"></path>
+                </svg>
               </button>
             </div>
             } @else {
-            <span class="value">{{ perfil()?.telefono }}</span>
+            <span class="value">{{ perfil()?.telefono || 'No especificado' }}</span>
             <button class="edit-pencil" (click)="startEdit('telefono', perfil()?.telefono)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+                <path [attr.d]="icons.EDIT"></path>
+              </svg>
             </button>
             }
           </div>
         </li>
-
         <li class="data-item">
-          <span class="label">Zona de Trabajo</span>
-          <div class="value-container">
-            @if (editingField() === 'ciudad') {
-            <div class="edit-mode">
-              <div class="horizontal-group" style="display: flex; align-items: center; gap: 5px; width: 100%;">
-                <div class="search-wrapper" style="position: relative; flex: 1; display: flex; align-items: center;">
-                  <input
-                    type="text"
-                    [value]="tempValue"
-                    (input)="buscarZona($event)"
-                    class="input-inline"
-                    placeholder="Ej: Los Troncos, Mar del Plata"
-                    style="flex: 1; padding-right: 35px;"
-                  >
+  <span class="label">Zona de Trabajo</span>
+  <div class="value-container">
+    @if (editingField() === 'zonaTrabajo' || editingField() === 'ciudad') {
+    <div class="edit-mode">
+      <div class="search-wrapper" style="display: flex; align-items: center; width: 100%; position: relative;">
+        <input type="text" [value]="tempValue" (keydown)="soloLetrasKeydown($event)"
+          (input)="hasTyped = true;buscarZona($event)" class="input-inline" placeholder="Ej: Los Troncos, Mar del Plata"
+          style="flex: 1; padding-right: 40px;">
 
-                  <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarZona()" title="Usar GPS">
-                    <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                    </svg>
-                  </button>
+        <button type="button" class="btn-inside-input-perfil" (click)="detectarYGuardarZona()"
+          title="Usar GPS">
+          <svg viewBox="0 0 16 16" fill="currentColor" height="18" width="18"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+          </svg>
+        </button>
 
-                  @if (citySuggestions().length > 0) {
-                  <ul class="suggestions-list">
-                    @for (sug of citySuggestions(); track sug.lat) {
-                    <li (click)="seleccionarZona(sug)" class="suggestion-item">
-                      {{ sug.nombreVisual }}
-                    </li>
-                    }
-                  </ul>
-                  }
-                </div>
+        @if (citySuggestions().length > 0) {
+        <ul class="suggestions-list">
+          @for (sug of citySuggestions(); track sug.lat) {
+          <li (click)="seleccionarZona(sug)" class="suggestion-item">
+            {{ sug.nombreVisual }}
+          </li>
+          }
+        </ul>
+        } @else if (hasTyped && tempValue && tempValue.trim().length > 2) {
+        <div class="no-suggestions-msg">
+          💡 No encontramos ese barrio exacto. Por favor, selecciona uno de los alrededores o usa el botón de GPS.
+        </div>
+        }
+      </div>
 
-                <div class="actions" style="display: flex; gap: 5px;">
-                  <button class="action-btn save" (click)="saveEdit('ciudad')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.SAVE"></path></svg>
-                  </button>
-                  <button class="action-btn cancel" (click)="cancelEdit()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.CANCEL"></path></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            } @else {
-            <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
-            <button class="edit-pencil" (click)="startEdit('ciudad', perfil()?.ciudad)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24"><path [attr.d]="icons.EDIT"></path></svg>
-            </button>
-            }
-          </div>
-        </li>
+      <button class="action-btn save" (click)="saveEdit('zonaTrabajo')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+          <path [attr.d]="icons.SAVE"></path>
+        </svg>
+      </button>
+      <button class="action-btn cancel" (click)="cancelEdit()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+          <path [attr.d]="icons.CANCEL"></path>
+        </svg>
+      </button>
+    </div>
+    } @else {
+    <span class="value">{{ perfil()?.ciudad || 'No especificada' }}</span>
+    <button class="edit-pencil" (click)="startEdit('zonaTrabajo', perfil()?.ciudad)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 24 24">
+        <path [attr.d]="icons.EDIT"></path>
+      </svg>
+    </button>
+    }
+  </div>
+</li>
       </ul>
     </div>
   </section>

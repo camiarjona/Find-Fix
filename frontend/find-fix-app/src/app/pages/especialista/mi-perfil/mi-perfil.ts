@@ -76,6 +76,7 @@ export class MiPerfilEspecialista implements OnInit {
   public showConfirmPass = signal(false);
 
   public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
+  public hasTyped: boolean = false;
 
   mostrarFeedback(titulo: string, mensaje: string, tipo: 'success' | 'error' = 'success') {
     this.feedbackData = { visible: true, titulo, mensaje, tipo };
@@ -259,12 +260,34 @@ export class MiPerfilEspecialista implements OnInit {
     this.citySuggestions.set([]);
   }
 
+
   // --- Métodos Sanitizadores y Validaciones de Perfil ---
+
+  soloNumerosKeydown(event: KeyboardEvent) {
+    const teclasPermitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+    if (teclasPermitidas.includes(event.key)) return;
+
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   soloNumerosInput(event: Event) {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/\D/g, '');
-    this.tempValue = input.value;
+    const limpio = input.value.replace(/\D/g, '');
+    this.tempValue = limpio;
+    input.value = limpio;
   }
+
+  soloLetrasKeydown(event: KeyboardEvent) {
+    const teclasPermitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End', ' '];
+    if (teclasPermitidas.includes(event.key)) return;
+
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
 
   private validarCampoPerfil(field: string, valor: string): { valido: boolean; mensaje: string } {
     const val = valor.trim();
@@ -277,8 +300,8 @@ export class MiPerfilEspecialista implements OnInit {
         break;
 
       case 'telefono':
-        if (!/^\d{8,15}$/.test(val)) {
-          return { valido: false, mensaje: 'El teléfono debe tener entre 8 y 15 dígitos numéricos.' };
+        if (!/^\d{10}$/.test(val)) {
+          return { valido: false, mensaje: 'El teléfono debe contener exactamente 10 dígitos numéricos.' };
         }
         break;
 
@@ -293,7 +316,18 @@ export class MiPerfilEspecialista implements OnInit {
 
       case 'ciudad':
         if (val.length < 3) {
-          return { valido: false, mensaje: 'Escribe o selecciona una zona de trabajo válida.' };
+          return { valido: false, mensaje: 'La zona de trabajo debe contener al menos 3 caracteres.' };
+        }
+
+        const barrioValido = this.allBarrios.some(
+          (b: any) => b.nombre.toLowerCase() === val.trim().toLowerCase()
+        );
+
+        if (!barrioValido) {
+          return {
+            valido: false,
+            mensaje: 'El barrio ingresado no se encuentra en la lista oficial. Por favor, selecciona uno válido de las sugerencias.'
+          };
         }
         break;
     }
