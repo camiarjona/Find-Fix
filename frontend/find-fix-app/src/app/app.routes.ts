@@ -180,5 +180,10 @@ export const routes: Routes = [
   },
   {
     path: 'acceso-denegado', component: AccessDeniedPage
-  }
+  },
+
+  {
+  path: 'terminos',
+  loadComponent: () => import('./pages/terminos/terminos.page').then(m => m.TerminosPage)
+ }
 ];

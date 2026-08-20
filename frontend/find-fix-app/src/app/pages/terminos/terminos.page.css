@@ -1,0 +1,63 @@
+.terminos-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: inherit;
+  color: var(--text-main, #333);
+}
+
+.terminos-card {
+  background: var(--bg-card, #fff);
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+  color: var(--primary-color, #f36f21);
+}
+
+.fecha {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+  margin-bottom: 30px;
+}
+
+section {
+  margin-bottom: 25px;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--text-main, #222);
+}
+
+p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #444);
+}
+
+.acciones-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.btn-volver {
+  background: var(--primary-color, #f36f21);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.btn-volver:hover {
+  opacity: 0.9;
+}
