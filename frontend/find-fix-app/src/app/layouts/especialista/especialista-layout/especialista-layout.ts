@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { AuthService } from '../../../services/auth/auth.service';
 import { ThemeService } from '../../../services/tema/theme.service';
 import { NotificacionComponent } from "../../../components/notificacion/notificacion-component/notificacion-component";
+import { UI_ICONS } from '../../../models/general/ui-icons';
 
 @Component({
   selector: 'app-especialista-layout',
@@ -24,6 +25,7 @@ export class EspecialistaLayout {
   private authService = inject(AuthService);
   private router = inject(Router);
   public themeService = inject(ThemeService);
+  public icons = UI_ICONS;
 
   // --- Funciones de la Barra Lateral ---
   toggleSidebar() {

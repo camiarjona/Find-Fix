@@ -3,7 +3,8 @@
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  background-color: var(--bg-app);
+  background-color: var(--bg-color);
+  color: var(--text-main); 
 }
 
 
@@ -12,9 +13,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-card); /* Variable */
+  border-bottom: 1px solid var(--border-color); /* Variable */
   position: fixed;
   top: 0;
   left: 0;
@@ -24,26 +25,26 @@
 
 .mobile-header .sidebar-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--text-main); /* Variable */
 }
 
 .mobile-header .hamburger-btn {
-  padding: 0.5rem;
+  padding: 0.25rem;
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .mobile-header .hamburger-btn span {
   display: block;
-  width: 22px;
+  width: 20px;
   height: 2px;
-  background-color: var(--text-main);
+  background-color: var(--text-main); /* Variable */
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -55,18 +56,20 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 280px;
-  background-color: var(--bg-card);
+  width: 260px;
+  background-color: var(--bg-card); /* Variable: Fondo del menú */
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1rem;
+  padding: 0.75rem 0.75rem;
   z-index: 1000;
-  box-shadow: 0 4px 20px var(--shadow-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, padding 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, padding 0.3s ease-in-out, background-color 0.3s ease;
   height: 100vh;
   box-sizing: border-box;
+  border-right: 1px solid var(--border-color); /* Agregado borde sutil para modo oscuro */
 }
+
 .sidebar.open {
   transform: translateX(0);
 }
@@ -78,14 +81,15 @@
   border: none;
   cursor: pointer;
   flex-direction: column;
-  gap: 5px;
-  margin-right: -0.5rem;
+  gap: 4px;
+  margin-right: -0.25rem;
 }
+
 .sidebar .mobile-close span {
   display: block;
-  width: 22px;
+  width: 20px;
   height: 2px;
-  background-color: var(--text-main);
+  background-color: var(--text-main); /* Variable */
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -93,9 +97,7 @@
 .sidebar .mobile-close span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
-.sidebar .mobile-close span:nth-child(2) {
-  opacity: 0;
-}
+.sidebar .mobile-close span:nth-child(2) { opacity: 0; }
 .sidebar .mobile-close span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
@@ -105,26 +107,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  margin: 0 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color); /* Variable */
+  margin: 0 0.25rem 0.5rem 0.25rem;
+  min-height: 40px;
 }
 
-.sidebar-title a{
+.sidebar-title a {
   text-decoration: none;
-  color: var(--text-main); ;
+  color: var(--text-main); /* Variable */
 }
-.sidebar .sidebar-header .sidebar-title {
 
-  font-size: 1.5rem;
+.sidebar .sidebar-header .sidebar-title {
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--text-main); /* Variable */
   display: block;
-  opacity: 1;
-  width: auto;
   margin: 0;
   padding: 0;
-  visibility: visible;
   white-space: nowrap;
 }
 
@@ -140,40 +140,45 @@
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.sidebar-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
+
+.sidebar-overlay.open { opacity: 1; visibility: visible; }
+
 
 
 .content-area {
-  padding: 1.5rem;
+  padding: 1rem;
   height: 100vh;
   box-sizing: border-box;
   overflow-y: auto;
-  padding-top: calc(60px + 1.5rem);
+  padding-top: calc(50px + 1rem);
+  background-color: var(--bg-color); /* Variable */
+  transition: background-color 0.3s ease;
 }
 
 
 .sidebar .hamburger-btn {
-  padding: 0.5rem;
+  padding: 0.25rem;
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-right: -0.5rem;
+  gap: 4px;
   flex-shrink: 0;
 }
+
 .sidebar .hamburger-btn span {
   display: block;
-  width: 22px;
+  width: 20px;
   height: 2px;
-  background-color: var(--text-main);
+  background-color: var(--text-main); /* Variable */
   border-radius: 2px;
   transition: all 0.3s ease;
 }
+
+.sidebar .desktop-toggle { display: none; }
+
+
 .cliente-dashboard:not(.sidebar-collapsed) .sidebar .desktop-toggle span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
@@ -363,7 +368,7 @@
 
 .header-controls {
   display: flex;
-  align-items: center;
+  align-items: center;     /* 🌟 Asegura que todos los elementos (switch, divisor, campana y sol) estén alineados al medio */
   gap: 0.75rem;
   background-color: var(--bg-card);
   padding: 6px;
@@ -380,20 +385,25 @@
   width: 32px;
   height: 32px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center;    /* 🌟 Centra verticalmente el ícono */
+  justify-content: center; /* 🌟 Centra horizontalmente el ícono */
   cursor: pointer;
   color: var(--text-secondary);
   transition: all 0.2s ease;
+  margin: auto 0;          /* 🌟 Fuerza el centrado absoluto si el contenedor padre usa flex */
 }
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;          /* Evita desalineaciones por espacios inline */
+}
+
 .theme-toggle:hover {
   background-color: var(--border-color);
   color: var(--text-main);
 }
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-}
+
 
 
 
@@ -413,11 +423,11 @@
   border-radius: 99px;
   padding: 4px;
   cursor: pointer;
-  width: 64px;
-  height: 32px;
+  width: 68px; /* Ancho fijo uniforme */
+  height: 34px; /* Alto fijo uniforme */
   box-sizing: border-box;
+  border: 1px solid var(--border-color);
 }
-
 
 .toggle-checkbox {
   opacity: 0;
@@ -431,53 +441,52 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 2px;
+  padding: 0 6px;
+  box-sizing: border-box;
 }
+
+/* Forzamos dimensiones idénticas y escalado limpio para ambos íconos */
 .toggle-icons svg {
-  width: 18px;
-  height: 18px;
+  width: 18px !important;
+  height: 18px !important;
   color: var(--text-secondary);
   z-index: 1;
   position: relative;
-  transform: scale(0.9);
-  transition: color 0.3s ease, transform 0.3 ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .toggle-icons .icon-cliente svg {
   color: var(--primary-color);
-
-  transform: scale(1.15);
+  transform: scale(1.1);
 }
-
 
 .toggle-slider {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 24px;
-  height: 24px;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
   background-color: var(--bg-card);
   border-radius: 50%;
   box-shadow: 0 1px 3px var(--shadow-color);
   transition: transform 0.3s ease;
+  z-index: 0;
 }
 
-
-
-
+/* Comportamiento al alternar el switch */
 .toggle-checkbox:checked + .toggle-icons .icon-cliente svg {
   color: var(--text-secondary);
-
-  transform: scale(0.9);
+  transform: scale(1);
 }
+
 .toggle-checkbox:checked + .toggle-icons .icon-especialista svg {
   color: var(--primary-color);
-  transform: scale(1.50);
-}
-.toggle-checkbox:checked ~ .toggle-slider {
-  transform: translateX(32px);
+  transform: scale(1.1);
 }
 
+.toggle-checkbox:checked ~ .toggle-slider {
+  transform: translateX(34px); /* Desplazamiento exacto para el ancho de la caja */
+}
 
 
 @media (min-width: 900px) {
