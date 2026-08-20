@@ -47,6 +47,11 @@
             </div>
           }
         </ngx-dropzone>
+
+        <!-- 🌟 ACLARACIÓN DE RESOLUCIÓN MÁXIMA -->
+        <p class="nota-resolucion" style="font-size: 0.75rem; color: var(--text-muted, #9ca3af); font-style: italic; text-align: center; margin-top: 8px;">
+          * Resolución máxima permitida por imagen: 1920x1080px
+        </p>
       </div>
 
       <button class="cta-button" type="submit" [disabled]="solicitudForm.invalid || fotosRequisitos().length === 0">

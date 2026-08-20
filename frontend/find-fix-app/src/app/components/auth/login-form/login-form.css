@@ -55,6 +55,16 @@
   justify-content: center;
 }
 
+.app-form-content h1 {
+  color: #1a1a1a !important;
+}
+
+.app-form-content span {
+  color: #666666 !important;
+}
+
+.forgot-password-link {
+  color: #555555 !important;
 /* Arreglo de posición de los mensajes de validación */
 .error-message {
   display: block;
@@ -103,4 +113,6 @@
 .forgot-password-link {
   margin: 4px 0 8px 0;
   font-size: 0.8rem;
+}
+
 }

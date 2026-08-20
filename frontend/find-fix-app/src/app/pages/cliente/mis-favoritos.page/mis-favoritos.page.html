@@ -163,7 +163,32 @@
         <p><strong>Email:</strong> {{ especialistaSeleccionaCompleto()?.email }}</p>
         <p><strong>Teléfono:</strong> {{ especialistaSeleccionaCompleto()?.telefono }}</p>
       </div>
+
+      <!-- 🌟 GALERÍA DE TRABAJOS (NUEVO BLOQUE AGREGADO) -->
+      @if (especialistaSeleccionaCompleto()?.galeria && especialistaSeleccionaCompleto()!.galeria.length > 0) {
+        <div class="gallery-public-section" style="margin-top: 20px;">
+          <h4 style="margin-bottom: 12px; font-size: 1.1rem; font-weight: 600;">Portfolio de Trabajos</h4>
+
+          <div class="gallery-public-scroll">
+            @for (foto of especialistaSeleccionaCompleto()?.galeria; track foto.id) {
+              <div class="gallery-public-card">
+                <img [src]="foto.url" alt="Trabajo anterior" class="gallery-public-img" (click)="abrirImagenCompleta(foto.url)">
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
+
+    <!-- 🌟 LIGHTBOX (PANTALLA COMPLETA AL HACER CLICK EN FOTO) -->
+    @if (fotoLightboxUrl()) {
+      <div class="lightbox-overlay" (click)="cerrarLightbox()">
+        <div class="lightbox-content" (click)="$event.stopPropagation()">
+          <button class="lightbox-close" (click)="cerrarLightbox()">✕</button>
+          <img [src]="fotoLightboxUrl()" class="lightbox-img" alt="Trabajo ampliado">
+        </div>
+      </div>
+    }
 
     <div class="profile-actions-modal">
       <button class="cta-button flex-grow" (click)="abrirModalContratar(especialistaSeleccionaCompleto())">
