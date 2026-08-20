@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.controller;
 
+import com.findfix.find_fix_app.resena.repository.ResenaRepository;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.ActualizarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.VisualizarTrabajoAppClienteDTO;
@@ -25,13 +26,20 @@ import java.util.List;
 @Validated
 public class TrabajoAppController {
     private final TrabajoAppService trabajoAppService;
+    private final ResenaRepository resenaRepository;
 
     @GetMapping("/cliente/mis-trabajos")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ApiResponse<List<VisualizarTrabajoAppClienteDTO>>> obtenerTrabajosDelCliente() throws UsuarioNotFoundException, TrabajoAppException {
         List<TrabajoApp> trabajos = trabajoAppService.obtenerTrabajosClientes();
+
         List<VisualizarTrabajoAppClienteDTO> dtos = trabajos.stream()
-                .map(VisualizarTrabajoAppClienteDTO::new).toList();
+                .map(trabajo -> {
+                    boolean tieneResena = resenaRepository.existsByTrabajoApp_Titulo(trabajo.getTitulo());
+                    return new VisualizarTrabajoAppClienteDTO(trabajo, tieneResena);
+                })
+                .toList();
+
         return ResponseEntity.ok(new ApiResponse<>("Lista de trabajos encontrada ☑️", dtos));
     }
 

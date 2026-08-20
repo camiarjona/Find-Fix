@@ -6,6 +6,8 @@ export interface VisualizarTrabajoAppCliente {
   presupuesto: number;
   fechaInicio: string;
   fechaFin: string;
+  tieneResena?: boolean;
+
 }
 
 export interface VisualizarTrabajoAppEspecialista {

@@ -29,7 +29,7 @@ public record CrearTrabajoExternoDTO(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9]+)*$",
                 message = "El titulo no debe tener espacios al principio, al final ni múltiples espacios seguidos"
         )
-        @Size(min = 1, max = 20, message = "El titulo debe tener entre 1 y 20 caracteres")
+        @Size(min = 1, max = 50, message = "El titulo debe tener entre 1 y 50 caracteres")
         String titulo
 ){
 }

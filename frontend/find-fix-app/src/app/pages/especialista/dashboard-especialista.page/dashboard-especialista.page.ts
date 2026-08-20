@@ -37,20 +37,23 @@ export class DashboardEspecialistaPage {
   }
 
 
-  cargarResenas() {
+cargarResenas() {
     // 1. SOLICITUDES
     this.especialistaService.getSolicitudesRecibidas().subscribe({
       next: (solicitudes) => {
         const pendientes = solicitudes.filter(s => s.estado?.toUpperCase() === 'PENDIENTE').length;
+        const aceptadas = solicitudes.filter(s => s.estado?.toUpperCase() === 'ACEPTADO' || s.estado?.toUpperCase() === 'APROBADO').length;
         const rechazadas = solicitudes.filter(s => s.estado?.toUpperCase() === 'RECHAZADO').length;
 
         this.solicitudesPendientes.set(pendientes);
 
         this.datosSolicitudes = {
           ...this.datosSolicitudes,
+          labels: ['Aceptadas', 'Rechazadas'],
           datasets: [{
             ...this.datosSolicitudes.datasets[0],
-            data: [pendientes, rechazadas]
+            data: [aceptadas, rechazadas],
+            backgroundColor: ['#38a169', '#e2e8f0']
           }]
         };
       },
@@ -60,11 +63,9 @@ export class DashboardEspecialistaPage {
     // 2. TRABAJOS E INGRESOS
     this.especialistaService.getMisTrabajos().subscribe({
       next: (trabajos) => {
-        // Trabajos en curso
         const enCurso = trabajos.filter(t => t.estado?.toString() === 'En proceso').length;
         this.trabajosEnCurso.set(enCurso);
 
-        // Actualizar Gráfico Dona En Curso
         this.datosEnCurso = {
           ...this.datosEnCurso,
           datasets: [{
@@ -73,11 +74,9 @@ export class DashboardEspecialistaPage {
           }]
         };
 
-        // Trabajos Finalizados
         const finalizados = trabajos.filter(t => t.estado?.toUpperCase() === 'FINALIZADO');
         this.trabajosCompletados.set(finalizados.length);
 
-        // Actualizar Gráfico Barras Historial
         const historial = this.calcularHistorialMeses(finalizados);
         this.datosCompletados = {
           ...this.datosCompletados,
@@ -87,11 +86,9 @@ export class DashboardEspecialistaPage {
           }]
         };
 
-        // Ingresos
         const totalIngresos = finalizados.reduce((sum, t) => sum + (t.presupuesto || 0), 0);
         this.ingresosMes.set(totalIngresos);
 
-        // Actualizar Gráfico Ingresos (Lineas)
         this.datosIngresos = {
           ...this.datosIngresos,
           datasets: [{
@@ -108,7 +105,7 @@ export class DashboardEspecialistaPage {
       error: (err) => console.error('Error trabajos', err)
     });
 
-    // 3. RESEÑAS Y CALIFICACIÓN
+    // 3. RESEÑAS Y CALIFICACIÓN (Modificado para usar nombres y puntuación directa)
     this.especialistaService.getMisResenas().subscribe({
       next: (resenas) => {
         this.totalResenas.set(resenas.length);
@@ -130,17 +127,23 @@ export class DashboardEspecialistaPage {
               data: [cincoEstrellas, cuatroEstrellas, tresOMenos]
             }]
           };
-
-          const historialResenas = this.calcularHistorialMesesResenas(resenas);
-
-          this.datosResenas = {
-            ...this.datosResenas,
-            datasets: [{
-              ...this.datosResenas.datasets[0],
-              data: historialResenas
-            }]
-          };
         }
+
+        // Gráfico de barras basado en las últimas reseñas (Nombre del cliente y sus estrellas)
+        const ultimasCinco = resenas.slice(0, 5).reverse();
+        const nombresClientes = ultimasCinco.map(r => r.nombreCliente || 'Cliente');
+        const puntuaciones = ultimasCinco.map(r => r.puntuacion);
+
+        this.datosResenas = {
+          ...this.datosResenas,
+          labels: nombresClientes,
+          datasets: [{
+            ...this.datosResenas.datasets[0],
+            data: puntuaciones,
+            backgroundColor: '#db2777',
+            borderRadius: 4
+          }]
+        };
       },
       error: (err) => console.error('Error al cargar reseñas', err)
     });
@@ -169,29 +172,7 @@ export class DashboardEspecialistaPage {
     return conteo;
   }
 
-  // Método auxiliar para contar reseñas por mes (Últimos 3 meses)
-  private calcularHistorialMesesResenas(resenas: any[]): number[] {
-    const hoy = new Date();
-    const mesActual = hoy.getMonth();
-    const conteo = [0, 0, 0];
-
-    resenas.forEach(r => {
-
-      const fechaStr = r.fecha || r.fechaResena;
-
-      if (fechaStr) {
-        const fechaResena = new Date(fechaStr);
-        const mesResena = fechaResena.getMonth();
-
-        if (fechaResena.getFullYear() === hoy.getFullYear()) {
-          if (mesResena === mesActual) conteo[2]++;
-          else if (mesResena === mesActual - 1) conteo[1]++;
-          else if (mesResena === mesActual - 2) conteo[0]++;
-        }
-      }
-    });
-    return conteo;
-  }
+  
 
   //CONFIGURACIÓN GRÁFICOS
   opcionesComunes: ChartOptions = {
