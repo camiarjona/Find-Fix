@@ -41,3 +41,4 @@ frontend/coverage/
 frontend/find-fix-app/package-lock.json
 frontend/find-fix-app/package-lock.json
 backend/.env
+frontend/package-lock.json
