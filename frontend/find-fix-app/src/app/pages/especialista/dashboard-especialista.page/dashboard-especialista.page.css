@@ -218,6 +218,11 @@
   justify-content: center;
 }
 
+.mini-chart-container canvas {
+  width: 100% !important;
+  height: 90px !important;
+}
+
 /* --- SECTION RECIENTE (RENOVADA) --- */
 .recent-activity {
   margin-top: 3rem;

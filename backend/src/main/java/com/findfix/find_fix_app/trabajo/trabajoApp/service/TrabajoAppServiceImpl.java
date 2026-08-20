@@ -1,5 +1,6 @@
 package com.findfix.find_fix_app.trabajo.trabajoApp.service;
 
+import com.findfix.find_fix_app.resena.repository.ResenaRepository;
 import com.findfix.find_fix_app.trabajo.trabajoApp.dto.BuscarTrabajoAppDTO;
 import com.findfix.find_fix_app.trabajo.trabajoApp.specifications.TrabajoAppSpecifications;
 import com.findfix.find_fix_app.auth.service.AuthServiceImpl;

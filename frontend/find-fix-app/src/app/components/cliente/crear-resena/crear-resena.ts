@@ -5,11 +5,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { CrearResenaDTO } from '../../../models/reseña/reseña.model';
 import { ResenaService } from '../../../services/reseña/reseñas.service';
+import { ModalFeedbackComponent } from '../../general/modal-feedback.component/modal-feedback.component';
 
 @Component({
   selector: 'app-crear-resena',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ModalFeedbackComponent],
   templateUrl: './crear-resena.html',
   styleUrls: ['./crear-resena.css'],
 })
@@ -19,6 +20,8 @@ export class CrearResenaComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private resenaService = inject(ResenaService);
+
+  public feedbackData = { visible: false, tipo: 'success' as 'success' | 'error', titulo: '', mensaje: '' };
 
   resenaForm!: FormGroup;
   trabajoId!: number;
@@ -57,6 +60,12 @@ export class CrearResenaComponent implements OnInit {
     this.resenaForm.get('puntuacion')?.setValue(valor);
   }
 
+cerrarFeedback() {
+    this.feedbackData.visible = false;
+    if (this.feedbackData.tipo === 'success') {
+      this.router.navigate(['/cliente/mis-resenas']);
+    }
+  }
   onSubmit(): void {
     if (this.resenaForm.invalid || this.isLoading()) {
       this.resenaForm.markAllAsTouched();
@@ -75,13 +84,26 @@ export class CrearResenaComponent implements OnInit {
     this.resenaService.crearResena(dto).subscribe({
       next: () => {
         this.isLoading.set(false);
-        alert('¡Gracias por tu opinión!');
-        this.router.navigate(['/cliente/mis-resenas']);
+        this.feedbackData = { 
+          visible: true, 
+          tipo: 'success', 
+          titulo: '¡Éxito!', 
+          mensaje: '¡Gracias por tu opinión!' 
+        };
       },
       error: (err) => {
         this.isLoading.set(false);
         console.error('Error al crear reseña:', err);
-        this.errorMessage.set(err.error?.mensaje || 'Ocurrió un error al enviar tu reseña.');
+        
+        // Extraemos el mensaje exacto que manda tu backend de Java (ej: "Ya existe una reseña para este trabajo")
+        const mensajeError = err.error?.mensaje || err.error?.message || 'Ocurrió un error al enviar tu reseña.';
+        
+        this.feedbackData = { 
+          visible: true, 
+          tipo: 'error', 
+          titulo: 'Atención', 
+          mensaje: mensajeError 
+        };
       }
     });
   }
@@ -89,4 +111,6 @@ export class CrearResenaComponent implements OnInit {
   cancelar() {
     this.router.navigate(['/cliente/mis-trabajos']);
   }
+
+  
 }

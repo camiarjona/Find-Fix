@@ -1,6 +1,7 @@
+
 :host {
   display: block;
-  background-color: #f9fafb;
+  background-color: var(--bg-app, #f9fafb); 
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -14,29 +15,30 @@
 }
 
 .review-card {
-  background: white;
+  background: var(--bg-card, white);
   border-radius: 16px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   padding: 40px;
   text-align: center;
+  border: 1px solid var(--border-color, transparent);
 }
 
 .header h1 {
   margin: 0 0 10px 0;
-  color: #1f2937;
+  color: var(--text-main, #1f2937);
   font-size: 1.5rem;
 }
 
 .header p {
-  color: #6b7280;
+  color: var(--text-secondary, #6b7280);
   margin: 0 0 30px 0;
   font-size: 0.95rem;
-}
+} 
 
 /* --- Estrellas --- */
 .stars-selector {
   margin-bottom: 30px;
-  background: #fffbeb;
+  background: var(--bg-input, #fffbeb);
   padding: 20px;
   border-radius: 12px;
   border: 1px dashed #fcd34d;
@@ -44,7 +46,7 @@
 
 .label {
   font-weight: 600;
-  color: #92400e;
+  color: var(--text-main, #92400e);
   margin-bottom: 10px;
   display: block;
 }
@@ -59,7 +61,6 @@
 .star {
   font-size: 2.5rem;
   color: #d1d5db;
-  /* Gris apagado */
   cursor: pointer;
   transition: transform 0.2s, color 0.2s;
   line-height: 1;
@@ -71,7 +72,6 @@
 
 .star.active {
   color: #F58634;
-  /* Naranja marca */
   text-shadow: 0 2px 4px rgba(245, 134, 52, 0.3);
 }
 
@@ -90,7 +90,7 @@
 label {
   display: block;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-main, #374151);
   margin-bottom: 8px;
   font-size: 0.9rem;
 }
@@ -98,12 +98,14 @@ label {
 textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color, #d1d5db);
   border-radius: 8px;
   font-family: inherit;
   font-size: 1rem;
   resize: vertical;
   box-sizing: border-box;
+  background-color: var(--bg-input, #ffffff);
+  color: var(--text-main, #000000);
   transition: border-color 0.2s;
 }
 
@@ -147,13 +149,13 @@ button {
 }
 
 .btn-cancel {
-  background-color: white;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  background-color: var(--bg-input, white);
+  border: 1px solid var(--border-color, #d1d5db);
+  color: var(--text-main, #374151);
 }
 
 .btn-cancel:hover {
-  background-color: #f3f4f6;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .btn-submit {
@@ -171,4 +173,65 @@ button {
   background-color: #fed7aa;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+/* --- ADAPTACIÓN AL MODO OSCURO --- */
+
+:host-context(body.dark-mode), 
+:host-context(.dark-mode) {
+  background-color: #121212 !important;
+}
+
+:host-context(.dark-mode) {
+  background-color: var(--bg-app, #121212) !important;
+}
+
+:host-context(.dark-mode) .review-card {
+  background: var(--bg-card, #1e1e1e) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color, #333333);
+}
+
+:host-context(.dark-mode) .header h1 {
+  color: var(--text-main, #ffffff);
+}
+
+:host-context(.dark-mode) .header p {
+  color: var(--text-secondary, #9ca3af);
+}
+
+/* Caja de estrellas en modo oscuro */
+:host-context(.dark-mode) .stars-selector {
+  background: rgba(245, 134, 52, 0.08);
+  border-color: rgba(245, 134, 52, 0.3);
+}
+
+:host-context(.dark-mode) .label {
+  color: #fbbf24;
+}
+
+:host-context(.dark-mode) .rating-text {
+  color: #f6ad55;
+}
+
+/* Formulario e inputs */
+:host-context(.dark-mode) label {
+  color: var(--text-main, #e5e7eb);
+}
+
+:host-context(.dark-mode) textarea {
+  background-color: var(--bg-input, #2d2d2d);
+  color: var(--text-main, #ffffff);
+  border-color: var(--border-color, #444444);
+}
+
+/* Botones en modo oscuro */
+:host-context(.dark-mode) .btn-cancel {
+  background-color: var(--bg-input, #2d2d2d);
+  border-color: var(--border-color, #444444);
+  color: var(--text-main, #ffffff);
+}
+
+:host-context(.dark-mode) .btn-cancel:hover {
+  background-color: #383838;
 }

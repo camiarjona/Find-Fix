@@ -15,6 +15,7 @@ public class VisualizarTrabajoAppClienteDTO {
     private Double presupuesto;
     private String fechaInicio;
     private String fechaFin;
+    private boolean tieneResena;
 
     private static final DateTimeFormatter formatoAmigable = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -26,6 +27,12 @@ public class VisualizarTrabajoAppClienteDTO {
         this.presupuesto = trabajoApp.getPresupuesto() == null ? 0.0 : trabajoApp.getPresupuesto();
         this.fechaInicio = (trabajoApp.getFechaInicio() == null) ? "No se inició el trabajo aún" :  trabajoApp.getFechaInicio().format(formatoAmigable);
         this.fechaFin = (trabajoApp.getFechaFin() == null) ? "No se finalizó el trabajo aún" : trabajoApp.getFechaFin().format(formatoAmigable);
+        this.tieneResena = false;
+    }
+
+    public VisualizarTrabajoAppClienteDTO(TrabajoApp trabajoApp, boolean tieneResena) {
+        this(trabajoApp);
+        this.tieneResena = tieneResena;
     }
 
 

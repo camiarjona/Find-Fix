@@ -17,4 +17,6 @@ public interface ResenaRepository extends JpaRepository<Resena,Long> {
     List<Resena> findAllByTrabajoApp_Especialista(Especialista especialista);
 
     List<Resena> findAllByTrabajoApp_Usuario(Usuario usuario);
+
+    boolean existsByTrabajoApp_Titulo(String titulo);
 }

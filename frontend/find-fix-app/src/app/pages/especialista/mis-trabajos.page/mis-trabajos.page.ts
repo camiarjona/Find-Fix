@@ -355,7 +355,11 @@ export class MisTrabajosPage implements OnInit {
   }
 
   guardarNuevoTrabajo() {
-    if (!this.nuevoTrabajo.titulo || !this.nuevoTrabajo.nombreCliente) return;
+   if (!this.nuevoTrabajo.titulo || !this.nuevoTrabajo.nombreCliente) {
+      this.mostrarAlerta('Por favor completa los campos obligatorios.', 'error');
+      return;
+    }
+
     this.servicioTrabajoExterno.crearTrabajo({
       titulo: this.nuevoTrabajo.titulo,
       nombreCliente: this.nuevoTrabajo.nombreCliente,
@@ -367,7 +371,19 @@ export class MisTrabajosPage implements OnInit {
         this.cargarDatosReales();
         this.modalCreacionVisible.set(false);
       },
-      error: () => this.mostrarAlerta('Error al crear', 'error')
+      error: (err) => {
+        let mensajeError = 'Error al crear el trabajo';
+
+        if (err?.error?.errors && Array.isArray(err.error.errors) && err.error.errors.length > 0) {
+          mensajeError = err.error.errors[0].defaultMessage; 
+        } else if (err?.error?.mensaje) {
+          mensajeError = err.error.mensaje;
+        } else if (err?.error?.message) {
+          mensajeError = err.error.message;
+        }
+
+        this.mostrarAlerta(mensajeError, 'error');
+      }
     });
   }
 
@@ -377,4 +393,10 @@ export class MisTrabajosPage implements OnInit {
     this.alertaVisible.set(true);
   }
   cerrarAlerta() { this.alertaVisible.set(false); }
+
+  cerrarModalCreacion() {
+    this.modalCreacionVisible.set(false);
+  }
+  
 }
+
