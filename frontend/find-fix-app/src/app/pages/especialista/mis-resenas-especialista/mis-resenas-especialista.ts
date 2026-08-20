@@ -16,8 +16,8 @@ import { ordenarDinamicamente } from '../../../utils/sort-utils';
 export class MisResenasPage implements OnInit {
   private resenaService = inject(ResenaService);
 
-  public todasLasResenas: MostrarResenaEspecialistaDTO[] = [];
-  public resenasFiltradas: MostrarResenaEspecialistaDTO[] = []; // Lista intermedia
+  public todasLasResenas = signal<MostrarResenaEspecialistaDTO[]>([]);
+  public resenasFiltradas: MostrarResenaEspecialistaDTO[] = [];
   public resenasVisibles = signal<MostrarResenaEspecialistaDTO[]>([]);
   public isLoading = signal(true);
 
@@ -31,9 +31,9 @@ export class MisResenasPage implements OnInit {
   public pageSize = 4;
   public totalPages = signal(0);
 
-  public promedio = computed(() => {
-    const lista = this.todasLasResenas;
-    if (lista.length === 0) return 0;
+public promedio = computed(() => {
+    const lista = this.todasLasResenas();
+    if (!lista || lista.length === 0) return 0;
     const suma = lista.reduce((acc, curr) => acc + curr.puntuacion, 0);
     return (suma / lista.length).toFixed(1);
   });
@@ -46,8 +46,8 @@ export class MisResenasPage implements OnInit {
     this.isLoading.set(true);
     this.resenaService.obtenerResenasRecibidas().subscribe({
       next: (response) => {
-        this.todasLasResenas = response.data || [];
-        this.aplicarFiltros(); 
+        this.todasLasResenas.set(response.data || []);
+        this.aplicarFiltros();
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -58,7 +58,7 @@ export class MisResenasPage implements OnInit {
   }
 
   aplicarFiltros() {
-    let resultado = [...this.todasLasResenas];
+    let resultado = [...this.todasLasResenas()];
 
     if (this.filtroTexto) {
       const busqueda = this.filtroTexto.toLowerCase();
@@ -106,7 +106,7 @@ export class MisResenasPage implements OnInit {
   actualizarVistaPaginada() {
     const inicio = this.currentPage() * this.pageSize;
     const fin = inicio + this.pageSize;
-    this.resenasVisibles.set(this.todasLasResenas.slice(inicio, fin));
+    this.resenasVisibles.set(this.todasLasResenas().slice(inicio, fin));
   }
 
   cambiarPagina(nuevaPagina: number) {
