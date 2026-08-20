@@ -109,7 +109,7 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-
+    //CLIENTES
     private List<Usuario> precargarClientes() {
         List<Usuario> clientes = new ArrayList<>();
 
@@ -117,14 +117,14 @@ public class DataInitializer implements CommandLineRunner {
                 .orElseThrow(() -> new RuntimeException("Rol CLIENTE no encontrado"));
 
         Object[][] datos = {
-                {"ana.torres@example.com", "Ana", "Torres", "223-4001111", "Centro", -38.0055, -57.5426},
-                {"pedro.diaz@example.com", "Pedro", "Diaz", "223-4002222", "Constitucion", -37.9930, -57.5680},
-                {"sofia.martinez@example.com", "Sofia", "Martinez", "223-4003333", "La Perla", -38.0010, -57.5300},
-                {"lucas.romero@example.com", "Lucas", "Romero", "223-4004444", "Playa Grande", -38.0190, -57.5340},
-                {"valentina.gil@example.com", "Valentina", "Gil", "223-4005555", "San Carlos", -37.9700, -57.5900},
-                {"matias.herrera@example.com", "Matias", "Herrera", "223-4006666", "Puerto", -38.0330, -57.5330},
-                {"camila.ortiz@example.com", "Camila", "Ortiz", "223-4007777", "Los Troncos", -37.9980, -57.5480},
-                {"nicolas.vega@example.com", "Nicolas", "Vega", "223-4008888", "Chauvin", -38.0090, -57.5500},
+                {"ana.torres@example.com", "Ana", "Torres", "2234001111", "Barrio Centro", -38.0000, -57.5430},
+                {"pedro.diaz@example.com", "Pedro", "Diaz", "2234002222", "Barrio Constitucion", -37.9800, -57.5600},
+                {"sofia.martinez@example.com", "Sofia", "Martinez", "2234003333", "Barrio La Perla", -37.9920, -57.5480},
+                {"lucas.romero@example.com", "Lucas", "Romero", "2234004444", "Barrio Playa Grande", -38.0280, -57.5300},
+                {"valentina.gil@example.com", "Valentina", "Gil", "2234005555", "Barrio San Carlos", -38.0250, -57.5450},
+                {"matias.herrera@example.com", "Matias", "Herrera", "2234006666", "Barrio Puerto", -38.0450, -57.5450},
+                {"camila.ortiz@example.com", "Camila", "Ortiz", "2234007777", "Barrio Los Troncos", -38.0200, -57.5350},
+                {"nicolas.vega@example.com", "Nicolas", "Vega", "2234008888", "Barrio Chauvin", -38.0150, -57.5550},
         };
 
         for (Object[] d : datos) {
@@ -154,7 +154,7 @@ public class DataInitializer implements CommandLineRunner {
         return clientes;
     }
 
-
+    // ESPECIALISTAS
     private List<Especialista> precargarEspecialistas() {
         List<Especialista> especialistas = new ArrayList<>();
 
@@ -165,34 +165,34 @@ public class DataInitializer implements CommandLineRunner {
 
         // email, nombre, apellido, telefono, barrio, lat, lon, dni, descripcion, oficios[]
         Object[][] datos = {
-                {"juan.perez@example.com", "Juan", "Perez", "223-5001111", "San Carlos", -37.9700, -57.5900,
+                {"juan.perez@example.com", "Juan", "Perez", "2235001111", "Barrio San Carlos", -38.0250, -57.5450,
                         30111222L, "Electricista matriculado con 10 anios de experiencia en instalaciones domiciliarias e industriales.",
                         new String[]{"ELECTRICISTA"}},
-                {"martin.alvarez@example.com", "Martin", "Alvarez", "223-5001112", "Sierra de los Padres", -37.9350, -57.6300,
+                {"martin.alvarez@example.com", "Martin", "Alvarez", "2235001112", "Barrio Sierra de los Padres", -37.9450, -57.7750,
                         30111223L, "Electricista especializado en tableros y automatizacion basica del hogar.",
                         new String[]{"ELECTRICISTA"}},
-                {"marta.gomez@example.com", "Marta", "Gomez", "223-5002222", "Los Troncos", -37.9980, -57.5480,
+                {"marta.gomez@example.com", "Marta", "Gomez", "2235002222", "Barrio Los Troncos", -38.0200, -57.5350,
                         29222333L, "Especialista en plomeria, destapaciones y reparacion de canierias.",
                         new String[]{"PLOMERO"}},
-                {"diego.sosa@example.com", "Diego", "Sosa", "223-5005555", "Divino Rostro", -38.0250, -57.5650,
+                {"diego.sosa@example.com", "Diego", "Sosa", "2235005555", "Barrio Divino Rostro", -38.0200, -57.5600,
                         28555666L, "Gasista matriculado, tambien realiza trabajos de plomeria general.",
                         new String[]{"GASISTA", "PLOMERO"}},
-                {"carlos.ruiz@example.com", "Carlos", "Ruiz", "223-5003333", "Puerto", -38.0330, -57.5330,
+                {"carlos.ruiz@example.com", "Carlos", "Ruiz", "2235003333", "Barrio Puerto", -38.0450, -57.5450,
                         27333444L, "Carpintero especializado en muebles a medida y restauracion.",
                         new String[]{"CARPINTERO"}},
-                {"valeria.nunez@example.com", "Valeria", "Nunez", "223-5003334", "Constitucion", -37.9930, -57.5680,
+                {"valeria.nunez@example.com", "Valeria", "Nunez", "2235003334", "Barrio Constitucion", -37.9800, -57.5600,
                         27333445L, "Carpintera especializada en mobiliario de oficina y placares a medida.",
                         new String[]{"CARPINTERO"}},
-                {"laura.fernandez@example.com", "Laura", "Fernandez", "223-5004444", "Chauvin", -38.0090, -57.5500,
+                {"laura.fernandez@example.com", "Laura", "Fernandez", "2235004444", "Barrio Chauvin", -38.0150, -57.5550,
                         31444555L, "Pintora de interiores y exteriores, trabajos residenciales y comerciales.",
                         new String[]{"PINTOR"}},
-                {"ezequiel.molina@example.com", "Ezequiel", "Molina", "223-5004445", "Playa Grande", -38.0190, -57.5340,
+                {"ezequiel.molina@example.com", "Ezequiel", "Molina", "2235004445", "Barrio Playa Grande", -38.0280, -57.5300,
                         31444556L, "Pintor especializado en revestimientos texturados y fachadas.",
                         new String[]{"PINTOR"}},
-                {"gustavo.paz@example.com", "Gustavo", "Paz", "223-5005556", "Centro", -38.0055, -57.5426,
+                {"gustavo.paz@example.com", "Gustavo", "Paz", "2235005556", "Barrio Centro", -38.0000, -57.5430,
                         28555667L, "Gasista matriculado, especializado en habilitaciones comerciales.",
                         new String[]{"GASISTA"}},
-                {"rocio.medina@example.com", "Rocio", "Medina", "223-5005557", "La Perla", -38.0010, -57.5300,
+                {"rocio.medina@example.com", "Rocio", "Medina", "2235005557", "Barrio La Perla", -37.9920, -57.5480,
                         28555668L, "Gasista con experiencia en instalaciones residenciales nuevas.",
                         new String[]{"GASISTA"}},
         };
@@ -239,7 +239,7 @@ public class DataInitializer implements CommandLineRunner {
         return especialistas;
     }
 
-
+    //SOLICITUDES TRABAJO
     private List<SolicitudTrabajo> precargarSolicitudesTrabajo(List<Usuario> clientes, List<Especialista> especialistas) {
         List<SolicitudTrabajo> solicitudes = new ArrayList<>();
 
@@ -296,6 +296,7 @@ public class DataInitializer implements CommandLineRunner {
         return solicitudes;
     }
 
+    //TRABAJOS APP
     private void precargarTrabajosApp(List<SolicitudTrabajo> solicitudes) {
         if (solicitudes.size() < 10) {
             log.warn("No hay suficientes solicitudes aceptadas para precargar trabajos app.");
@@ -357,7 +358,7 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Trabajos app y resenias precargados.");
     }
 
-
+    //TRABAJOS EXTERNOS
     private void precargarTrabajosExternos(List<Especialista> especialistas) {
         if (especialistas.size() < 10) {
             log.warn("No hay suficientes especialistas para precargar trabajos externos.");
@@ -405,7 +406,7 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Trabajos externos precargados.");
     }
     
-
+    //FAVORITOS
     private void precargarFavoritos(List<Usuario> clientes, List<Especialista> especialistas) {
         if (clientes.size() < 7 || especialistas.size() < 10) {
             return;
