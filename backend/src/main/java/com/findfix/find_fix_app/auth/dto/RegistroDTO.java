@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 
 public record RegistroDTO(
         @Email(message = "Ingrese un formato de email válido.")
+        @NotBlank(message = "El email es obligatorio.")
         String email,
 
         @NotBlank(message = "La contraseña no puede quedar vacía.")
@@ -14,16 +15,18 @@ public record RegistroDTO(
         String password,
 
         @NotBlank(message = "El nombre no puede quedar en blanco")
+        @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres.")
         @Pattern(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
-                message = "El nombre no debe tener espacios al principio, al final ni múltiples espacios seguidos"
+                message = "El nombre solo debe contener letras y un espacio entre palabras."
         )
         String nombre,
 
         @NotBlank(message = "El apellido no puede quedar en blanco")
+        @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres.")
         @Pattern(
                 regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
-                message = "El apellido no debe tener espacios al principio, al final ni múltiples espacios seguidos"
+                message = "El apellido solo debe contener letras y un espacio entre palabras."
         )
         String apellido,
 

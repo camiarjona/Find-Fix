@@ -1,11 +1,12 @@
 package com.findfix.find_fix_app.especialista.dto;
 
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ActualizarEspecialistaDTO(
-        @Size(max = 250)
+        @Size(max = 250, message = "El campo 'Sobre mí' no puede superar los 250 caracteres.")
         String descripcion,
 
         @Pattern(
@@ -18,7 +19,12 @@ public record ActualizarEspecialistaDTO(
                 message = "❌ El apellido no debe tener espacios al principio, al final ni múltiples espacios seguidos ❌"
         )
         String apellido,
+
+        @NotBlank(message = "El teléfono es obligatorio.")
+        @Pattern(regexp = "^[0-9]{10}$", message = "El teléfono debe tener exactamente 10 dígitos.")
         String telefono,
+
+        @NotBlank(message = "La zona de trabajo es obligatoria.")
         String ciudad,
         Double latitud,
         Double longitud,

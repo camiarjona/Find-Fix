@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ChangeDetectorRef, HostListener } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RegisterCredentials } from '../../../models/user/user.model';
 import { UI_ICONS } from '../../../models/general/ui-icons';
 import { HttpClient } from '@angular/common/http';
@@ -40,12 +40,45 @@ export class RegisterForm implements OnInit {
 
   public icons = UI_ICONS;
 
+  // Validador personalizado para evitar letras repetidas y secuencias absurdas ("aaaa", "hrtegrw")
+  private textoEstrictoValidator(control: AbstractControl): ValidationErrors | null {
+    const val = control.value;
+    if (!val) return null;
+    
+    // Solo letras y espacios
+    if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(val)) {
+      return { formatoInvalido: true };
+    }
+    // Evita 3 o más letras idénticas seguidas ("aaa")
+    if (/(.)\1{2,}/i.test(val)) {
+      return { letrasRepetidas: true };
+    }
+    // Evita cadenas sin sentido lógico (más de 5 consonantes seguidas sin espacios)
+    const sinEspacios = val.replace(/\s/g, '');
+    if (/[bcdfghjklmnpqrstvwxyz]{6,}/i.test(sinEspacios)) {
+      return { secuenciaInvalida: true };
+    }
+    return null;
+  }
+
+  // Validador estricto de barrio perteneciente a la lista oficial
+  private barrioOficialValidator = (control: AbstractControl): ValidationErrors | null => {
+    const val = control.value;
+    if (!val || this.allBarrios.length === 0) return null;
+
+    const existe = this.allBarrios.some(
+      b => b.nombre.toLowerCase() === val.trim().toLowerCase()
+    );
+    return existe ? null : { barrioNoOficial: true };
+  };
+  
+
   public registerForm = this.fb.nonNullable.group({
-    nombre: ['', [Validators.required]],
-    apellido: ['', [Validators.required]],
+    nombre: ['', [Validators.required, Validators.minLength(2), this.textoEstrictoValidator]],
+    apellido: ['', [Validators.required, Validators.minLength(2), this.textoEstrictoValidator]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    ciudad: ['', [Validators.required]]
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+    ciudad: ['', [Validators.required, this.barrioOficialValidator]]
   });
 
   ngOnInit() {
@@ -63,13 +96,15 @@ export class RegisterForm implements OnInit {
   cargarBarriosDelBackend() {
     this.http.get<Barrio[]>('http://localhost:8080/api/barrios?ciudad=mdp')
       .subscribe({
-        next: (data) => { this.allBarrios = data; },
+        next: (data) => { this.allBarrios = data; this.registerForm.get('ciudad')?.updateValueAndValidity(); },
         error: (err) => console.error('Error cargando barrios', err)
       });
   }
 
   onInputManual(event: any) {
     const termino = event.target.value.toLowerCase();
+    this.registerForm.get('ciudad')?.updateValueAndValidity();
+
     if (termino.length < 1) {
       this.limpiarSugerencias();
       return;
@@ -81,8 +116,7 @@ export class RegisterForm implements OnInit {
     this.mostrandoResultados.set(filtrados.length > 0);
   }
 
-  seleccionarLocalidad(barrio: Barrio) {
-    this.limpiarSugerencias();
+seleccionarLocalidad(barrio: Barrio) {
     this.aplicarValorCiudad(barrio.nombre, barrio.lat, barrio.lon);
   }
 
@@ -108,25 +142,22 @@ export class RegisterForm implements OnInit {
     }
   }
 
-  private aplicarValorCiudad(nombre: string, lat: number, lon: number) {
+ private aplicarValorCiudad(nombre: string, lat: number, lon: number) {
     this.latitudSeleccionada = lat;
     this.longitudSeleccionada = lon;
 
+    // Actualizamos el valor del formulario
     this.registerForm.patchValue({ ciudad: nombre });
     this.registerForm.get('ciudad')?.markAsTouched();
+    this.registerForm.get('ciudad')?.updateValueAndValidity();
 
-    this.limpiarSugerencias();
-
-    setTimeout(() => {
-      const input = document.getElementById('reg-ciudad') as HTMLInputElement;
-      if (input) {
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-        input.blur();
-      }
-      this.cdr.detectChanges();
-    }, 50);
+    // 🛑 Forzamos el cierre inmediato limpiando las señales de resultados
+    this.mostrandoResultados.set(false);
+    this.resultadosBusqueda.set([]);
+    
+    this.cdr.detectChanges();
   }
-
+  
   limpiarSugerencias() {
     this.mostrandoResultados.set(false);
     this.resultadosBusqueda.set([]);
