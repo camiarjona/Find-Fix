@@ -122,13 +122,19 @@
         <span class="precio">{{ trabajo.presupuesto | currency }}</span>
 
         <div class="acciones-tarjeta">
-          @if (trabajo.estado === 'Finalizado') {
-          <button class="btn-calificar" (click)="irADejarResena(trabajo.id, $event)" title="Calificar servicio">
-            ⭐ Calificar
-          </button>
-          }
-          <button class="btn-ver">Ver Detalles</button>
-        </div>
+  @if (trabajo.estado === 'FINALIZADO' || trabajo.estado === 'Finalizado') {
+    @if (trabajo.tieneResena) {
+      <button class="btn-ya-calificado" disabled>
+        ✓ Ya calificado
+      </button>
+    } @else {
+      <button class="btn-calificable" (click)="irADejarResena(trabajo.id, $event)">
+        Calificar
+      </button>
+    }
+  }
+  <button class="btn-ver" (click)="abrirModalDetalle(trabajo)">Ver Detalles</button>
+</div>
       </div>
 
     </div>
@@ -174,21 +180,27 @@
             <div class="precio-tabla">{{ trabajo.presupuesto | currency }}</div>
           </td>
           <td class="text-right">
-            <div class="acciones-tabla">
-              @if (trabajo.estado === 'Finalizado') {
-              <button class="btn-icono-calificar" (click)="irADejarResena(trabajo.id, $event)" title="Dejar reseña">
-                ⭐
-              </button>
-              }
-              <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver detalle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </button>
-            </div>
-          </td>
+  <div class="acciones-tabla">
+    @if (trabajo.estado === 'FINALIZADO' || trabajo.estado === 'Finalizado') {
+      @if (trabajo.tieneResena) {
+        <button class="btn-icono-calificado" disabled title="Ya calificado" style="background-color: var(--bg-app, #2a2a2a); color: #9ca3af; border: 1px solid var(--border-color, #444444); width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: not-allowed; opacity: 0.7; font-size: 0.8rem;">
+          ✓
+        </button>
+      } @else {
+        <button class="btn-icono-calificar" (click)="irADejarResena(trabajo.id, $event)" title="Dejar reseña">
+          ⭐
+        </button>
+      }
+    }
+    <button class="btn-icono" (click)="abrirModalDetalle(trabajo)" title="Ver detalle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    </button>
+  </div>
+</td>
         </tr>
         }
       </tbody>
@@ -273,13 +285,19 @@
       </div>
 
       <div class="acciones-modal-unificadas">
-        @if (trabajoSeleccionado()?.estado === 'Finalizado') {
-        <button type="button" class="btn-calificar" (click)="irADejarResena(trabajoSeleccionado()!.id, $event)">
-          Calificar
-        </button>
-        }
-        <button type="button" class="btn-guardar" (click)="cerrarModal()">Cerrar</button>
-      </div>
+  @if (trabajoSeleccionado()?.estado === 'FINALIZADO' || trabajoSeleccionado()?.estado === 'Finalizado') {
+    @if (trabajoSeleccionado()?.tieneResena) {
+      <button type="button" class="btn-ya-calificado" disabled>
+        ✓ Ya calificado
+      </button>
+    } @else {
+      <button type="button" class="btn-calificable" (click)="irADejarResena(trabajoSeleccionado()!.id, $event)">
+        Calificar
+      </button>
+    }
+  }
+  <button type="button" class="btn-guardar" (click)="cerrarModal()">Cerrar</button>
+</div>
     </div>
   </div>
 </div>

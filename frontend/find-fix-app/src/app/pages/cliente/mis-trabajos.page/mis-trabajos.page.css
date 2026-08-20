@@ -192,7 +192,15 @@
 
 /* Grid de Tarjetas */
 .contenedor-cuadricula { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-.tarjeta-trabajo { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+.tarjeta-trabajo { 
+  background: var(--bg-card); 
+  border: 1px solid var(--border-color); 
+  border-radius: 16px; 
+  padding: 1.25rem 1.1rem; 
+  transition: transform 0.2s, box-shadow 0.2s; 
+  display: flex; 
+  flex-direction: column; 
+}
 .tarjeta-trabajo:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--shadow-color); border-color: #fed7aa; }
 .icono-tarjeta {
   background: #fff7ed;
@@ -206,8 +214,14 @@
 .titulo-tarjeta { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 1rem 0 0.5rem; }
 .cliente-tarjeta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 500; }
 .fechas-tarjeta { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 5px; }
-.pie-tarjeta { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-top: auto; }
-.precio { font-weight: 700; color: #059669; font-size: 1.1rem; }
+.pie-tarjeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;     
+  border-top: 1px solid var(--border-color);
+  margin-top: 1.5rem;      
+}.precio { font-weight: 700; color: #059669; font-size: 1.1rem; }
 .btn-ver { background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; font-weight: 600; transition: all 0.2s; }
 .btn-ver:hover { border-color: var(--primary-color); color: var(--primary-color); background-color: var(--bg-app); }
 
@@ -297,4 +311,151 @@
     font-size: 0.95rem;
     font-weight: 500;
     color: #4b5563;
+}
+
+
+/* --- Botón para Calificar y Ya Calificado (Tamaño unificado) --- */
+.btn-calificable, 
+.btn-ya-calificado,
+.btn-ver {
+  height: 32px;
+  padding: 0 8px;           /* Padding lateral ligeramente más compacto */
+  border-radius: 6px;
+  font-size: 0.76rem;       /* Tipografía precisa para que queden holgados sin salirse */
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* El resto de estilos de los botones se mantienen igual: */
+.btn-ver {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ver:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: var(--bg-app);
+}
+
+.btn-calificable {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: 1px solid var(--primary-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-calificable:hover {
+  background-color: #e07528;
+}
+
+.btn-ya-calificado {
+  background-color: transparent;
+  color: var(--text-secondary, #9ca3af);
+  border: 1px solid var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.7;
+  gap: 3px;
+}
+
+/* --- Precio robusto ante números grandes --- */
+.precio {
+  font-weight: 700;
+  color: #059669;
+  font-size: 1rem;          /* Ligeramente optimizado por si hay muchos dígitos */
+  white-space: nowrap;      /* Evita que el precio se rompa a la mitad en dos renglones */
+  overflow: hidden;         /* Oculta de forma limpia si excede el espacio extremo */
+  text-overflow: ellipsis;  /* Pone puntos suspensivos si el número es gigante */
+  max-width: 45%;           /* Limita el espacio máximo que puede ocupar el precio en la fila */
+}
+
+/* --- Contenedor de botones fijo para que no se deformen --- */
+.acciones-tarjeta {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;           /* Impide que los botones se encojan a la fuerza */
+}
+
+.col-fecha {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.acciones-tabla {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+
+.tabla-trabajos .btn-icono {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;          /* Totalmente circular */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-trabajos .btn-icono:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: var(--bg-app);
+  transform: translateY(-2px);
+}
+
+/* Botón de estrella para calificar en tabla */
+.btn-icono-calificar {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: #b45309;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-icono-calificar:hover {
+  background: #fcd34d;
+  transform: translateY(-2px) scale(1.05);
+  color: #78350f;
+}
+
+/* Botón de "Ya calificado" en tabla (sutil y circular) */
+.btn-icono-ya-calificado {
+  background-color: var(--bg-app, #2a2a2a);
+  color: #9ca3af;
+  border: 1px solid var(--border-color, #444444);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: not-allowed;
+  opacity: 0.8;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
