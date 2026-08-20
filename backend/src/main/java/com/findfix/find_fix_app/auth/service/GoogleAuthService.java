@@ -5,6 +5,8 @@ import com.findfix.find_fix_app.auth.model.RefreshToken;
 import com.findfix.find_fix_app.rol.model.Rol;
 import com.findfix.find_fix_app.usuario.model.Usuario;
 import com.findfix.find_fix_app.usuario.repository.UsuarioRepository;
+import com.findfix.find_fix_app.utils.exception.exceptions.CuentaInactivaException;
+import com.findfix.find_fix_app.utils.exception.exceptions.UsuarioNotFoundException;
 import com.findfix.find_fix_app.utils.security.JwtService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -53,14 +55,15 @@ public class GoogleAuthService {
         GoogleIdToken.Payload payload = idToken.getPayload();
         String email = payload.getEmail();
 
+        // Si no existe -> Lanza UsuarioNotFoundException (GlobalExceptionHandler devuelve HTTP 404)
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
+                .orElseThrow(() -> new UsuarioNotFoundException(
                         "El correo " + email + " no está registrado en FindFix. Por favor regístrate primero."
                 ));
 
+        // Si no está activo -> Lanza CuentaInactivaException (GlobalExceptionHandler devuelve HTTP 403)
         if (!usuario.isActivo()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cuenta deshabilitada.");
+            throw new CuentaInactivaException("Tu cuenta existe pero aún no ha sido activada. Revise el inicio de sesion que se le habilito un boton de reenvío");
         }
 
         String accessToken = jwtService.generateToken(usuario);

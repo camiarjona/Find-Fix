@@ -1,5 +1,18 @@
 @import url('../form-styles.css');
 
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .mobile-toggle-link {
   display: none;
   margin-top: 15px;
@@ -49,7 +62,7 @@
 }
 
 .social-login-container {
-  margin-top: 10px;
+  margin-top: 8px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -57,15 +70,21 @@
 
 .app-form-content h1 {
   color: #1a1a1a !important;
+  margin-top: 0;
+  margin-bottom: 4px;
 }
 
 .app-form-content span {
   color: #666666 !important;
+  margin-bottom: 12px;
 }
 
 .forgot-password-link {
   color: #555555 !important;
-/* Arreglo de posición de los mensajes de validación */
+  margin: 4px 0 6px 0;
+  font-size: 0.8rem;
+}
+
 .error-message {
   display: block;
   margin-top: 2px;
@@ -108,11 +127,4 @@
 .btn-resend:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.forgot-password-link {
-  margin: 4px 0 8px 0;
-  font-size: 0.8rem;
-}
-
 }

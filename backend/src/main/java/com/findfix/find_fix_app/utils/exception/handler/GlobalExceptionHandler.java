@@ -19,12 +19,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-// clase global para el manejo de errores con @Valid
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-    // 🚨 NUEVO HANDLER: Maneja cuando el usuario intenta loguearse sin activar la cuenta (HTTP 403)
+    // Maneja acceso con cuenta registrada pero inactiva (HTTP 403)
     @ExceptionHandler(CuentaInactivaException.class)
     public ResponseEntity<ErrorResponse> handleCuentaInactiva(CuentaInactivaException ex) {
         log.warn("Intento de acceso con cuenta inactiva: {}", ex.getMessage());
@@ -40,6 +39,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
+    // Maneja duplicados de base de datos (HTTP 409)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(DataIntegrityViolationException ex) {
         ErrorResponse error = ErrorResponse.builder()
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
-    // Maneja cuando el usuario no está autenticado
+    // Maneja falta de autenticación (HTTP 401)
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
         log.error("Authentication failed: {}", ex.getMessage());
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
-    // Maneja errores de validación (@Valid)
+    // Maneja errores de validación con @Valid (HTTP 400)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // Maneja entidades no encontradas
+    // Maneja entidades no encontradas, incluyendo UsuarioNotFoundException para Google (HTTP 404)
     @ExceptionHandler({
             UsuarioNotFoundException.class,
             EspecialistaNotFoundException.class,
@@ -117,7 +117,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // Maneja errores de lógica de negocio personalizados
+    // Maneja errores de lógica de negocio (HTTP 400)
     @ExceptionHandler({
             IllegalStateException.class,
             IllegalArgumentException.class
@@ -136,7 +136,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    /// manejo de errores para notificaciones
+    // Maneja errores de notificaciones (HTTP 400)
     @ExceptionHandler(NotificacionException.class)
     public ResponseEntity<ErrorResponse> handleNotificacionError(NotificacionException ex) {
         ErrorResponse error = ErrorResponse.builder()
@@ -150,7 +150,30 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    // Maneja errores generales no contemplados
+    // Maneja errores de conflictos de negocio (HTTP 409)
+    @ExceptionHandler({
+            RolException.class,
+            UsuarioException.class,
+            EspecialistaExcepcion.class,
+            TrabajoAppException.class,
+            SolicitudEspecialistaException.class,
+            FavoritoException.class,
+            ResenaException.class,
+            OficioException.class,
+    })
+    public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .path(getCurrentPath())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    // Fallback para errores no contemplados (HTTP 500)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
         log.error("Unexpected error: ", ex);
@@ -174,29 +197,6 @@ public class GlobalExceptionHandler {
         } catch (Exception e) {
             return "unknown";
         }
-    }
-
-    // Manejo de errores personalizados de conflictos
-    @ExceptionHandler({
-            RolException.class,
-            UsuarioException.class,
-            EspecialistaExcepcion.class,
-            TrabajoAppException.class,
-            SolicitudEspecialistaException.class,
-            FavoritoException.class,
-            ResenaException.class,
-            OficioException.class,
-    })
-    public ResponseEntity<ErrorResponse> handleRolExistente(Exception ex) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .error("Conflict")
-                .message(ex.getMessage())
-                .path(getCurrentPath())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
 }
